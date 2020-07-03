@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
+<?page title="${c:l('sp.crud.profile.admin')}"?>
+<?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
+<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
+<zk xmlns:n="native">
+    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminProfileController" class="general-window">
+        <style src="/css/general.css"/>
+        <borderlayout width="100%" height="100%" class="content-transparent">
+            <north border="none" size="52px" class="content-transparent">
+                <include src="adminHeader.zul"/>
+            </north>
+            <center border="none" flex="true" class="content-transparent" autoscroll="true">
+                <div align="center" >
+                    <hlayout >
+                        <div></div>
+                        <div width="1800px" align="left" height="840px">
+                            <hlayout>
+                                <div>
+                                    <include src="adminMainMenu.zul"/>
+                                </div>
+                                <div width="1400px">
+                                    <vlayout>
+                                        <div height="20px" width="100%" align="left">
+                                            <!--Bread crumb-->
+                                            <hlayout>
+                                                <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
+                                                 |
+                                                <toolbarbutton label="${c:l('sp.crud.profile.list')}" onClick='Executions.sendRedirect(&quot;listProfiles.zul&quot;)'/>
+                                                 |
+                                                <toolbarbutton id="tbbCurrentAction" />
+                                            </hlayout>
+                                        </div>
+                                        <div height="5px" width="100%" style="background:#333;" align="left"></div>
+                                        <div>
+                                            <vlayout>
+                                                <div align="right">
+                                                    <hlayout>
+                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
+                                                        <separator/>
+                                                        <label value="*" sclass="lblreq" />
+                                                        <separator/>
+                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
+                                                    </hlayout>
+                                                </div>
+                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="1090px"/>
+                                                    </columns>
+                                                    <rows>
+                                                        <row>
+                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtAlias" width="320px" constraint="no empty: ${c:l('error.field.required')}" maxlength="45"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
+                                                            </hlayout>
+                                                        </row>
+                                                    
+                                                        <row>
+                                                            <label value="${c:l('sp.common.enabled')}" sclass="lblbold"/>
+                                                            <checkbox id="cbxEnabled" checked="true"/>
+                                                        </row>
+                                                    </rows>
+                                                </grid>
+                                                <label value="${c:l('sp.common.data.multilanguage')}" sclass="lblbold"/>
+                                                <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="1090px"/>
+                                                    </columns>
+                                                    <rows>
+                                                        <group label="${c:l('sp.common.english')}" />
+                                                        <row>
+                                                            <label value="${c:l('sp.common.alias')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtAliasEnglish" width="320px" maxlength="45" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.common.description')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtDescriptionEnglish" width="320px" rows="2" maxlength="255"/>
+                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <group label="${c:l('sp.common.spanish')}" />
+                                                        <row>
+                                                            <label value="${c:l('sp.common.alias')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtAliasSpanish" width="320px" maxlength="45" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.common.description')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtDescriptionSpanish" width="320px" rows="2" maxlength="255" />
+                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
+                                                            </hlayout>
+                                                        </row>
+                                                    </rows>
+                                                </grid>
+
+                                                <label value="${c:l('sp.crud.profile.permissions')}" sclass="lblbold"/>
+                                                <listbox id="lbxPermissions" fixedLayout="true" multiple="true" checkmark="true" width="1395px" height="300px">
+                                                    <listhead>
+                                                        <listheader label="" width="30px"/>
+                                                        <listheader label="${c:l('sp.common.name')}" width="345px"/>
+                                                        <listheader label="${c:l('sp.crud.profile.permission.action')}" width="250px"/>
+                                                        <listheader label="${c:l('sp.crud.profile.permission.entity')}" width="250px"/>
+                                                    </listhead>
+                                                </listbox>
+                                            </vlayout>
+                                        </div>
+                                        <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
+                                        <!--Buttons-->
+                                        <div align="right">
+                                            <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listProfiles.zul&quot;)"/>
+                                        </div>
+                                    </vlayout>
+                                </div>
+                                <div></div>
+                            </hlayout>
+                        </div>
+                        <div></div>
+                    </hlayout>
+                </div>
+            </center>
+            <south border="none" size="40px">
+                <include src="adminFooter.zul"/>
+            </south>
+        </borderlayout>
+    </window>
+</zk>

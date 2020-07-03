@@ -1,0 +1,38 @@
+package com.alodiga.wallet.admin.web.components;
+
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+
+import com.alodiga.wallet.admin.web.utils.AccessControl;
+
+public class ShowAdminViewListener implements EventListener {
+
+    private int eventType = -1;
+    private String view = null;
+    private Long permissionId = null;
+    private Object object = null;
+
+    public ShowAdminViewListener() {
+    }
+
+    public ShowAdminViewListener(String view) {
+        this.view = view;
+    }
+
+    public ShowAdminViewListener(int eventType, String view, Object o,Long permissionId) {
+        this.eventType = eventType;
+        this.view = view;
+        this.object = o;
+        this.permissionId = permissionId;
+    }
+
+    public void onEvent(Event event) throws UiException, InterruptedException {
+        Sessions.getCurrent().setAttribute("object", this.object);
+        Sessions.getCurrent().setAttribute("eventType", eventType);
+        AccessControl.saveAction(permissionId, view);
+        Executions.sendRedirect(view);
+    }
+}

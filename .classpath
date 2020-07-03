@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/itextpdf-5.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/java-json.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.json-api-1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zcommon.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zcommons-el.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zhtml.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zk.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zkex.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zkplus.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zml.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zul.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zuljsp.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zweb.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AlodigaWallet"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi.jar"/>
+	<classpathentry kind="lib" path="C:/glassfish4/glassfish/modules/javax.mail.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
