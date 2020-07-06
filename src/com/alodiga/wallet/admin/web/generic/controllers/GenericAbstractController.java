@@ -20,6 +20,7 @@ import org.zkoss.zul.Separator;
 import org.zkoss.zul.Window;
 
 import com.alodiga.wallet.admin.web.utils.AccessControl;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 
 public class GenericAbstractController extends GenericForwardComposer implements GenericSPController {
 
@@ -32,6 +33,7 @@ public class GenericAbstractController extends GenericForwardComposer implements
     public boolean permissionDelete;
     public Long languageId = 1L;
     public Div divInfo;
+    public EJBRequest request = new EJBRequest();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {

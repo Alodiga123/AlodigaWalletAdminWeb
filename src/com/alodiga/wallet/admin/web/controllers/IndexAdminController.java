@@ -1,6 +1,8 @@
 package com.alodiga.wallet.admin.web.controllers;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.zkoss.util.Locales;
 import org.zkoss.web.Attributes;
@@ -11,13 +13,11 @@ import org.zkoss.zul.Textbox;
 
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
-import com.alodiga.wallet.admin.web.utils.RestClient;
-import com.alodiga.wallet.respuestas.ResponseCode;
-import com.alodiga.wallet.rest.request.UserRequest;
-import com.alodiga.wallet.rest.response.UserResponse;
-import com.alodiga.wallet.utils.Encoder;
-import com.alodiga.wallet.web.exceptions.GeneralException;
-import com.alodiga.wallet.web.exceptions.RegisterNotFoundException;
+import com.alodiga.wallet.common.ejb.UserEJB;
+import com.alodiga.wallet.common.exception.DisabledUserException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
+import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.QueryConstants;
 
 public class IndexAdminController extends GenericAbstractController {
 
@@ -27,7 +27,9 @@ public class IndexAdminController extends GenericAbstractController {
     private Textbox txtPassword;
     private Groupbox gbxLogin;
     private Groupbox gbxRecoverPass;
+    private UserEJB userEJB = null;
     private String adminHome ="home-admin.zul";
+
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -79,10 +81,10 @@ public class IndexAdminController extends GenericAbstractController {
                 if (AccessControl.validateUser(txtLogin.getText(), txtPassword.getText())) {
                 	return true;
                 }
-//            } catch (DisabledUserException ex) {
-//                this.showMessage("sp.error.disableAccount", true, null);
-//            } catch (RegisterNotFoundException ex) {
-//                this.showMessage("sp.error.invalid.login", true, null);
+            } catch (DisabledUserException ex) {
+                this.showMessage("sp.error.disableAccount", true, null);
+            } catch (RegisterNotFoundException ex) {
+                this.showMessage("sp.error.invalid.login", true, null);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 this.showMessage("sp.error.general", true, null);
@@ -123,22 +125,18 @@ public class IndexAdminController extends GenericAbstractController {
         gbxLogin.setVisible(true);
         gbxRecoverPass.setVisible(false);
     }
+    
     public void onClick$btnRecoverPass() throws InterruptedException {
         this.clearMessage();
         if (validateRecoverLogin()) {
             try {
-            	RestClient client = new RestClient();
-            	UserRequest userRequest = new UserRequest();
-        		userRequest.setLogin(txtRecoverLogin.getText());
-        		UserResponse userResponse = (UserResponse) client.getResponse("loadUserByLogin", userRequest, UserResponse.class);
-        		if (userResponse.getCodigoRespuesta().equals(ResponseCode.EXITO.getCodigo())) {
-        			userRequest.setId(userResponse.getId());
-        			userRequest.setPassword(userResponse.getPassword());
-        			AccessControl.generateNewPassword(userRequest, false);
-        			this.showMessage("sp.common.recoveryPassword.success", false, null);        			
-        		}else if(userResponse.getCodigoRespuesta().equals(ResponseCode.USER_NOT_FOUND.getCodigo())) {
-        			throw new RegisterNotFoundException(userResponse.getMensajeRespuesta());
-        		}
+                User user = null;
+                Map params = new HashMap<String, Object>();
+                params.put(QueryConstants.PARAM_LOGIN, txtRecoverLogin.getText());
+                request.setParams(params);
+                user = userEJB.loadUserByLogin(request);
+                AccessControl.generateNewPassword(user, false);
+                this.showMessage("sp.common.recoveryPassword.success", false, null);
             } catch (RegisterNotFoundException e) {
                 this.showMessage("sp.common.recoveryPassword.notFound", true, null);
             } catch (Exception e) {

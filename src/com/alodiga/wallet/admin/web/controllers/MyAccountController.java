@@ -3,6 +3,7 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -11,17 +12,19 @@ import org.zkoss.zul.Textbox;
 
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
-import com.alodiga.wallet.admin.web.utils.RestClient;
-import com.alodiga.wallet.model.Enterprise;
-import com.alodiga.wallet.respuestas.ResponseCode;
-import com.alodiga.wallet.rest.request.ProfileRequest;
-import com.alodiga.wallet.rest.response.ProfileResponse;
-import com.alodiga.wallet.rest.response.UserHasProfileHasEnterpriseResponse;
-import com.alodiga.wallet.rest.response.UserResponse;
+import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.UserEJB;
+import com.alodiga.wallet.common.model.Enterprise;
+import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.model.UserHasProfileHasEnterprise;
+import com.alodiga.wallet.common.utils.EJBServiceLocator;
+import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.Encoder;
+
 
 public class MyAccountController extends GenericAbstractAdminController {
 
-    private static final long serialVersionUID = -9145887024839938515L;
+	private static final long serialVersionUID = -9145887024839938515L;
     private Label lblLogin;
     private Textbox txtOldPassword;
     private Textbox txtNewPassword1;
@@ -34,7 +37,8 @@ public class MyAccountController extends GenericAbstractAdminController {
 //    private Checkbox cbxReceiveTopNotification;
     private Listbox lbxEnterprises;
     private Label lblProfile;
-    private UserResponse userParam;
+    private UserEJB userEJB = null;
+    private User userParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -47,6 +51,7 @@ public class MyAccountController extends GenericAbstractAdminController {
     public void initialize() {
         try {
             super.initialize();
+            userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
             userParam = AccessControl.loadCurrentUser();
             loadFields(userParam);
         } catch (Exception ex) {
@@ -57,17 +62,10 @@ public class MyAccountController extends GenericAbstractAdminController {
     public void clearFields() {
     }
 
-    private void loadFields(UserResponse user) {
+    private void loadFields(User user) {
         try {
             lblLogin.setValue(user.getLogin());
-            Long profileId = user.getUserHasProfileHasEnterpriseResponse().get(0).getProfileId();
-            ProfileRequest profileRequest = new ProfileRequest();
-       	    profileRequest.setId(profileId);
-       	    RestClient restClient = new RestClient();
-	       	ProfileResponse profileResponse = (ProfileResponse) restClient.getResponse("getProfileById",profileRequest,ProfileResponse.class);
-	      	if (profileResponse.getCodigoRespuesta().equals(ResponseCode.EXITO.getCodigo())) {		
-	      		lblProfile.setValue(profileResponse.getProfileDataByLanguageId(profileId).getAlias());
-	      	} 
+            lblProfile.setValue(user.getUserHasProfileHasEnterprises().get(0).getProfile().getProfileDataByLanguageId(languageId).getAlias());
             txtName.setText(user.getFirstName());
             txtLastName.setText(user.getLastName());
             txtEmail.setText(user.getEmail());
@@ -75,19 +73,17 @@ public class MyAccountController extends GenericAbstractAdminController {
 //            cbxEnabled.setChecked(user.getEnabled());
 //            cbxReceiveTopNotification.setChecked(user.getReceiveTopUpNotification());
             lbxEnterprises.getItems().clear();
-            loadEnterpriseList(user.getUserHasProfileHasEnterpriseResponse());
+            loadEnterpriseList(user.getUserHasProfileHasEnterprises());
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    private void loadEnterpriseList(List<UserHasProfileHasEnterpriseResponse> userHasProfileHasEnterprises) {
+    private void loadEnterpriseList(List<UserHasProfileHasEnterprise> userHasProfileHasEnterprises) {
         lbxEnterprises.setCheckmark(false);
         for (int i = 0; i < userHasProfileHasEnterprises.size(); i++) {
             if (userHasProfileHasEnterprises.get(i).getEndingDate() == null) {
-                Long enterpriseId = userHasProfileHasEnterprises.get(i).getEnterpriseId();
-                Enterprise enterprise = new Enterprise();
-                enterprise.setName("Alodiga");
+                Enterprise enterprise = userHasProfileHasEnterprises.get(i).getEnterprise();
                 Listitem item = new Listitem();
                 item.setValue(enterprise);
                 item.appendChild(new Listcell(enterprise.getName()));
@@ -120,45 +116,45 @@ public class MyAccountController extends GenericAbstractAdminController {
 
     }
 
-    private void saveUser(UserResponse _user) {
+    private void saveUser(User _user) {
         try {
             if (_user != null) {
-//                User user = _user;
-//                if (txtOldPassword.getText().isEmpty()) {
-//                    user.setFirstName(txtName.getText());
-//                    user.setLastName(txtLastName.getText());
-//                    user.setEmail(txtEmail.getText());
-//                    user.setPhoneNumber(txtPhoneNumber.getText());
-//                    user.setEnabled(true);
-//                    user.setReceiveTopUpNotification(true);
-//                    request.setParam(user);
-//                    user = userEJB.saveUser(request);
-//                    userParam = user;
-//                    Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
-//                    this.showMessage("sp.common.save.update", false, null);
-//                } else if (user.getPassword().equals(Encoder.MD5(txtOldPassword.getText()))) {
-//                    if (txtNewPassword1.getText().equals(txtNewPassword2.getText())) {
-//                        user.setPassword(Encoder.MD5(txtNewPassword1.getText()));
-//                        user.setFirstName(txtName.getText());
-//                        user.setLastName(txtLastName.getText());
-//                        user.setEmail(txtEmail.getText());
-//                        user.setPhoneNumber(txtPhoneNumber.getText());
-//                        user.setEnabled(true);
-//                        user.setReceiveTopUpNotification(true);
-//                        request.setParam(user);
-//                        user = userEJB.saveUser(request);
-//                        userParam = user;
-//                        Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
-//                        this.showMessage("sp.common.save.update", false, null);
-//                    } else {
-//
-//                        this.showMessage("sp.error.confirmationPasswordNotEqual", true, null);
-//                    }
-//                } else {
-//                    this.showMessage("sp.error.wrongPassword", true, null);
-//                }
-//            } else {
-//                this.showMessage("sp.error.general", true, null);
+                User user = _user;
+                if (txtOldPassword.getText().isEmpty()) {
+                    user.setFirstName(txtName.getText());
+                    user.setLastName(txtLastName.getText());
+                    user.setEmail(txtEmail.getText());
+                    user.setPhoneNumber(txtPhoneNumber.getText());
+                    user.setEnabled(true);
+                    user.setReceiveTopUpNotification(true);
+                    request.setParam(user);
+                    user = userEJB.saveUser(request);
+                    userParam = user;
+                    Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
+                    this.showMessage("sp.common.save.update", false, null);
+                } else if (user.getPassword().equals(Encoder.MD5(txtOldPassword.getText()))) {
+                    if (txtNewPassword1.getText().equals(txtNewPassword2.getText())) {
+                        user.setPassword(Encoder.MD5(txtNewPassword1.getText()));
+                        user.setFirstName(txtName.getText());
+                        user.setLastName(txtLastName.getText());
+                        user.setEmail(txtEmail.getText());
+                        user.setPhoneNumber(txtPhoneNumber.getText());
+                        user.setEnabled(true);
+                        user.setReceiveTopUpNotification(true);
+                        request.setParam(user);
+                        user = userEJB.saveUser(request);
+                        userParam = user;
+                        Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
+                        this.showMessage("sp.common.save.update", false, null);
+                    } else {
+
+                        this.showMessage("sp.error.confirmationPasswordNotEqual", true, null);
+                    }
+                } else {
+                    this.showMessage("sp.error.wrongPassword", true, null);
+                }
+            } else {
+                this.showMessage("sp.error.general", true, null);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
