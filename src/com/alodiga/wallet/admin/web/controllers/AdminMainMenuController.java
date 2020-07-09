@@ -16,35 +16,31 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listitem;
 
-import com.alodiga.wallet.admin.web.manager.PermissionManager;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
-import com.alodiga.wallet.admin.web.utils.RestClient;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.model.Enterprise;
-import com.alodiga.wallet.model.Permission;
-import com.alodiga.wallet.respuestas.ResponseCode;
-import com.alodiga.wallet.rest.request.ProfileRequest;
-import com.alodiga.wallet.rest.response.PermissionGroupResponse;
-import com.alodiga.wallet.rest.response.PermissionResponse;
-import com.alodiga.wallet.rest.response.ProfileResponse;
-import com.alodiga.wallet.rest.response.UserResponse;
+import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.Enterprise;
+import com.alodiga.wallet.common.model.Permission;
+import com.alodiga.wallet.common.model.PermissionGroup;
+import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.User;
 
 public class AdminMainMenuController extends GenericForwardComposer {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    UserResponse currentuser = null;
+    User currentuser = null;
     Listcell ltcFullName;
     Listcell ltcProfile;
     Listcell ltcLogin;
     private static String OPTION = "option";
     private static String OPTION_NONE = "none";
     private static String OPTION_CUSTOMERS_LIST = "ltcCustomerList";
-    private List<PermissionResponse> permissions;
-    private List<PermissionGroupResponse> permissionGroups;
-    private List<PermissionGroupResponse> pGroups;
+    private List<Permission> permissions;
+    private List<PermissionGroup> permissionGroups;
+    private List<PermissionGroup> pGroups;
     private PermissionManager pm = null;
     private Listbox lbxPermissions;
-    private ProfileResponse currentProfile = null;
+    private Profile currentProfile = null;
     private Long languageId;
 
     @Override
@@ -75,38 +71,30 @@ public class AdminMainMenuController extends GenericForwardComposer {
     }
 
     private void loadAccountData() {
-        try {
-            currentuser = AccessControl.loadCurrentUser();
-            Long profileId = currentuser.getCurrentProfile(Enterprise.ALODIGA);
-            ProfileRequest profileRequest = new ProfileRequest();
-       	    profileRequest.setId(profileId);
-       	    RestClient restClient = new RestClient();
-	       	ProfileResponse profileResponse = (ProfileResponse) restClient.getResponse("getProfileById",profileRequest,ProfileResponse.class);
-	      	if (profileResponse.getCodigoRespuesta().equals(ResponseCode.EXITO.getCodigo())) {		
-	      		currentProfile = profileResponse;
-	      	} 
-
-            
-            ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
-            ltcLogin.setLabel(currentuser.getLogin());
-            ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    	 try {
+             currentuser = AccessControl.loadCurrentUser();
+             currentProfile = currentuser.getCurrentProfile(Enterprise.ALODIGA);
+             ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
+             ltcLogin.setLabel(currentuser.getLogin());
+             ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
+         } catch (Exception ex) {
+             ex.printStackTrace();
+         }
     }
 
     private void loadMenu() {
         try {
-            pGroups = new ArrayList<PermissionGroupResponse>();
+        	pGroups = new ArrayList<PermissionGroup>();
             permissionGroups = pm.getPermissionGroups();
-            for (PermissionGroupResponse pg : permissionGroups) {
+            for (PermissionGroup pg : permissionGroups) {
                 if (existPermissionInGroup(permissions, pg.getId())) {
                     pGroups.add(pg);
                 }
             }
 
+
             if (!pGroups.isEmpty()) {//ES USUARIO TIENE AL MENOS UN PERMISO ASOCIADO A UN GRUPO
-                for (PermissionGroupResponse pg : pGroups) {
+            	 for (PermissionGroup pg : pGroups) {
                     switch (pg.getId().intValue()) {
                         case 1://Operational Management
                             loadOperationalManagementGroup(pg);
@@ -130,18 +118,18 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     }
 
-    private boolean existPermissionInGroup(List<PermissionResponse> ps, Long permissionGroupId) {
-        for (PermissionResponse p : ps) {
-            if (p.getGroupResponse().getId().equals(permissionGroupId)) {
+    private boolean existPermissionInGroup(List<Permission> ps, Long permissionGroupId) {
+        for (Permission p : ps) {
+            if (p.getPermissionGroup().getId().equals(permissionGroupId)) {
                 return true;
             }
         }
         return false;
     }
 
-    private PermissionResponse loadPermission(Long permissionId) {
+    private Permission loadPermission(Long permissionId) {
 
-        for (PermissionResponse p : permissions) {
+        for (Permission p : permissions) {
             if (p.getId().equals(permissionId)) {
                 return p;
             }
@@ -151,7 +139,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadPemissions() {
         try {
-                permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile(Enterprise.ALODIGA));
+                permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile(Enterprise.ALODIGA).getId());
             if (permissions != null && !permissions.isEmpty()) {
                 loadMenu();
             }
@@ -164,7 +152,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         return Sessions.getCurrent().getAttribute(OPTION) != null ? Sessions.getCurrent().getAttribute(OPTION).toString() : OPTION_NONE;
     }
 
-    private Listgroup createListGroup(PermissionGroupResponse permissionGroup) {
+    private Listgroup createListGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = new Listgroup();
         listgroup.setOpen(false);
         Listcell listcell = new Listcell();
@@ -174,7 +162,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
         return listgroup;
     }
 
-    private void loadOperationalManagementGroup(PermissionGroupResponse permissionGroup) {
+
+    private void loadOperationalManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_COUNTRIES, "listCountries.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
@@ -182,7 +171,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.VIEW_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);    }
 
-    private void loadSecurityManagementGroup(PermissionGroupResponse permissionGroup) {
+    private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {
 
         Listgroup listgroup = createListGroup(permissionGroup);
 //        createCell(Permission.AUDIT_ACTIONS, "listAuditActions.zul", permissionGroup, listgroup);
@@ -191,7 +180,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_USERS, "listUsers.zul", permissionGroup, listgroup);
     }
 
-    private void loadConfigurationsManagementGroup(PermissionGroupResponse permissionGroup) {
+    private void loadConfigurationsManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_ENTERPRISES, "listEnterprises.zul", permissionGroup, listgroup);
         createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
@@ -201,8 +190,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     
 
-    private void createCell(Long permissionId, String view, PermissionGroupResponse permissionGroup, Listgroup listgroup) {
-        PermissionResponse permission = loadPermission(permissionId);
+    private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {
+        Permission permission = loadPermission(permissionId);
         if (permission != null) {
             Listitem item = new Listitem();
             Listcell listCell = new Listcell();
@@ -222,17 +211,16 @@ public class AdminMainMenuController extends GenericForwardComposer {
         }
     }
 
-
     class RedirectListener implements EventListener {
 
         private String view = null;
         private Long permissionId = null;
-        private PermissionGroupResponse permissionGroup;
+        private PermissionGroup permissionGroup;
 
         public RedirectListener() {
         }
 
-        public RedirectListener(String view, Long permissionId, PermissionGroupResponse permissionGroup) {
+        public RedirectListener(String view, Long permissionId, PermissionGroup permissionGroup) {
             this.view = view;
             this.permissionId = permissionId;
             this.permissionGroup = permissionGroup;

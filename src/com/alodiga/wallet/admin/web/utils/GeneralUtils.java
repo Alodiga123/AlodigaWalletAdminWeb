@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
 
+import com.alodiga.wallet.common.utils.Encoder;
+
 public class GeneralUtils {
 
     public static final String FORMAT_DATE_USA = "yyyy-MM-dd HH:mm:ss";

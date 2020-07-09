@@ -13,9 +13,9 @@ import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractController;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericSPController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.model.Enterprise;
-import com.alodiga.wallet.model.PreferenceField;
-import com.alodiga.wallet.model.PreferenceValue;
+import com.alodiga.wallet.common.model.Enterprise;
+import com.alodiga.wallet.common.model.PreferenceField;
+import com.alodiga.wallet.common.model.PreferenceValue;
 
 public class AdminSettingsController extends GenericAbstractController implements GenericSPController {
 
