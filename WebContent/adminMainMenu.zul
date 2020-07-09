@@ -1,7 +1,7 @@
 
-<div width="300px" height="1300px" apply="com.alodiga.wallet.admin.web.controllers.AdminMainMenuController">
+<div width="250px" height="1300px" apply="com.alodiga.wallet.admin.web.controllers.AdminMainMenuController">
     <image id="imgLogo" src="/images/logo_header.png" style="cursor:pointer" />
-    <listbox id="lbxAccount" width="295px" style="background-color: green; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;border-width: 1px;border-color: gray;" class="borderedFrame">
+    <listbox id="lbxAccount" width="245px" style="background-color: green; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;border-width: 1px;border-color: gray;" class="borderedFrame">
         <listgroup open="true">
             <listcell label="${c:l('sp.menu.main.myAccount')}"/>
             <listcell/>
@@ -17,7 +17,7 @@
         </listitem>
     </listbox>
     <separator/>
-    <listbox id="lbxPermissions" width="295px">
+    <listbox id="lbxPermissions" width="245px">
         
     </listbox>
 </div>
