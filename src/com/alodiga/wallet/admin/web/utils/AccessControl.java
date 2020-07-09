@@ -21,6 +21,7 @@ import com.alodiga.wallet.common.ejb.UserEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.DisabledUserException;
 import com.alodiga.wallet.common.exception.GeneralException;
+import com.alodiga.wallet.common.exception.InvalidPasswordException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
@@ -99,7 +100,7 @@ public class AccessControl {
 	        return false;
 	    }
 
-	    public static boolean validateUser(String login, String password) throws RegisterNotFoundException, GeneralException, NoSuchAlgorithmException, UnsupportedEncodingException, NullParameterException, DisabledUserException {
+	    public static boolean validateUser(String login, String password) throws InvalidPasswordException, RegisterNotFoundException, GeneralException, NoSuchAlgorithmException, UnsupportedEncodingException, NullParameterException, DisabledUserException {
 	        boolean valid = false;
 	        User user = null;
 	        accessEjb = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
