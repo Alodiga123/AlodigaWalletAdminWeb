@@ -147,24 +147,26 @@ public class ListProductsController extends GenericAbstractListController<Produc
                 btnDownload.setVisible(true);
                 for (Product product : list) {
 
-                    item = new Listitem();
-                    item.setValue(product);
-                    item.appendChild(new Listcell(product.getName()));
-                    item.appendChild(new Listcell(product.getCategoryId().getName()));
-                    item.appendChild(permissionChangeStatus ? initEnabledButton(product.getEnabled(), item) : new Listcell());
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, product, Permission.EDIT_PRODUCT) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, product, Permission.VIEW_PRODUCT) : new Listcell());
-                    item.setParent(lbxRecords);
-                }
-            } else {
-                btnDownload.setVisible(false);
-                item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell());
-                item.setParent(lbxRecords);
-            }
+	                    item = new Listitem();
+	                    item.setValue(product);
+	                    item.appendChild(new Listcell(product.getName()));
+                            item.appendChild(new Listcell(product.getEnterpriseId().getName()));
+	                    item.appendChild(new Listcell(product.getCategoryId().getName()));
+                            item.appendChild(new Listcell(product.getProductIntegrationTypeId().getName()));
+                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("ma.common.yes"):Labels.getLabel("ma.common.no"))));
+	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, product,Permission.EDIT_PRODUCT) : new Listcell());
+	                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, product,Permission.VIEW_PRODUCT) : new Listcell());
+	                    item.setParent(lbxRecords);
+	                }
+	            } else {
+	                btnDownload.setVisible(false);
+	                item = new Listitem();
+	                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+	                item.appendChild(new Listcell());
+	                item.appendChild(new Listcell());
+	                item.appendChild(new Listcell());
+	                item.setParent(lbxRecords);
+	            }
 
         } catch (Exception ex) {
             showError(ex);
