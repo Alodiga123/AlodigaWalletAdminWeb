@@ -55,16 +55,13 @@
                                             <!--Record Listbox-->
                                              <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="550px" mold="paging">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.PartNumber')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.descripton')}" width="330px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.ubicationBox')}" width="160px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.ubicationFolder')}" width="165px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.stockMin')}" width="160px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.stockMax')}" width="160px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.category')}" width="120px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.status')}" width="50px" sort="auto"/>
-                                                    <listheader label="-" width="50px"/>
-<!--                                                     <listheader label="-" width="50px"/> -->
+                                                    <listheader label="${c:l('ma.common.product')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enterprise')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('ma.common.category')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('ma.common.integration.type')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enabled')}" width="200px" sort="auto"/>
+                                                    <listheader label="-" width="80px"/>
+                                                    <listheader label="-" width="80px"/> 
                                                     
                                                 </listhead>
                                             </listbox>
