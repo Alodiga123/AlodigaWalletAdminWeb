@@ -25,9 +25,9 @@ import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 
-import com.alodiga.wallet.model.Language;
-import com.alodiga.wallet.utils.Constants;
-import com.alodiga.wallet.utils.GeneralUtils;
+import com.alodiga.wallet.common.model.Language;
+import com.alodiga.wallet.common.utils.Constants;
+
 
 
 
