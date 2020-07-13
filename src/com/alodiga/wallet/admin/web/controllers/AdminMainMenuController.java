@@ -1,6 +1,5 @@
 package com.alodiga.wallet.admin.web.controllers;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,20 +70,20 @@ public class AdminMainMenuController extends GenericForwardComposer {
     }
 
     private void loadAccountData() {
-    	 try {
-             currentuser = AccessControl.loadCurrentUser();
-             currentProfile = currentuser.getCurrentProfile(Enterprise.ALODIGA);
-             ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
-             ltcLogin.setLabel(currentuser.getLogin());
-             ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
-         } catch (Exception ex) {
-             ex.printStackTrace();
-         }
+        try {
+            currentuser = AccessControl.loadCurrentUser();
+            currentProfile = currentuser.getCurrentProfile(Enterprise.ALODIGA);
+            ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
+            ltcLogin.setLabel(currentuser.getLogin());
+            ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void loadMenu() {
         try {
-        	pGroups = new ArrayList<PermissionGroup>();
+            pGroups = new ArrayList<PermissionGroup>();
             permissionGroups = pm.getPermissionGroups();
             for (PermissionGroup pg : permissionGroups) {
                 if (existPermissionInGroup(permissions, pg.getId())) {
@@ -92,9 +91,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
                 }
             }
 
-
             if (!pGroups.isEmpty()) {//ES USUARIO TIENE AL MENOS UN PERMISO ASOCIADO A UN GRUPO
-            	 for (PermissionGroup pg : pGroups) {
+                for (PermissionGroup pg : pGroups) {
                     switch (pg.getId().intValue()) {
                         case 1://Operational Management
                             loadOperationalManagementGroup(pg);
@@ -108,7 +106,6 @@ public class AdminMainMenuController extends GenericForwardComposer {
                         default:
                             break;
                     }
-
 
                 }
             }
@@ -139,7 +136,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadPemissions() {
         try {
-                permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile(Enterprise.ALODIGA).getId());
+            permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile(Enterprise.ALODIGA).getId());
             if (permissions != null && !permissions.isEmpty()) {
                 loadMenu();
             }
@@ -162,14 +159,16 @@ public class AdminMainMenuController extends GenericForwardComposer {
         return listgroup;
     }
 
-
     private void loadOperationalManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_COUNTRIES, "listCountries.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
         createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
-        createCell(Permission.VIEW_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);    }
+        createCell(Permission.VIEW_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_CURRENCIES, "listCurrency.zul", permissionGroup, listgroup);
+    }
 
     private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {
 
@@ -186,9 +185,6 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
         createCell(Permission.BALANCE_ADJUSMENT, "balanceAdjusmentView.zul", permissionGroup, listgroup);
     }
-
-
-    
 
     private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {
         Permission permission = loadPermission(permissionId);
