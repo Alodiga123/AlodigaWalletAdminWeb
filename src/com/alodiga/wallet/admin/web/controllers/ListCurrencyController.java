@@ -51,9 +51,9 @@ public class ListCurrencyController extends GenericAbstractListController<Curren
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_BANK));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_BANK);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_BANK);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_CURRENCIES));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_CURRENCIES);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_CURRENCIES);
 //            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.CHANGE_USER_STATUS);
         } catch (Exception ex) {
             showError(ex);
@@ -161,8 +161,8 @@ public class ListCurrencyController extends GenericAbstractListController<Curren
                     item.setValue(currency);
                     item.appendChild(new Listcell(currency.getName()));
                     item.appendChild(new Listcell(currency.getSymbol()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, currency, Permission.EDIT_BANK) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, currency, Permission.VIEW_BANK) : new Listcell());
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, currency, Permission.EDIT_CURRENCIES) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, currency, Permission.VIEW_CURRENCIES) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {

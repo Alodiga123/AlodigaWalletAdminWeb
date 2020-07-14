@@ -10,34 +10,34 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
-import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.UserEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.Bank;
 import com.alodiga.wallet.common.model.Enterprise;
+import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
-public class ListBankController extends GenericAbstractListController<Bank> {
+public class ListExchangeRateController extends GenericAbstractListController<ExchangeRate> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
-    private UserEJB userEJB = null;
     private UtilsEJB utilsEJB = null;
-    private List<Bank> banks = null;
+    private List<ExchangeRate> exchangeRates = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -50,14 +50,12 @@ public class ListBankController extends GenericAbstractListController<Bank> {
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_BANK));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_BANK);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_BANK);
-//            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.CHANGE_USER_STATUS);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_EXCHANGE_RATE));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_EXCHANGE_RATE);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_EXCHANGE_RATE);
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     public void startListener() {
@@ -72,38 +70,20 @@ public class ListBankController extends GenericAbstractListController<Bank> {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
             checkPermissions();
-            adminPage = "adminBank.zul";
+            adminPage = "adminExchangeRate.zul";
             getData();
-            loadList(banks);
+            loadList(exchangeRates);
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    private Listcell initEnabledButton(final Boolean enabled, final Listitem listItem) {
-
-        Listcell cell = new Listcell();
-        cell.setValue("");
-        final ChangeStatusButton button = new ChangeStatusButton(enabled);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
-        button.setClass("open orange");
-//        button.addEventListener("onClick", new EventListener() {
-//
-//            public void onEvent(Event event) throws Exception {
-//                changeStatus(button, listItem);
-//            }
-//        });
-
-        button.setParent(cell);
-        return cell;
-    }
-
-    public List<Bank> getFilteredList(String filter) {
-        List<Bank> list = new ArrayList<Bank>();
-        if (banks != null) {
-            for (Iterator<Bank> i = banks.iterator(); i.hasNext();) {
-                Bank tmp = i.next();
-                String field = tmp.getName().toLowerCase();
+    public List<ExchangeRate> getFilteredList(String filter) {
+        List<ExchangeRate> list = new ArrayList<ExchangeRate>();
+        if (exchangeRates != null) {
+            for (Iterator<ExchangeRate> i = exchangeRates.iterator(); i.hasNext();) {
+                ExchangeRate tmp = i.next();
+                String field = tmp.getProductId().getName().toLowerCase();
                 if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
                     list.add(tmp);
                 }
@@ -121,36 +101,27 @@ public class ListBankController extends GenericAbstractListController<Bank> {
     public void onClick$btnDelete() {
     }
 
-//    private void changeStatus(ChangeStatusButton button, Listitem listItem) {
-//        try {
-//            Bank bank = (Bank) listItem.getValue();
-//            button.changeImageStatus(bank.getEnabled());
-//            bank.setEnabled(!bank.getEnabled());
-//            listItem.setValue(bank);
-//            //request.setAuditData(AccessControl.getCurrentAudit());
-//            request.setParam(bank);
-//            userEJB.saveUser(request);
-////            AccessControl.saveAction(Permission.CHANGE_USER_STATUS, "changeStatus user = " + user.getId() + " to status = " + !user.getEnabled());
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-
-    public void loadList(List<Bank> list) {
+    public void loadList(List<ExchangeRate> list) {
+        Locale locale = new Locale ("es", "ES");
+        String value = "";
+        NumberFormat numberFormat = NumberFormat.getInstance (locale);
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
                 
-                for (Bank bank : list) {
+                for (ExchangeRate exchangeRate : list) {
                     item = new Listitem();
-                    item.setValue(bank);
-                    item.appendChild(new Listcell(bank.getName()));
-                    item.appendChild(new Listcell(bank.getEnterpriseId().getName()));
-                    item.appendChild(new Listcell(bank.getCountryId().getName()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, bank, Permission.EDIT_BANK) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, bank, Permission.VIEW_BANK) : new Listcell());
+                    item.setValue(exchangeRate);
+                    String pattern = "yyyy-MM-dd";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                    item.appendChild(new Listcell(exchangeRate.getProductId().getName()));
+                    value = numberFormat.format(exchangeRate.getValue());
+                    item.appendChild(new Listcell(value));
+                    item.appendChild(new Listcell(simpleDateFormat.format(exchangeRate.getBeginningDate())));
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, exchangeRate, Permission.EDIT_EXCHANGE_RATE) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, exchangeRate, Permission.VIEW_EXCHANGE_RATE) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -169,11 +140,11 @@ public class ListBankController extends GenericAbstractListController<Bank> {
     }
 
     public void getData() {
-        banks = new ArrayList<Bank>();
+        exchangeRates = new ArrayList<ExchangeRate>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-            banks = utilsEJB.getBank(request);
+            exchangeRates = utilsEJB.getExchangeRate(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -194,8 +165,8 @@ public class ListBankController extends GenericAbstractListController<Bank> {
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.bank.list"));
-            AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Bancos en formato excel");
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.exchangeRate.list"));
+            AccessControl.saveAction(Permission.LIST_EXCHANGE_RATE, "Se descargo listado de tipo de cambio en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
