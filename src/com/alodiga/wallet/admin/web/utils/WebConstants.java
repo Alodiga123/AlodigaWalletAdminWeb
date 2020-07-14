@@ -9,7 +9,6 @@ public class WebConstants {
     public static final int EVENT_DELETE = 3;
     public static final int EVENT_VIEW = 4;
     public static final int EVENT_ADD_DESCENDANT = 5;
-    public static final String EVENTYPE = "eventType";
     public static final String SESSION_ACCOUNT = "sp_account";
     public static final String SESSION_DISTRIBUTOR = "sp_loguedDistributor";
     public static final String SESSION_FULLSITE = "sp_fullSite";
@@ -36,7 +35,6 @@ public class WebConstants {
     public static final String DATA = "data";
     public static final String ID_PARAM_REPORT_OPEN = "/*<accountSql>*/";
     public static final String ID_PARAM_REPORT_CLOSED = "/*</accountSql>*/";
-    public static final String ID_ELEMENT = "id";
     public static final int INTEGER = 1;
     public static final int FLOAT = 2;
     public static final int STRING = 3;
