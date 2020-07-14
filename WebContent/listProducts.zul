@@ -55,10 +55,10 @@
                                             <!--Record Listbox-->
                                              <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="550px" mold="paging">
                                                 <listhead>
-                                                    <listheader label="${c:l('ma.common.product')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product')}" width="260px" sort="auto"/>
                                                     <listheader label="${c:l('sp.common.enterprise')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('ma.common.category')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('ma.common.integration.type')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.home.category')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product.integration.type')}" width="260px" sort="auto"/>
                                                     <listheader label="${c:l('sp.common.enabled')}" width="200px" sort="auto"/>
                                                     <listheader label="-" width="80px"/>
                                                     <listheader label="-" width="80px"/> 
