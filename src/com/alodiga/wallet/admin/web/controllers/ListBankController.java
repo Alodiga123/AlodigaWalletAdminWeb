@@ -194,8 +194,8 @@ public class ListBankController extends GenericAbstractListController<Bank> {
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.user.list"));
-            AccessControl.saveAction(Permission.LIST_USERS, "Se descargo listado de productos en stock formato excel");
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.bank.list"));
+            AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Bancos en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
