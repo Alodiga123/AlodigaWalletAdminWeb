@@ -2,9 +2,10 @@
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
 <?page title="${c:l('sp.common.page.title')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
-<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
+<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
+
 <zk xmlns:n="native">
-    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListProductsController" class="general-window">
+    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListCurrencyController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -14,19 +15,19 @@
                 <div align="center" >
                     <hlayout>
                         <div></div>
-                        <div width="1800px" align="left" height="670px">
+                        <div width="100%" align="left" height="100%">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
-                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.product.list')}" />
+                                                |
+                                                <toolbarbutton label="${c:l('sp.crud.currency.list')}"/>
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -34,49 +35,35 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.crud.product')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <label value="${c:l('sp.crud.currency.nameMoney')}" width="80px" sclass="lblbold"/>
+                                                    <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
-
                                                 <hlayout>
                                                     <!--Add button-->
-                                                    <div align="left" width="495px">
+                                                    <div align="left" width="385px">
                                                         <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}"/>
                                                     </div>
                                                     <!--Filters button-->
-                                                    <div align="right" width="900px">
+                                                    <div align="right" width="600px">
                                                         <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                         <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                     </div>
                                                 </hlayout>
-
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                             <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="550px" mold="paging">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.product')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enterprise')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.home.category')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.product.integration.type')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enabled')}" width="200px" sort="auto"/>
-                                                    <listheader label="-" width="80px"/>
-                                                    <listheader label="-" width="80px"/> 
-                                                    
+                                                    <listheader label="${c:l('sp.crud.country.name')}" width="500px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.currency.symbolMoney')}" width="400px" sort="auto"/>
+                                                    <listheader label="-" width="45px"/>
+                                                    <listheader label="-" width="45px"/>
                                                 </listhead>
                                             </listbox>
-                                            
-
-
-
-
-
-
                                         </div>
                                         <!--Download button-->
                                         <div align="right">
-                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
-                                            <button id="btnExportPdf" label="${c:l('sp.common.actions.download.pdf')}"  width="90px" class="open orange" tooltiptext="${c:l('sp.common.actions.download.pdf')}"/>
+                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>
                                 </div>

@@ -20,7 +20,12 @@ import org.zkoss.zul.Separator;
 import org.zkoss.zul.Window;
 
 import com.alodiga.wallet.admin.web.utils.AccessControl;
+import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import java.lang.reflect.Field;
+import java.util.List;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 
 public class GenericAbstractController extends GenericForwardComposer implements GenericSPController {
 
@@ -155,5 +160,49 @@ public class GenericAbstractController extends GenericForwardComposer implements
                 printer.close();
             }
         }
+    }
+    
+    public Combobox loadGenericCombobox(List<?> objs, Combobox combobox, String fieldName, Integer eventType, Long objectTrassientId) {
+        try {
+            for (Object c : objs) {
+                Comboitem item = new Comboitem();
+                item.setValue(c);
+                Class cls = c.getClass();
+                Field f;
+                Field id;
+                f = cls.getDeclaredField(fieldName);
+                f.setAccessible(true);
+                String name = (String) f.get(c);
+                item.setLabel(name);
+                item.setParent(combobox);
+                f.setAccessible(false);
+                if (eventType.equals(WebConstants.EVENT_EDIT) || eventType.equals(WebConstants.EVENT_VIEW)) {
+                    id = cls.getDeclaredField(WebConstants.ID_ELEMENT);
+                    id.setAccessible(true);
+                    if(id.get(c) instanceof Integer){
+                        if ((Long.valueOf((Integer) id.get(c))).equals(objectTrassientId)){
+                            combobox.setSelectedItem(item);
+                        }
+                    }
+                    if(id.get(c) instanceof Long){
+                        if(((Long) id.get(c)).equals(objectTrassientId)){
+                              combobox.setSelectedItem(item);
+                        }
+                    }
+                }
+            }
+            if (eventType.equals(WebConstants.EVENT_VIEW)) {
+                combobox.setDisabled(true);
+            }
+        } catch (NoSuchFieldException ex) {
+            Logger.getLogger(GenericAbstractController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(GenericAbstractController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(GenericAbstractController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GenericAbstractController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return combobox;
     }
 }
