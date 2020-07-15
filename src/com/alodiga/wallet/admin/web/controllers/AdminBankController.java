@@ -25,19 +25,16 @@ import org.zkoss.zul.Toolbarbutton;
 public class AdminBankController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-//    private static final long serialVersionUID = -9145887024839938157L;
     private Textbox txtName;
     private Textbox txtCodeSwift;
     private Textbox txtAba;
     private Combobox cmbEnterprise;
     private Combobox cmbCountry;
     private UtilsEJB utilsEJB = null;
-    private AccessControlEJB accessEJB = null;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private Bank bankParam;
     private Integer eventType;
-    private boolean editingPassword = false;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -50,7 +47,7 @@ public class AdminBankController extends GenericAbstractAdminController {
         }
 
         initialize();
-        initView(eventType, "crud.user");
+        initView(eventType, "crud.bank");
     }
 
     @Override
@@ -70,7 +67,6 @@ public class AdminBankController extends GenericAbstractAdminController {
                 break;
         }
         try {
-            accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
@@ -95,11 +91,11 @@ public class AdminBankController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtName.setReadonly(true);
-//        txtCodeSwift.setReadonly(true);
-        txtAba.setReadonly(true);
-        cmbCountry.setReadonly(true);
-        cmbEnterprise.setReadonly(true);
+        txtName.setDisabled(true);
+//        txtCodeSwift.setDisabled(true);
+        txtAba.setDisabled(true);
+        cmbCountry.setDisabled(true);
+        cmbEnterprise.setDisabled(true);
         
         btnSave.setVisible(false);
     }
