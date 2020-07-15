@@ -6,7 +6,6 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Combobox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.AccessControlEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
@@ -33,12 +32,10 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     private Datebox dtbEndingDate;
     private UtilsEJB utilsEJB = null;
     private ProductEJB productEJB = null;
-    private AccessControlEJB accessEJB = null;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private ExchangeRate exchangeRateParam;
     private Integer eventType;
-    private boolean editingPassword = false;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -51,7 +48,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         }
 
         initialize();
-        initView(eventType, "crud.user");
+        initView(eventType, "crud.exchangeRate");
     }
 
     @Override
@@ -71,7 +68,6 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
                 break;
         }
         try {
-            accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             loadData();
@@ -99,7 +95,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     }
 
     public void blockFields() {
-        dblValue.setReadonly(true);
+        dblValue.setDisabled(true);
         dtbBeginningDate.setDisabled(true);
         dtbEndingDate.setDisabled(true);
         cmbProduct.setReadonly(true);

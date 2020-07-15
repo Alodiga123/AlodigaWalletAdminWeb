@@ -5,7 +5,7 @@
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 
 <zk xmlns:n="native">
-    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListCurrencyController" class="general-window">
+    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListCountriesController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.currency.list')}"/>
+                                                <toolbarbutton label="${c:l('sp.crud.counties.list')}" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -35,7 +35,7 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.crud.currency.nameMoney')}" width="80px" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.crud.country.name')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
@@ -52,10 +52,11 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.country.name')}" width="500px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.currency.symbolMoney')}" width="400px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.country.name')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.country.shortName')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.country.code')}" width="300px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
@@ -63,7 +64,7 @@
                                         </div>
                                         <!--Download button-->
                                         <div align="right">
-                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
+                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>
                                 </div>
