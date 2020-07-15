@@ -19,7 +19,6 @@ import org.zkoss.zul.Listitem;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.PermissionGroup;
 import com.alodiga.wallet.common.model.Profile;
@@ -73,7 +72,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
     private void loadAccountData() {
     	 try {
              currentuser = AccessControl.loadCurrentUser();
-             currentProfile = currentuser.getCurrentProfile(Enterprise.ALODIGA);
+             currentProfile = currentuser.getCurrentProfile();
              ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
              ltcLogin.setLabel(currentuser.getLogin());
              ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
@@ -139,7 +138,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadPemissions() {
         try {
-                permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile(Enterprise.ALODIGA).getId());
+                permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile().getId());
             if (permissions != null && !permissions.isEmpty()) {
                 loadMenu();
             }

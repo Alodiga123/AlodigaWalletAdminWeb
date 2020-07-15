@@ -143,16 +143,7 @@
                                                             <label value="${c:l('sp.common.profile')}" sclass="lblbold"/>
                                                             <label id="lblProfile" />
                                                         </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.enterprise')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <listbox id="lbxEnterprises" fixedLayout="true" multiple="true" width="650px" height="120px">
-                                                                    <listhead>
-                                                                        <listheader label="${c:l('sp.common.enterprise')}" width="610px"/>
-                                                                    </listhead>
-                                                                </listbox>
-                                                            </hlayout>
-                                                        </row>
+                 
                                                     </rows>
                                                 </grid>
                                                 

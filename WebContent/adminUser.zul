@@ -14,12 +14,12 @@
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="1800px" align="left" height="800px">
+                        <div width="1300px" align="left" height="800px">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -116,8 +116,8 @@
 
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="1090px"/>
+                                                        <column label="" width="200px"/>
+                                                        <column label="" width="790px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>
@@ -125,18 +125,6 @@
                                                             <hlayout>
                                                                 <combobox id="cmbProfiles" width="250px" mold="rounded" readonly="true"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.enterprise')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <listbox id="lbxEnterprises" fixedLayout="true" multiple="true" checkmark="true" width="650px" height="120px">
-                                                            <listhead>
-                                                                <listheader label="" width="30px"/>
-                                                                <listheader label="${c:l('sp.common.enterprise')}" width="610px"/>
-                                                            </listhead>
-                                                        </listbox>
-                                                        <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                     </rows>
