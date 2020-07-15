@@ -153,7 +153,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
                             item.appendChild(new Listcell(product.getEnterpriseId().getName()));
 	                    item.appendChild(new Listcell(product.getCategoryId().getName()));
                             item.appendChild(new Listcell(product.getProductIntegrationTypeId().getName()));
-                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("ma.common.yes"):Labels.getLabel("ma.common.no"))));
+                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("sp.crud.product.yes"):Labels.getLabel("sp.crud.product.no"))));
 	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, product,Permission.EDIT_PRODUCT) : new Listcell());
 	                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, product,Permission.VIEW_PRODUCT) : new Listcell());
 	                    item.setParent(lbxRecords);
