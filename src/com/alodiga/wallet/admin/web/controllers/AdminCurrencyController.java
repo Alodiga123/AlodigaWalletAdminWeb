@@ -35,7 +35,7 @@ public class AdminCurrencyController extends GenericAbstractAdminController {
         }
 
         initialize();
-        initView(eventType, "crud.user");
+        initView(eventType, "crud.currency");
     }
 
     @Override
@@ -79,8 +79,8 @@ public class AdminCurrencyController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtNameMoney.setReadonly(true);
-        txtSymbolMoney.setReadonly(true);
+        txtNameMoney.setDisabled(true);
+        txtSymbolMoney.setDisabled(true);
         btnSave.setVisible(false);
     }
 
