@@ -34,7 +34,7 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.common.description')}" width="80px" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.crud.product')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
 
@@ -55,16 +55,13 @@
                                             <!--Record Listbox-->
                                              <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="550px" mold="paging">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.PartNumber')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.descripton')}" width="330px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.ubicationBox')}" width="160px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.ubicationFolder')}" width="165px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.stockMin')}" width="160px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.stockMax')}" width="160px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.category')}" width="120px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.status')}" width="50px" sort="auto"/>
-                                                    <listheader label="-" width="50px"/>
-<!--                                                     <listheader label="-" width="50px"/> -->
+                                                    <listheader label="${c:l('sp.crud.product')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enterprise')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.home.category')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product.integration.type')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enabled')}" width="200px" sort="auto"/>
+                                                    <listheader label="-" width="80px"/>
+                                                    <listheader label="-" width="80px"/> 
                                                     
                                                 </listhead>
                                             </listbox>

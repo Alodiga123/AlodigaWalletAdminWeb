@@ -1,366 +1,445 @@
-//package com.alodiga.wallet.admin.web.controllers;
-//
-//import java.sql.Timestamp;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//import org.zkoss.zk.ui.Component;
-//import org.zkoss.zk.ui.Executions;
-//import org.zkoss.zk.ui.Sessions;
-//import org.zkoss.zul.Button;
-//import org.zkoss.zul.Checkbox;
-//import org.zkoss.zul.Combobox;
-//import org.zkoss.zul.Comboitem;
-//import org.zkoss.zul.Intbox;
-//import org.zkoss.zul.Textbox;
-//
-//import com.alodiga.services.provider.commons.ejbs.AuditoryEJB;
-//import com.alodiga.services.provider.commons.ejbs.ProductEJB;
-//import com.alodiga.services.provider.commons.ejbs.TransactionEJB;
-//import com.alodiga.services.provider.commons.ejbs.UtilsEJB;
-//import com.alodiga.services.provider.commons.exceptions.RegisterNotFoundException;
-//import com.alodiga.services.provider.commons.genericEJB.EJBRequest;
-//import com.alodiga.services.provider.commons.managers.PermissionManager;
-//import com.alodiga.services.provider.commons.models.Audit;
-//import com.alodiga.services.provider.commons.models.Category;
-//import com.alodiga.services.provider.commons.models.Customer;
-//import com.alodiga.services.provider.commons.models.Enterprise;
-//import com.alodiga.services.provider.commons.models.Event;
-//import com.alodiga.services.provider.commons.models.Permission;
-//import com.alodiga.services.provider.commons.models.Product;
-//import com.alodiga.services.provider.commons.models.User;
-//import com.alodiga.services.provider.commons.utils.EJBServiceLocator;
-//import com.alodiga.services.provider.commons.utils.EjbConstants;
-//import com.alodiga.services.provider.commons.utils.GeneralUtils;
-//import com.alodiga.services.provider.commons.utils.QueryConstants;
-//import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
-//import com.alodiga.wallet.admin.web.utils.AccessControl;
-//import com.alodiga.wallet.admin.web.utils.WebConstants;
-//
-//public class AdminProductController extends GenericAbstractAdminController {
-//
-//    private static final long serialVersionUID = -9145887024839938515L;
-//    private Combobox cmbEnterprise;
-//    private Combobox cmbCategory;
-//    private Checkbox cbxEnabled;
-//    private Textbox txtAmount;
-//    private Textbox txtBachNumber;
-//    private Textbox txtUbicationFolder;
-//    private Textbox txtUbicationBox;
-//    private Textbox txtactNpNsn;
-//    private Textbox txtDescription;
-//    private Textbox txtPartNumber;
-//    private Intbox intStockMax;
-//    private Intbox intStockMin;
-//
-//    private ProductEJB productEJB = null;
-//    private TransactionEJB transactionEJB = null;
-//    private UtilsEJB utilsEJB = null;
-//    private Product productParam;
-//    private List<Enterprise> enterprises;
-//    private List<Category> categories;
-//    private Button btnAddDenomination;
-//    private Button btnSave;
-//    private User user;
-//    private AuditoryEJB auditoryEJB;
-//    private String ipAddress;
-//    
-//    @Override
-//    public void doAfterCompose(Component comp) throws Exception {
-//        super.doAfterCompose(comp);
-//        productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
-//        user = AccessControl.loadCurrentUser();
-//        initialize();
-//        initView(eventType, "sp.crud.product");
-//    }
-//
-//    @Override
-//    public void initView(int eventType, String adminView) {
-//        super.initView(eventType, "sp.crud.product");
-//    }
-//
-//    @Override
-//    public void initialize() {
-//        super.initialize();
-//        try {
-//        	ipAddress = Executions.getCurrent().getRemoteAddr();
-//        	auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
-//            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
-//            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-//            transactionEJB = (TransactionEJB) EJBServiceLocator.getInstance().get(EjbConstants.TRANSACTION_EJB);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-//
-//    public void clearFields() {
-//		cbxEnabled.setChecked(false);
-//		txtBachNumber.setRawValue(null);
-//		txtUbicationFolder.setRawValue(null);
-//		txtUbicationBox.setRawValue(null);
-//		txtactNpNsn.setRawValue(null);
-//		txtDescription.setRawValue(null);
-//		txtPartNumber.setRawValue(null);
-//    	intStockMax.setRawValue(null);
-//    	intStockMin.setRawValue(null);
-//    }
-//
-//    public void blockFields() {
-//    	cbxEnabled.setChecked(false);
-//		txtBachNumber.setReadonly(true);
-//		txtUbicationFolder.setReadonly(true);
-//		txtUbicationBox.setReadonly(true);
-//		txtactNpNsn.setReadonly(true);
-//		txtDescription.setReadonly(true);
-//		txtPartNumber.setReadonly(true);
-//    	intStockMax.setReadonly(true);
-//    	intStockMin.setReadonly(true);
-//        cbxEnabled.setDisabled(true);
-//        cmbEnterprise.setDisabled(true);
-//        cmbCategory.setDisabled(true);
-//        btnAddDenomination.setVisible(false);
-//        btnSave.setVisible(false);
-//    }
-//
-//    public Boolean validateEmpty() {
-//    	if (txtUbicationFolder.getText().isEmpty()) {
-//        	txtUbicationFolder.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
-//        } else if (txtUbicationBox.getText().isEmpty()) {
-//        	txtUbicationBox.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
-//        } else if (txtDescription.getText().isEmpty()) {
-//        	txtDescription.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
-//        }else if (txtPartNumber.getText().isEmpty()) {
-//        	txtPartNumber.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null); 
-//        }else if (intStockMax.getText().isEmpty()) {
-//        	intStockMax.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
-//        }else if (intStockMin.getText().isEmpty()) {
-//        	intStockMin.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
-//        } else if (txtPartNumber.getText().isEmpty()) {
-//        	txtPartNumber.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
-//        }else if (intStockMin.getValue()>intStockMax.getValue()) {
-//        	intStockMin.setFocus(true);
-//            this.showMessage("sp.common.stock.min.error", true, null);
-//        }else if (!GeneralUtils.isNumeric(txtAmount.getText())) {
-//        	txtAmount.setFocus(true);
-//            this.showMessage("sp.error.field.number", true, null);
-//        }
-//      
-//        else {
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//
-//    public void onClick$btnSave() {
-//        if (validateEmpty()) {
-//            switch (eventType) {
-//                case WebConstants.EVENT_ADD:
-//                    saveProduct(null);
-//                    break;
-//                case WebConstants.EVENT_EDIT:
-//                    saveProduct(productParam);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//    }
-//
-//    
-//
-//    public void onClick$btnBack() {
-//    	 Executions.sendRedirect("./listProducts.zul");
-//    }
-//    
-//    public void loadData() {
-//        switch (eventType) {
-//            case WebConstants.EVENT_EDIT:
-//                loadFields(productParam);
-//                loadEnterprises(productParam.getEnterprise());
-//                loadCategory(productParam.getCategory());
-//                break;
-//            case WebConstants.EVENT_VIEW:
-//                loadFields(productParam);
-//                loadEnterprises(productParam.getEnterprise());
-//                loadCategory(productParam.getCategory());
-//                blockFields();
-//                break;
-//            case WebConstants.EVENT_ADD:
-//                loadEnterprises(null);
-//                loadCategory(null);
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//
-//    
-//    public void loadFields(Product product) {
-//    	
-//    	intStockMax.setValue(product.getStockMax());
-//    	intStockMin.setValue(product.getStockMin());
-//    	txtAmount.setText(String.valueOf(product.getAmount()));
-////    	txtRealAmount.setText(String.valueOf(product.getRealAmount()));
-////		txtInitialAmount.setText(String.valueOf(product.getInictialAmount()));
-//		txtBachNumber.setText(product.getBatchNumber());
-//		txtUbicationFolder.setText(product.getUbicationFolder());
-//		txtUbicationBox.setText(product.getUbicationBox());
-//		txtactNpNsn.setText(product.getActNpNsn());
-//		txtDescription.setText(product.getDescription());
-//		txtPartNumber.setText(product.getPartNumber());
-//		txtPartNumber.setReadonly(true);
-//		cbxEnabled.setChecked(product.getEnabled());
-//    }
-//
-//
-//    private void loadEnterprises(Enterprise enterprise) {
-//        try {
-//            cmbEnterprise.getItems().clear();
-//            enterprises = utilsEJB.getEnterprises();
-//            for (Enterprise e : enterprises) {
-//                Comboitem cmbItem = new Comboitem();
-//                cmbItem.setLabel(e.getName());
-//                cmbItem.setValue(e);
-//                cmbItem.setParent(cmbEnterprise);
-//                if (enterprise != null && enterprise.getId().equals(e.getId())) {
-//                    cmbEnterprise.setSelectedItem(cmbItem);
-//                } else {
-//                    cmbEnterprise.setSelectedIndex(0);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-//
-//    private void loadCategory(Category category) {
-//        try {
-//        	cmbCategory.getItems().clear();
-//        	categories = transactionEJB.getCategories();
-//            for (Category e : categories) {
-//                Comboitem cmbItem = new Comboitem();
-//                cmbItem.setLabel(e.getName());
-//                cmbItem.setValue(e);
-//                cmbItem.setParent(cmbCategory);
-//                if (category != null && category.getId().equals(e.getId())) {
-//                    cmbEnterprise.setSelectedItem(cmbItem);
-//                } else {
-//                    cmbEnterprise.setSelectedIndex(0);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-//
-//
-//    private void saveProduct(Product _product) {
-//        Product product = new Product();
-//        try {
-//
-//            if (_product != null) 
-//                product.setId(_product.getId());
-//            Map params = new HashMap<String, Object>();
-//            Category category = (Category) cmbCategory.getSelectedItem().getValue();
-//            params.put(QueryConstants.PARAM_PART_NUMBER, txtPartNumber.getText());
-//            params.put(QueryConstants.PARAM_CATEGORY_ID, category.getId());
-//            request.setParams(params);
-//			if (_product == null) {
-//				try {
-//					productParam = productEJB.loadProductByPartNumber(request);
-//					eventType = WebConstants.EVENT_EDIT;
-//					loadData();
-//				} catch (RegisterNotFoundException ex) {
-//					productParam = null;
-//				}
-//			}
-//			if (_product == null && productParam != null) {
-//				this.showMessage("sp.error.part.number.exist", true, null);
-//
-//			} else {
-//				product.setDescription(txtDescription.getText());
-//				product.setAmount(Float.valueOf(txtAmount.getText()));
-//				product.setActNpNsn(txtactNpNsn.getText());
-//				product.setBatchNumber(txtBachNumber.getText());
-//				product.setEnabled(cbxEnabled.isChecked());
-//				product.setPartNumber(txtPartNumber.getText());
-//				product.setUbicationBox(txtUbicationBox.getText());
-//				product.setUbicationFolder(txtUbicationFolder.getText());
-//				product.setStockMin(intStockMin.getValue());
-//				product.setStockMax(intStockMax.getValue());
-//				Enterprise e = (Enterprise) cmbEnterprise.getSelectedItem().getValue();
-//				product.setEnterprise(e);
-//				product.setCategory(category);
-//				request.setParam(product);
-//				request.setAuditData(null);
-//				product = productEJB.saveProduct(request);
-//				productParam = product;
-//				eventType = WebConstants.EVENT_EDIT;
-//				this.showMessage("sp.common.save.success", false, null);
-//				AccessControl.saveAction(Permission.ADD_PRODUCT, "Ingreso el producto= " + product.getPartNumber());
-//				saveAudit(_product, product);
-//			}
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-//
-//
-//    public void saveAudit(Product fCustomerOld ,Product fCustomerNew){
-//        EJBRequest request1 = new EJBRequest();
-//        EJBRequest request2 = new EJBRequest();            
-//        String result = "";
-//         String oldValue ="";
-//        request1.setParam(fCustomerOld);
-//        request2.setParam(fCustomerNew);
-//
-//        try {
-//            result = auditoryEJB.getNaturalFieldProduct(request1, request2);
-//        } catch (Exception ex) {
-//            
-//        }
-//
-//        if(!result.isEmpty()||!"".equals(result)){
-//            String name = fCustomerOld.getDescription();
-//            String actNpNsn = fCustomerOld.getActNpNsn();
-//            String batchNumber = fCustomerOld.getBatchNumber();
-//            String box = fCustomerOld.getUbicationBox();
-//            String folder = fCustomerOld.getUbicationFolder();
-//            String partNumber = fCustomerOld.getPartNumber();
-//            String amount = String.valueOf(fCustomerOld.getAmount());
-//            oldValue = "Description:"+name+"|ActNpNsn:"+actNpNsn+"|BatchNumber:"+batchNumber
-//                    +"|UbicationBox:"+box+"|UbicationFolder:"+folder+"|PartNumber:"+partNumber+"|Amount:"+amount;
-//            
-//            try {
-//				EJBRequest ejbRequest = new EJBRequest();
-//				ejbRequest.setParam(eventType);
-//				Event ev = auditoryEJB.loadEvent(ejbRequest);
-//				Audit audit = new Audit();
-//				EJBRequest auditRequest = new EJBRequest();
-//				audit.setUser(user);
-//				audit.setEvent(ev);
-//				Permission permission = PermissionManager.getInstance().getPermissionById(2L);
-//				audit.setPermission(permission);
-//				audit.setCreationDate(new Timestamp((new java.util.Date().getTime())));
-//				audit.setTableName("Product");
-//				audit.setRemoteIp(ipAddress);
-//				audit.setOriginalValues(oldValue);
-//				audit.setNewValues(result);
-//				audit.setResponsibleType("usuario");
-//				auditRequest.setParam(audit);
-//				audit = auditoryEJB.saveAudit(auditRequest);
-//			} catch (Exception ex) {
-//				ex.printStackTrace();
-//			}
-//        }
-//    }
-//}
+package com.alodiga.wallet.admin.web.controllers;
+
+import java.util.List;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Textbox;
+import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
+import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.AccessControlEJB;
+import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.ejb.ProductEJB;
+import com.alodiga.wallet.common.exception.EmptyListException;
+import com.alodiga.wallet.common.exception.GeneralException;
+import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.model.Bank;
+import com.alodiga.wallet.common.model.Category;
+import com.alodiga.wallet.common.model.Country;
+import com.alodiga.wallet.common.model.Enterprise;
+import com.alodiga.wallet.common.model.Product;
+import com.alodiga.wallet.common.model.ProductIntegrationType;
+import com.alodiga.wallet.common.utils.EJBServiceLocator;
+import com.alodiga.wallet.common.utils.EjbConstants;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Toolbarbutton;
+
+public class AdminProductController extends GenericAbstractAdminController {
+
+    private static final long serialVersionUID = -9145887024839938515L;
+//    private static final long serialVersionUID = -9145887024839938157L;
+    private Combobox cmbEnterprise;
+    private Combobox cmbCategory;
+    private Combobox cmbProductIntegrationType;
+    
+    private Textbox txtName;
+    private Textbox txtSymbol;
+    private Textbox txtReferenceCode;
+    private Textbox txtRatesUrl;
+    private Textbox txtAccessNumberUrl;
+    
+    private Radio rEnabledYes;
+    private Radio rEnabledNo;
+    private Radio rIsFreeYes;
+    private Radio rIsFreeNo;
+    private Radio rIsAlocashProductYes;
+    private Radio rIsAlocashProductNo;
+    private Radio rIsPayTopUpYes;
+    private Radio rIsPayTopUpNo;
+    private Radio rIsExchangeProductYes;
+    private Radio rIsExchangeProductNo;
+    private Radio rIsRemettenceYes;
+    private Radio rIsRemettenceNo;
+    private Radio rTaxIncludeYes;
+    private Radio rTaxIncludeNo;
+    private Radio rIsPaymentInfoYes;
+    private Radio rIsPaymentInfoNo;
+
+    private UtilsEJB utilsEJB = null;
+    private ProductEJB productEJB;
+    private AccessControlEJB accessEJB = null;
+    private Button btnSave;
+    private Toolbarbutton tbbTitle;
+    private Product productParam;
+    private Integer eventType;
+    private boolean editingPassword = false;
+
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+        eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
+        if (eventType == WebConstants.EVENT_ADD) {
+            productParam = null;
+        } else {
+            productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+        }
+
+        initialize();
+        initView(eventType, "crud.produt");
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        switch (eventType) {
+            case WebConstants.EVENT_EDIT:
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.edit"));
+                break;
+            case WebConstants.EVENT_VIEW:
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.view"));
+                break;
+            case WebConstants.EVENT_ADD:
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.add"));
+                break;
+            default:
+                break;
+        }
+        try {
+            accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+
+            loadData();
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
+    public void clearFields() {
+    txtName.setRawValue(null);
+    txtSymbol.setRawValue(null);
+    txtReferenceCode.setRawValue(null);
+    txtRatesUrl.setRawValue(null);
+    txtAccessNumberUrl.setRawValue(null);
+    }
+
+    private void loadFields(Product product) {
+        try {
+        txtName.setText(product.getName());
+        txtSymbol.setText(product.getSymbol());
+        txtReferenceCode.setText(product.getReferenceCode());
+        txtRatesUrl.setText(product.getRatesUrl());
+        txtAccessNumberUrl.setText(product.getAccessNumberUrl());           
+        btnSave.setVisible(true);
+        
+    
+         if (product.getEnabled() == true) {
+             rEnabledYes.setChecked(true);    
+         } else {
+             rEnabledNo.setChecked(true);
+         }
+         
+         if (product.getIsFree() == true) {
+             rIsFreeYes.setChecked(true);    
+         } else {
+             rIsFreeNo.setChecked(true);
+         }
+        
+         if (product.getIsAlocashProduct() == true) {
+             rIsAlocashProductYes.setChecked(true);    
+         } else {
+             rIsAlocashProductNo.setChecked(true);
+         }
+        
+          
+         if (product.isIsPayTopUp()== true) {
+             rIsPayTopUpYes.setChecked(true);    
+         } else {
+             rIsPayTopUpNo.setChecked(true);
+         }
+         
+         if (product.isIsExchangeProduct()== true) {
+             rIsExchangeProductYes.setChecked(true);    
+         } else {
+             rIsExchangeProductNo.setChecked(true);
+         }
+         
+         if (product.isIsRemettence()== true) {
+             rIsRemettenceYes.setChecked(true);    
+         } else {
+             rIsRemettenceYes.setChecked(true);
+         }
+         
+         if (product.getTaxInclude()== true) {
+             rTaxIncludeYes.setChecked(true);    
+         } else {
+             rTaxIncludeNo.setChecked(true);
+         }
+         
+         if (product.isIsPaymentInfo()== true) {
+             rIsPaymentInfoYes.setChecked(true);    
+         } else {
+             rIsPaymentInfoNo.setChecked(true);
+         }
+        
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
+    public void blockFields() {
+        
+    cmbEnterprise.setReadonly(true);
+    cmbCategory.setReadonly(true);
+    cmbProductIntegrationType.setReadonly(true);
+    
+    txtName.setReadonly(true);
+    txtSymbol.setReadonly(true);
+    txtReferenceCode.setReadonly(true);
+    txtRatesUrl.setReadonly(true);
+    txtAccessNumberUrl.setReadonly(true);
+
+    btnSave.setVisible(false);
+    }
+
+    public boolean validateEmpty() {
+        this.showMessage("", false, null);
+        if( cmbEnterprise.getSelectedItem() == null){
+            this.showMessage("sp.crud.bank.enterprise.error", true, null);
+            cmbEnterprise.setFocus(true);
+            return false;
+        }
+        
+        if(cmbCategory.getSelectedItem() == null){
+        this.showMessage("sp.common.category.error", true, null);
+        cmbCategory.setFocus(true);
+        return false;
+        }
+        
+        if(cmbProductIntegrationType.getSelectedItem() == null){
+        this.showMessage("sp.crud.product.integration.type.error", true, null);
+        cmbProductIntegrationType.setFocus(true);
+        return false;
+        }
+
+        if (txtName.getText().isEmpty()) {
+            txtName.setFocus(true);
+            this.showMessage("sp.crud.product.name.error", true, null);
+            return false;
+        }
+        
+        if (txtSymbol.getText().isEmpty()) {
+            txtSymbol.setFocus(true);
+            this.showMessage("sp.crud.product.symbol.error", true, null);
+            return false;
+        }
+        
+        if (txtReferenceCode.getText().isEmpty()) {
+            txtReferenceCode.setFocus(true);
+            this.showMessage("sp.crud.product.referenceCode.error", true, null);
+            return false;
+        }
+          
+         if (txtRatesUrl.getText().isEmpty()) {
+            txtRatesUrl.setFocus(true);
+            this.showMessage("sp.crud.product.ratesUrl.error", true, null);
+            return false;
+        }
+         
+                       
+        if (txtAccessNumberUrl.getText().isEmpty()) {
+            txtAccessNumberUrl.setFocus(true);
+            this.showMessage("sp.crud.product.accessNumberUrl.error", true, null);
+            return false;
+        }
+ 
+        if(!(rEnabledYes.isChecked() || rEnabledNo.isChecked())){
+        this.showMessage("sp.common.enabled.error", true, null);
+        rEnabledYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rIsFreeYes.isChecked() || rIsFreeNo.isChecked())){
+        this.showMessage("sp.crud.product.isFree.error", true, null);
+        rIsFreeYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rIsAlocashProductYes.isChecked() || rIsAlocashProductNo.isChecked())){
+        this.showMessage("sp.crud.product.isAlocashProduct.error", true, null);
+        rIsAlocashProductYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rIsPayTopUpYes.isChecked() || rIsPayTopUpNo.isChecked())){
+        this.showMessage("sp.crud.product.isPayTopUp.error", true, null);
+        rIsPayTopUpYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rIsExchangeProductYes.isChecked() || rIsExchangeProductNo.isChecked())){
+        this.showMessage("sp.crud.product.isExchangeProduct.error", true, null);
+        rIsExchangeProductYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rIsRemettenceYes.isChecked() || rIsRemettenceNo.isChecked())){
+        this.showMessage("sp.crud.product.isRemettence.error", true, null);
+        rIsRemettenceYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rTaxIncludeYes.isChecked() || rTaxIncludeNo.isChecked())){
+        this.showMessage("sp.crud.product.taxInclude.error", true, null);
+        rTaxIncludeYes.setFocus(true);
+        return false;
+        }
+        
+        if(!(rIsPaymentInfoYes.isChecked() || rIsPaymentInfoNo.isChecked())){
+        this.showMessage("sp.crud.product.isPaymentInfo.error", true, null);
+        rIsPaymentInfoYes.setFocus(true);
+        return false;
+        }
+           
+        return true;
+
+    }
+
+    private void saveProduct(Product _product) {
+        try {
+            Product product = null;
+
+            if (_product != null) {
+                product = _product;
+            } else {
+                product = new Product();
+            }
+
+            product.setEnterpriseId((Enterprise) cmbEnterprise.getSelectedItem().getValue());
+            product.setCategoryId((Category) cmbCategory.getSelectedItem().getValue());
+            product.setProductIntegrationTypeId((ProductIntegrationType) cmbProductIntegrationType.getSelectedItem().getValue());
+            product.setName(txtName.getText());
+            product.setTaxInclude(rTaxIncludeYes.isChecked()?true:false);
+            product.setEnabled(rEnabledYes.isChecked()?true:false);
+            product.setReferenceCode(txtReferenceCode.getText());
+            product.setRatesUrl(txtRatesUrl.getText());
+            product.setAccessNumberUrl(txtAccessNumberUrl.getText());
+            product.setIsFree(rIsFreeYes.isChecked()?true:false);
+            product.setIsAlocashProduct(rIsAlocashProductYes.isChecked()?true:false);
+            product.setSymbol(txtSymbol.getText());
+            product.setIsPayTopUp(rIsPayTopUpYes.isChecked()?true:false);
+            product.setIsExchangeProduct(rIsExchangeProductYes.isChecked()?true:false);
+            product.setIsRemettence(rIsRemettenceYes.isChecked()?true:false);
+            product.setIsPaymentInfo(rIsPayTopUpYes.isChecked()?true:false);
+            EJBRequest request1 = new EJBRequest();
+            request1.setParam(product);
+            product = productEJB.saveProduct(request1);
+            productParam = product;
+            eventType = WebConstants.EVENT_EDIT;
+            this.showMessage("sp.common.save.success", false, null);
+            
+            if (eventType == WebConstants.EVENT_ADD) {
+                btnSave.setVisible(false);
+            } else {
+                btnSave.setVisible(true);
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
+    public void onClick$btnCancel() {
+        clearFields();
+    }
+
+    public void onClick$btnSave() {
+        if (validateEmpty()) {
+            switch (eventType) {
+                case WebConstants.EVENT_ADD:
+                    saveProduct(productParam);
+                    break;
+                case WebConstants.EVENT_EDIT:
+                    saveProduct(productParam);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void loadData() {
+        switch (eventType) {
+            case WebConstants.EVENT_EDIT:
+                loadFields(productParam);
+                loadCmbProductIntegrationType(eventType);
+                loadCmbEnterprise(eventType);
+                loadCmbCategory(eventType);
+                break;
+            case WebConstants.EVENT_VIEW:
+                loadFields(productParam);
+                blockFields();
+                loadCmbProductIntegrationType(eventType);
+                loadCmbEnterprise(eventType);
+                loadCmbCategory(eventType);
+                break;
+            case WebConstants.EVENT_ADD:
+                loadCmbProductIntegrationType(eventType);
+                loadCmbEnterprise(eventType);
+                loadCmbCategory(eventType);
+                break;
+            default:
+                break;
+        }
+    }
+
+ 
+    
+    private void loadCmbCategory(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<Category> category;
+        try {
+            category = productEJB.getCategories(request1);
+            loadGenericCombobox(category, cmbCategory, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getCategoryId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadCmbEnterprise(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<Enterprise> enterprise;
+        try {
+            enterprise = utilsEJB.getEnterprises(request1);
+            loadGenericCombobox(enterprise, cmbEnterprise, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getEnterpriseId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        }
+    }
+    
+        private void loadCmbProductIntegrationType(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<ProductIntegrationType> productIntegrationType;
+        try {
+            productIntegrationType = productEJB.getProductIntegrationType(request1);
+            loadGenericCombobox(productIntegrationType, cmbProductIntegrationType, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getProductIntegrationTypeId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        }
+    }
+      
+
+}

@@ -6,7 +6,7 @@
 <zk xmlns:n="native">
     <window id="winAdminView" apply ="com.alodiga.wallet.admin.web.controllers.IndexAdminController" width="100%" height="100%" class="general-window" >
         <style src="/css/general.css"/>
-         <borderlayout width="100%" height="100%" class="content-transparent">
+        <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="50px" class="content-transparent">
                 <borderlayout height="120px" class="content-transparent">
                     <north size="80px" border="0" class="content-transparent">
@@ -35,22 +35,22 @@
                 <div align="center">
                     <vlayout>
                         <separator/>
-                         <separator/>
-                          <separator/>
-                           <separator/>
-                            <separator/>
-                             <separator/>
-                             <separator/>
-                             <separator/>
-                              <separator/>
-                               <separator/>
-                               <separator/>
-                               <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
                         <hlayout>
-                        <image id="imgAirPlane" src="/images/logo_header.png" style="cursor:pointer" /> 
+                            <image id="imgAirPlane" src="/images/logo_header.png" style="cursor:pointer" /> 
                         </hlayout>
-                         <separator/>
-                          <separator/>
+                        <separator/>
+                        <separator/>
                         <groupbox id="gbxLogin" mold="3d" width="350px" >
                             <caption label="${c:l('sp.common.loginTitle')}" />
                             <hlayout >
@@ -92,44 +92,44 @@
                                 </vlayout>
                             </hlayout>
                         </groupbox>
-                          <groupbox id="gbxRecoverPass" mold="3d" width="350px" visible="false" class="borderedFrame">
-                                            <caption label="${c:l('sp.common.loginTitle')}" />
-                                            <hlayout >
-                                                <vlayout>
-                                                    <grid fixedLayout="true" width="290px">
-                                                        <columns >
-                                                            <column label="" width="80px" />
-                                                            <column label="" width="200px"/>
-                                                        </columns>
-                                                        <rows>
-                                                            <row>
-                                                                <label value="${c:l('sp.common.login')}" width="80px" class="lblbold"/>
-                                                                <hlayout>
-                                                                    <textbox id="txtRecoverLogin" width="150px" constraint="no empty: ${c:l('sp.error.field.required')}"/>
-                                                                </hlayout>
-                                                            </row>
-                                                        </rows>
-                                                    </grid>
-                                                    <vlayout>
-                                                        <div align="center">
-                                                            <hlayout>
-                                                                <button id="btnRecoverPass" label="${c:l('sp.common.generatePassword')}" width="140px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
-                                                                <button id="btnCancelRecoverPassword" label="${c:l('sp.common.actions.cancel')}"  width="140px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
-                                                            </hlayout>
-                                                        </div>
-                                                    </vlayout>
-                                                </vlayout>
+                        <groupbox id="gbxRecoverPass" mold="3d" width="350px" visible="false" class="borderedFrame">
+                            <caption label="${c:l('sp.common.loginTitle')}" />
+                            <hlayout >
+                                <vlayout>
+                                    <grid fixedLayout="true" width="290px">
+                                        <columns >
+                                            <column label="" width="80px" />
+                                            <column label="" width="200px"/>
+                                        </columns>
+                                        <rows>
+                                            <row>
+                                                <label value="${c:l('sp.common.login')}" width="80px" class="lblbold"/>
+                                                <hlayout>
+                                                    <textbox id="txtRecoverLogin" width="150px" constraint="no empty: ${c:l('sp.error.field.required')}"/>
+                                                </hlayout>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                    <vlayout>
+                                        <div align="center">
+                                            <hlayout>
+                                                <button id="btnRecoverPass" label="${c:l('sp.common.generatePassword')}" width="140px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
+                                                <button id="btnCancelRecoverPassword" label="${c:l('sp.common.actions.cancel')}"  width="140px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                             </hlayout>
-                                       </groupbox>
+                                        </div>
+                                    </vlayout>
+                                </vlayout>
+                            </hlayout>
+                        </groupbox>
                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                         <separator/>
-<!--                         <div align="center"> -->
+                        <!--                         <div align="center"> -->
 
-<!--                             <label value="${c:l('sp.common.page.copyright1')}" style="color:#837E76;"/> -->
-<!--                             <separator/> -->
-<!--                             <label value="${c:l('sp.common.page.copyright2')}" style="color:#837E76;"/> -->
+                        <!--                             <label value="${c:l('sp.common.page.copyright1')}" style="color:#837E76;"/> -->
+                        <!--                             <separator/> -->
+                        <!--                             <label value="${c:l('sp.common.page.copyright2')}" style="color:#837E76;"/> -->
                             
-<!--                         </div> -->
+                        <!--                         </div> -->
                     </vlayout>
                 </div>
             </center>
