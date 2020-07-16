@@ -179,7 +179,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadConfigurationsManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
-        createCell(Permission.LIST_ENTERPRISES, "listEnterprises.zul", permissionGroup, listgroup);
+//        createCell(Permission.LIST_ENTERPRISES, "listEnterprises.zul", permissionGroup, listgroup);
         createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
         createCell(Permission.BALANCE_ADJUSMENT, "balanceAdjusmentView.zul", permissionGroup, listgroup);
     }
