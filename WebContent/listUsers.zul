@@ -14,12 +14,12 @@
                 <div align="center" >
                     <hlayout>
                         <div></div>
-                        <div width="1800px" align="left" height="670px">
+                        <div width="1300px" align="left" height="1000px">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -59,11 +59,11 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="530px">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="995px" height="530px">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.fullName')}" width="415px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.login')}" width="415px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.profile')}" width="415px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.fullName')}" width="350px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.login')}" width="345px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.profile')}" width="350px" sort="auto"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>

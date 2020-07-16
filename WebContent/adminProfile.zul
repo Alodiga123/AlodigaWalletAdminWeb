@@ -14,12 +14,12 @@
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="1800px" align="left" height="840px">
+                        <div width="1300px" align="left" height="840px">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -46,8 +46,8 @@
                                                 <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="1090px"/>
+                                                        <column label="" width="200px"/>
+                                                        <column label="" width="790px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>

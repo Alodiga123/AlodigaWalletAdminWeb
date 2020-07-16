@@ -67,7 +67,7 @@ public class ListCountriesController extends GenericAbstractListController<Count
         try {
             currentUser = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminCountry.zul";
             getData();
