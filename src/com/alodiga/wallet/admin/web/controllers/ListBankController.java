@@ -3,6 +3,7 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -10,6 +11,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
+
 import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
@@ -24,7 +26,6 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Bank;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
@@ -70,7 +71,7 @@ public class ListBankController extends GenericAbstractListController<Bank> {
         try {
             currentUser = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminBank.zul";
             getData();

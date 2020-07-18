@@ -16,7 +16,7 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UserEJB;
 import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.User;
-import com.alodiga.wallet.common.model.UserHasProfileHasEnterprise;
+import com.alodiga.wallet.common.model.UserHasProfile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.Encoder;
@@ -65,32 +65,16 @@ public class MyAccountController extends GenericAbstractAdminController {
     private void loadFields(User user) {
         try {
             lblLogin.setValue(user.getLogin());
-            lblProfile.setValue(user.getUserHasProfileHasEnterprises().get(0).getProfile().getProfileDataByLanguageId(languageId).getAlias());
+            lblProfile.setValue(user.getUserHasProfile().get(0).getProfile().getProfileDataByLanguageId(languageId).getAlias());
             txtName.setText(user.getFirstName());
             txtLastName.setText(user.getLastName());
             txtEmail.setText(user.getEmail());
             txtPhoneNumber.setText(user.getPhoneNumber());
-//            cbxEnabled.setChecked(user.getEnabled());
-//            cbxReceiveTopNotification.setChecked(user.getReceiveTopUpNotification());
-            lbxEnterprises.getItems().clear();
-            loadEnterpriseList(user.getUserHasProfileHasEnterprises());
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    private void loadEnterpriseList(List<UserHasProfileHasEnterprise> userHasProfileHasEnterprises) {
-        lbxEnterprises.setCheckmark(false);
-        for (int i = 0; i < userHasProfileHasEnterprises.size(); i++) {
-            if (userHasProfileHasEnterprises.get(i).getEndingDate() == null) {
-                Enterprise enterprise = userHasProfileHasEnterprises.get(i).getEnterprise();
-                Listitem item = new Listitem();
-                item.setValue(enterprise);
-                item.appendChild(new Listcell(enterprise.getName()));
-                item.setParent(lbxEnterprises);
-            }
-        }
-    }
 
     public void blockFields() {
     }

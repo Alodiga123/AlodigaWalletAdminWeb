@@ -51,9 +51,9 @@
                                                     <rows>
 
                                                         <row>
-                                                            <label value="${c:l('sp.common.enterprise')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.preference.classification')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbEnterprises" width="250px" mold="rounded" readonly="true"/>
+                                                                <combobox id="cmbClassification" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>
@@ -68,81 +68,81 @@
                                                     <rows>
 
                                                         <row>
-                                                            <label value="${c:l('sp.preference.session.timeoutInactiveSession')}" sclass="lblbold"/>
+                                                            <label id="lblTimeoutInactiveSession" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtTimeoutInactiveSession" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="5"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.preference.session.maxWrongNumberIntentLogin')}" sclass="lblbold"/>
+                                                            <label id="lblMaxWrongNumberIntentLogin" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtMaxWrongNumberIntentLogin" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="5"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.preference.commission.period')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <combobox id="cmbPeriods" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.preference.transaction')}" sclass="lblbold"/>
+                                                            <label id="lblEnabledTransaction" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <checkbox id="chbEnableTransaction"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.preference.transaction.maxTransactionAmountLimit')}" sclass="lblbold"/>
+                                                            <label id="lblMaxTransactionAmountLimit" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtMaxTransactionAmountLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.preference.transaction.maxTransactionDailyLimit')}" sclass="lblbold"/>
+                                                            <label id="lblMaxTransactionAmountDailyLimit" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtMaxTransactionAmountDailyLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.preference.transaction.maxTransactionNumberPerAccount')}" sclass="lblbold"/>
+                                                            <label id="lblMaxTransactionAmountMonthLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionNumberPerAccount" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionAmountMonthLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.preference.transaction.maxPromotionalTransactionLimit')}" sclass="lblbold"/>
+                                                            <label id="lblMaxTransactionAmountYearLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxPromotionalTransactionLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionAmountYearLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                            </hlayout>
+                                                        </row>
+                                                         <row>
+                                                            <label id="lblMaxTransactionQuantityDailyLimit" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtMaxTransactionQuantityDailyLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.common.defaultSMSProvider')}" sclass="lblbold"/>
+                                                            <label id="lblMaxTransactionQuantityMonthLimit" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtMaxTransactionQuantityMonthLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblMaxTransactionQuantityYearLimit" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtMaxTransactionQuantityYearLimit" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblDefaultSMSProvider" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbDefaultSMSProvider" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
                                                         </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.preference.point-currency.exchange')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label value="${c:l('sp.preference.one')}"/>
-                                                                <separator/>
-                                                                <label id="lblCurrency" sclass="lblbold"/>
-                                                                <separator/>
-                                                                <label value="${c:l('sp.preference.equivalent')}"/>
-                                                                <separator/>
-                                                                <textbox id="txtPointExchange" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="${c:l('sp.common.points')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-
+                                                    
                                                      </rows>
                                                 </grid>
                                             </vlayout>

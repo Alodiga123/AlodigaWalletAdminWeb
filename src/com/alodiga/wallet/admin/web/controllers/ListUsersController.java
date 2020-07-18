@@ -27,7 +27,6 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
@@ -74,7 +73,7 @@ public class ListUsersController extends GenericAbstractListController<User> {
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
-            currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminUser.zul";
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
@@ -156,7 +155,7 @@ public class ListUsersController extends GenericAbstractListController<User> {
                     item.setValue(user);
                     item.appendChild(new Listcell(user.getFirstName() + " " + user.getLastName()));
                     item.appendChild(new Listcell(user.getLogin()));
-                    item.appendChild(new Listcell(user.getCurrentProfile(Enterprise.ALODIGA).getProfileDataByLanguageId(languageId).getAlias()));
+                    item.appendChild(new Listcell(user.getCurrentProfile().getProfileDataByLanguageId(languageId).getAlias()));
                     System.out.println("---------------user "+ user.getEmail());
                     item.appendChild(permissionChangeStatus ? initEnabledButton(user.getEnabled(), item) : new Listcell());
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, user,Permission.EDIT_USER) : new Listcell());

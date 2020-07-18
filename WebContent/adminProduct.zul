@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.bank.list')}" onClick='Executions.sendRedirect(&quot;listBank.zul&quot;)'/>
+                                                <toolbarbutton label="${c:l('sp.crud.product.list')}" onClick='Executions.sendRedirect(&quot;listProducts.zul&quot;)'/>
                                                 |
                                                 <toolbarbutton id="tbbTitle" label=""/> 
                                             </hlayout>
@@ -81,15 +81,15 @@
                                                         </row>
                                                         <row>
                                                             <hlayout>
-                                                                <textbox id="txtName" width="300px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
+                                                                <textbox id="txtName" width="300px" maxlength="60"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
-                                                                <textbox id="txtSymbol" width="300px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
+                                                                <textbox id="txtSymbol" width="300px"  maxlength="60"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
-                                                                <textbox id="txtReferenceCode" width="300px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
+                                                                <textbox id="txtReferenceCode" width="300px"  maxlength="60"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout> 
                                                         </row>
@@ -100,11 +100,11 @@
                                                         <row>
                                
                                                             <hlayout>
-                                                                <textbox id="txtRatesUrl" width="300px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
+                                                                <textbox id="txtRatesUrl" width="300px"  maxlength="60"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>  
                                                             <hlayout>
-                                                                <textbox id="txtAccessNumberUrl" width="300px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
+                                                                <textbox id="txtAccessNumberUrl" width="300px"  maxlength="60"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
@@ -230,7 +230,7 @@
                                         <!--Buttons-->
                                         <div align="right">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listBank.zul&quot;)"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listProducts.zul&quot;)"/>
                                         </div>
                                     </vlayout>
                                 </div>

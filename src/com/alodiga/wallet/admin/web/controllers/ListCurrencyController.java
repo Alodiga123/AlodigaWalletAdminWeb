@@ -67,7 +67,7 @@ public class ListCurrencyController extends GenericAbstractListController<Curren
         try {
             currentUser = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminCurrency.zul";
             getData();

@@ -10,20 +10,15 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.AccessControlEJB;
 import com.alodiga.wallet.common.ejb.UserEJB;
-import com.alodiga.wallet.common.ejb.UtilsEJB;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
-import com.alodiga.wallet.common.model.UserHasProfileHasEnterprise;
+import com.alodiga.wallet.common.model.UserHasProfile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.Encoder;
@@ -39,10 +34,7 @@ public class AdminUserController extends GenericAbstractAdminController {
     private Textbox txtEmail;
     private Textbox txtPhoneNumber;
     private Checkbox cbxEnabled;
-//    private Checkbox cbxReceiveTopNotification;
-    private Listbox lbxEnterprises;
     private Combobox cmbProfiles;
-    private UtilsEJB utilsEJB = null;
     private AccessControlEJB accessEJB = null;
     private UserEJB userEJB = null;
     private User userParam;
@@ -61,7 +53,6 @@ public class AdminUserController extends GenericAbstractAdminController {
         try {
             super.initialize();
             accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
-            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
         } catch (Exception ex) {
             showError(ex);
@@ -77,7 +68,6 @@ public class AdminUserController extends GenericAbstractAdminController {
         txtPhoneNumber.setRawValue(null);
         cbxEnabled.setChecked(true);
 //        cbxReceiveTopNotification.setChecked(false);
-        loadEnterprises(true);
         loadProfiles(true);
     }
 
@@ -90,7 +80,6 @@ public class AdminUserController extends GenericAbstractAdminController {
             txtEmail.setText(user.getEmail());
             txtPhoneNumber.setText(user.getPhoneNumber());
             cbxEnabled.setChecked(user.getEnabled());
-//            cbxReceiveTopNotification.setChecked(user.getReceiveTopUpNotification());
 
         } catch (Exception ex) {
             showError(ex);
@@ -106,7 +95,6 @@ public class AdminUserController extends GenericAbstractAdminController {
         txtPhoneNumber.setReadonly(true);
         cmbProfiles.setReadonly(true);
         cbxEnabled.setDisabled(true);
-//        cbxReceiveTopNotification.setDisabled(true);
     }
 
     public boolean validateEmpty() {
@@ -129,9 +117,6 @@ public class AdminUserController extends GenericAbstractAdminController {
         } else if (cmbProfiles.getSelectedItem() == null) {
             cmbProfiles.setFocus(true);
             this.showMessage("sp.error.profile.notSelected", true, null);
-        } else if (lbxEnterprises.getSelectedCount() == 0) {
-            lbxEnterprises.setFocus(true);
-            this.showMessage("sp.error.enterprise.notSelected", true, null);
         } else if (validateExistingUser(txtLogin.getText(), null) && eventType == WebConstants.EVENT_ADD) {
             txtLogin.setFocus(true);
             this.showMessage("sp.error.login.exist", true, null);
@@ -145,45 +130,7 @@ public class AdminUserController extends GenericAbstractAdminController {
 
     }
 
-    private void loadEnterpriseList(List<UserHasProfileHasEnterprise> userHasProfileHasEnterprises) {
-        lbxEnterprises.setCheckmark(false);
-        for (int i = 0; i < userHasProfileHasEnterprises.size(); i++) {
-            Enterprise enterprise = userHasProfileHasEnterprises.get(i).getEnterprise();
-            Listitem item = new Listitem();
-            item.setValue(enterprise);
-            item.appendChild(new Listcell());
-            item.appendChild(new Listcell(enterprise.getName()));
-            item.setParent(lbxEnterprises);
-        }
-    }
-
-    private void loadEnterprises(Boolean isAdd) {
-
-        List<Enterprise> enterprises = new ArrayList<Enterprise>();
-        try {
-            enterprises = utilsEJB.getEnterprises();
-            lbxEnterprises.getItems().clear();
-            for (int i = 0; i < enterprises.size(); i++) {
-                Listitem item = new Listitem();
-                if (!isAdd) {
-                    List<UserHasProfileHasEnterprise> uhphes = userParam.getUserHasProfileHasEnterprises();
-                    for (int y = 0; y < uhphes.size(); y++) {
-                        Enterprise e = uhphes.get(y).getEnterprise();
-                        if (e.getId().equals(enterprises.get(i).getId()) && uhphes.get(y).getEndingDate() == null) {
-                            item.setSelected(true);
-                        }
-                    }
-                }
-                item.setValue(enterprises.get(i));
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell(enterprises.get(i).getName()));
-                item.setParent(lbxEnterprises);
-            }
-        } catch (Exception ex) {
-            showError(ex);
-        }
-    }
-
+   
     private void saveUser(User _user) {
         User user = new User();
         try {
@@ -196,26 +143,23 @@ public class AdminUserController extends GenericAbstractAdminController {
             user.setEnabled(cbxEnabled.isChecked());
             user.setReceiveTopUpNotification(true);
             user.setCreationDate(new Timestamp(new java.util.Date().getTime()));
-            List<UserHasProfileHasEnterprise> uhphes = new ArrayList<UserHasProfileHasEnterprise>();
-            Profile profile = (Profile) cmbProfiles.getSelectedItem().getValue();
-            for (int i = 0; i < lbxEnterprises.getSelectedCount(); i++) {
-                UserHasProfileHasEnterprise uhphe = new UserHasProfileHasEnterprise();
-                uhphe.setUser(user);
-                uhphe.setProfile(profile);
-                uhphe.setEnterprise((Enterprise) lbxEnterprises.getItemAtIndex(i).getValue());
-                uhphe.setBeginningDate(new Timestamp(new java.util.Date().getTime()));
-                uhphes.add(uhphe);
-            }
+			List<UserHasProfile> uhphes = new ArrayList<UserHasProfile>();
+			Profile profile = (Profile) cmbProfiles.getSelectedItem().getValue();
+			UserHasProfile uhphe = new UserHasProfile();
+			uhphe.setUser(user);
+			uhphe.setProfile(profile);
+			uhphe.setBeginningDate(new Timestamp(new java.util.Date().getTime()));
+			uhphes.add(uhphe);
 
-            user.setUserHasProfileHasEnterprises(uhphes);
+            user.setUserHasProfile(uhphes);
             if (_user != null && _user.getId() != null) {//Is update
                 user.setId(_user.getId());
                 if (!editingPassword) {
                     user.setPassword(userParam.getPassword());
                 }
-                List<UserHasProfileHasEnterprise> auxUhphes = new ArrayList<UserHasProfileHasEnterprise>();
-                List<UserHasProfileHasEnterprise> activeUhphes = new ArrayList<UserHasProfileHasEnterprise>();
-                auxUhphes = userParam.getUserHasProfileHasEnterprises();
+                List<UserHasProfile> auxUhphes = new ArrayList<UserHasProfile>();
+                List<UserHasProfile> activeUhphes = new ArrayList<UserHasProfile>();
+                auxUhphes = userParam.getUserHasProfile();
 
                 for (int i = 0; i < auxUhphes.size(); i++) {
                     if (auxUhphes.get(i).getEndingDate() == null) {
@@ -225,15 +169,15 @@ public class AdminUserController extends GenericAbstractAdminController {
                 for (int i = 0; i < activeUhphes.size(); i++) {
                     activeUhphes.get(i).setEndingDate(new Timestamp(new java.util.Date().getTime()));
                 }
-                user.getUserHasProfileHasEnterprises().addAll(activeUhphes);
+                user.getUserHasProfile().addAll(activeUhphes);
 
             }
             request.setParam(user);
             userParam = userEJB.saveUser(request);
 
-//            if (eventType.equals(WebConstants.EVENT_ADD)) {
-//                sendRegistrationMail(user, profile, txtPassword.getText());
-//            }
+            if (eventType.equals(WebConstants.EVENT_ADD)) {
+                sendRegistrationMail(user, profile, txtPassword.getText());
+            }
 
 
             eventType = WebConstants.EVENT_EDIT;
@@ -259,7 +203,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                 item.setLabel(profiles.get(i).getProfileDataByLanguageId(languageId).getAlias());
                 item.setParent(cmbProfiles);
                 if (!isAdd) {
-                    List<UserHasProfileHasEnterprise> uhphes = userParam.getUserHasProfileHasEnterprises();
+                    List<UserHasProfile> uhphes = userParam.getUserHasProfile();
                     for (int y = 0; y < uhphes.size(); y++) {
                         Profile p = uhphes.get(y).getProfile();
                         if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() == null) {
@@ -320,18 +264,15 @@ public class AdminUserController extends GenericAbstractAdminController {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(userParam);
-                loadEnterprises(false);
                 loadProfiles(false);
                 txtLogin.setReadonly(true);
                 txtPassword.setReadonly(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(userParam);
-                loadEnterpriseList(userParam.getUserHasProfileHasEnterprises());
                 loadProfiles(false);
                 break;
             case WebConstants.EVENT_ADD:
-                loadEnterprises(true);
                 loadProfiles(true);
                 break;
             default:
@@ -339,15 +280,15 @@ public class AdminUserController extends GenericAbstractAdminController {
         }
     }
 
-//    private void sendRegistrationMail(User user, Profile profile, String password) {
-//
+    private void sendRegistrationMail(User user, Profile profile, String password) {
+
 //        try {
-//            Enterprise enterprise = utilsEJB.loadEnterprise(new EJBRequest(Enterprise.TURBINES));
-//          //  Mail mail = CommonMails.getUserRegistrationMail(user, profile, password, enterprise);
-//           // utilsEJB.sendMail(mail);
+//            Enterprise enterprise = utilsEJB.loadEnterprise(new EJBRequest(Enterprise.ALODIGA));
+//            Mail mail = CommonMails.getUserRegistrationMail(user, profile, password, enterprise);
+//            utilsEJB.sendMail(mail);
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
 //        }
-//
-//    }
+
+    }
 }
