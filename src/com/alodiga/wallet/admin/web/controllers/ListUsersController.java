@@ -205,13 +205,11 @@ public class ListUsersController extends GenericAbstractListController<User> {
 
     public void onClick$btnClear() throws InterruptedException {
         txtName.setText("");
-        txtLogin.setText("");
-        txtProfile.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-            //loadList(getFilteredList(txtAlias.getText()));
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
