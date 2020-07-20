@@ -20,28 +20,30 @@ import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
+import com.alodiga.wallet.admin.web.utils.PDFUtil;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.UserEJB;
+import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
+import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.Provider;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
-public class ListUsersController extends GenericAbstractListController<User> {
+public class ListProductHasBankController extends GenericAbstractListController<Product> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
-    private Textbox txtName;
-    private Textbox txtLogin;
-    private Textbox txtProfile;
-    private UserEJB userEJB = null;
-    private List<User> users = null;
+    private Textbox txtAlias;
+    private ProductEJB productEJB = null;
+    private List<Product> products = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -51,13 +53,13 @@ public class ListUsersController extends GenericAbstractListController<User> {
         initialize();
     }
 
-            @Override
+    @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_USER));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_USER);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_USER);
-            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.CHANGE_USER_STATUS);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_PRODUCT));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.EDIT_PRODUCT);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.VIEW_PRODUCT);
+            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.CHANGE_PRODUCT_STATUS);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -65,7 +67,6 @@ public class ListUsersController extends GenericAbstractListController<User> {
     }
 
     public void startListener() {
-        
     }
 
     @Override
@@ -73,14 +74,14 @@ public class ListUsersController extends GenericAbstractListController<User> {
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
-            currentProfile = currentUser.getCurrentProfile();
+            //currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
             checkPermissions();
-            adminPage = "adminUser.zul";
-            userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
-            //loadPermission(new Profile());
-            //startListener();
+            adminPage = "tabProducts.zul";
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+//			loadPermission(new Provider());
+            startListener();
             getData();
-            loadList(users);
+            loadList(products);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -104,73 +105,68 @@ public class ListUsersController extends GenericAbstractListController<User> {
         return cell;
     }
 
-    public List<User> getFilteredList(String filter) {
-        List<User> list= new ArrayList<User>();
-		if (users != null) {
-			for (Iterator<User> i = users.iterator(); i.hasNext();) {
-				User tmp = i.next();
-				String field = tmp.getFirstName().toLowerCase();
-				if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-					list.add(tmp);
-				}
-			}
-		}
-        return list;
+    public List<Product> getFilteredList(String filter) {
+        List<Product> auxList = new ArrayList<Product>();
+        for (Iterator<Product> i = products.iterator(); i.hasNext();) {
+            Product tmp = i.next();
+            String field = tmp.getName().toLowerCase();
+            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                auxList.add(tmp);
+            }
+        }
+        return auxList;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
         Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
         Sessions.getCurrent().removeAttribute("object");
         Executions.getCurrent().sendRedirect(adminPage);
-    }
 
-    public void onClick$btnDelete() {
     }
 
     private void changeStatus(ChangeStatusButton button, Listitem listItem) {
         try {
-            User user = (User) listItem.getValue();
-            
-            button.changeImageStatus(user.getEnabled());
-            user.setEnabled(!user.getEnabled());
-            listItem.setValue(user);
-            //request.setAuditData(AccessControl.getCurrentAudit());
-            request.setParam(user);
-            userEJB.saveUser(request);
-            AccessControl.saveAction(Permission.CHANGE_USER_STATUS, "changeStatus user = "+user.getId() +" to status = "+ !user.getEnabled());
+            Product product = (Product) listItem.getValue();
+            button.changeImageStatus(product.getEnabled());
+            product.setEnabled(!product.getEnabled());
+            listItem.setValue(product);
+            request.setParam(product);
+            productEJB.saveProduct(request);
+            AccessControl.saveAction(Permission.CHANGE_PRODUCT_STATUS, "changeStatus product = " + product.getId() + " to status = " + !product.getEnabled());
+
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    public void loadList(List<User> list) {
+    public void loadList(List<Product> list) {
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (User user : list) {
+                for (Product product : list) {
 
-                    item = new Listitem();
-                    item.setValue(user);
-                    item.appendChild(new Listcell(user.getFirstName() + " " + user.getLastName()));
-                    item.appendChild(new Listcell(user.getLogin()));
-                    item.appendChild(new Listcell(user.getCurrentProfile().getProfileDataByLanguageId(languageId).getAlias()));
-                    System.out.println("---------------user "+ user.getEmail());
-                    item.appendChild(permissionChangeStatus ? initEnabledButton(user.getEnabled(), item) : new Listcell());
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, user,Permission.EDIT_USER) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, user,Permission.VIEW_USER) : new Listcell());
-                    item.setParent(lbxRecords);
-                }
-            } else {
-                btnDownload.setVisible(false);
-                item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell());
-                item.setParent(lbxRecords);
-            }
+	                    item = new Listitem();
+	                    item.setValue(product);
+	                    item.appendChild(new Listcell(product.getName()));
+                            item.appendChild(new Listcell(product.getEnterpriseId().getName()));
+	                    item.appendChild(new Listcell(product.getCategoryId().getName()));
+                            item.appendChild(new Listcell(product.getProductIntegrationTypeId().getName()));
+                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("sp.crud.product.yes"):Labels.getLabel("sp.crud.product.no"))));
+	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, product,Permission.EDIT_PRODUCT) : new Listcell());
+	                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, product,Permission.VIEW_PRODUCT) : new Listcell());
+	                    item.setParent(lbxRecords);
+	                }
+	            } else {
+	                btnDownload.setVisible(false);
+	                item = new Listitem();
+	                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+	                item.appendChild(new Listcell());
+	                item.appendChild(new Listcell());
+	                item.appendChild(new Listcell());
+	                item.setParent(lbxRecords);
+	            }
 
         } catch (Exception ex) {
             showError(ex);
@@ -178,38 +174,35 @@ public class ListUsersController extends GenericAbstractListController<User> {
     }
 
     public void getData() {
-        users = new ArrayList<User>();
+        products = new ArrayList<Product>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-//            request.setAuditData(AccessControl.getCurrentAudit());
-            users = userEJB.getUsers(request);
+            request.setAuditData(null);
+            products = productEJB.getProducts(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
         } catch (GeneralException ex) {
             showError(ex);
-        }catch (Exception ex) {
-           ex.printStackTrace();
         }
     }
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.user.list"));
-            AccessControl.saveAction(Permission.LIST_USERS, "Se descargo listado de productos en stock formato excel");
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.provider.list"));
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        txtName.setText("");
+        txtAlias.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-            loadList(getFilteredList(txtName.getText()));
+            loadList(getFilteredList(txtAlias.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
