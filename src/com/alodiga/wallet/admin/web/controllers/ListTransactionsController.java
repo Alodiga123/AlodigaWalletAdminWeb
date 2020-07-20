@@ -74,7 +74,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
         try {
             currentUser = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
 //            dtbBeginningDate.setFormat("yyyy/MM/dd");
 //            dtbEndingDate.setFormat("yyyy/MM/dd");
