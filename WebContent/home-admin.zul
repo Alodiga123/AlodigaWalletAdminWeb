@@ -14,12 +14,12 @@
                 <div align="center">
                     <hlayout>
                         <div></div>
-                        <div width="1700px" height="1000px" align="left">
+                       <div width="1200px" height="1500px" align="left">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px" height="800px">
+                               <div width="1070px" height="700px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->

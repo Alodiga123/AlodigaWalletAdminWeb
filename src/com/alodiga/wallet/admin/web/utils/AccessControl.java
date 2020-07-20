@@ -34,7 +34,7 @@ import com.alodiga.wallet.common.model.Language;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.PermissionHasProfile;
 import com.alodiga.wallet.common.model.User;
-import com.alodiga.wallet.common.model.UserHasProfileHasEnterprise;
+import com.alodiga.wallet.common.model.UserHasProfile;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -56,13 +56,13 @@ public class AccessControl {
 	    private static UtilsEJB utilsEJB;
 		LanguageDefinition definition;
 
-	    public static boolean savePermissionUser(List<UserHasProfileHasEnterprise> userHasProfiles, Long enterpriseId) {
+	    public static boolean savePermissionUser(List<UserHasProfile> userHasProfiles, Long enterpriseId) {
 	        HashMap<String, List<String>> permissionsMap = new HashMap<String, List<String>>();
 
 	        try {
-	            for (UserHasProfileHasEnterprise userHasProfileHasEnterprise : userHasProfiles) {
-	                if (userHasProfileHasEnterprise.getEnterprise().getId().equals(enterpriseId) && userHasProfileHasEnterprise.getEndingDate() == null) {
-	                    List<PermissionHasProfile> permissionHasProfiles = userHasProfileHasEnterprise.getProfile().getPermissionHasProfiles();
+	            for (UserHasProfile userHasProfile : userHasProfiles) {
+	                if ( userHasProfile.getEndingDate() == null) {
+	                    List<PermissionHasProfile> permissionHasProfiles = userHasProfile.getProfile().getPermissionHasProfiles();
 	                    for (PermissionHasProfile permissionHasProfile : permissionHasProfiles) {
 	                        Permission permission = permissionHasProfile.getPermission();
 	                        if (permission.getEnabled()) {
@@ -100,16 +100,16 @@ public class AccessControl {
 	        return false;
 	    }
 
-	    public static boolean validateUser(String login, String password) throws InvalidPasswordException, RegisterNotFoundException, GeneralException, NoSuchAlgorithmException, UnsupportedEncodingException, NullParameterException, DisabledUserException {
+	    public static boolean validateUser(String login, String password) throws RegisterNotFoundException, GeneralException, NoSuchAlgorithmException, UnsupportedEncodingException, NullParameterException, DisabledUserException, InvalidPasswordException {
 	        boolean valid = false;
 	        User user = null;
 	        accessEjb = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
 		    utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-	        //     request.setAuditData(getCurrentAudit());
+
 	        user = accessEjb.validateUser(login, Encoder.MD5(password));
-	        List<UserHasProfileHasEnterprise> userHasProfileHasEnterprises = user.getUserHasProfileHasEnterprises();
-	        if (userHasProfileHasEnterprises != null && userHasProfileHasEnterprises.size() > 0 && user.getEnabled()) {
-	            AccessControl.savePermissionUser(userHasProfileHasEnterprises, Enterprise.ALODIGA);
+	        List<UserHasProfile> userHasProfile = user.getUserHasProfile();
+	        if (userHasProfile != null && userHasProfile.size() > 0 && user.getEnabled()) {
+	            AccessControl.savePermissionUser(userHasProfile, Enterprise.ALODIGA);
 	            Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
 	            saveAction(null, Permission.LOG_IN);
 	            valid = true;
@@ -216,22 +216,22 @@ public class AccessControl {
 	    }
 
 	      public static void saveAction(Long permissionId, String info) {
-//	        try {
-//	            AuditAction action = new AuditAction();
-//	            String host = Sessions.getCurrent().getRemoteHost();
-//	            Sessions.getCurrent().getDeviceType();
-//	            Sessions.getCurrent().getRemoteAddr();
-//	            action.setDate(new Timestamp(new Date().getTime()));
-//	            action.setHost(host);
-//	            action.setUser(loadCurrentUser());
-//	            Permission permission = PermissionManager.getInstance().getPermissionById(permissionId);
-//	            action.setPermission(permission);
-//	            action.setInfo(info);
-//	            auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
-//	            auditoryEJB.saveAuditAction(action);
-//	        } catch (Exception ex) {
-//	            ex.printStackTrace();
-//	        }
+	        try {
+	            AuditAction action = new AuditAction();
+	            String host = Sessions.getCurrent().getRemoteHost();
+	            Sessions.getCurrent().getDeviceType();
+	            Sessions.getCurrent().getRemoteAddr();
+	            action.setDate(new Timestamp(new Date().getTime()));
+	            action.setHost(host);
+	            action.setUser(loadCurrentUser());
+	            Permission permission = PermissionManager.getInstance().getPermissionById(permissionId);
+	            action.setPermission(permission);
+	            action.setInfo(info);
+	            auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
+	            auditoryEJB.saveAuditAction(action);
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
 	    }
 
 
@@ -240,28 +240,28 @@ public class AccessControl {
 	    }
 
 
-	         public static List<Audit> getCurrentAudit() {
-	        List<Audit> audits = new ArrayList<Audit>();
-	        Audit audit = new Audit();
-	        try {
-	        	EJBRequest ejbRequest = new EJBRequest();
-	        	ejbRequest.setParam(1);
-	            Event ev = auditoryEJB.loadEvent(ejbRequest);
-	            audit.setEvent(ev);
-	            //            audit.setNewValues("new values");
-	            //            audit.setOriginalValues("");
-	            audit.setRemoteIp(Executions.getCurrent().getRemoteAddr());
-	            	if (loadCurrentUser() != null) {
-	                audit.setUser(loadCurrentUser());
-	                audit.setResponsibleType("User");
-	            } 
-	            audit.setTableName("");
-	            audit.setCreationDate(new Timestamp(new Date().getDate()));
-	            audits.add(audit);
-	            return audits;
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	        }
-	        return audits;
-	    }
+	public static List<Audit> getCurrentAudit() {
+		List<Audit> audits = new ArrayList<Audit>();
+		Audit audit = new Audit();
+		try {
+			EJBRequest ejbRequest = new EJBRequest();
+			ejbRequest.setParam(1);
+			Event ev = auditoryEJB.loadEvent(ejbRequest);
+			audit.setEvent(ev);
+			// audit.setNewValues("new values");
+			// audit.setOriginalValues("");
+			audit.setRemoteIp(Executions.getCurrent().getRemoteAddr());
+			if (loadCurrentUser() != null) {
+				audit.setUser(loadCurrentUser());
+				audit.setResponsibleType("User");
+			}
+			audit.setTableName("");
+			audit.setCreationDate(new Timestamp(new Date().getDate()));
+			audits.add(audit);
+			return audits;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return audits;
+	}
 }
