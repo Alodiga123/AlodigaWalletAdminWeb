@@ -37,7 +37,7 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
-public class ListProductsController extends GenericAbstractListController<Product> {
+public class ListProductHasBankController extends GenericAbstractListController<Product> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
@@ -78,6 +78,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
             checkPermissions();
             adminPage = "tabProducts.zul";
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+//			loadPermission(new Provider());
             startListener();
             getData();
             loadList(products);
