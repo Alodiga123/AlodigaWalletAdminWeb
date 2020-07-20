@@ -20,6 +20,7 @@ import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
+import com.alodiga.wallet.admin.web.utils.PDFUtil;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.ProductEJB;
@@ -27,14 +28,16 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.Provider;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
-public class ListProductsController extends GenericAbstractListController<Product> {
+public class ListProductHasBankController extends GenericAbstractListController<Product> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
@@ -75,6 +78,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
             checkPermissions();
             adminPage = "tabProducts.zul";
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+//			loadPermission(new Provider());
             startListener();
             getData();
             loadList(products);

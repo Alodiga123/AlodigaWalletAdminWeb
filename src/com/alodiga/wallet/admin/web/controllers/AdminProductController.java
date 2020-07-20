@@ -86,19 +86,18 @@ public class AdminProductController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.edit"));
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.view"));
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.add"));
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.add"));
                 break;
             default:
                 break;
         }
         try {
-            accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
 
