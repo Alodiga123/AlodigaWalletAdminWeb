@@ -14,14 +14,14 @@
                 <div align="center" >
                     <hlayout>
                         <div></div>
-                        <div width="1800px" align="left" height="670px">
+                        <div width="100%" align="left" height="100%">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px">
+                                <div width="1000px">
                                     <vlayout>
-                                        <div height="20px" width="100%" align="left">
+                                        <div height="20px" width="100%" align="100%">
                                             <!--Bread crumb-->
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
@@ -40,11 +40,11 @@
 
                                                 <hlayout>
                                                     <!--Add button-->
-                                                    <div align="left" width="495px">
+                                                    <div align="left" width="385px">
                                                         <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}"/>
                                                     </div>
                                                     <!--Filters button-->
-                                                    <div align="right" width="900px">
+                                                    <div align="right" width="610px">
                                                         <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                         <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                     </div>
@@ -53,25 +53,18 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                             <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="550px" mold="paging">
+                                             <listbox id="lbxRecords" fixedLayout="true" width="1000px" height="500px" mold="paging">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.product')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enterprise')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.home.category')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.product.integration.type')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enabled')}" width="200px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enterprise')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.home.category')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product.integration.type')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enabled')}" width="100px" sort="auto"/>
                                                     <listheader label="-" width="80px"/>
                                                     <listheader label="-" width="80px"/> 
                                                     
                                                 </listhead>
                                             </listbox>
-                                            
-
-
-
-
-
-
                                         </div>
                                         <!--Download button-->
                                         <div align="right">

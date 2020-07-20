@@ -4,7 +4,7 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
 <zk xmlns:n="native">
-    <window id="winAdminSettings" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminSettingsController" class="general-window">
+    <window id="winAdminSettings" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminSpecificsSettingsController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -45,8 +45,8 @@
 
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column width="400px"/>
-                                                        <column width="490px"/>
+                                                        <column width="320px"/>
+                                                        <column width="570px"/>
                                                     </columns>
                                                     <rows>
 
@@ -55,92 +55,125 @@
                                                             <hlayout>
                                                                 <combobox id="cmbClassification" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
+                         
                                                         </row>
+                                                        <row>
+                                                        <label value="${c:l('sp.specific.preference.product')}" sclass="lblbold"/>  
+                                                            <hlayout>
+                                                                <combobox id="cmbProduct" width="250px" mold="rounded" readonly="true" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                            </hlayout>
+                                                         </row>
+                                                         <row>
+                                                         <label value="${c:l('sp.specific.preference.transaction.type')}" sclass="lblbold"/>
+                                                             <hlayout>
+                                                                <combobox id="cmbTransactionType" width="250px" mold="rounded" readonly="true" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                            </hlayout>
+                                                         </row>
+                                                          <row>
+                                                          <label value="${c:l('sp.specific.preference.bussiness')}" sclass="lblbold"/>
+                                                             <hlayout>
+                                                                <textbox id="txtBussiness" width="150px" constraint="no empty: ${c:l('error.field.required')}" maxlength="10" disabled="true"/>
+                                                                <textbox id="txtEmailBussiness" width="150px" constraint="no empty: ${c:l('error.field.required')}" maxlength="10"/>
+                                                                <button  id="btnSearch" width="100px" label="${c:l('sp.common.actions.search')}" class="open orange"/>
+                                                            </hlayout>
+                                                          </row>
                                                     </rows>
                                                 </grid>
 
 
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column width="400px"/>
-                                                        <column width="490px"/>
+                                                        <column label ="${c:l('sp.specific.preference.field')}" width="320px"/>
+                                                        <column label ="${c:l('sp.specific.preference.value')}" width="330px"/>
+                                                        <column label ="${c:l('sp.specific.preference.disabled')}" width="240px"/>
                                                     </columns>
                                                     <rows>
 
                                                         <row>
                                                             <label id="lblTimeoutInactiveSession" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtTimeoutInactiveSession" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="5"/>
+                                                                <textbox id="txtTimeoutInactiveSession" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxTimeoutInactiveSession" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxWrongNumberIntentLogin" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxWrongNumberIntentLogin" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="5"/>
+                                                                <textbox id="txtMaxWrongNumberIntentLogin" width="50px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxWrongNumberIntentLogin" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblEnabledTransaction" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <checkbox id="chbEnableTransaction"/>
                                                             </hlayout>
+                                                            <checkbox id="cbxEnabledTransaction" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxTransactionAmountLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionAmountLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionAmountLimit" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxTransactionAmountDailyLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountDailyLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionAmountDailyLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionAmountDailyLimit" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxTransactionAmountMonthLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountMonthLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionAmountMonthLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionAmountMonthLimit" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxTransactionAmountYearLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountYearLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionAmountYearLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionAmountYearLimit" checked="true"/>
                                                         </row>
                                                          <row>
                                                             <label id="lblMaxTransactionQuantityDailyLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionQuantityDailyLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionQuantityDailyLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionQuantityDailyLimit" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxTransactionQuantityMonthLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionQuantityMonthLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionQuantityMonthLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionQuantityMonthLimit" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblMaxTransactionQuantityYearLimit" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtMaxTransactionQuantityYearLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
+                                                                <textbox id="txtMaxTransactionQuantityYearLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="15"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                            <checkbox id="cbxMaxTransactionQuantityYearLimit" checked="true"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblDefaultSMSProvider" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbDefaultSMSProvider" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
+                                                            <checkbox id="cbxDefaultSMSProvider" checked="true"/>
                                                         </row>
                                                     
                                                      </rows>
@@ -151,7 +184,7 @@
                                         <!--Buttons-->
                                         <div align="right">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;home-admin.zul&quot;)"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listSpecificsSetting.zul&quot;)"/>
                                         </div>
                                     </vlayout>
                                 </div>
