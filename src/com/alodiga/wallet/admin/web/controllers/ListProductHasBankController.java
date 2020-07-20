@@ -74,7 +74,7 @@ public class ListProductHasBankController extends GenericAbstractListController<
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
-            currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            //currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
             checkPermissions();
             adminPage = "tabProducts.zul";
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
