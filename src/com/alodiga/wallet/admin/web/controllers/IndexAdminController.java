@@ -26,15 +26,13 @@ public class IndexAdminController extends GenericAbstractController {
     private Groupbox gbxLogin;
     private Groupbox gbxRecoverPass;
     private UserEJB userEJB = null;
-    private String adminHome ="home-admin.zul";
-
+    private String adminHome = "home-admin.zul";
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         initialize();
     }
-
 
     @Override
     public void initialize() {
@@ -46,7 +44,6 @@ public class IndexAdminController extends GenericAbstractController {
         txtLogin.setRawValue(null);
         txtPassword.setRawValue(null);
     }
-
 
     public Boolean validateEmpty() {
         if (txtLogin.getText().isEmpty()) {
@@ -63,21 +60,21 @@ public class IndexAdminController extends GenericAbstractController {
     }
 
     public boolean validateRecoverLogin() {
-        
+
         if (txtRecoverLogin.getText().isEmpty()) {
             this.showMessage("sp.error.field.cannotNull", true, null);
             txtRecoverLogin.setFocus(true);
-        }else{
+        } else {
             return true;
         }
         return false;
     }
 
-     public boolean validate() {
+    public boolean validate() {
         if (validateEmpty()) {
             try {
                 if (AccessControl.validateUser(txtLogin.getText(), txtPassword.getText())) {
-                	return true;
+                    return true;
                 }
             } catch (DisabledUserException ex) {
                 this.showMessage("sp.error.disableAccount", true, null);
@@ -91,8 +88,8 @@ public class IndexAdminController extends GenericAbstractController {
         return false;
     }
 
-  public void onClick$btnLogin() throws InterruptedException {
-      this.clearMessage();
+    public void onClick$btnLogin() throws InterruptedException {
+        this.clearMessage();
         if (validate()) {
             Executions.sendRedirect(adminHome);
         }
@@ -101,14 +98,14 @@ public class IndexAdminController extends GenericAbstractController {
     public void onOK$txtLogin() {
         this.clearMessage();
         if (validate()) {
-             Executions.sendRedirect(adminHome);
+            Executions.sendRedirect(adminHome);
         }
     }
 
     public void onOK$txtPassword() {
         this.clearMessage();
         if (validate()) {
-             Executions.sendRedirect(adminHome);
+            Executions.sendRedirect(adminHome);
         }
     }
 
@@ -123,7 +120,7 @@ public class IndexAdminController extends GenericAbstractController {
         gbxLogin.setVisible(true);
         gbxRecoverPass.setVisible(false);
     }
-    
+
     public void onClick$btnRecoverPass() throws InterruptedException {
         this.clearMessage();
         if (validateRecoverLogin()) {
@@ -143,7 +140,7 @@ public class IndexAdminController extends GenericAbstractController {
             }
         }
     }
-    
+
     public void onClick$mniEnglish() {
 
         if (!Locales.getCurrent().getLanguage().equals("en")) {

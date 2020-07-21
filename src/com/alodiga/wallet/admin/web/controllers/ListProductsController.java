@@ -26,6 +26,7 @@ import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
@@ -72,7 +73,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
-            //currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "tabProducts.zul";
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
@@ -172,11 +173,12 @@ public class ListProductsController extends GenericAbstractListController<Produc
 
     public void getData() {
         products = new ArrayList<Product>();
+        EJBRequest request1 = new EJBRequest();
         try {
-            request.setFirst(0);
-            request.setLimit(null);
-            request.setAuditData(null);
-            products = productEJB.getProducts(request);
+            //request.setFirst(0);
+            //request.setLimit(null);
+            //request.setAuditData(null);
+            products = productEJB.getProducts(request1);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
