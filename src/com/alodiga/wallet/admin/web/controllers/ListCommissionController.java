@@ -27,7 +27,6 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class ListCommissionController extends GenericAbstractListController<Commission> {
@@ -116,9 +115,9 @@ public class ListCommissionController extends GenericAbstractListController<Comm
                     item.appendChild(new Listcell(commission.getProductId().getName()));
                     item.appendChild(new Listcell(commission.getTransactionTypeId().getValue()));
                     if (commission.getIsPercentCommision() == 1) {
-                        comission = "Si";
+                        comission = Labels.getLabel("sp.common.yes");
                     }else{
-                        comission = "No";
+                        comission = Labels.getLabel("sp.common.no");
                     }
                     item.appendChild(new Listcell(comission));
                     item.appendChild(new Listcell(value));

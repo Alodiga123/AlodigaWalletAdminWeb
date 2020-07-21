@@ -7,7 +7,6 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.AccessControlEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
