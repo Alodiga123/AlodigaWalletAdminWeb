@@ -20,30 +20,34 @@ import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
-import com.alodiga.wallet.admin.web.utils.PDFUtil;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.BankHasProduct;
 import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
-import com.alodiga.wallet.common.model.Provider;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.HashMap;
+import java.util.Map;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Window;
 
-public class ListProductHasBankController extends GenericAbstractListController<Product> {
+public class ListProductsHasBankController extends GenericAbstractListController<BankHasProduct> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtAlias;
     private ProductEJB productEJB = null;
-    private List<Product> products = null;
+    private List<BankHasProduct> bankHasProductList = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -74,14 +78,14 @@ public class ListProductHasBankController extends GenericAbstractListController<
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
-            //currentProfile = currentUser.getCurrentProfile(Enterprise.ALODIGA);
+            currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "tabProducts.zul";
+            adminPage = "/adminAddProductHasBank.zul";
+            
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
-//			loadPermission(new Provider());
             startListener();
             getData();
-            loadList(products);
+            loadList(bankHasProductList);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -105,11 +109,11 @@ public class ListProductHasBankController extends GenericAbstractListController<
         return cell;
     }
 
-    public List<Product> getFilteredList(String filter) {
-        List<Product> auxList = new ArrayList<Product>();
-        for (Iterator<Product> i = products.iterator(); i.hasNext();) {
-            Product tmp = i.next();
-            String field = tmp.getName().toLowerCase();
+    public List<BankHasProduct> getFilteredList(String filter) {
+        List<BankHasProduct> auxList = new ArrayList<BankHasProduct>();
+        for (Iterator<BankHasProduct> i = bankHasProductList.iterator(); i.hasNext();) {
+            BankHasProduct tmp = i.next();
+            String field = tmp.getProductId().getName().toLowerCase();
             if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
                 auxList.add(tmp);
             }
@@ -118,9 +122,14 @@ public class ListProductHasBankController extends GenericAbstractListController<
     }
 
     public void onClick$btnAdd() throws InterruptedException {
-        Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
-        Sessions.getCurrent().removeAttribute("object");
-        Executions.getCurrent().sendRedirect(adminPage);
+        //Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
+        //Sessions.getCurrent().removeAttribute("object");
+        //Executions.getCurrent().sendRedirect(adminPage);
+            Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
+            Map<String, Object> paramsPass = new HashMap<String, Object>();
+            paramsPass.put("object", bankHasProductList);
+            final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
+            window.doModal();
 
     }
 
@@ -139,31 +148,25 @@ public class ListProductHasBankController extends GenericAbstractListController<
         }
     }
 
-    public void loadList(List<Product> list) {
+    public void loadList(List<BankHasProduct> list) {
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (Product product : list) {
+                for (BankHasProduct bankHasProduct : list) {
 
 	                    item = new Listitem();
-	                    item.setValue(product);
-	                    item.appendChild(new Listcell(product.getName()));
-                            item.appendChild(new Listcell(product.getEnterpriseId().getName()));
-	                    item.appendChild(new Listcell(product.getCategoryId().getName()));
-                            item.appendChild(new Listcell(product.getProductIntegrationTypeId().getName()));
-                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("sp.crud.product.yes"):Labels.getLabel("sp.crud.product.no"))));
-	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, product,Permission.EDIT_PRODUCT) : new Listcell());
-	                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, product,Permission.VIEW_PRODUCT) : new Listcell());
-	                    item.setParent(lbxRecords);
+	                    item.setValue(bankHasProduct);
+	                    item.appendChild(new Listcell(bankHasProduct.getProductId().getName()));
+                            item.appendChild(new Listcell(bankHasProduct.getBankId().getName()));
+	                    item.appendChild(createButtonEditModal(bankHasProduct));
+                            item.appendChild(createButtonViewModal(bankHasProduct));  item.setParent(lbxRecords);
 	                }
 	            } else {
 	                btnDownload.setVisible(false);
 	                item = new Listitem();
 	                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
-	                item.appendChild(new Listcell());
-	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
 	                item.setParent(lbxRecords);
 	            }
@@ -174,12 +177,10 @@ public class ListProductHasBankController extends GenericAbstractListController<
     }
 
     public void getData() {
-        products = new ArrayList<Product>();
+        EJBRequest request1 = new EJBRequest();
+        bankHasProductList = new ArrayList<BankHasProduct>();
         try {
-            request.setFirst(0);
-            request.setLimit(null);
-            request.setAuditData(null);
-            products = productEJB.getProducts(request);
+            bankHasProductList = productEJB.getBankHasProduct(request1);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -206,5 +207,57 @@ public class ListProductHasBankController extends GenericAbstractListController<
         } catch (Exception ex) {
             showError(ex);
         }
+    }
+    
+    public Listcell createButtonEditModal(final Object obg) {
+        Listcell listcellEditModal = new Listcell();
+        try {
+            Button button = new Button();
+            button.setImage("/images/icon-edit.png");
+            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setClass("open orange");
+            button.addEventListener("onClick", new EventListener() {
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    Sessions.getCurrent().setAttribute("object", obg);
+                    Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_EDIT);
+                    Map<String, Object> paramsPass = new HashMap<String, Object>();
+                    paramsPass.put("object", obg);
+                    final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
+                    window.doModal();
+                }
+
+            });
+            button.setParent(listcellEditModal);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return listcellEditModal;
+    }
+
+    public Listcell createButtonViewModal(final Object obg) {
+        Listcell listcellViewModal = new Listcell();
+        try {
+            Button button = new Button();
+            button.setImage("/images/icon-invoice.png");
+            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setClass("open orange");
+            button.addEventListener("onClick", new EventListener() {
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    Sessions.getCurrent().setAttribute("object", obg);
+                    Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_VIEW);
+                    Map<String, Object> paramsPass = new HashMap<String, Object>();
+                    paramsPass.put("object", obg);
+                    final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
+                    window.doModal();
+                }
+
+            });
+            button.setParent(listcellViewModal);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return listcellViewModal;
     }
 }
