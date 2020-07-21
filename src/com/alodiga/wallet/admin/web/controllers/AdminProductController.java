@@ -23,6 +23,7 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Radio;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminProductController extends GenericAbstractAdminController {
@@ -61,6 +62,7 @@ public class AdminProductController extends GenericAbstractAdminController {
     public static Product productsAdmin = null;
     private Integer eventType;
     private boolean editingPassword = false;
+    private Tab tabProductHasBank;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -81,12 +83,15 @@ public class AdminProductController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
+                disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
+                disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.view"));
                 break;
             case WebConstants.EVENT_ADD:
+                //disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.add"));
                 break;
             default:
@@ -109,6 +114,11 @@ public class AdminProductController extends GenericAbstractAdminController {
         return this.eventType;
     }
 
+    public void disableTab() {
+          if (!productParam.isIndHasAssociatedBank()) {
+                    tabProductHasBank.setDisabled(true); 
+          }
+    }
     public void clearFields() {
         txtName.setRawValue(null);
         txtSymbol.setRawValue(null);

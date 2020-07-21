@@ -37,15 +37,16 @@
                                             <vlayout>
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
                                                     <tabs>
-                                                        <tab id="tabProduct" label="${c:l('sp.crud.product.list')}" />
+                                                        <tab id="tabProduct" label="${c:l('sp.crud.product.add')}" />
                                                         <tab id="tabProductHasBank" label="${c:l('sp.crud.product.bank')}"/>
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
+                                                            <include src="listProductsHasBank.zul"/>
                                                             <include src="adminProduct.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="listProducts.zul"/>
+                                                            <include src="adminProduct.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
