@@ -14,7 +14,6 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
-
 import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
@@ -28,7 +27,6 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
@@ -58,7 +56,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
             btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_PRODUCT));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.EDIT_PRODUCT);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.VIEW_PRODUCT);
-            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.CHANGE_PRODUCT_STATUS);
+//            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.CHANGE_PRODUCT_STATUS);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -75,7 +73,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "tabProducts.zul";
+            adminPage = "TabProduct.zul";
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             startListener();
             getData();
@@ -182,9 +180,19 @@ public class ListProductsController extends GenericAbstractListController<Produc
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
+            showEmptyList();
         } catch (GeneralException ex) {
             showError(ex);
         }
+    }
+    
+     private void showEmptyList() {
+        Listitem item = new Listitem();
+        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.setParent(lbxRecords);
     }
 
     public void onClick$btnDownload() throws InterruptedException {
