@@ -37,7 +37,7 @@
                                             <vlayout>
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
                                                     <tabs>
-                                                        <tab id="tabProduct" label="${c:l('sp.crud.product.add')}" />
+                                                        <tab id="tabProduct" label="${c:l('sp.crud.product')}" />
                                                         <tab id="tabCommissionByProduct" label="${c:l('sp.tab.commission.commissionByProduct')}"/>
                                                         <tab id="tabProductHasBank" label="${c:l('sp.crud.product.bank')}"/>
                                                     </tabs>

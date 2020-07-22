@@ -42,7 +42,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
     private List<Product> products = null;
     private User currentUser;
     private Profile currentProfile;
-
+    
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
