@@ -3,7 +3,6 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -73,7 +72,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "TabProduct.zul";
+            adminPage = "tabProducts.zul";
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             startListener();
             getData();

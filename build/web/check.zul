@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
+<?page title="${c:l('sp.common.page.title')}"?>
+<?link rel="icon" type="image/x-icon" href="/images/favicon.ico"?>
+<zk>
+    <style src="/css/general.css"/>
+    <window apply ="com.alodiga.services.provider.web.controllers.CheckController" width="100%" height="100%">
+        <borderlayout width="100%" height="100%">
+            <north border="none" size="50px" >
+                <borderlayout height="50px">
+                    <north size="20px" border="0" style="background:#333; repeat center center;">
+                        <div align="center">
+                        <label value="${c:l('sp.common.page.title')}" style="color:#C9B38F; font-size:16px;"/>
+                        </div>
+                    </north>
+                    <south size="30px" border="0" class="yellow1">
+                        <div align="center">
+                            <toolbar mold="panel" align="center">
+                                <toolbarbutton label="${c:l('sp.common.gotoAdminPage')}" image="/images/icon-user.png" onClick="Executions.sendRedirect(&quot;admin.zul&quot;)"/>
+                            </toolbar>
+                        </div>
+                    </south>
+                </borderlayout>
+            </north>
+            <center border="none" flex="true" autoscroll="true">
+                <div align="center">
+                    <separator/>
+                    <separator/>
+                    <separator/>
+                   
+                    <hlayout>
+                        <vlayout>
+                            <listbox id="lbxEjbsFounded" fixedLayout="true" width="250px" height="500px" mold="paging">
+                                <listhead>
+                                    <listheader label="${c:l('sp.common.ejbChecker.good')}" width="240px" sort="auto"/>
+                                </listhead>
+                            </listbox>
+                        </vlayout>
+                        <vlayout>
+                            <listbox id="lbxEjbsNotFounded" fixedLayout="true" width="250px" height="500px" mold="paging">
+                                <listhead>
+                                    <listheader label="${c:l('sp.common.ejbChecker.bad')}" width="240px" sort="auto"/>
+                                </listhead>
+                            </listbox>
+                        </vlayout>
+                        <vlayout>
+                            <groupbox closable="false" height="500px" width="260px" mold="3d">
+                                <caption label="${c:l('sp.common.actions.reloadCache')}" />
+                                <div align="center">
+                                    <button  id="btnReloadCache" width="160px" label="${c:l('sp.common.actions.reloadCache')}" class="open orange"/>
+                                </div>
+                                <separator/>
+                                <separator/>
+                                <div align="center">
+                                    <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
+                                </div>
+                            </groupbox>
+                        </vlayout>
+                    </hlayout>
+                    
+                </div>
+            </center>
+            <south border="none" size="30px">
+                <div align="center" style="background:#333; repeat center center; border:none;" height="30px">
+                </div>
+            </south>
+        </borderlayout>
+    </window>
+</zk>

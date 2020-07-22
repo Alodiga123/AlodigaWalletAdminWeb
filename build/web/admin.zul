@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
+<?page title="${c:l('sp.common.page.title')}"?>
+<?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
+<?init class="com.alodiga.wallet.admin.web.security.IndexAdminRedirectInit" ?>
+<zk xmlns:n="native">
+    <window id="winAdminView" apply ="com.alodiga.wallet.admin.web.controllers.IndexAdminController" width="100%" height="100%" class="general-window" >
+        <style src="/css/general.css"/>
+        <borderlayout width="100%" height="100%" class="content-transparent">
+            <north border="none" size="50px" class="content-transparent">
+                <borderlayout height="120px" class="content-transparent">
+                    <north size="80px" border="0" class="content-transparent">
+                        <div>
+                            <div align="center" style="background:#232323; repeat center center; border:none;" height="20px">
+                                <label value="${c:l('page.title')}" style="color:#837E76; font-size:16px;"/>
+                            </div>
+                            <div align="center" class="yellow1">
+                                <menubar id="menubar" class="yellow1">
+                                    <menuitem label="${c:l('sp.common.gotoCommercialPage')}" image="/images/icon-home.png" onClick="Executions.sendRedirect(&quot;https://cgturbines.com.ar//&quot;)"/>
+                                    <menu label="${c:l('sp.common.language')}" image="/images/icon-chat.png" >
+                                        <menupopup style="background: #DAA908 repeat-x 0 center;border:0">
+                                            <menuitem id="mniSpanish" label="${c:l('sp.common.language.spanish')}" image="/images/icon-spanish.png" style="background: #FACC2E repeat-x 0 center;border:0"/>
+                                            <menuitem id="mniEnglish" label="${c:l('sp.common.language.english')}" image="/images/icon-english.png" style="background: #FACC2E repeat-x 0 center;border:0"/>
+                                        </menupopup>
+                                    </menu>
+                                </menubar>
+                            </div>
+                        </div>
+                    </north>
+                    <south size="40px" border="0">
+                    </south>
+                </borderlayout>
+            </north>
+            <center border="none" flex="true" class="content-transparent">
+                <div align="center">
+                    <vlayout>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <separator/>
+                        <hlayout>
+                            <image id="imgAirPlane" src="/images/logo_header.png" style="cursor:pointer" /> 
+                        </hlayout>
+                        <separator/>
+                        <separator/>
+                        <groupbox id="gbxLogin" mold="3d" width="350px" >
+                            <caption label="${c:l('sp.common.loginTitle')}" />
+                            <hlayout >
+                                <vlayout>
+                                    <grid fixedLayout="true" width="290px">
+                                        <columns >
+                                            <column label="" width="80px" />
+                                            <column label="" width="200px"/>
+                                        </columns>
+                                        <rows>
+                                            <row>
+                                                <label  sclass="lblbold" value="${c:l('sp.common.login')}" width="80px" />
+                                                <hlayout>
+                                                    <textbox id="txtLogin" value="" width="150px"/>
+                                                </hlayout>
+                                            </row>
+                                            <row id="rowPassword">
+                                                <label  sclass="lblbold" value="${c:l('sp.common.password')}" width="80px" />
+                                                <textbox id="txtPassword" type="password" value="" width="150px" />
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                
+                                    <label  id="lblInfo" />
+                                    <vlayout id="vltLogin">
+                                    
+                                        <hlayout>
+                                            <button id="btnLogin" style="cursor:pointer" width="140px" height="23px" class="small1 orange" label="${c:l('sp.common.actions.signIn')}"/>
+                                            <button id="btnRecoverPassword" style="cursor:pointer" width="140px" height="23px" class="small1 gray" label="${c:l('sp.common.forgotPassword')}"/>
+                                        </hlayout>
+                                    </vlayout>
+                                    <vlayout id="vltPasswordRecovery" visible="false">
+
+                                        <hlayout>
+                                            <button id="btnGeneratePassword" style="cursor:pointer" width="140px" height="23px" class="small1 orange" label="${c:l('sp.common.generatePassword')}"/>
+                                            <button id="btnBack" style="cursor:pointer" width="140px" height="23px" class="small1 gray" label="${c:l('sp.common.actions.cancel')}"/>
+                                        </hlayout>
+                                    </vlayout>
+                                </vlayout>
+                            </hlayout>
+                        </groupbox>
+                        <groupbox id="gbxRecoverPass" mold="3d" width="350px" visible="false" class="borderedFrame">
+                            <caption label="${c:l('sp.common.loginTitle')}" />
+                            <hlayout >
+                                <vlayout>
+                                    <grid fixedLayout="true" width="290px">
+                                        <columns >
+                                            <column label="" width="80px" />
+                                            <column label="" width="200px"/>
+                                        </columns>
+                                        <rows>
+                                            <row>
+                                                <label value="${c:l('sp.common.login')}" width="80px" class="lblbold"/>
+                                                <hlayout>
+                                                    <textbox id="txtRecoverLogin" width="150px" constraint="no empty: ${c:l('sp.error.field.required')}"/>
+                                                </hlayout>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                    <vlayout>
+                                        <div align="center">
+                                            <hlayout>
+                                                <button id="btnRecoverPass" label="${c:l('sp.common.generatePassword')}" width="140px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
+                                                <button id="btnCancelRecoverPassword" label="${c:l('sp.common.actions.cancel')}"  width="140px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
+                                            </hlayout>
+                                        </div>
+                                    </vlayout>
+                                </vlayout>
+                            </hlayout>
+                        </groupbox>
+                        <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
+                        <separator/>
+                        <!--                         <div align="center"> -->
+
+                        <!--                             <label value="${c:l('sp.common.page.copyright1')}" style="color:#837E76;"/> -->
+                        <!--                             <separator/> -->
+                        <!--                             <label value="${c:l('sp.common.page.copyright2')}" style="color:#837E76;"/> -->
+                            
+                        <!--                         </div> -->
+                    </vlayout>
+                </div>
+            </center>
+            <south border="none" size="50px">
+                <div align="center" style="background:#232323; repeat center center; border:none;" height="50px">
+                    <hlayout>
+                        <div></div>
+                        <div align="center" width="980px" style="padding-top: 5px;">
+                            <hlayout>
+                                <label value="${c:l('sp.common.page.copyright')}" style="color:#CDA869;"/>
+                                <separator orient="vertical" bar="true"/>
+                                <label value="${c:l('sp.common.page.powerby')}" style="color:#837E76;"/>
+                                <label value="Alodiga" style="color:#CDA869; cursor:pointer;" onClick="Executions.sendRedirect(&quot;https://cgturbines.com.ar/&quot;)"/>
+                                <separator/>
+                                <separator/>
+                                <separator/>
+                                <separator/>
+                          
+                            </hlayout>
+                        </div>
+                        <div></div>
+                    </hlayout>
+                </div>
+            </south>
+        </borderlayout>
+    </window>
+</zk>

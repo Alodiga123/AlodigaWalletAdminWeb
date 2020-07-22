@@ -12,10 +12,10 @@
                 <include src="adminHeader.zul"/>
             </north>
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
-                <div align="center" width="2000px">
+                <div align="center">
                     <hlayout >
                         <div></div>
-                        <div width="1200px" align="left" height="890px">
+                        <div width="100%" align="left" height="100%">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
@@ -38,12 +38,15 @@
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
                                                     <tabs>
                                                         <tab id="tabProduct" label="${c:l('sp.crud.product.add')}" />
+                                                        <tab id="tabCommissionByProduct" label="${c:l('sp.tab.commission.commissionByProduct')}"/>
                                                         <tab id="tabProductHasBank" label="${c:l('sp.crud.product.bank')}"/>
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
                                                             <include src="listProductsHasBank.zul"/>
-                                                            <include src="adminProduct.zul"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <include src="listCommissionByProduct.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="adminProduct.zul"/>
