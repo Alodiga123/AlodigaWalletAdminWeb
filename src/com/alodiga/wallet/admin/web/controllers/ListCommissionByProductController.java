@@ -9,8 +9,6 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
-import com.alodiga.wallet.admin.web.components.ListcellEditButton;
-import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
@@ -19,7 +17,6 @@ import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
-import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Commission;
@@ -32,10 +29,9 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
@@ -49,15 +45,18 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
     private List<Commission> commissions = null;
-    private AdminProductController adminProduct = null;
     private User currentUser;
     private Profile currentProfile;
+    private Product productParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
-        adminProduct = new AdminProductController();
-        eventType = adminProduct.getEventType();
         super.doAfterCompose(comp);
+        if (eventType == WebConstants.EVENT_ADD) {
+            productParam = null;
+        } else {
+            productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+        }
         initialize();
     }
 
@@ -73,14 +72,14 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     }
 
     public void startListener() {
-//        EventQueue que = EventQueues.lookup("updateCommission", EventQueues.APPLICATION, true);
-//        que.subscribe(new EventListener() {
-//
-//            public void onEvent(Event evt) {
-//                getData();
-//                loadList(commissions);
-//            }
-//        });
+        EventQueue que = EventQueues.lookup("updateCommission", EventQueues.APPLICATION, true);
+        que.subscribe(new EventListener() {
+
+            public void onEvent(Event evt) {
+                getData();
+                loadList(commissions);
+            }
+        });
     }
 
     @Override
@@ -88,10 +87,10 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
-            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "/adminCommissionByProduct.zul";
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             startListener();
             getData();
             loadList(commissions);
@@ -100,24 +99,18 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         }
     }
 
-//    public List<Commission> getFilteredList(String Commission) {
-//        List<Commission> list = new ArrayList<ExchangeRate>();
-//        if (commissions != null) {
-//            for (Iterator<Commission> i = commissions.iterator(); i.hasNext();) {
-//                Commission tmp = i.next();
-//                String field = tmp.getProductId().getName().toLowerCase();
-//                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-//                    list.add(tmp);
-//                }
-//            }
-//        }
-//        return list;
-//    }
-//    public void onClick$btnAdd() throws InterruptedException {
-//        Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
-//        Sessions.getCurrent().removeAttribute("object");
-//        Executions.getCurrent().sendRedirect(adminPage);
-//    }
+    public List<Commission> getFilteredList(String filter) {
+        List<Commission> auxList = new ArrayList<Commission>();
+        for (Iterator<Commission> i = commissions.iterator(); i.hasNext();) {
+            Commission tmp = i.next();
+            String field = tmp.getProductId().getName().toLowerCase();
+            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                auxList.add(tmp);
+            }
+        }
+        return auxList;
+    }
+
     public void onClick$btnAdd() throws InterruptedException {
         try {
             Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
@@ -231,26 +224,23 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     }
 
     public void getData() {
-//        commissions = new ArrayList<Commission>();
-//        try {
-//            
-
         Product product = null;
         commissions = new ArrayList<Commission>();
-
         try {
-            
+
 //            request.setFirst(0);
 //            request.setLimit(null);
 //            commissions = utilsEJB.getCommission(request);
 
-            AdminProductController adminProduct = new AdminProductController();
-            if (adminProduct.getProduct()!= null) {
-                product = adminProduct.getProduct();
-            }
+//            Product principal
+//            AdminProductController adminProduct = new AdminProductController();
+//            if (adminProduct.getProductParent() != null) {
+//                product = adminProduct.getProductParent();
+//            }
+
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
-            params.put(Constants.COMMISSION_KEY, product.getId());
+            params.put(Constants.PRODUCT_KEY, productParam.getId());
             request1.setParams(params);
             commissions = utilsEJB.getCommissionByProduct(request1);
         } catch (NullParameterException ex) {
@@ -283,7 +273,6 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     }
 
     public void onClick$btnClear() throws InterruptedException {
-
     }
 
     public void onClick$btnSearch() throws InterruptedException {
@@ -291,10 +280,5 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    @Override
-    public List<Commission> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

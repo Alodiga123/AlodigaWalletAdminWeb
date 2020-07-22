@@ -59,7 +59,7 @@ public class AdminProductController extends GenericAbstractAdminController {
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private Product productParam;
-    public static Product productsAdmin = null;
+    public static Product productParent = null;
     private Integer eventType;
     private boolean editingPassword = false;
     private Tab tabProductHasBank;
@@ -106,8 +106,8 @@ public class AdminProductController extends GenericAbstractAdminController {
         }
     }
     
-    public Product getProduct() {
-        return this.productsAdmin;
+    public Product getProductParent() {
+        return this.productParent;
     }
     
     public Integer getEventType() {
@@ -184,7 +184,7 @@ public class AdminProductController extends GenericAbstractAdminController {
                 rIsPaymentInfoNo.setChecked(true);
             }
 
-            productsAdmin = product;
+            productParent = product;
         } catch (Exception ex) {
             showError(ex);
         }
@@ -337,7 +337,7 @@ public class AdminProductController extends GenericAbstractAdminController {
             request1.setParam(product);
             product = productEJB.saveProduct(request1);
             productParam = product;
-            productsAdmin = product;
+            productParent = product;
             eventType = WebConstants.EVENT_EDIT;
             this.showMessage("sp.common.save.success", false, null);
 
@@ -373,14 +373,12 @@ public class AdminProductController extends GenericAbstractAdminController {
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                productsAdmin = productParam;
                 loadFields(productParam);
                 loadCmbProductIntegrationType(eventType);
                 loadCmbEnterprise(eventType);
                 loadCmbCategory(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
-                productsAdmin = productParam;
                 loadFields(productParam);
                 blockFields();
                 loadCmbProductIntegrationType(eventType);

@@ -4,18 +4,18 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminCommissionByProduct" title="${c:l('sp.tab.commission.commissionByProduct')}" width="950px" height="650px" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winAdminCommissionByProduct" title="${c:l('sp.tab.commission.commissionByProduct')}" width="950px" height="350px" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionsByProductController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="900px" align="left" height="600px">
+                        <div width="1200px" align="left" height="300px">
                             <hlayout>
                                 <div width="900px">
                                     <vlayout>
-                                        <div height="5px" width="100%" style="background:#333;" align="left"></div>
+                                        <div height="5px" width="100%" style="background:#333;" align="center"></div>
                                         <div>
                                             <vlayout>
                                                 <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
@@ -23,7 +23,7 @@
                                                     <columns>
                                                         <column label="" width="300px"/>
                                                         <column label="" width="300px"/>
-                                                        <column label="" width="300px"/>
+                                                        <column label="" width="200px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>
@@ -87,10 +87,8 @@
                                         </div>
                                     </vlayout>
                                 </div>
-                                <div></div>
                             </hlayout>
                         </div>
-                        <div></div>
                     </hlayout>
                 </div>
             </center>
