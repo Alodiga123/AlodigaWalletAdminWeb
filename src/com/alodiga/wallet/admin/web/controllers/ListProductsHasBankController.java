@@ -47,6 +47,7 @@ public class ListProductsHasBankController extends GenericAbstractListController
     private List<BankHasProduct> bankHasProductList = null;
     private User currentUser;
     private Profile currentProfile;
+    private Product product;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -182,6 +183,12 @@ public class ListProductsHasBankController extends GenericAbstractListController
     public void getData() {
         EJBRequest request1 = new EJBRequest();
         bankHasProductList = new ArrayList<BankHasProduct>();
+        product= (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+
+        AdminProductController admin= new AdminProductController();
+        admin.setProductParent(product);
+        request1.setParam(product);
+        
         try {
             bankHasProductList = productEJB.getBankHasProduct(request1);
         } catch (NullParameterException ex) {

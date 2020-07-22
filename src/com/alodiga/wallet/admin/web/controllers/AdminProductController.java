@@ -72,6 +72,7 @@ public class AdminProductController extends GenericAbstractAdminController {
             productParam = null;
         } else {
             productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+            productParent= productParam;
         }
 
         initialize();
@@ -108,6 +109,10 @@ public class AdminProductController extends GenericAbstractAdminController {
     
     public Product getProductParent() {
         return this.productParent;
+    }
+    
+    public void setProductParent(Product product) {
+        this.productParent=product;
     }
     
     public Integer getEventType() {

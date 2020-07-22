@@ -32,17 +32,18 @@ import org.zkoss.zul.Window;
 
 public class AdminAddProductHasBankController extends GenericAbstractAdminController {
 
-    private static final long serialVersionUID = -9145887024839938515L;
+    private static final long serialVersionUID = -9145887024839938516L;
     private Listbox lbxRecords;
     private Combobox cmbProduct;
     private Combobox cmbBank;
-    private Label txtProduct;
+    private Label lblProduct;
     private ProductEJB productEJB = null;
     private UtilsEJB utilsEJB = null;
     private BankHasProduct bankHasProductParam;
     private Button btnSave;
     public Window winAdminAddCommerceCategory;
     private Integer eventType;
+    Product product;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -79,15 +80,12 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
 
     public void blockFields() {
         cmbBank.setDisabled(true);
-        cmbProduct.setDisabled(true);
+        //cmbProduct.setDisabled(true);
         btnSave.setVisible(false);
     }
 
     public Boolean validateEmpty() {
-        if (cmbProduct.getSelectedItem() == null) {
-            cmbProduct.setFocus(true);
-            this.showMessage("sp.crud.product.select", true, null);
-        } else if (cmbBank.getSelectedItem() == null) {
+        if (cmbBank.getSelectedItem() == null) {
             cmbBank.setFocus(true);
             this.showMessage("sp.crud.product.bank.select", true, null);
         } else {
@@ -105,7 +103,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
                 bankHasProduct = new BankHasProduct();
             }
 
-            bankHasProduct.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+            bankHasProduct.setProductId(product);
             bankHasProduct.setBankId((Bank) cmbBank.getSelectedItem().getValue());
             //request1.setParam(bankHasProduct);
 
@@ -135,6 +133,8 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
             showError(ex);
         } catch (GeneralException ex) {
             showError(ex);
+        } catch (RegisterNotFoundException ex) {
+            showError(ex);
         }
     }
 
@@ -160,24 +160,31 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadCmbProduct(eventType);
+                loadFiels(eventType);
                 loadCmbBank(eventType);
-                //cmbProduct.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 blockFields();
-                loadCmbProduct(eventType);
+                loadFiels(eventType);
                 loadCmbBank(eventType);
                 break;
             case WebConstants.EVENT_ADD:
+                //cmbProduct.setDisabled(true);
                 loadCmbBank(eventType);
-                loadCmbProduct(eventType);
+                loadFiels(eventType);
                 break;
             default:
                 break;
         }
     }
 
+      private void loadFiels(Integer eventType) {
+        //product = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+        AdminProductController admin = new AdminProductController();
+        product= admin.getProductParent();
+        lblProduct.setValue(product.getName());
+    }
+    
     private void loadCmbProduct(Integer eventType) {
         EJBRequest request1 = new EJBRequest();
         List<Product> productList;
