@@ -47,7 +47,7 @@
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="listProductHasBank.zul"/>
-                                                        </tabpanel>
+                                                        </tabpanel>                                          
                                                         <tabpanel>
                                                             <include src="adminProduct.zul"/>
                                                         </tabpanel>
