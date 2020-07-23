@@ -335,6 +335,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
         cmbOperationType.setSelectedIndex(0);
         cmbOperationMode.setSelectedIndex(0);
         cmbProduct.setSelectedIndex(0);
+        cmbBank.setSelectedIndex(0);
         Date date = new Date();
         dtbBeginningDate.setValue(date);
         dtbEndingDate.setValue(date);
