@@ -73,7 +73,7 @@ public class ListBankController extends GenericAbstractListController<Bank> {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "adminBank.zul";
+            adminPage = "TabBank.zul";
             getData();
             loadList(banks);
         } catch (Exception ex) {
