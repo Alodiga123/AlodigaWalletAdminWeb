@@ -4,6 +4,7 @@ import java.util.List;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
@@ -34,6 +35,7 @@ public class AdminBankController extends GenericAbstractAdminController {
     private Toolbarbutton tbbTitle;
     private Bank bankParam;
     private Integer eventType;
+    private Tab tabBankOperator;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -52,22 +54,8 @@ public class AdminBankController extends GenericAbstractAdminController {
     @Override
     public void initialize() {
         super.initialize();
-        switch (eventType) {
-            case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.edit"));
-                break;
-            case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.view"));
-                break;
-            case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.add"));
-                break;
-            default:
-                break;
-        }
         try {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            loadData();
         } catch (Exception ex) {
             showError(ex);
         }
