@@ -1,0 +1,20 @@
+
+<div align="center" style="background: transparent url(./images/topbarbg.jpg);background-repeat: repeat-x; border:none;" height="10px" >
+
+    <separator orient="horizontal"/>
+    <div align="center" style="background:#232323; repeat center center; border:none;" height="30px">
+        <hlayout>
+            <div></div>
+            <div align="center" width="980px" style="padding-top: 5px;">
+                <hlayout>
+                <label value="${c:l('sp.common.page.copyright')}" style="color:rgb(196, 196, 196);"/>
+                <separator/>
+                <separator/>
+                <separator/>
+                <separator/>
+             </hlayout>
+            </div>
+            <div></div>
+        </hlayout>
+    </div>
+</div>
