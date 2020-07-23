@@ -159,6 +159,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
     private void loadOperationalManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_COUNTRIES, "listCountries.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_CURRENCIES, "listCurrency.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
         createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
@@ -167,6 +168,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_CURRENCIES, "listCurrency.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_COMMISSION, "listCommission.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
     }
 
     private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {

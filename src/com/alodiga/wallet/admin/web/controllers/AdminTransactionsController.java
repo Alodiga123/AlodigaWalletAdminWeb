@@ -9,8 +9,8 @@ import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.model.Transaction;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
-import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
-import com.ericsson.alodiga.ws.RespuestaUsuario;
+//import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
+//import com.ericsson.alodiga.ws.RespuestaUsuario;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
@@ -91,8 +91,8 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
     }
     
     private void loadFields(Transaction transaction) {
-        APIRegistroUnificadoProxy searchUser = new APIRegistroUnificadoProxy();
-        RespuestaUsuario responseUser = new RespuestaUsuario();
+        //APIRegistroUnificadoProxy searchUser = new APIRegistroUnificadoProxy();
+        //RespuestaUsuario responseUser = new RespuestaUsuario();
         Long userName;
         
         try {

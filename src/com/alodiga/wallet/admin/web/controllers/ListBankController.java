@@ -3,7 +3,6 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -11,7 +10,6 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
-
 import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;

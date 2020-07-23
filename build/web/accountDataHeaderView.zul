@@ -1,0 +1,27 @@
+
+<vlayout apply="com.alodiga.wallet.admin.web.controllers.AccountHeaderMenuController">
+    <hlayout>
+       <label value="${c:l('sp.common.account.type')}" style="color:grey;font-size:14px" />:
+        <label id="lblAccountType" value="" style="color:#424242;font-size:18px" />
+    </hlayout>
+    <hlayout>
+        <label value="${c:l('sp.common.customer')}" style="color:grey;font-size:17px" />:
+        <label id="lblAccountName" value="" style="color:#424242;font-size:17px" />
+    </hlayout>
+    <hlayout id= "balance" visible="false">
+        <label id="lblCurrentBalance" value="${c:l('sp.common.label.balance')}" style="color:#424242;font-size:17px"/>
+        <label id="lblCurrentBalanceValue" value="" style="color:#538312;font-size:16px"/>
+    </hlayout>
+    <hlayout id= "balanceCreditLimit" visible="false">
+        <label id="lblCurrentLimit" value="${c:l('sp.common.balance.limit')}" style="color:#424242;font-size:15px"/>
+        <label id="lblCurrentBalanceLimit" value="" style="color:#538312;font-size:13px"/>
+    </hlayout>
+    <hlayout id= "balance2" visible="false">
+        <label id="lblCurrentBalance2" value="${c:l('sp.purchase.balance.balanceUsed')}" style="color:#424242;font-size:15px"/>
+        <label id="lblCurrentBalanceValue2" value="" style="color:#538312;font-size:13px"/>
+    </hlayout>
+    <hlayout id= "balanceAvalaible" visible="false">
+        <label id="lblCurrentBalanceAvalaible" value="${c:l('sp.common.label.available.balance')}" style="color:#424242;font-size:15px"/>
+        <label id="lblCurrentBalanceValueAvalaible" value="" style="color:#538312;font-size:13px"/>
+    </hlayout>
+</vlayout>
