@@ -53,7 +53,7 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="995px" height="530px">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="995px" height="410px">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.common.fullName')}" width="280px" sort="auto"/>
                                                     <listheader label="${c:l('sp.common.login')}" width="280px" sort="auto"/>
