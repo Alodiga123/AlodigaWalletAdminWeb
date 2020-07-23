@@ -32,12 +32,10 @@
                                                         </row>
                                                         <row>
                                                             <hlayout>
-                                                                <combobox id="cmbProduct" width="250px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
+                                                            <label id="lblProduct" width="250px"/>                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbBank" width="250px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                     </rows>

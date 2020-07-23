@@ -28,6 +28,12 @@ public class ShowAdminViewListener implements EventListener {
         this.object = o;
         this.permissionId = permissionId;
     }
+    
+    public ShowAdminViewListener(int eventType, String view, Object o) {
+        this.eventType = eventType;
+        this.view = view;
+        this.object = o;
+    }
 
     public void onEvent(Event event) throws UiException, InterruptedException {
         Sessions.getCurrent().setAttribute("object", this.object);

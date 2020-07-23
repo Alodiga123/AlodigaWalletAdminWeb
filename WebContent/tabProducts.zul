@@ -57,13 +57,14 @@
                                         </div>
                                     </vlayout>
                                 </div>
-                                <div></div>
                             </hlayout>
                         </div>
-                        <div></div>
                     </hlayout>
                 </div>
             </center>
+            <south border="none" size="40px">
+                <include src="adminFooter.zul"/>
+            </south>
         </borderlayout>
     </window>
 </zk>
