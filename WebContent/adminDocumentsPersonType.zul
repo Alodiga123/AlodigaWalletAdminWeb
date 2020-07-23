@@ -35,6 +35,7 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
+<<<<<<< Updated upstream:WebContent/adminDocumentsPersonType.zul
                                                 <div align="right">
                                                     <hlayout>
                                                         <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
@@ -83,6 +84,26 @@
                                                         </row>
                                                     </rows>
                                                 </grid>
+=======
+                                                <tabbox id="tbxPurchaseTabs" width="920px" height="600px">
+                                                    <tabs>
+                                                        <tab id="tabCommissionByProduct" label="${c:l('sp.tab.commission.commissionByProduct')}"/>
+                                                        <tab id="tabProductHasBank" label="${c:l('sp.crud.product.bank')}"/>
+                                                        <tab id="tabProduct" label="${c:l('sp.crud.product.list')}" />
+                                                    </tabs>
+                                                    <tabpanels>
+                                                        <tabpanel>
+                                                            <include src="listCommissionByProduct.zul"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <include src="listProductHasBank.zul"/>
+                                                        </tabpanel>                                          
+                                                        <tabpanel>
+                                                            <include src="adminProduct.zul"/>
+                                                        </tabpanel>
+                                                    </tabpanels>
+                                                </tabbox>
+>>>>>>> Stashed changes:build/web/TabProduct.zul
                                             </vlayout>
                                         </div>
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
