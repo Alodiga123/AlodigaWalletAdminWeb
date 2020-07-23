@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
-<?page title="${c:l('sp.crud.profile.admin')}"?>
+<?page title="${c:l('sp.crud.bank.operaton.view')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 
@@ -26,64 +26,64 @@
                                                         <column label="" width="595px"/>
                                                     </columns>
                                                     <rows>
-                                                     <row>
+                                                                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.number')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtNumber" maxlength="255" width="250px" />
+                                                                <label id="lblNumber" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.user')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtUser" maxlength="255" width="250px" />
+                                                                <label id="lblUser" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.transaccion.id')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtTransaction" maxlength="255" width="250px" />
+                                                                <label id="lblTransaction" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                          <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.bank')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbBank" width="250px" mold="rounded" readonly="true"/>
+                                                                <label id="lblBank" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.type')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbType" width="250px" mold="rounded" readonly="true"/>
+                                                                <label id="lblType" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.mode')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbMode" width="250px" mold="rounded" readonly="true"/>
+                                                                <label id="lblMode" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                        <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.product')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbProduct" width="250px" mold="rounded" readonly="true"/>
+                                                                <label id="lblProduct" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                         <label value="${c:l('sp.crud.bank.operaton.date')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <datebox id="dtbDate" width="250px"/>                
+                                                                <label id="lblDate" width="250px" style="color:#837E76;"/>                
                                                             </hlayout>
                                                         </row>
                                                          <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.amount')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                              <doublebox id="dblAmount" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
+                                                              <label id="lblAmount" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.operaton.status')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                               <textbox id="txtStatus" maxlength="255" width="250px" />
+                                                               <label id="lblStatus"  width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>
