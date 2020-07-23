@@ -3,7 +3,6 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -14,10 +13,7 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
-
 import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
-import com.alodiga.wallet.admin.web.components.ListcellEditButton;
-import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
@@ -29,7 +25,6 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.BankHasProduct;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
@@ -38,6 +33,8 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.util.HashMap;
 import java.util.Map;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Window;
 
@@ -50,6 +47,7 @@ public class ListProductsHasBankController extends GenericAbstractListController
     private List<BankHasProduct> bankHasProductList = null;
     private User currentUser;
     private Profile currentProfile;
+    private Product product;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -67,10 +65,17 @@ public class ListProductsHasBankController extends GenericAbstractListController
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
-
+    
     public void startListener() {
+        EventQueue que = EventQueues.lookup("updateProductHasBank", EventQueues.APPLICATION, true);
+        que.subscribe(new EventListener() {
+
+            public void onEvent(Event evt) {
+                getData();
+                loadList(bankHasProductList);
+            }
+        });
     }
 
     @Override
@@ -81,7 +86,6 @@ public class ListProductsHasBankController extends GenericAbstractListController
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "/adminAddProductHasBank.zul";
-            
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             startListener();
             getData();
@@ -179,6 +183,12 @@ public class ListProductsHasBankController extends GenericAbstractListController
     public void getData() {
         EJBRequest request1 = new EJBRequest();
         bankHasProductList = new ArrayList<BankHasProduct>();
+        product= (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+
+        AdminProductController admin= new AdminProductController();
+        admin.setProductParent(product);
+        request1.setParam(product);
+        
         try {
             bankHasProductList = productEJB.getBankHasProduct(request1);
         } catch (NullParameterException ex) {

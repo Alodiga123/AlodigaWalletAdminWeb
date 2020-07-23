@@ -1,0 +1,42 @@
+
+<borderlayout height="60px" apply="com.alodiga.wallet.admin.web.controllers.HeaderController">
+    <north size="60px" border="0" class="content-transparent">
+        <div align="center">
+            <hlayout style="background: transparent url(./images/topbarbg.jpg);background-repeat: repeat-x;">
+                <div></div>
+                <div width="1100px" style="padding: 5px 5px 5px 5px;color:white;font-weight:bolder;">
+                    <hlayout>
+                        <div width="500px" align="left">
+                            <hlayout>
+                                <label value="${c:l('sp.common.atc')}"/>
+                                <separator/>
+                                <label id="lblAtcNumber"/>
+                            </hlayout>
+                        </div>
+                        <div width="575px" align="right">
+                            <hlayout>
+                                <image src="/images/icon-email.png" style="cursor:pointer" onClick="Executions.sendRedirect(&quot;mailto:webmasterus@gmail.com&quot;)"/>
+                                <image src="/images/icon-youtube.png" style="cursor:pointer" onClick="Executions.sendRedirect(&quot;http://www.youtube.com/user/AlodigaUS?blend=11&quot;)"/>
+                                <image src="/images/icon-linkedin.png" style="cursor:pointer" onClick="Executions.sendRedirect(&quot;http://www.linkedin.com/company/456273?trk=tyah&quot;)"/>
+                                <image src="/images/icon-gplus.png" style="cursor:pointer" onClick="Executions.sendRedirect(&quot;https://plus.google.com/u/0/b/105532997490711329388/105532997490711329388/posts&quot;)"/>
+                                <image src="/images/icon-twitter.png" style="cursor:pointer" onClick="Executions.sendRedirect(&quot;https://twitter.com/AlodigaUS&quot;)"/>
+                                <image src="/images/icon-facebook.png" style="cursor:pointer" onClick="Executions.sendRedirect(&quot;http://www.facebook.com/alo.diga&quot;)"/>
+                            </hlayout>
+                        </div>
+                    </hlayout>
+                </div>
+                <div></div>
+            </hlayout>
+            <hlayout class="yellow1">
+                <div></div>
+                <div>
+                    <include src="distributorHeaderMenu.zul"/>
+                </div>
+                <div></div>
+            </hlayout>
+
+        </div>
+    </north>
+    <south height="0px" border="0" >
+    </south>
+</borderlayout>
