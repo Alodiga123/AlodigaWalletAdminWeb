@@ -1,21 +1,25 @@
 package com.alodiga.wallet.admin.web.controllers;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Sessions;
-import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
-import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.ProductEJB;
-import com.alodiga.wallet.common.ejb.UtilsEJB;
-import com.alodiga.wallet.common.model.Transaction;
-import com.alodiga.wallet.common.utils.EJBServiceLocator;
-import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.List;
+
 //import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
 //import com.ericsson.alodiga.ws.RespuestaUsuario;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
-import static sun.net.www.protocol.http.AuthCacheValue.Type.Proxy;
+
+import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
+import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.model.CommissionItem;
+import com.alodiga.wallet.common.model.Transaction;
+import com.alodiga.wallet.common.utils.EJBServiceLocator;
+import com.alodiga.wallet.common.utils.EjbConstants;
 
 public class AdminTransactionsController extends GenericAbstractAdminController {
 
@@ -40,12 +44,15 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
     private Label lblAdditional2;
     private Label lblClose;
     private Label lblConcept;
-    private UtilsEJB utilsEJB = null;
-    private ProductEJB productEJB = null;
+    private Label lblAmountComission;
+    private Label lblComissionValue;
+    private Checkbox chbPercentComission;
+    private Grid grdCommision;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private Transaction transactionParam;
     private Integer eventType;
+    private UtilsEJB utilsEJB = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -78,8 +85,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 break;
         }
         try {
-            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+        	utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
@@ -185,7 +191,20 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             }else{
                 lblClose.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
+            try {
+	            List<CommissionItem> items = utilsEJB.getCommissionItems(transaction.getId());
+	            if (!items.isEmpty()) {
+	            	grdCommision.setVisible(true);
+	            	for(CommissionItem c: items) {
+		            	lblAmountComission.setValue(String.valueOf(c.getAmount()));
+		            	lblComissionValue.setValue(String.valueOf(c.getCommissionId().getValue()));
+		            	chbPercentComission.setChecked(c.getCommissionId().getIsPercentCommision()!=0);
+		            	chbPercentComission.setDisabled(true);
+	            	}
+	            }
+            }catch (Exception e) {
 
+			}
             btnSave.setVisible(true);
         } catch (Exception ex) {
             showError(ex);
