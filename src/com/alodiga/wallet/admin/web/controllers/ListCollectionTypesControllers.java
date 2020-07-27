@@ -21,6 +21,7 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -59,7 +60,7 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             checkPermissions();
             getData();
-            loadDataList(collectionType);
+            loadList(collectionType);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -115,17 +116,18 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
 
     public void onClick$btnClear() throws InterruptedException {
         txtName.setText("");
+        loadList(collectionType);
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-            loadDataList(getFilterList(txtName.getText()));
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
     }
     
-    public List<CollectionType> getFilterList(String filter) {
+   /* public List<CollectionType> getFilterList(String filter) {
         List<CollectionType> collectionTypeList = new ArrayList<CollectionType>();
         try {
             if (filter != null && !filter.equals("")) {
@@ -141,9 +143,9 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
    
     public void startListener() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 
-    public void loadDataList(List<CollectionType> list) {
+   /* public void loadDataList(List<CollectionType> list) {
           try {
             lbxRecords.getItems().clear();
             Listitem item = null;
@@ -171,15 +173,53 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
         } catch (Exception ex) {
            showError(ex);
         }
-    }
-
-    @Override
+    }*/
+     
     public List<CollectionType> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CollectionType> auxList = new ArrayList<CollectionType>();
+        for (Iterator<CollectionType> i = collectionType.iterator(); i.hasNext();) {
+            CollectionType tmp = i.next();
+            String field = tmp.getDescription().toLowerCase();
+            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                auxList.add(tmp);
+            }
+        }
+        return auxList;    
     }
 
     @Override
     public void loadList(List<CollectionType> list) {
+ try {
+            lbxRecords.getItems().clear();
+            Listitem item = null;
+            if (list != null && !list.isEmpty()) {
+                btnDownload.setVisible(true);
+                for (CollectionType collectionType : list) {
+                    item = new Listitem();
+                    item.setValue(collectionType);
+                    item.appendChild(new Listcell(collectionType.getCountryId().getName()));
+                    item.appendChild(new Listcell(collectionType.getDescription()));
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionType, Permission.EDIT_TYPE_OF_COLLECTIONS) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionType, Permission.VIEW_TYPE_OF_COLLECTIONS) : new Listcell());
+                    item.setParent(lbxRecords);
+                }
+            } else {
+                btnDownload.setVisible(false);
+                item = new Listitem();
+                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell());
+                item.appendChild(new Listcell());
+                item.appendChild(new Listcell());
+                item.setParent(lbxRecords);
+            }
+
+        } catch (Exception ex) {
+           showError(ex);
+        }    
+    }
+
+    @Override
+    public void startListener() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

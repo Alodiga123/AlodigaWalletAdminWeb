@@ -73,13 +73,20 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
     }
     
      public Boolean validateEmpty() {
+        
+        if (cmbCountry.getSelectedItem() == null) {
+            cmbCountry.setFocus(true);
+            this.showMessage("sp.error.countryNotSelected", true, null);
+            return false;
+        }
+        
         if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
             this.showMessage("sp.error.field.cannotNull", true, null);
-        } else {
-            return true;
-        }
-        return false;
+            return false;
+        } 
+        
+        return true;
     }
 
     private void loadFields(CollectionType collectionType) {
