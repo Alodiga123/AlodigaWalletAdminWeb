@@ -149,8 +149,8 @@ public class ListProductsController extends GenericAbstractListController<Produc
 	                    item.appendChild(new Listcell(product.getCategoryId().getName()));
                             item.appendChild(new Listcell(product.getProductIntegrationTypeId().getName()));
                             item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("sp.crud.product.yes"):Labels.getLabel("sp.crud.product.no"))));
-	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, product,Permission.EDIT_PRODUCT) : new Listcell());
-	                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, product,Permission.VIEW_PRODUCT) : new Listcell());
+	                    item.appendChild(new ListcellEditButton(adminPage, product));
+	                    item.appendChild(new ListcellViewButton(adminPage, product));
 	                    item.setParent(lbxRecords);
 	                }
 	            } else {
@@ -172,9 +172,6 @@ public class ListProductsController extends GenericAbstractListController<Produc
         products = new ArrayList<Product>();
         EJBRequest request1 = new EJBRequest();
         try {
-            //request.setFirst(0);
-            //request.setLimit(null);
-            //request.setAuditData(null);
             products = productEJB.getProducts(request1);
         } catch (NullParameterException ex) {
             showError(ex);
