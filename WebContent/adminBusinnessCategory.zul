@@ -5,15 +5,16 @@
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminBank" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminBankController">
+    <window id="winAdminBusinnessCategory" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminBusinnessCategoryController">
         <style src="/css/general.css"/>
-        <borderlayout width="100%" height="100%" class="content-transparent">
+        <borderlayout width="970px" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout >
-                       <div width="1200px" align="left" height="600px">
+                        <div></div>
+                        <div width="970px" align="left" height="100%">
                             <hlayout>
-                                <div width="950px">
+                                <div width="910px">
                                     <vlayout>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
@@ -27,47 +28,26 @@
                                                         <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
                                                     </hlayout>
                                                 </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
-                                                        <column label="" width="645px"/>
+                                                        <column label="" width="600px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>
-                                                            <label value="${c:l('sp.common.bank.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.businnesSubCategory.category')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtName" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                                <textbox id="txtDescription" maxlength="80" width="250px"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
+                                                                <label value="${c:l('sp.common.max80')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.bank.enterprise')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.businnesSubCategory.mccCode')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbEnterprise" width="250px" mold="rounded" readonly="true"/>
+                                                                <textbox id="txtMccCode" maxlength="10" width="250px"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.codeSwift')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtCodeSwift" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.aba')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtAba" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.country')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="${c:l('sp.common.max10')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>
@@ -78,7 +58,7 @@
                                         <!--Buttons-->
                                         <div align="right">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listBank.zul&quot;)"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listBusinnesCategory.zul&quot;)"/>
                                         </div>
                                     </vlayout>
                                 </div>
@@ -89,7 +69,6 @@
                     </hlayout>
                 </div>
             </center>
-
         </borderlayout>
     </window>
 </zk>

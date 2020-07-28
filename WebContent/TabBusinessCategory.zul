@@ -5,7 +5,7 @@
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 
 <zk xmlns:n="native">
-    <window id="winTabProduct" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminProductController" class="general-window">
+    <window id="winTabBusinessCategory" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminProductController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.product.list')}" onClick='Executions.sendRedirect(&quot;listProducts.zul&quot;)'/>
+                                                <toolbarbutton label="${c:l('sp.tab.businnesCategory')}" onClick='Executions.sendRedirect(&quot;listBusinnesCategory.zul&quot;)'/>
                                                 |
                                                 <toolbarbutton id="tbbTitle" label=""/>
                                             </hlayout>
@@ -37,19 +37,15 @@
                                             <vlayout>
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
                                                     <tabs>
-                                                        <tab id="tabProduct" label="${c:l('sp.crud.product')}" />
-                                                        <tab id="tabCommissionByProduct" label="${c:l('sp.tab.commission.commissionByProduct')}"/>
-                                                        <tab id="tabProductHasBank" label="${c:l('sp.crud.product.bank')}"/>
+                                                        <tab id="tabSubBusinnesCategory" label="${c:l('sp.tab.businnesSubCategory')}"/>
+                                                        <tab id="tabBusinnesCategory" label="${c:l('sp.tab.businnesCategory')}" />
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
-                                                            <include src="listProductsHasBank.zul"/>
+                                                            <include src="listBusinnesSubCategory.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="listCommissionByProduct.zul"/>
-                                                        </tabpanel>
-                                                        <tabpanel>
-                                                            <include src="adminProduct.zul"/>
+                                                            <include src="adminBusinnessCategory.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
@@ -57,13 +53,14 @@
                                         </div>
                                     </vlayout>
                                 </div>
-                                <div></div>
                             </hlayout>
                         </div>
-                        <div></div>
                     </hlayout>
                 </div>
             </center>
+            <south border="none" size="40px">
+                <include src="adminFooter.zul"/>
+            </south>
         </borderlayout>
     </window>
 </zk>

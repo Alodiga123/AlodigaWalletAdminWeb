@@ -2,59 +2,56 @@
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
 <?page title="${c:l('sp.common.page.title')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
-<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
+<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
 
 <zk xmlns:n="native">
-    <window id="winTabProduct" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminProductController" class="general-window">
+    <window id="winTabBanK" width="100%" height="100%"  class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
                 <include src="adminHeader.zul"/>
             </north>
-            <center border="none" flex="true" class="content-transparent" autoscroll="true">
-                <div align="center">
+            <center border="none" flex="true" class="content-transparent">
+                <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="100%" align="left" height="100%">
+                        <div width="1300px" align="left" height="700px">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="100%">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.product.list')}" onClick='Executions.sendRedirect(&quot;listProducts.zul&quot;)'/>
+                                                <toolbarbutton label="${c:l('sp.crud.bank.list')}" />
                                                 |
-                                                <toolbarbutton id="tbbTitle" label=""/>
+                                                <toolbarbutton id="tbbCurrentAction" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
+                                                <tabbox id="tbxBankTabs" width="1000px" height="650px">
                                                     <tabs>
-                                                        <tab id="tabProduct" label="${c:l('sp.crud.product')}" />
-                                                        <tab id="tabCommissionByProduct" label="${c:l('sp.tab.commission.commissionByProduct')}"/>
-                                                        <tab id="tabProductHasBank" label="${c:l('sp.crud.product.bank')}"/>
+                                                        <tab id="tabBanK" label="${c:l('sp.tab.bank')}" />
+                                                        <tab id="tabBankOperator" label="${c:l('sp.tab.list.bank.operation')}"/>
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
-                                                            <include src="listProductsHasBank.zul"/>
+                                                            <include src="adminBank.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="listCommissionByProduct.zul"/>
-                                                        </tabpanel>
-                                                        <tabpanel>
-                                                            <include src="adminProduct.zul"/>
+                                                            <include src="listBankOperation.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
                                             </vlayout>
                                         </div>
+                                        <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                     </vlayout>
                                 </div>
                                 <div></div>
@@ -64,6 +61,9 @@
                     </hlayout>
                 </div>
             </center>
+            <south border="none" size="40px">
+                <include src="adminFooter.zul"/>
+            </south>
         </borderlayout>
     </window>
 </zk>

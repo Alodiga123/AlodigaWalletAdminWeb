@@ -14,10 +14,9 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
-
-//import com.alodiga.businessportal.ws.BPBusinessWSProxy;
-//import com.alodiga.businessportal.ws.BpBusiness;
-//import com.alodiga.businessportal.ws.BusinessSearchType;
+import com.alodiga.businessportal.ws.BPBusinessWSProxy;
+import com.alodiga.businessportal.ws.BpBusiness;
+import com.alodiga.businessportal.ws.BusinessSearchType;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractController;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericSPController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
@@ -694,14 +693,13 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     }
 
     public void onClick$btnSearch() {
-//    	BPBusinessWSProxy proxy = new BPBusinessWSProxy();
-//        try {
-//        	BpBusiness bpBussiness = proxy.getBusiness(BusinessSearchType.ID, txtEmailBussiness.getText());
-//        	txtBussiness.setText(bpBussiness.getId().toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    	txtBussiness.setText(txtEmailBussiness.getText());
+    	BPBusinessWSProxy proxy = new BPBusinessWSProxy();
+        try {
+        	BpBusiness bpBussiness = proxy.getBusiness(BusinessSearchType.EMAIL, txtEmailBussiness.getText());
+        		txtBussiness.setText(bpBussiness.getId().toString());    
+        } catch (Exception e) {
+        	this.showMessage("sp.specific.preference.error.search", true, null);  
+        }
     }
 
 }
