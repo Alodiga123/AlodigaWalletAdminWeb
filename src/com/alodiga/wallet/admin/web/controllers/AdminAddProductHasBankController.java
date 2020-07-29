@@ -18,8 +18,6 @@ import com.alodiga.wallet.common.model.Bank;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -123,12 +121,6 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
             } else {
                 this.showMessage("sp.crud.product.exist", true, null);
             }
-
-        } catch (ConstraintViolationException ex) {
-            for (ConstraintViolation actual : ex.getConstraintViolations()) {
-                System.out.println(actual.toString());
-            }
-            this.showMessage("sp.crud.product.exist", true, null);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {
@@ -193,7 +185,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
             productList = productEJB.getProducts(request1);
             if (!productList.isEmpty()) {
                 for (Product product_ : productList) {
-                    if (product_.getIndHasAssociatedBank()) {
+                    if (product_.getIndHasAssociatedBank() != null) {
                         productListAux.add(product_);
                     }
                 }
