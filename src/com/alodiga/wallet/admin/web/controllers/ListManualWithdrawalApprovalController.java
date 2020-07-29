@@ -15,28 +15,35 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListContr
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.DocumentsPersonType;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.StatusTransactionApproveRequest;
+import com.alodiga.wallet.common.model.TransactionApproveRequest;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import org.zkoss.zul.Textbox;
 
-public class ListDocumentsPersonTypeController extends GenericAbstractListController<DocumentsPersonType> {
+public class ListManualWithdrawalApprovalController extends GenericAbstractListController<TransactionApproveRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtName;
-    private PersonEJB personEJB = null;
     private UtilsEJB utilsEJB = null;
-    private List<DocumentsPersonType> documentsPersonType = null;
+    private List<TransactionApproveRequest> manualWithdrawalApproval = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -49,9 +56,9 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_DOCUMENTS_PERSON_TYPE));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_DOCUMENTS_PERSON_TYPE);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_DOCUMENTS_PERSON_TYPE);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_MANUAL_WITHDRAWAL_APPROVAL));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_MANUAL_WITHDRAWAL_APPROVAL);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_MANUAL_WITHDRAWAL_APPROVAL);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -63,12 +70,11 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
         try {
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
-            personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             checkPermissions();
-            adminPage = "adminDocumentsPersonType.zul";
+            adminPage = "adminManualWithdrawalApproval.zul";
             getData();
-            loadDataList(documentsPersonType);
+            loadList(manualWithdrawalApproval);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -81,11 +87,30 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
     }
 
     public void getData() {
-        documentsPersonType = new ArrayList<DocumentsPersonType>();
+        List<StatusTransactionApproveRequest> statusPending;
+        statusPending = new ArrayList<StatusTransactionApproveRequest>();
+        StatusTransactionApproveRequest statusP = null;
+
+        manualWithdrawalApproval = new ArrayList<TransactionApproveRequest>();
         try {
-            request.setFirst(0);
-            request.setLimit(null);
-            documentsPersonType = personEJB.getDocumentsPersonType(request);
+            EJBRequest code = new EJBRequest();
+            Map params = new HashMap();
+            params = new HashMap();
+            params.put(QueryConstants.PARAM_CODE, Constants.STATUS_TRANSACTIONS_CODE);
+            code.setParams(params);
+            statusPending = utilsEJB.getStatusTransactionApproveRequestPending(code);
+
+            if (statusPending != null) {
+                for (StatusTransactionApproveRequest s : statusPending) {
+                    statusP = s;
+                }
+            }
+            EJBRequest status = new EJBRequest();
+            params = new HashMap();
+            params = new HashMap();
+            params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPROVE_REQUEST_ID, statusP.getId());
+            status.setParams(params);
+            manualWithdrawalApproval = utilsEJB.getTransactionApproveRequestByStatus(status);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -108,21 +133,28 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void loadDataList(List<DocumentsPersonType> list) {
+    public void loadList(List<TransactionApproveRequest> list) {
+        Locale locale = new Locale("es", "ES");
+        String totalAmount = "";
+        NumberFormat numberFormat = NumberFormat.getInstance(locale);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (DocumentsPersonType documentsPersonType : list) {
+                for (TransactionApproveRequest transactionApproveRequest : list) {
                     item = new Listitem();
-                    item.setValue(documentsPersonType);
-                    item.appendChild(new Listcell(documentsPersonType.getPersonTypeId().getCountryId().getName()));
-                    item.appendChild(new Listcell(documentsPersonType.getPersonTypeId().getDescription()));
-                    item.appendChild(new Listcell(documentsPersonType.getDescription()));
-                    item.appendChild(new Listcell(documentsPersonType.getCodeIdentification()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, documentsPersonType, Permission.EDIT_DOCUMENTS_PERSON_TYPE) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, documentsPersonType, Permission.VIEW_DOCUMENTS_PERSON_TYPE) : new Listcell());
+                    item.setValue(transactionApproveRequest);
+                    item.appendChild(new Listcell(transactionApproveRequest.getRequestNumber()));
+                    item.appendChild(new Listcell(transactionApproveRequest.getProductId().getName()));
+                    totalAmount = numberFormat.format(transactionApproveRequest.getTransactionId().getTotalAmount());
+                    item.appendChild(new Listcell(totalAmount));
+                    item.appendChild(new Listcell(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription()));
+                    item.appendChild(new Listcell(simpleDateFormat.format(transactionApproveRequest.getRequestDate())));
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, transactionApproveRequest, Permission.EDIT_MANUAL_WITHDRAWAL_APPROVAL) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, transactionApproveRequest, Permission.VIEW_MANUAL_WITHDRAWAL_APPROVAL) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -134,7 +166,6 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
                 item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -142,8 +173,8 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.documentPersonType.list"));
-            AccessControl.saveAction(Permission.LIST_DOCUMENTS_PERSON_TYPE, "Se descargo listado de Documentos por tipo de Persona en formato excel");
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.manualWithdrawalApproval.list"));
+            AccessControl.saveAction(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "Se descargo listado de Retiro Manual en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
@@ -162,12 +193,7 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
     }
 
     @Override
-    public List<DocumentsPersonType> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void loadList(List<DocumentsPersonType> list) {
+    public List<TransactionApproveRequest> getFilteredList(String filter) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
