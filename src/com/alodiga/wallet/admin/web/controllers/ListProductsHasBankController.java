@@ -126,14 +126,11 @@ public class ListProductsHasBankController extends GenericAbstractListController
     }
 
     public void onClick$btnAdd() throws InterruptedException {
-        //Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
-        //Sessions.getCurrent().removeAttribute("object");
-        //Executions.getCurrent().sendRedirect(adminPage);
-            Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
-            Map<String, Object> paramsPass = new HashMap<String, Object>();
-            paramsPass.put("object", bankHasProductList);
-            final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
-            window.doModal();
+        Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
+        Map<String, Object> paramsPass = new HashMap<String, Object>();
+        paramsPass.put("object", bankHasProductList);
+        final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
+        window.doModal();
 
     }
 
@@ -165,7 +162,8 @@ public class ListProductsHasBankController extends GenericAbstractListController
 	                    item.appendChild(new Listcell(bankHasProduct.getProductId().getName()));
                             item.appendChild(new Listcell(bankHasProduct.getBankId().getName()));
 	                    item.appendChild(createButtonEditModal(bankHasProduct));
-                            item.appendChild(createButtonViewModal(bankHasProduct));  item.setParent(lbxRecords);
+                            item.appendChild(createButtonViewModal(bankHasProduct));
+                            item.setParent(lbxRecords);
 	                }
 	            } else {
 	                btnDownload.setVisible(false);

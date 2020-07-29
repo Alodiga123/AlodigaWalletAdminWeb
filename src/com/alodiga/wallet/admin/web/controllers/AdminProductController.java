@@ -14,10 +14,13 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Category;
 import com.alodiga.wallet.common.model.Enterprise;
+import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.ProductIntegrationType;
+import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import org.zkoss.util.resource.Labels;
@@ -63,6 +66,7 @@ public class AdminProductController extends GenericAbstractAdminController {
     private Integer eventType;
     private boolean editingPassword = false;
     private Tab tabProductHasBank;
+    private Profile currentProfile;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -84,11 +88,11 @@ public class AdminProductController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                disableTab();
+//                disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                disableTab();
+//                disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.view"));
                 break;
             case WebConstants.EVENT_ADD:
@@ -120,8 +124,8 @@ public class AdminProductController extends GenericAbstractAdminController {
     }
 
     public void disableTab() {
-          if (!productParam.getIndHasAssociatedBank()) {
-                    tabProductHasBank.setDisabled(true); 
+          if (productParam.getIndHasAssociatedBank() != null) {
+            tabProductHasBank.setDisabled(true); 
           }
     }
     public void clearFields() {
@@ -188,7 +192,6 @@ public class AdminProductController extends GenericAbstractAdminController {
             } else {
                 rIsPaymentInfoNo.setChecked(true);
             }
-
             productParent = product;
         } catch (Exception ex) {
             showError(ex);
@@ -196,7 +199,6 @@ public class AdminProductController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-
         cmbEnterprise.setReadonly(true);
         cmbCategory.setReadonly(true);
         cmbProductIntegrationType.setReadonly(true);
