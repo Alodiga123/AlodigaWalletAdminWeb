@@ -55,7 +55,6 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     @Override
@@ -70,7 +69,6 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
             adminPage = "adminDocumentsPersonType.zul";
             getData();
             loadDataList(documentsPersonType);
-//            loadList(banks);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -162,21 +160,6 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
             showError(ex);
         }
     }
-
-//    public List<DocumentsPersonType> getFilterList(String filter) {
-//        List<DocumentsPersonType> documentsPersonTypeaux = new ArrayList<DocumentsPersonType>();
-//        DocumentsPersonType documentsPersonTypes;
-//        try {
-//            if (filter != null && !filter.equals("")) {
-//                documentsPersonTypeaux = utilsEJB.getSearchDocumentsPersonType(filter);
-//            } else {
-//                return documentsPersonType;
-//            }
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//        return documentsPersonTypeaux;
-//    }
 
     @Override
     public List<DocumentsPersonType> getFilteredList(String filter) {

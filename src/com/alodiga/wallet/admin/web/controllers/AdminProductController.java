@@ -120,7 +120,7 @@ public class AdminProductController extends GenericAbstractAdminController {
     }
 
     public void disableTab() {
-          if (!productParam.isIndHasAssociatedBank()) {
+          if (!productParam.getIndHasAssociatedBank()) {
                     tabProductHasBank.setDisabled(true); 
           }
     }

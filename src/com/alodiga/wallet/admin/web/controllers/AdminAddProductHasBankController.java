@@ -193,7 +193,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
             productList = productEJB.getProducts(request1);
             if (!productList.isEmpty()) {
                 for (Product product_ : productList) {
-                    if (product_.isIndHasAssociatedBank()) {
+                    if (product_.getIndHasAssociatedBank()) {
                         productListAux.add(product_);
                     }
                 }
