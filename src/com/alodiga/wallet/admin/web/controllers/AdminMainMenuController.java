@@ -100,6 +100,9 @@ public class AdminMainMenuController extends GenericForwardComposer {
                         case 3://Configurations Management
                             loadConfigurationsManagementGroup(pg);
                             break;
+                        case 5://Configurations Management
+                        	loadTransactionalManagementGroup(pg);
+                            break;
                         default:
                             break;
                     }
@@ -163,11 +166,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
         createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_COMMISSION, "listCommission.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_COLLECTIONS_TYPE, "listCollectionTypes.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_CATEGORY, "listBusinnesCategory.zul", permissionGroup, listgroup);
@@ -189,6 +189,15 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.BALANCE_ADJUSMENT, "balanceAdjusmentView.zul", permissionGroup, listgroup);
     }
 
+    private void loadTransactionalManagementGroup(PermissionGroup permissionGroup) {
+        Listgroup listgroup = createListGroup(permissionGroup);
+        createCell(Permission.LIST_COMMISSION, "listCommission.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "listManualRecharge.zul", permissionGroup, listgroup);
+     } 
+    
+    
     private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {
         Permission permission = loadPermission(permissionId);
         if (permission != null) {
