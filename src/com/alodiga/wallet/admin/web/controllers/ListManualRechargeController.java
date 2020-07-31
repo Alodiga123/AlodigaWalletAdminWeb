@@ -20,6 +20,7 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 
+import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
@@ -212,7 +213,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
                     	item.appendChild(new Listcell(approveRequest.getProductId().getName()));
                     	item.appendChild(new Listcell(String.valueOf(approveRequest.getTransactionId().getAmount())));
                     	item.appendChild(new Listcell(approveRequest.getStatusTransactionApproveRequestId().getDescription()));
-                    	item.appendChild(permissionRead ? new ListcellViewButton(adminPage, approveRequest, Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
+                    	item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, approveRequest,Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
                         item.appendChild(permissionRead ? new ListcellViewButton(adminPage, approveRequest,Permission.VIEW_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
                     	item.setParent(lbxRecords);
                     	

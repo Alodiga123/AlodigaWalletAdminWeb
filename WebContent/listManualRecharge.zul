@@ -40,7 +40,7 @@
                                                     <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
                                                     <combobox id="cmbProduct" width="140px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('sp.crud.manual.recharge.transaction')}" sclass="lblbold"/>
-                                                   <textbox id="txtRequestNumber" width="260px" maxlength="60"/>
+                                                   <textbox id="txtRequestNumber" width="200px" maxlength="60"/>
                                                 </hlayout>
                                                   <hlayout id="hParams" style="text-align:right">            
                                                     <label value="${c:l('sp.common.beginningDate')}"  sclass="lblbold"/>
@@ -58,7 +58,7 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="890px" height="450px" mold="paging" pageSize="15">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.manual.recharge.transaction')}" width="190px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.manual.recharge.request.number')}" width="190px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.date')}" width="170px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.product')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.amount')}" width="145px" sort="auto"/>
