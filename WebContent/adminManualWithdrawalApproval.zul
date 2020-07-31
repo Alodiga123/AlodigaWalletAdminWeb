@@ -82,16 +82,6 @@
                                                             <label id="lblTransaction" value="" width="250px" style="color:#837E76;"/>
                                                             <datebox id="dtbApprovedRequestDate" width="250px"/>
                                                         </row>
-                                                    </rows>
-                                                </grid>
-                                                <grid fixedLayout="true">
-                                                    <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="300px"/>
-                                                    </columns>
-                                                    <rows>
-                                                        <group label="${c:l('sp.crud.manualWithdrawalApproval.bankData')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.bank')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.accountBank')}" sclass="lblbold"/>
@@ -108,6 +98,7 @@
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.bankOperationAmount')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
+                                                            <!--<label id="dblAmount" value="" width="250px" style="color:#837E76;"/>-->
                                                             <doublebox id="dblAmount" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                             <doublebox id="dblCommision" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                             <label id="dblBankOperationAmount" value="" width="250px" style="color:#837E76;"/>

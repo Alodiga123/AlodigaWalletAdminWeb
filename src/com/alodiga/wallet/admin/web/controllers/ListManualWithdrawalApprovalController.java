@@ -149,7 +149,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
                     item.setValue(transactionApproveRequest);
                     item.appendChild(new Listcell(transactionApproveRequest.getRequestNumber()));
                     item.appendChild(new Listcell(transactionApproveRequest.getProductId().getName()));
-                    totalAmount = numberFormat.format(transactionApproveRequest.getTransactionId().getTotalAmount());
+//                    totalAmount = numberFormat.format(transactionApproveRequest.getTransactionId().getTotalAmount());
                     item.appendChild(new Listcell(totalAmount));
                     item.appendChild(new Listcell(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription()));
                     item.appendChild(new Listcell(simpleDateFormat.format(transactionApproveRequest.getRequestDate())));
