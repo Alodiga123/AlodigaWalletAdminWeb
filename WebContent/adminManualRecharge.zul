@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
+<?page title="${c:l('sp.crud.bank.operaton.view')}"?>
+<?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
+<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
+
+<zk xmlns:n="native">
+    <window id="winAdminBankOperation" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminManualRechargeController">
+        <style src="/css/general.css"/>
+        <borderlayout width="100%" height="100%" class="content-transparent">
+            <north border="none" size="52px" class="content-transparent">
+                <include src="adminHeader.zul"/>
+            </north>
+            <center border="none" flex="true" class="content-transparent" autoscroll="true">
+                <div align="center" >
+                    <hlayout >
+                        <div></div>
+                        <div width="100%" align="left" height="100%">
+                            <hlayout>
+                                <div>
+                                    <include src="adminMainMenu.zul"/>
+                                </div>
+                                <div width="900px">
+                                    <vlayout>
+                                        <div height="20px" width="100%" align="left">
+                                            <!--Bread crumb-->
+                                            <hlayout>
+                                                <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
+                                                |
+                                                <toolbarbutton label="${c:l('sp.crud.manual.recharge.list')}" onClick='Executions.sendRedirect(&quot;listBankingOperations.zul&quot;)'/>
+                                                |
+                                                <toolbarbutton id="tbbCurrentAction" />
+                                            </hlayout>
+                                        </div>
+                                        <div height="5px" width="100%" style="background:#333;" align="left"></div>
+                                        <div>
+                                            <vlayout>
+                                                <div align="right">
+                                                    <hlayout>
+                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
+                                                        <separator/>
+                                                        <label value="*" sclass="lblreq" />
+                                                        <separator/>
+                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
+                                                    </hlayout>
+                                                </div>
+                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="299px"/>
+                                                        <column label="" width="299px"/>
+                                                        <column label="" width="299px"/>
+                                                    </columns>
+                                                    <rows>
+                                                     <group label="${c:l('sp.common.data.basic')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.request.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.request.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.status')}" sclass="lblbold"/>
+                                                        </row>
+                                                    	 <row>
+                                                    	    <label id="lblRequestNumber" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblRequestDate" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblRequestStatus" value="" width="270px" style="color:#837E76;"/>
+                                                        </row>
+                                                      <group label="${c:l('sp.crud.manual.recharge.info.transaction')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.concept')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.transaction')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblProduct" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblConcept" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblTransactionNumber" value="" width="270px" style="color:#837E76;"/>
+                                                        </row>
+                                                         <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.transaction.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.amount')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblTransactionDate" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblAmount" value="" width="270px" style="color:#837E76;"/>
+                                                        </row>
+                                                         <group label="${c:l('sp.crud.manual.recharge.info.user')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.user.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.user.phone')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.user.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblUserName" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblTelephone" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblEmail" value="" width="270px" style="color:#837E76;"/>
+                                                        </row>
+                                                         <group label="${c:l('sp.crud.manual.recharge.info.bank.operation')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.bank')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.bank.operation.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.bank.operation.date')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblBank" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblBankOperationNumber" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblBankOperationDate" value="" width="270px" style="color:#837E76;"/>
+                                                        </row>
+                                                        <group label="${c:l('sp.crud.manual.recharge.application.approval')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.bank.operation.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.approval.user')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.approval.indicator')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblApprovalUser" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblApprovalDate" value="" width="270px" style="color:#837E76;"/>
+                                                           	<checkbox id="chbApprovalIndicator"/>
+                                                        </row>                                                    
+                                                    </rows>
+                                                </grid>
+                                                 <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="895px"/>
+                                                    </columns>
+                                                    <rows>
+                                                         <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.approval.observation')}" sclass="lblbold"/>                              
+                                                        </row>
+                                                        <row>
+                                                            <textbox id="txtObservation" rows="3" maxlength="255" width="890px"/>                                                          
+                                                        </row>
+                                                    </rows>
+                                                </grid>
+                                            </vlayout>
+                                        </div>
+                                        <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
+                                        <!--Buttons-->
+                                        <div align="right">
+                                            <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listManualRecharge.zul&quot;)"/>
+                                        </div>
+                                    </vlayout>
+                                </div>
+                                <div></div>
+                            </hlayout>
+                        </div>
+                        <div></div>
+                    </hlayout>
+                </div>
+            </center>
+            <south border="none" size="40px">
+                <include src="adminFooter.zul"/>
+            </south>
+        </borderlayout>
+    </window>
+</zk>

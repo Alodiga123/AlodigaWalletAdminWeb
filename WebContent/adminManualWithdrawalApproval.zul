@@ -74,18 +74,59 @@
                                                         <group label="${c:l('sp.crud.manualWithdrawalApproval.data')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.product')}" sclass="lblbold"/>
-                                                            <label id="lblProduct" value="" width="250px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.transaction')}" sclass="lblbold"/>
-                                                            <label id="lblTransaction" value="" width="250px" style="color:#837E76;"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.approvedRequestDate')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.approvedRequestDate')}" sclass="lblbold"/>
+                                                            <label id="lblProduct" value="" width="250px" style="color:#837E76;"/>
+                                                            <label id="lblTransaction" value="" width="250px" style="color:#837E76;"/>
                                                             <datebox id="dtbApprovedRequestDate" width="250px"/>
                                                         </row>
+                                                    </rows>
+                                                </grid>
+                                                <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="300px"/>
+                                                    </columns>
+                                                    <rows>
+                                                        <group label="${c:l('sp.crud.manualWithdrawalApproval.bankData')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.bank')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.accountBank')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.userSource')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblBank" value="" width="250px" style="color:#837E76;"/>
+                                                            <label id="lblAccountBank" value="" width="250px" style="color:#837E76;"/>
+                                                            <label id="lblUserSource" value="" width="250px" style="color:#837E76;"/>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.amount')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.commision')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.bankOperationAmount')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <doublebox id="dblAmount" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
+                                                            <doublebox id="dblCommision" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
+                                                            <label id="dblBankOperationAmount" value="" width="250px" style="color:#837E76;"/>
+                                                        </row>
+                                                    </rows> 
+                                                </grid>
+                                                <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="300px"/>
+                                                    </columns>
+                                                    <rows>
+                                                        <group label="${c:l('sp.crud.manualWithdrawalApproval.dataToApprove')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.approved')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.observations')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
                                                             <hbox>
                                                                 <radiogroup id="indApproved" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -97,9 +138,6 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.observations')}" sclass="lblbold"/>
                                                             <cell colspan="2">
                                                                 <hlayout>
                                                                     <textbox id="txtObservations" multiline="true" rows="2" width="600px" maxlength="1000"/>
@@ -107,7 +145,7 @@
                                                                 </hlayout>   
                                                             </cell>
                                                         </row>
-                                                    </rows>
+                                                    </rows> 
                                                 </grid>
                                             </vlayout>
                                         </div>
