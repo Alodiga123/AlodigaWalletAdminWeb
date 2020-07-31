@@ -45,7 +45,7 @@ public class AdminUserController extends GenericAbstractAdminController {
         super.doAfterCompose(comp);
         userParam = (Sessions.getCurrent().getAttribute("object") != null) ? (User) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
-        initView(eventType, "crud.user");
+        initView(eventType, "sp.crud.user");
     }
 
     @Override
