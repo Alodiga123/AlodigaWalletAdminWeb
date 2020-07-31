@@ -158,7 +158,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
               params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
               if (dtbEndingDate.getValue().getTime() >= dtbBeginningDate.getValue().getTime()) {
                   if (cmbStatus.getSelectedItem() != null && cmbStatus.getSelectedIndex() != 0) {
-                      params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPOVED_REQUEST, ((StatusTransactionApproveRequest) cmbStatus.getSelectedItem().getValue()).getId());
+                      params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPROVE_REQUEST_ID, ((StatusTransactionApproveRequest) cmbStatus.getSelectedItem().getValue()).getId());
                   }               
                   if (cmbProduct.getSelectedItem() != null && cmbProduct.getSelectedIndex() != 0) {
                       params.put(QueryConstants.PARAM_PRODUCT_ID, ((Product) cmbProduct.getSelectedItem().getValue()).getId());
