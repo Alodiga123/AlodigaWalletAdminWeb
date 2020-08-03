@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -14,7 +12,6 @@ import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
-import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
@@ -30,10 +27,8 @@ import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import org.zkoss.zul.Textbox;
 
@@ -56,7 +51,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_MANUAL_WITHDRAWAL_APPROVAL));
+//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_MANUAL_WITHDRAWAL_APPROVAL));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_MANUAL_WITHDRAWAL_APPROVAL);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_MANUAL_WITHDRAWAL_APPROVAL);
         } catch (Exception ex) {
@@ -78,12 +73,6 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    public void onClick$btnAdd() throws InterruptedException {
-        Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
-        Sessions.getCurrent().removeAttribute("object");
-        Executions.getCurrent().sendRedirect(adminPage);
     }
 
     public void getData() {
@@ -109,6 +98,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
             params = new HashMap();
             params = new HashMap();
             params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPROVE_REQUEST_ID, statusP.getId());
+            params.put(QueryConstants.PARAM_REQUEST_NUMBER, Constants.REQUEST_NUMBER_MANUAL_WITHDRAWAL);
             status.setParams(params);
             manualWithdrawalApproval = utilsEJB.getTransactionApproveRequestByStatus(status);
         } catch (NullParameterException ex) {
@@ -134,9 +124,6 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
     }
 
     public void loadList(List<TransactionApproveRequest> list) {
-        Locale locale = new Locale("es", "ES");
-        String totalAmount = "";
-        NumberFormat numberFormat = NumberFormat.getInstance(locale);
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
@@ -149,8 +136,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
                     item.setValue(transactionApproveRequest);
                     item.appendChild(new Listcell(transactionApproveRequest.getRequestNumber()));
                     item.appendChild(new Listcell(transactionApproveRequest.getProductId().getName()));
-//                    totalAmount = numberFormat.format(transactionApproveRequest.getTransactionId().getTotalAmount());
-                    item.appendChild(new Listcell(totalAmount));
+                    item.appendChild(new Listcell(String.valueOf(transactionApproveRequest.getTransactionId().getAmount())));
                     item.appendChild(new Listcell(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription()));
                     item.appendChild(new Listcell(simpleDateFormat.format(transactionApproveRequest.getRequestDate())));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, transactionApproveRequest, Permission.EDIT_MANUAL_WITHDRAWAL_APPROVAL) : new Listcell());
@@ -194,6 +180,11 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
 
     @Override
     public List<TransactionApproveRequest> getFilteredList(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void onClick$btnAdd() throws InterruptedException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
