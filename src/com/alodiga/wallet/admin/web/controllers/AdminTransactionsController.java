@@ -85,52 +85,51 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 break;
         }
         try {
-        	utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
         }
-    }    
-
-    public void buscarUsuario (){
-        
     }
-    
+
+    public void buscarUsuario() {
+
+    }
+
     private void loadFields(Transaction transaction) {
         //APIRegistroUnificadoProxy searchUser = new APIRegistroUnificadoProxy();
         //RespuestaUsuario responseUser = new RespuestaUsuario();
         Long userName;
-        
+
         try {
-            
+
 //            responseUser = searchUser.getUsuarioporemail("usuarioWS","passwordWS", "email");
 //            userName = Long.valueOf(responseUser.getDatosRespuesta().getUsuarioID());
 //            searchUser.getUsuarioporId("usuarioWS","passwordWS", transaction.getUserSourceId().toString());
-            
             lblUserSource.setValue(transaction.getUserSourceId().toString());
             if (transaction.getUserDestinationId() != null) {
                 lblUserDestination.setValue(transaction.getUserDestinationId().toString());
-            }else{
+            } else {
                 lblUserDestination.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getProductId().getName() != null) {
                 lblProduct.setValue(transaction.getProductId().getName());
-            }else{
+            } else {
                 lblProduct.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getPaymentInfoId() != null) {
                 lblPaymentInfo.setValue(transaction.getPaymentInfoId().getCreditCardName());
-            }else{
+            } else {
                 lblPaymentInfo.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getTransactionTypeId() != null) {
                 lblTransactionType.setValue(transaction.getTransactionTypeId().getValue());
-            }else{
+            } else {
                 lblTransactionType.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getTransactionSourceId() != null) {
                 lblTransactionSource.setValue(transaction.getTransactionSourceId().getName());
-            }else{
+            } else {
                 lblTransactionSource.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             lblTransactionDate.setValue(transaction.getCreationDate().toString());
@@ -138,73 +137,73 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             lblStatus.setValue(transaction.getTransactionStatus());
             if (transaction.getTotalTax() != null) {
                 lblTotalTax.setValue(transaction.getTotalTax().toString());
-            }else{
+            } else {
                 lblTotalTax.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (String.valueOf(transaction.getTotalAmount()) != null) {
                 lblTotalAmount.setValue(String.valueOf(transaction.getTotalAmount()));
-            }else{
+            } else {
                 lblTotalAmount.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getPromotionAmount() != null) {
                 lblPromotionAmount.setValue(transaction.getPromotionAmount().toString());
-            }else{
+            } else {
                 lblPromotionAmount.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getTotalAlopointsUsed() != null) {
                 lblTotalAlopointsUsed.setValue(transaction.getTotalAlopointsUsed().toString());
-            }else{
+            } else {
                 lblTotalAlopointsUsed.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getTopUpDescription() != null) {
                 lblTopUpDescription.setValue(transaction.getTopUpDescription());
-            }else{
+            } else {
                 lblTopUpDescription.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getBillPaymentDescription() != null) {
                 lblBillPaymentDescription.setValue(transaction.getBillPaymentDescription());
-            }else{
+            } else {
                 lblBillPaymentDescription.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getExternalId() != null) {
                 lblExternal.setValue(transaction.getExternalId());
-            }else{
+            } else {
                 lblExternal.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getAdditional() != null) {
                 lblAdditional.setValue(transaction.getAdditional());
-            }else{
+            } else {
                 lblAdditional.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getAdditional2() != null) {
                 lblAdditional2.setValue(transaction.getAdditional2());
-            }else{
+            } else {
                 lblAdditional2.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getConcept() != null) {
                 lblConcept.setValue(transaction.getConcept());
-            }else{
+            } else {
                 lblConcept.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getCloseId() != null) {
                 lblClose.setValue(transaction.getCloseId().getId().toString());
-            }else{
+            } else {
                 lblClose.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             try {
-	            List<CommissionItem> items = utilsEJB.getCommissionItems(transaction.getId());
-	            if (!items.isEmpty()) {
-	            	grdCommision.setVisible(true);
-	            	for(CommissionItem c: items) {
-		            	lblAmountComission.setValue(String.valueOf(c.getAmount()));
-		            	lblComissionValue.setValue(String.valueOf(c.getCommissionId().getValue()));
-		            	chbPercentComission.setChecked(c.getCommissionId().getIsPercentCommision()!=0);
-		            	chbPercentComission.setDisabled(true);
-	            	}
-	            }
-            }catch (Exception e) {
+                List<CommissionItem> items = utilsEJB.getCommissionItems(transaction.getId());
+                if (!items.isEmpty()) {
+                    grdCommision.setVisible(true);
+                    for (CommissionItem c : items) {
+                        lblAmountComission.setValue(String.valueOf(c.getAmount()));
+                        lblComissionValue.setValue(String.valueOf(c.getCommissionId().getValue()));
+                        chbPercentComission.setChecked(c.getCommissionId().getIsPercentCommision() != 0);
+                        chbPercentComission.setDisabled(true);
+                    }
+                }
+            } catch (Exception e) {
 
-			}
+            }
             btnSave.setVisible(true);
         } catch (Exception ex) {
             showError(ex);
