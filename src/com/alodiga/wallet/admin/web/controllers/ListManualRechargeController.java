@@ -277,8 +277,8 @@ public class ListManualRechargeController extends GenericAbstractListController<
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.tab.list.bank.operation"));
-            AccessControl.saveAction(Permission.LIST_OPERATION_BANK, "Se descargo listado de Operaciones Bankarias en formato excel");
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.manual.recharge.list"));
+            AccessControl.saveAction(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "Se descargo listado de Solicitudes de Recarga Manual en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
