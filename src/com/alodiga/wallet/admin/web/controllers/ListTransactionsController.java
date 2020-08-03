@@ -18,7 +18,6 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.Transaction;
@@ -76,14 +75,10 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-//            dtbBeginningDate.setFormat("yyyy/MM/dd");
-//            dtbEndingDate.setFormat("yyyy/MM/dd");
-//            dtbBeginningDate.setValue(new Timestamp(new java.util.Date().getTime()));
-//            dtbEndingDate.setValue(new Timestamp(new java.util.Date().getTime()));
             adminPage = "adminTransactions.zul";
             btnViewTransactions.setVisible(false);
-            getData();
-            loadList(transactions);
+//            getData();
+//            loadList(transactions);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -187,7 +182,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
                     item.appendChild(new Listcell(totalAmount));
                     item.appendChild(new Listcell(transaction.getTransactionStatus()));
                     item.appendChild(new Listcell(simpleDateFormat.format(transaction.getCreationDate())));
-//                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, transaction, Permission.VIEW_TRANSACTION) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, transaction, Permission.VIEW_TRANSACTION) : new Listcell());
                     item.setParent(lbxRecords);
                 }
