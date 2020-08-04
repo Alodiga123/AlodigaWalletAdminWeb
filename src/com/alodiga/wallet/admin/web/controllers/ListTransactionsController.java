@@ -58,7 +58,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     @Override
     public void checkPermissions() {
         try {
-//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_BANK));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_TRANSACTION);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_TRANSACTION);
         } catch (Exception ex) {
@@ -133,9 +132,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
 
     public void getDataTransactions() throws RegisterNotFoundException {
         try {
-
-            loadList(utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
-//            transactions = utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(),dtbEndingDate.getValue());
+        loadList(utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -168,18 +165,20 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-
                 for (Transaction transaction : list) {
-                    String pattern = "yyyy-MM-dd";
+                    String pattern = "dd-MM-yyyy";
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
                     item = new Listitem();
                     item.setValue(transaction);
                     item.appendChild(new Listcell(transaction.getProductId().getName()));
                     item.appendChild(new Listcell(transaction.getTransactionTypeId().getValue()));
                     item.appendChild(new Listcell(transaction.getTransactionSourceId().getName()));
-                    totalAmount = numberFormat.format(transaction.getTotalAmount());
-                    item.appendChild(new Listcell(totalAmount));
+                    if (transaction.getTotalAmount() != null) {
+                        totalAmount = numberFormat.format(transaction.getTotalAmount());
+                        item.appendChild(new Listcell(totalAmount));
+                    } else {
+                        item.appendChild(new Listcell(""));
+                    }
                     item.appendChild(new Listcell(transaction.getTransactionStatus()));
                     item.appendChild(new Listcell(simpleDateFormat.format(transaction.getCreationDate())));
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, transaction, Permission.VIEW_TRANSACTION) : new Listcell());
