@@ -35,6 +35,10 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                <hlayout style="text-align:right">
+                                               <label value="${c:l('sp.specific.preference.product')}" sclass="lblbold"/>
+                                                    <combobox id="cmbProduct" width="140px" mold="rounded" readonly="true"/>
+                                                    <label value="${c:l('sp.specific.preference.transaction.type')}" sclass="lblbold"/>
+                                                    <combobox id="cmbTransactionType" width="180px" mold="rounded" readonly="true"/>        
                                                     <label value="${c:l('sp.specific.preference.bussiness')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtBussinessId" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
