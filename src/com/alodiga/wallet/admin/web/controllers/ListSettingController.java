@@ -1,13 +1,17 @@
 package com.alodiga.wallet.admin.web.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -20,16 +24,25 @@ import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
+import com.alodiga.wallet.common.ejb.ProductEJB;
+import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.Bank;
+import com.alodiga.wallet.common.model.BankOperationMode;
+import com.alodiga.wallet.common.model.BankOperationType;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.PreferenceValue;
+import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.TransactionType;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 
 public class ListSettingController extends GenericAbstractListController<PreferenceValue> {
 
@@ -37,9 +50,13 @@ public class ListSettingController extends GenericAbstractListController<Prefere
     private Listbox lbxRecords;
     private Textbox txtBussinessId;
     private PreferencesEJB preferencesEJB = null;
+    private ProductEJB productEJB = null;
+    private UtilsEJB utilsEJB = null;
     private List<PreferenceValue> preferenceValues = null;
     private User currentUser;
     private Profile currentProfile;
+    private Combobox cmbProduct;
+    private Combobox cmbTransactionType;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -68,6 +85,8 @@ public class ListSettingController extends GenericAbstractListController<Prefere
         super.initialize();
         try {
             currentUser = AccessControl.loadCurrentUser();
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             preferencesEJB = (PreferencesEJB) EJBServiceLocator.getInstance().get(EjbConstants.PREFERENCES_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
@@ -116,7 +135,6 @@ public class ListSettingController extends GenericAbstractListController<Prefere
                     item.appendChild(new Listcell(preferenceValue.getProductId().getName()));
                     item.appendChild(new Listcell(preferenceValue.getTransactionTypeId().getValue()));
                     item.appendChild(new Listcell(preferenceValue.getBussinessId().toString()));
-//                    item.appendChild(permissionChangeStatus ? initEnabledButton(preferenceValue.isEnabled(), item) : new Listcell());
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, preferenceValue, Permission.EDIT_PREFERENCES) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, preferenceValue, Permission.VIEW_PREFERENCES) : new Listcell());
                     item.setParent(lbxRecords);
@@ -127,7 +145,6 @@ public class ListSettingController extends GenericAbstractListController<Prefere
                 item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
-//                item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
             }
 
@@ -136,42 +153,15 @@ public class ListSettingController extends GenericAbstractListController<Prefere
         }
     }
 
-//    private Listcell initEnabledButton(final Boolean enabled, final Listitem listItem) {
-//
-//        Listcell cell = new Listcell();
-//        cell.setValue("");
-//        final ChangeStatusButton button = new ChangeStatusButton(enabled);
-//        button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
-//        button.setClass("open orange");
-//        button.addEventListener("onClick", new EventListener() {
-//
-//            public void onEvent(Event event) throws Exception {
-//                changeStatus(button, listItem);
-//            }
-//        });
-//
-//        button.setParent(cell);
-//        return cell;
-//    }
-//    
-//    private void changeStatus(ChangeStatusButton button, Listitem listItem) {
-//        try {
-//            PreferenceValue preferenceValue = (PreferenceValue) listItem.getValue();
-//            
-//            
-//            preferencesEJB.EnabledPreferencesValues(preferenceValue.getPreferenceClassficationId().getId(), preferenceValue.getBussinessId(), !preferenceValue.isEnabled());
-//            button.changeImageStatus(preferenceValue.isEnabled());
-//            preferenceValue.setEnabled(!preferenceValue.isEnabled());
-//            listItem.setValue(preferenceValue);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
+
     public void getData() {
+    	loadProducts();
+    	loadTransactionType();
     	preferenceValues = new ArrayList<PreferenceValue>();
         try {
-            request.setFirst(0);
-            request.setLimit(null);
+
+            Map<String, Object> params = new HashMap<String, Object>();
+            request.setParams(params);
             preferenceValues = preferencesEJB.getPreferenceValuesGroupByBussinessId(request);
         } catch (NullParameterException ex) {
             showError(ex);
@@ -207,10 +197,68 @@ public class ListSettingController extends GenericAbstractListController<Prefere
     }
 
     public void onClick$btnSearch() throws InterruptedException {
+          EJBRequest _request = new EJBRequest();
+          Map<String, Object> params = new HashMap<String, Object>();
+          try {
+              if (cmbTransactionType.getSelectedItem() != null && cmbTransactionType.getSelectedIndex() != 0) {
+                  params.put(QueryConstants.PARAM_TRANSACTION_TYPE_ID, ((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId());
+              }
+              if (cmbProduct.getSelectedItem() != null && cmbProduct.getSelectedIndex() != 0) {
+                  params.put(QueryConstants.PARAM_PRODUCT_ID, ((Product) cmbProduct.getSelectedItem().getValue()).getId());
+              }
+              if(txtBussinessId.getText() == null || !txtBussinessId.getText().equals("")) {
+            	  params.put(QueryConstants.PARAM_BUSSINESS_ID, txtBussinessId.getText());
+              }
+              _request.setParams(params);
+              loadList(preferenceValues = preferencesEJB.getPreferenceValuesGroupByBussinessId(_request));        
+	    } catch (EmptyListException ex) {
+	        showEmptyList();
+	    } catch (Exception ex) {
+	        showError(ex);
+	    }
+    }
+    
+    private void loadProducts() {
+
         try {
-        	  loadList(getFilteredList(txtBussinessId.getText()));
+        	cmbProduct.getItems().clear();
+        	EJBRequest request = new EJBRequest();
+            List<Product> products = productEJB.getProducts(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setParent(cmbProduct);
+            cmbProduct.setSelectedItem(item);
+            for (int i = 0; i < products.size(); i++) {
+                item = new Comboitem();
+                item.setValue(products.get(i));
+                item.setLabel(products.get(i).getName());
+                item.setParent(cmbProduct);
+            }
         } catch (Exception ex) {
-            showError(ex);
+            this.showError(ex);
         }
+
+    }
+    
+    private void loadTransactionType() {
+
+        try {
+        	cmbTransactionType.getItems().clear();
+        	EJBRequest request = new EJBRequest();
+            List<TransactionType> transactionTypes = utilsEJB.getTransactionType(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setParent(cmbTransactionType);
+            cmbTransactionType.setSelectedItem(item);
+            for (int i = 0; i < transactionTypes.size(); i++) {
+                item = new Comboitem();
+                item.setValue(transactionTypes.get(i));
+                item.setLabel(transactionTypes.get(i).getValue());
+                item.setParent(cmbTransactionType);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
+
     }
 }

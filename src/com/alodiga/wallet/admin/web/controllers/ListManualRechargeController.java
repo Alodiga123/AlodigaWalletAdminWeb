@@ -38,6 +38,7 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.StatusTransactionApproveRequest;
 import com.alodiga.wallet.common.model.TransactionApproveRequest;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
@@ -213,7 +214,10 @@ public class ListManualRechargeController extends GenericAbstractListController<
                     	item.appendChild(new Listcell(approveRequest.getProductId().getName()));
                     	item.appendChild(new Listcell(String.valueOf(approveRequest.getTransactionId().getAmount())));
                     	item.appendChild(new Listcell(approveRequest.getStatusTransactionApproveRequestId().getDescription()));
-                    	item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, approveRequest,Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
+                    	if(approveRequest.getStatusTransactionApproveRequestId().getCode().equals(Constants.STATUS_TRANSACTIONS_CODE))
+                    		item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, approveRequest,Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
+                    	else
+                    		item.appendChild(new Listcell());
                         item.appendChild(permissionRead ? new ListcellViewButton(adminPage, approveRequest,Permission.VIEW_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
                     	item.setParent(lbxRecords);
                     	
@@ -277,8 +281,8 @@ public class ListManualRechargeController extends GenericAbstractListController<
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.tab.list.bank.operation"));
-            AccessControl.saveAction(Permission.LIST_OPERATION_BANK, "Se descargo listado de Operaciones Bankarias en formato excel");
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.manual.recharge.list"));
+            AccessControl.saveAction(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "Se descargo listado de Solicitudes de Recarga Manual en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
