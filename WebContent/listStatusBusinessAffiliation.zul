@@ -36,7 +36,7 @@
                                             <vlayout>
                                                <hlayout style="text-align:right">
                                                     <label value="${c:l('sp.crud.status.business.affiliation.init')}" sclass="lblbold"/>
-                                                    <combobox id="cmbStatus" width="140px" mold="rounded" readonly="true"/>                               
+                                                    <combobox id="cmbStatus" width="210px" mold="rounded" readonly="true"/>                               
                                                 </hlayout>
 
                                                 <hlayout>
