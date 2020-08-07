@@ -91,7 +91,6 @@ public class ListStatusBusinessAffiliationController extends GenericAbstractList
         	EJBRequest request = new EJBRequest();
             List<StatusBusinessAffiliationRequest> list = utilsEJB.getStatusBusinessAffiliationRequest(request);
             Comboitem item = new Comboitem();
-            cmbStatus.setSelectedItem(item);
             for (int i = 0; i < list.size(); i++) {
                 item = new Comboitem();
                 item.setValue(list.get(i));

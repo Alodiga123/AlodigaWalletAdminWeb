@@ -1,5 +1,7 @@
 package com.alodiga.wallet.admin.web.controllers;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
@@ -65,12 +67,15 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     private void saveStatus(StatusBusinessAffiliationHasFinalState _status) {
 
         try {
-            if (_status == null) {
+            if (_status != null) {
+            	_status.setUpdateDate(new Timestamp(new Date().getTime()));
+            }else {
             	_status = new StatusBusinessAffiliationHasFinalState();
+            	_status.setCreateDate(new Timestamp(new Date().getTime()));
             }
-
 			_status.setStatusBusinessAffiliationRequetsId((StatusBusinessAffiliationRequest) cmbStatus.getSelectedItem().getValue());
 			_status.setFinalStateId((StatusBusinessAffiliationRequest) cmbFinal.getSelectedItem().getValue());
+			if (utilsEJB.validateStatusBusinessAffiliationHasFinalState(_status.getStatusBusinessAffiliationRequetsId().getId(),_status.getFinalStateId().getId()))
 			_status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(_status);
 			this.showMessage("sp.common.save.success", false, null);
 			if (eventType == WebConstants.EVENT_ADD) {
@@ -159,7 +164,7 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
         List<StatusBusinessAffiliationRequest> requests;
         try {
         	requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
-            loadGenericCombobox(requests, cmbFinal, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getStatusBusinessAffiliationRequetsId().getId() : 0));
+            loadGenericCombobox(requests, cmbFinal, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getFinalStateId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
             ex.printStackTrace();
