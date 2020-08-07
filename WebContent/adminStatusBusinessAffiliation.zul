@@ -20,7 +20,7 @@
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1000px">
+                                <div width="900px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -48,7 +48,7 @@
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
-                                                        <column label="" width="600px"/>
+                                                        <column label="" width="595px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>

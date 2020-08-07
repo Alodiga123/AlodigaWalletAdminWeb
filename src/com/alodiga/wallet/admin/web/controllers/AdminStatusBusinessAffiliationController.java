@@ -75,12 +75,15 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
             }
 			_status.setStatusBusinessAffiliationRequetsId((StatusBusinessAffiliationRequest) cmbStatus.getSelectedItem().getValue());
 			_status.setFinalStateId((StatusBusinessAffiliationRequest) cmbFinal.getSelectedItem().getValue());
-			if (utilsEJB.validateStatusBusinessAffiliationHasFinalState(_status.getStatusBusinessAffiliationRequetsId().getId(),_status.getFinalStateId().getId()))
-			_status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(_status);
-			this.showMessage("sp.common.save.success", false, null);
-			if (eventType == WebConstants.EVENT_ADD) {
-				btnSave.setVisible(false);
-			 } 
+			if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusBusinessAffiliationHasFinalState(_status.getStatusBusinessAffiliationRequetsId().getId(),_status.getFinalStateId().getId()))
+					|| eventType.equals(WebConstants.EVENT_EDIT)) {
+				_status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(_status);
+				this.showMessage("sp.common.save.success", false, null);
+				if (eventType == WebConstants.EVENT_ADD) {
+					btnSave.setVisible(false);
+				} 				
+			}else
+				this.showMessage("sp.error.status.business.affiliation.exist", true, null);     
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {
