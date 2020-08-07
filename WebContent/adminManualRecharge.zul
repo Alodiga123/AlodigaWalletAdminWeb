@@ -112,7 +112,7 @@
                                                         </row>
                                                         <row>
                                                             <label id="lblApprovalUser" value="" width="270px" style="color:#837E76;"/>
-                                                            <label id="lblApprovalDate" value="" width="270px" style="color:#837E76;"/>
+                                                            <datebox id="dtbApprovedRequestDate" width="250px"/>
                                                            	<checkbox id="chbApprovalIndicator"/>
                                                         </row>                                                    
                                                     </rows>
