@@ -7,7 +7,7 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequets;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PhonePerson;
 import com.alodiga.wallet.common.utils.Constants;
@@ -44,8 +44,8 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
-    private BusinessAffiliationRequets businessAffiliationRequetsParam;
-    public static BusinessAffiliationRequets businessAffiliationRequetsParent = null;
+    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    public static BusinessAffiliationRequest businessAffiliationRequestParent = null;
     private Integer eventType;
 
     @Override
@@ -53,10 +53,10 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         if (eventType == WebConstants.EVENT_ADD) {
-            businessAffiliationRequetsParam = null;
+            businessAffiliationRequestParam = null;
         } else {
-            businessAffiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequets) Sessions.getCurrent().getAttribute("object") : null;
-            businessAffiliationRequetsParent = businessAffiliationRequetsParam;
+            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+            businessAffiliationRequestParent = businessAffiliationRequestParam;
         }
 
         initialize();
@@ -87,12 +87,12 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         }
     }
 
-    public BusinessAffiliationRequets getBusinessAffiliationRequets() {
-        return this.businessAffiliationRequetsParam;
+    public BusinessAffiliationRequest getBusinessAffiliationRequest() {
+        return this.businessAffiliationRequestParam;
     }
 
-    public void setProductParent(BusinessAffiliationRequets businessAffiliationRequets) {
-        this.businessAffiliationRequetsParent = businessAffiliationRequets;
+    public void setProductParent(BusinessAffiliationRequest businessAffiliationRequets) {
+        this.businessAffiliationRequestParent = businessAffiliationRequets;
     }
 
     public Integer getEventType() {
@@ -103,15 +103,15 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
 
     }
 
-    private void loadFields(BusinessAffiliationRequets businessAffiliationRequets) {
+    private void loadFields(BusinessAffiliationRequest businessAffiliationRequest) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblRequestNumber.setValue(businessAffiliationRequets.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequets.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequets.getStatusBusinessAffiliationRequetsId().getDescription());
+            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
 
-            businessAffiliationRequetsParent = businessAffiliationRequets;
+            businessAffiliationRequestParent = businessAffiliationRequest;
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
@@ -175,12 +175,12 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadFields(businessAffiliationRequetsParam);
-                loadFieldRequest(businessAffiliationRequetsParam.getBusinessPersonId());
+                loadFields(businessAffiliationRequestParam);
+                loadFieldRequest(businessAffiliationRequestParam.getBusinessPersonId());
                 break;
             case WebConstants.EVENT_VIEW:
-                loadFields(businessAffiliationRequetsParam);
-                loadFieldRequest(businessAffiliationRequetsParam.getBusinessPersonId());
+                loadFields(businessAffiliationRequestParam);
+                loadFieldRequest(businessAffiliationRequestParam.getBusinessPersonId());
                 blockFields();
                 break;
             case WebConstants.EVENT_ADD:
