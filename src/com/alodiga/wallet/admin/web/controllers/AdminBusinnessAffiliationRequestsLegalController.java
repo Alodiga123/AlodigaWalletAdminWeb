@@ -45,8 +45,8 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
-    private BusinessAffiliationRequets businessAffiliationRequetsParam;
-    public static BusinessAffiliationRequets businessAffiliationRequetsParent = null;
+    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    public static BusinessAffiliationRequest businessAffiliationRequetsParent = null;
     private Tab tabBusinessAffiliationRequests;
     private Integer eventType;
 
@@ -58,7 +58,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
             businessAffiliationRequestParam = null;
         } else {
             businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
-            businessAffiliationRequestParent = businessAffiliationRequestParam;
+            businessAffiliationRequetsParent = businessAffiliationRequestParam;
         }
 
         initialize();
@@ -89,12 +89,12 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         }
     }
 
-    public BusinessAffiliationRequets getBusinessAffiliationRequets() {
+    public BusinessAffiliationRequest getBusinessAffiliationRequets() {
         return this.businessAffiliationRequetsParent;
     }
 
     public void setProductParent(BusinessAffiliationRequest businessAffiliationRequets) {
-        this.businessAffiliationRequestParent = businessAffiliationRequets;
+        this.businessAffiliationRequetsParent = businessAffiliationRequets;
     }
 
     public Integer getEventType() {
@@ -109,11 +109,11 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblRequestNumber.setValue(businessAffiliationRequets.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequets.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequets.getStatusBusinessAffiliationRequestId().getDescription());
+            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
 
-            businessAffiliationRequestParent = businessAffiliationRequest;
+            businessAffiliationRequetsParent = businessAffiliationRequest;
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);

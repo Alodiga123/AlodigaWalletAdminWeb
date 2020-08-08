@@ -21,7 +21,7 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Address;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequets;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PersonHasAddress;
@@ -51,7 +51,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
     private User currentUser;
     private Profile currentProfile;
     private Integer eventType;
-    private BusinessAffiliationRequets businessAffiliationRequetsParam;
+    private BusinessAffiliationRequest businessAffiliationRequetsParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -60,7 +60,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
         if (eventType == WebConstants.EVENT_ADD) {
             businessAffiliationRequetsParam = null;
         } else {
-            businessAffiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequets) Sessions.getCurrent().getAttribute("object") : null;
+            businessAffiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         }
         initialize();
     }
