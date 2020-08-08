@@ -17,7 +17,7 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequets;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
@@ -26,13 +26,13 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.SimpleDateFormat;
 import org.zkoss.zul.Textbox;
 
-public class ListBusinessAffiliationRequestsController extends GenericAbstractListController<BusinessAffiliationRequets> {
+public class ListBusinessAffiliationRequestsController extends GenericAbstractListController<BusinessAffiliationRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtNumber;
     private UtilsEJB utilsEJB = null;
-    private List<BusinessAffiliationRequets> businessAffiliationRequetsList = null;
+    private List<BusinessAffiliationRequest> businessAffiliationRequestList = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -63,7 +63,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             checkPermissions();
             getData();
-            loadDataList(businessAffiliationRequetsList);
+            loadDataList(businessAffiliationRequestList);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -73,11 +73,11 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
     }
 
     public void getData() {
-        businessAffiliationRequetsList = new ArrayList<BusinessAffiliationRequets>();
+        businessAffiliationRequestList = new ArrayList<BusinessAffiliationRequest>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-            businessAffiliationRequetsList = utilsEJB.getBusinessAffiliationRequets(request);
+            businessAffiliationRequestList = utilsEJB.getBusinessAffiliationRequest(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -100,7 +100,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void loadDataList(List<BusinessAffiliationRequets> list) {
+    public void loadDataList(List<BusinessAffiliationRequest> list) {
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String applicantNameLegal = "";
@@ -110,27 +110,24 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (BusinessAffiliationRequets businessAffiliationRequets : list) {
+                for (BusinessAffiliationRequest businessAffiliationRequest : list) {
                     item = new Listitem();
-                    item.setValue(businessAffiliationRequets);
-                    item.appendChild(new Listcell(businessAffiliationRequets.getNumberRequest()));
-                    item.appendChild(new Listcell(simpleDateFormat.format(businessAffiliationRequets.getDateRequest())));
-                    if (businessAffiliationRequets.getBusinessPersonId().getPersonTypeId().getIndNaturalPerson() == true) {
+                    item.setValue(businessAffiliationRequest);
+                    item.appendChild(new Listcell(businessAffiliationRequest.getNumberRequest()));
+                    item.appendChild(new Listcell(simpleDateFormat.format(businessAffiliationRequest.getDateRequest())));
+                    if (businessAffiliationRequest.getBusinessPersonId().getPersonTypeId().getIndNaturalPerson() == true) {
                             tipo = "Persona Natural";
                             item.appendChild(new Listcell(tipo));
-                            StringBuilder applicantNameNatural = new StringBuilder(businessAffiliationRequets.getBusinessPersonId().getNaturalPerson().getFirstName());
+                            StringBuilder applicantNameNatural = new StringBuilder(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getFirstName());
                             applicantNameNatural.append(" ");
-                            applicantNameNatural.append(businessAffiliationRequets.getBusinessPersonId().getNaturalPerson().getLastName());
+                            applicantNameNatural.append(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getLastName());
                             item.appendChild(new Listcell(applicantNameNatural.toString()));
-                            
-//                            adminPage = "TabNaturalPerson.zul";
                             adminPage = "TabAffiliationRequestsNatural.zul";
                         } else {
                             tipo = "Persona Juridica";
                             item.appendChild(new Listcell(tipo));
-                            applicantNameLegal = businessAffiliationRequets.getBusinessPersonId().getLegalPerson().getBusinessName();
+                            applicantNameLegal = businessAffiliationRequest.getBusinessPersonId().getLegalPerson().getBusinessName();
                             item.appendChild(new Listcell(applicantNameLegal));
-//                            adminPage = "TabLegalPerson.zul";
                             adminPage = "TabAffiliationRequestsLegal.zul";
                         }
                     item.appendChild(new Listcell(businessAffiliationRequets.getStatusBusinessAffiliationRequestId().getDescription()));
@@ -175,12 +172,12 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
     }
 
     @Override
-    public void loadList(List<BusinessAffiliationRequets> list) {
+    public void loadList(List<BusinessAffiliationRequest> list) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<BusinessAffiliationRequets> getFilteredList(String filter) {
+    public List<BusinessAffiliationRequest> getFilteredList(String filter) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
