@@ -20,6 +20,7 @@ import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbstractAdminController {
@@ -44,8 +45,9 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
-    public static BusinessAffiliationRequest businessAffiliationRequestParent = null;
+    private BusinessAffiliationRequets businessAffiliationRequetsParam;
+    public static BusinessAffiliationRequets businessAffiliationRequetsParent = null;
+    private Tab tabBusinessAffiliationRequests;
     private Integer eventType;
 
     @Override
@@ -87,8 +89,8 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         }
     }
 
-    public BusinessAffiliationRequest getBusinessAffiliationRequest() {
-        return this.businessAffiliationRequestParam;
+    public BusinessAffiliationRequets getBusinessAffiliationRequets() {
+        return this.businessAffiliationRequetsParent;
     }
 
     public void setProductParent(BusinessAffiliationRequest businessAffiliationRequets) {
@@ -107,9 +109,9 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+            lblRequestNumber.setValue(businessAffiliationRequets.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequets.getDateRequest()));
+            lblStatusRequest.setValue(businessAffiliationRequets.getStatusBusinessAffiliationRequestId().getDescription());
 
             businessAffiliationRequestParent = businessAffiliationRequest;
             btnSave.setVisible(false);
