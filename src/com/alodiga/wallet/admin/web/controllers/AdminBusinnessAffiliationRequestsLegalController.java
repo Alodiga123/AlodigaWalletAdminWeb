@@ -20,6 +20,7 @@ import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbstractAdminController {
@@ -46,6 +47,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private List<PhonePerson> phonePersonList = null;
     private BusinessAffiliationRequets businessAffiliationRequetsParam;
     public static BusinessAffiliationRequets businessAffiliationRequetsParent = null;
+    private Tab tabBusinessAffiliationRequests;
     private Integer eventType;
 
     @Override
@@ -88,7 +90,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     }
 
     public BusinessAffiliationRequets getBusinessAffiliationRequets() {
-        return this.businessAffiliationRequetsParam;
+        return this.businessAffiliationRequetsParent;
     }
 
     public void setProductParent(BusinessAffiliationRequets businessAffiliationRequets) {
@@ -109,7 +111,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         try {
             lblRequestNumber.setValue(businessAffiliationRequets.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequets.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequets.getStatusBusinessAffiliationRequetsId().getDescription());
+            lblStatusRequest.setValue(businessAffiliationRequets.getStatusBusinessAffiliationRequestId().getDescription());
 
             businessAffiliationRequetsParent = businessAffiliationRequets;
             btnSave.setVisible(false);

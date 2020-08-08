@@ -133,7 +133,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
 //                            adminPage = "TabLegalPerson.zul";
                             adminPage = "TabAffiliationRequestsLegal.zul";
                         }
-                    item.appendChild(new Listcell(businessAffiliationRequets.getStatusBusinessAffiliationRequetsId().getDescription()));
+                    item.appendChild(new Listcell(businessAffiliationRequets.getStatusBusinessAffiliationRequestId().getDescription()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, businessAffiliationRequets, Permission.EDIT_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, businessAffiliationRequets, Permission.VIEW_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
                     item.setParent(lbxRecords);
