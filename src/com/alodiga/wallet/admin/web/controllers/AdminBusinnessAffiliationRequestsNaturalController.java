@@ -93,8 +93,8 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
         }
     }
 
-    public BusinessAffiliationRequets getBusinessAffiliationRequets() {
-        return this.businessAffiliationRequetsParent;
+    public BusinessAffiliationRequest getBusinessAffiliationRequets() {
+        return this.businessAffiliationRequestParent;
     }
 
     public void setProductParent(BusinessAffiliationRequest businessAffiliationRequest) {
@@ -113,9 +113,9 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblRequestNumber.setValue(businessAffiliationRequets.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequets.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequets.getStatusBusinessAffiliationRequestId().getDescription());
+            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
 
             businessAffiliationRequestParent = businessAffiliationRequest;
             btnSave.setVisible(false);

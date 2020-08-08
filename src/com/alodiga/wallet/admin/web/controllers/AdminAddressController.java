@@ -3,7 +3,7 @@ package com.alodiga.wallet.admin.web.controllers;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.model.Address;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequets;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.PersonHasAddress;
 import java.text.SimpleDateFormat;
 import org.zkoss.zk.ui.Component;
@@ -40,7 +40,7 @@ public class AdminAddressController extends GenericAbstractAdminController {
     private Button btnSave;
     private Integer eventType;
     public Window winAdminPersonAddress;
-    private BusinessAffiliationRequets afilationRequest;
+    private BusinessAffiliationRequest afilationRequest;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
