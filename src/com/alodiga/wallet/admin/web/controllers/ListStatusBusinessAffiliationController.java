@@ -178,7 +178,7 @@ public class ListStatusBusinessAffiliationController extends GenericAbstractList
     public void onClick$btnDownload() throws InterruptedException {
         try {
             Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.status.business.affiliation.list"));
-            AccessControl.saveAction(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "Se descargo listado de Prerelaciones Estatus Afiliación formato excel");
+            AccessControl.saveAction(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "Se descargo listado de Prerelaciones Estatus Afiliacion formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
