@@ -20,6 +20,7 @@ import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbstractAdminController {
@@ -45,7 +46,8 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
     private BusinessAffiliationRequest businessAffiliationRequestParam;
-    public static BusinessAffiliationRequest businessAffiliationRequestParent = null;
+    public static BusinessAffiliationRequest businessAffiliationRequetsParent = null;
+    private Tab tabBusinessAffiliationRequests;
     private Integer eventType;
 
     @Override
@@ -56,7 +58,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
             businessAffiliationRequestParam = null;
         } else {
             businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
-            businessAffiliationRequestParent = businessAffiliationRequestParam;
+            businessAffiliationRequetsParent = businessAffiliationRequestParam;
         }
 
         initialize();
@@ -87,12 +89,12 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         }
     }
 
-    public BusinessAffiliationRequest getBusinessAffiliationRequest() {
-        return this.businessAffiliationRequestParam;
+    public BusinessAffiliationRequest getBusinessAffiliationRequets() {
+        return this.businessAffiliationRequetsParent;
     }
 
     public void setProductParent(BusinessAffiliationRequest businessAffiliationRequets) {
-        this.businessAffiliationRequestParent = businessAffiliationRequets;
+        this.businessAffiliationRequetsParent = businessAffiliationRequets;
     }
 
     public Integer getEventType() {
@@ -111,7 +113,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
             lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
 
-            businessAffiliationRequestParent = businessAffiliationRequest;
+            businessAffiliationRequetsParent = businessAffiliationRequest;
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
