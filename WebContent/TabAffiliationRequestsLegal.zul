@@ -38,11 +38,15 @@
                                                 <tabbox id="tbxRequestTabs" width="970px" height="700px">
                                                     <tabs>
                                                         <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
+                                                        <tab id="tabLegalRepresentative" label="${c:l('sp.tab.businessAffiliationRequests.legalRepresentative')}" />
                                                         <tab id="tabBusinessAffiliationRequests" label="${c:l('sp.tab.businessAffiliationRequests')}" />
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
                                                             <include src="listAddress.zul"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <include src="adminLegalRepresentative.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="adminBusinessAffiliationRequestsLegal.zul"/>
