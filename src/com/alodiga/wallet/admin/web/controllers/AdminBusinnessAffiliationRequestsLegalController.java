@@ -5,7 +5,6 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
-import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.Person;
@@ -48,6 +47,8 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private BusinessAffiliationRequest businessAffiliationRequestParam;
     public static BusinessAffiliationRequest businessAffiliationRequetsParent = null;
     private Tab tabBusinessAffiliationRequests;
+    private Tab tabAddress;
+    private Tab tabLegalRepresentative;
     private Integer eventType;
 
     @Override
