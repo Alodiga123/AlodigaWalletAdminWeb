@@ -7,6 +7,7 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.LegalRepresentative;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PhonePerson;
 import com.alodiga.wallet.common.utils.Constants;
@@ -16,13 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
-public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbstractAdminController {
+public class AdminLegalRepresentativeController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Label lblRequestNumber;
@@ -31,24 +30,22 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Label lblCountryName;
     private Label lblIdentificationType;
     private Label lblIdentificationNumber;
-    private Label lblTradeName;
-    private Label lblBusinessName;
-    private Label lblBusinessCategory;
-    private Label lblRegistryNumber;
-    private Label lblRegistrationDate;
-    private Label lblPayedCapital;
+    private Label lblExpirationDater;
+    private Label lblIdentificationNumberOld;
+    private Label lblFullName;
+    private Label lblFullLastName;
+    private Label lblBirthPlace;
+    private Label lblBirthday;
+    private Label lblAge;
+    private Label lblGender;
+    private Label lblCivilState;
+    private Label lblPhoneType;
     private Label lblPhoneNumber;
     private Label lblEmail;
-    private Label lblWebSite;
     private PersonEJB personEJB = null;
     private Button btnSave;
-    private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
     private BusinessAffiliationRequest businessAffiliationRequestParam;
-    public static BusinessAffiliationRequest businessAffiliationRequetsParent = null;
-    private Tab tabBusinessAffiliationRequests;
-    private Tab tabAddress;
-    private Tab tabLegalRepresentative;
     private Integer eventType;
 
     @Override
@@ -59,7 +56,6 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
             businessAffiliationRequestParam = null;
         } else {
             businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
-            businessAffiliationRequetsParent = businessAffiliationRequestParam;
         }
 
         initialize();
@@ -69,33 +65,12 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     @Override
     public void initialize() {
         super.initialize();
-        switch (eventType) {
-            case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.edit"));
-                break;
-            case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.view"));
-                break;
-            case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.add"));
-                break;
-            default:
-                break;
-        }
         try {
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    public BusinessAffiliationRequest getBusinessAffiliationRequets() {
-        return this.businessAffiliationRequetsParent;
-    }
-
-    public void setProductParent(BusinessAffiliationRequest businessAffiliationRequets) {
-        this.businessAffiliationRequetsParent = businessAffiliationRequets;
     }
 
     public Integer getEventType() {
@@ -113,8 +88,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
             lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
             lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
-
-            businessAffiliationRequetsParent = businessAffiliationRequest;
+            
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
@@ -125,28 +99,33 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private void loadFieldRequest(Person person) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        LegalRepresentative legalRepresentative = new LegalRepresentative();
+        legalRepresentative = person.getLegalPerson().getLegalRepresentativeId();
         try {
             lblCountryName.setValue(person.getCountryId().getName());
-            lblIdentificationType.setValue(person.getLegalPerson().getDocumentsPersonTypeId().getDescription());
-            lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
-            lblTradeName.setValue(person.getLegalPerson().getTradeName());
-            lblBusinessName.setValue(person.getLegalPerson().getBusinessName());
-            lblBusinessCategory.setValue(person.getLegalPerson().getBusinessCategoryId().getDescription());
-            lblRegistryNumber.setValue(person.getLegalPerson().getRegisterNumber());
-            lblRegistrationDate.setValue(simpleDateFormat.format(person.getLegalPerson().getDateInscriptionRegister()));
-            lblPayedCapital.setValue(person.getLegalPerson().getPayedCapital().toString());            
+            lblIdentificationType.setValue(legalRepresentative.getDocumentsPersonTypeId().getDescription());
+            lblIdentificationNumber.setValue(legalRepresentative.getIdentificationNumber());
+            lblExpirationDater.setValue(simpleDateFormat.format(legalRepresentative.getDueDateDocumentIdentification()));
+            lblIdentificationNumberOld.setValue(legalRepresentative.getIdentificationNumberOld());
+            lblFullName.setValue(legalRepresentative.getFirstNames());
+            lblFullLastName.setValue(legalRepresentative.getLastNames());
+            lblBirthPlace.setValue(legalRepresentative.getPlaceBirth());
+            lblBirthday.setValue(simpleDateFormat.format(legalRepresentative.getDateBirth()));
+            lblAge.setValue(String.valueOf(legalRepresentative.getAge()));
+            lblGender.setValue(legalRepresentative.getGender());
+            lblCivilState.setValue(legalRepresentative.getCivilStatusId().getDescription());            
             lblEmail.setValue(person.getEmail());
-            lblWebSite.setValue(person.getWebSite());
             
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
-            params.put(Constants.PERSON_KEY, person.getId());
+            params.put(Constants.PERSON_KEY, legalRepresentative.getPersonId().getId());
             request.setParams(params);
             phonePersonList = personEJB.getPhoneByPerson(request);
             if (phonePersonList != null) {
                 for (PhonePerson p : phonePersonList) {
                     if (p.getPhoneTypeId().getId() == Constants.PHONE_TYPE_ROOM) {
-                        lblPhoneNumber.setValue(p.getNumberPhone());
+                        lblPhoneType.setValue(p.getPhoneTypeId().getDescription());
+                        lblPhoneNumber.setValue(p.getCountryCode() + " " + p.getAreaCode() + " " + p.getNumberPhone());
                     }
                 }
             }
