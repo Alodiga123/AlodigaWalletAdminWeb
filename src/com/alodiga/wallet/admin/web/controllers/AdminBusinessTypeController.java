@@ -37,7 +37,7 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     private static final long serialVersionUID = -9145887024839938515L;
     private Textbox txtCode;
     private Textbox txtDescription;
-    private Listbox lbxBusinessServices;
+    private Listbox lbxRecords;
     private BusinessType businessTypeParam;
     private User user;
     private AccessControlEJB accessEjb = null;
@@ -105,21 +105,24 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     }
 
     private void loadBussinessService() {
-
         List<BusinessServiceType> businessService = new ArrayList<BusinessServiceType>();
+        Listcell tmpCell = new Listcell();
         try {
             request.setFirst(0);
             request.setFirst(null);
-            businessService = utilsEJB.getBusinessServiceType(request);
-            lbxBusinessServices.getItems().clear();
-            if (businessService != null && !businessService.isEmpty()) {
-                for (BusinessServiceType businessServices : businessService) {
+            businessServiceList = utilsEJB.getBusinessServiceType(request);
+            lbxRecords.getItems().clear();
+            if (businessServiceList != null && !businessServiceList.isEmpty()) {
+                for (BusinessServiceType businessServices : businessServiceList) {
                         Listitem item = new Listitem(); 
                         item.setValue(businessServices);
-                        item.appendChild(new Listcell());
+                        tmpCell = new Listcell();
+                        Checkbox chkRequired = new Checkbox();
+                        chkRequired.setParent(tmpCell);
+                        item.appendChild(tmpCell);
                         item.appendChild(new Listcell(businessServices.getCode()));
                         item.appendChild(new Listcell(businessServices.getDescription()));
-                        item.setParent(lbxBusinessServices);
+                        item.setParent(lbxRecords);
                 }
             }
 
@@ -129,7 +132,7 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     }
 
     private void saveBusinessType(BusinessType _businessType) {
-        businessServiceList = lbxBusinessServices.getItems();
+        businessServiceList = lbxRecords.getItems();
         int countRecords = businessServiceList.size();
         
         try{
@@ -147,14 +150,16 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
             
             //BusinessServiceType  
             for (int i = 0; i < countRecords; i++) {
-                Integer a = i;
-                List<Listcell> listCells = ((Listitem) lbxBusinessServices.getItems().get(i)).getChildren();
+                List<Listcell> listCells = ((Listitem) lbxRecords.getItems().get(i)).getChildren();
                 for (Listcell l : listCells) {
                     for (Object cell : ((Listcell) l).getChildren()) {
                         if (cell instanceof Checkbox) {
                             Checkbox myCheckbox = (Checkbox) cell;
                             if (myCheckbox.isChecked()) {
-                                
+                                BusinessServiceType businessServiceType = new BusinessServiceType();
+                                businessServiceType = (BusinessServiceType) ((Listitem) lbxRecords.getItems().get(i)).getValue();
+                                businessServiceType.setBusinessTypeId(businessType);
+                                businessServiceType = utilsEJB.saveBusinessServiceType(businessServiceType);
                             }
                         }
                     }
