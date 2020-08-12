@@ -1,7 +1,11 @@
 package com.alodiga.wallet.admin.web.controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -9,6 +13,8 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Textbox;
+
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
@@ -20,25 +26,22 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.CollectionsRequest;
-import com.alodiga.wallet.common.model.Currency;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import org.zkoss.zul.Textbox;
 
-public class ListCollectionsAffiliationRequestController extends GenericAbstractListController<CollectionsRequest> {
+public class ListCollectionsAffiliationRequestController extends GenericAbstractListController<RequestHasCollectionRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
-    private List<CollectionsRequest> collectionsRequests = null;
+    List<RequestHasCollectionRequest> collectionsRequests = null;
     private User currentUser;
     private Profile currentProfile;
+    private Textbox txtName;
     
 
     @Override
@@ -75,11 +78,11 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     }
 
     public void getData() {
-        collectionsRequests = new ArrayList<CollectionsRequest>();
+        collectionsRequests = new ArrayList<RequestHasCollectionRequest>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-            collectionsRequests = utilsEJB.getCollectionsRequest(request);
+            collectionsRequests = utilsEJB.getRequestsHasCollectionsRequest(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -120,11 +123,12 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -133,18 +137,18 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     public void startListener() {
     }
 
-    public void loadList(List<CollectionsRequest> list) {
+    public void loadList(List<RequestHasCollectionRequest> list) {
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (CollectionsRequest collectionsRequest : list) {
+                for (RequestHasCollectionRequest collectionsRequest : list) {
                     item = new Listitem();
                     item.setValue(collectionsRequest);
-                    item.appendChild(new Listcell(collectionsRequest.getCollectionTypeId().getCountryId().getName()));
-                    item.appendChild(new Listcell(collectionsRequest.getCollectionTypeId().getDescription()));
-                    item.appendChild(new Listcell(collectionsRequest.getPersonTypeId().getDescription()));
+                    item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
+                    item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
+                    item.appendChild(new Listcell(collectionsRequest.getIndApproved()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionsRequest, Permission.EDIT_COLLECTIONS_REQUEST) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionsRequest, Permission.VIEW_COLLECTIONS_REQUEST) : new Listcell());
                     item.setParent(lbxRecords);
@@ -164,13 +168,20 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
         }
     }
 
-    public void loadDataList(List<Currency> list) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
-    public List<CollectionsRequest> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<RequestHasCollectionRequest> getFilteredList(String filter) {
+        List<RequestHasCollectionRequest> list = new ArrayList<RequestHasCollectionRequest>();
+        if (collectionsRequests != null) {
+            for (Iterator<RequestHasCollectionRequest> i = collectionsRequests.iterator(); i.hasNext();) {
+            	RequestHasCollectionRequest tmp = i.next();
+                String field = tmp.getCollectionsRequestId().getCollectionTypeId().getDescription().toLowerCase();
+                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                    list.add(tmp);
+                }
+            }
+        }
+        return list;
     }
 
 }
