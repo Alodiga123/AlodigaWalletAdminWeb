@@ -70,9 +70,9 @@
                                                 </grid>
                                                 
                                                 <label value="${c:l('sp.crud.business.type.list')}" sclass="lblbold"/>
-                                                <listbox id="lbxBusinessServices" fixedLayout="true" multiple="true" checkmark="true" width="1395px" height="300px">
+                                                <listbox id="lbxRecords" fixedLayout="true" width="800px" height="300px">
                                                     <listhead>
-                                                        <listheader label="" width="30px"/>
+                                                        <listheader label="${c:l('maw.common.selected')}" width="85px"/>
                                                         <listheader label="${c:l('sp.common.code')}" width="100px"/>
                                                         <listheader label="${c:l('sp.preference.description')}" width="350px"/>
                                                     </listhead>
