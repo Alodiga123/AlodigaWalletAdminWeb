@@ -116,4 +116,5 @@ public class WebConstants {
     public static final int MAX_LOGIN_DIGITS = 8;
     public static final int MAX_PASSWORD_DIGITS = 4;
     public static String DEV_REPORT = "dev-reports@interaxmedia.com";
+    public static final String MAIN_APPLICANT = "Solicitante Principal";
 }
