@@ -49,6 +49,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Tab tabBusinessAffiliationRequests;
     private Tab tabAddress;
     private Tab tabLegalRepresentative;
+    private Tab tabCollectionAffiliationRequests;
     private Integer eventType;
 
     @Override
@@ -63,7 +64,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         }
 
         initialize();
-        initView(eventType, "crud.businessAffiliationRequets");
+//        initView(eventType, "crud.businessAffiliationRequets");
     }
 
     @Override

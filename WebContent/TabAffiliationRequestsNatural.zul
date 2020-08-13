@@ -40,6 +40,7 @@
                                                         <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
                                                         <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
                                                         <tab id="tabBusinessAffiliationRequests" label="${c:l('sp.tab.businessAffiliationRequests')}" />
+                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
@@ -50,6 +51,9 @@
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="adminBusinessAffiliationRequestsNatural.zul"/>
+                                                        </tabpanel>
+                                                         <tabpanel>
+                                                            <include src="listCollectionsAffiliationRequest.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
