@@ -170,13 +170,9 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
-//        createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
-//        createCell(Permission.LIST_COLLECTIONS_TYPE, "listCollectionTypes.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_CATEGORY, "listBusinnesCategory.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_COLLECTIONS_REQUEST, "listCollectionsRequest.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_TYPE, "listBusinessType.zul", permissionGroup, listgroup);
-//        createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
-//        createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
     }
 
     private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {
@@ -208,6 +204,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_COLLECTIONS_TYPE, "listCollectionTypes.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
     }
