@@ -34,12 +34,13 @@
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
-                                            <vlayout>
-                                                <tabbox id="tbxRequestTabs" width="970px" height="700px">
+                                            <vlayout> 
+                                            <tabbox id="tbxRequestTabs" width="970px" height="700px">
                                                     <tabs>
                                                         <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
                                                         <tab id="tabLegalRepresentative" label="${c:l('sp.tab.businessAffiliationRequests.legalRepresentative')}" />
                                                         <tab id="tabBusinessAffiliationRequests" label="${c:l('sp.tab.businessAffiliationRequests')}" />
+                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
@@ -50,6 +51,9 @@
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="adminBusinessAffiliationRequestsLegal.zul"/>
+                                                        </tabpanel>
+                                                       <tabpanel>
+                                                            <include src="listCollectionsAffiliationRequest.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>

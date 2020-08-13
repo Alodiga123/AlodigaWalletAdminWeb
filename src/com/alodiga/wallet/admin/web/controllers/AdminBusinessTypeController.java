@@ -119,7 +119,15 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
                         tmpCell = new Listcell();
                         Checkbox chkRequired = new Checkbox();
                         chkRequired.setParent(tmpCell);
-                        item.appendChild(tmpCell);
+                        if ((businessServices.getBusinessTypeId() != null) && (eventType != WebConstants.EVENT_ADD)) {
+                            chkRequired.setChecked(true);
+                            item.appendChild(tmpCell);
+                        } else {
+                            item.appendChild(tmpCell);
+                        }
+                        if (eventType == WebConstants.EVENT_ADD) {
+                            item.appendChild(tmpCell);
+                        }
                         item.appendChild(new Listcell(businessServices.getCode()));
                         item.appendChild(new Listcell(businessServices.getDescription()));
                         item.setParent(lbxRecords);
