@@ -3,17 +3,23 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
@@ -69,7 +75,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "adminRequestCollections.zul";
+            adminPage = "adminCollectionsAffiliationRequest.zul";
             getData();
             loadList(collectionsRequests);
         } catch (Exception ex) {
@@ -148,9 +154,9 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                     item.setValue(collectionsRequest);
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
-                    item.appendChild(new Listcell(collectionsRequest.getIndApproved()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionsRequest, Permission.EDIT_COLLECTIONS_REQUEST) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionsRequest, Permission.VIEW_COLLECTIONS_REQUEST) : new Listcell());
+                    item.appendChild(new Listcell(collectionsRequest.getIndApproved()?Labels.getLabel("sp.common.yes"):Labels.getLabel("sp.common.no")));
+                    item.appendChild(permissionEdit ?createButtonEditModal(collectionsRequest) : new Listcell());
+                    item.appendChild(permissionRead ?createButtonViewModal(collectionsRequest) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -184,4 +190,55 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
         return list;
     }
 
+    public Listcell createButtonEditModal(final Object obg) {
+        Listcell listcellEditModal = new Listcell();
+        try {
+            Button button = new Button();
+            button.setImage("/images/icon-edit.png");
+            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setClass("open orange");
+            button.addEventListener("onClick", new EventListener() {
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    Sessions.getCurrent().setAttribute("object", obg);
+                    Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_EDIT);
+                    Map<String, Object> paramsPass = new HashMap<String, Object>();
+                    paramsPass.put("object", obg);
+                    final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
+                    window.doModal();
+                }
+
+            });
+            button.setParent(listcellEditModal);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return listcellEditModal;
+    }
+
+    public Listcell createButtonViewModal(final Object obg) {
+        Listcell listcellViewModal = new Listcell();
+        try {
+            Button button = new Button();
+            button.setImage("/images/icon-invoice.png");
+            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setClass("open orange");
+            button.addEventListener("onClick", new EventListener() {
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    Sessions.getCurrent().setAttribute("object", obg);
+                    Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_VIEW);
+                    Map<String, Object> paramsPass = new HashMap<String, Object>();
+                    paramsPass.put("object", obg);
+                    final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
+                    window.doModal();
+                }
+
+            });
+            button.setParent(listcellViewModal);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return listcellViewModal;
+    }
 }

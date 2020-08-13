@@ -4,6 +4,10 @@ import java.util.List;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Textbox;
+
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
@@ -13,44 +17,75 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.BusinessServiceType;
 import com.alodiga.wallet.common.model.CollectionType;
 import com.alodiga.wallet.common.model.CollectionsRequest;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.PersonType;
+import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.zkoss.image.AImage;
+import org.zkoss.image.Image;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zul.Vbox;
+import org.zkoss.zul.Window;
 
 public class AdminCollectionsAffiliationRequestController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    private Combobox cmbCountry;
-    private Combobox cmbPersonType;
-    private Combobox cmbCollectionType;
+    private Label lblRequestNumber;
+    private Label lblRequestDate;
+    private Label lblStatusRequest;
+    private RequestHasCollectionRequest requestHasCollectionsRequestParam;
+    private List<RequestHasCollectionRequest> requestHasCollectionsRequestList;
     private UtilsEJB utilsEJB = null;
-    private PersonEJB personEJB = null;
-    private CollectionsRequest collectionsRequestParam;
+    private Radio rApprovedYes;
+    private Radio rApprovedNo;
+    private Label lblInfo;
+    private Label txtCollectionType;
+    private Textbox txtObservations;
+    private Combobox cmbPersonType;
+    private Combobox cmbCountry;
     private Button btnSave;
-    private Integer eventType;
-    private Toolbarbutton tbbTitle;
+    private Button btnUpload;
+    private Image image;
+    private Vbox divPreview;
+    String UrlFile = "";
+    String format = "";
+    private boolean uploaded = false;
+    public Window winAdminCollectionsRequestController;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+//        AdminRequestController adminRequestController = new AdminRequestController();
+//        if (adminRequestController.getRequest().getId() != null) {
+//            requestParam = adminRequestController.getRequest();
+//        }
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
-        if (eventType == WebConstants.EVENT_ADD) {
-            collectionsRequestParam = null;
-        } else {
-            collectionsRequestParam = (CollectionsRequest) Sessions.getCurrent().getAttribute("object");
+        switch (eventType) {
+            case WebConstants.EVENT_EDIT:
+            	requestHasCollectionsRequestParam = (RequestHasCollectionRequest) Sessions.getCurrent().getAttribute("object");
+                break;
+            case WebConstants.EVENT_VIEW:
+            	requestHasCollectionsRequestParam = (RequestHasCollectionRequest) Sessions.getCurrent().getAttribute("object");
+                break;
         }
         initialize();
     }
@@ -58,137 +93,104 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     @Override
     public void initialize() {
         super.initialize();
-        switch (eventType) {
-            case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.collectionsRequest.edit"));
-                break;
-            case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.collectionsRequest.view"));
-                break;
-            case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.collectionsRequest.add"));
-                break;
-            default:
-                break;
-        }
         try {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-            personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             loadData();
+            btnUpload.setDisabled(true);
+        } catch (Exception ex) {
+            showError(ex);
+        } 
+    }
+
+
+
+    public void clearFields() {
+    }
+
+    private void loadField(BusinessAffiliationRequest businessAffiliationRequest) {
+        try {
+            String pattern = "yyyy-MM-dd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+            if (businessAffiliationRequest.getNumberRequest() != null) {
+                lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
+                lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
+                lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+            }
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    public void clearFields() {
-        btnSave.setVisible(false);
+    private void loadFieldC(CollectionsRequest collectionsRequest) {   
+        txtCollectionType.setValue(collectionsRequest.getCollectionTypeId().getDescription());
     }
 
-    private void loadFields(CollectionsRequest collectionsRequest) {
-        btnSave.setVisible(true);
-    }
-
-    public void onChange$cmbCountry() {
-        this.clearMessage();
-        cmbCollectionType.setVisible(true);
-        cmbPersonType.setVisible(true);
-        Country country = (Country) cmbCountry.getSelectedItem().getValue();
-        loadCmbCollectionType(eventType, Integer.parseInt(country.getId().toString()));
-        loadCmbPersonType(eventType, Integer.parseInt(country.getId().toString()));
-    }
-
-    public void onChange$cmbCollectionType() {
-        this.clearMessage();
-    }
-    public void onChange$cmbPersonType() {
-        this.clearMessage();
-    }
-    
-    public void blockFields() {
-        btnSave.setVisible(false);
-    }
-
-    private void saveCollectionsRequest(CollectionsRequest _collectionsRequest) {
-        CollectionsRequest collectionsRequest = null;
-
-        try {
-            if (_collectionsRequest != null) {
-                collectionsRequest = _collectionsRequest;
-            } else {//New collectionsRequest
-                collectionsRequest = new CollectionsRequest();
-            }
-
-            collectionsRequest.setPersonTypeId((PersonType) cmbPersonType.getSelectedItem().getValue());
-            collectionsRequest.setCollectionTypeId((CollectionType) cmbCollectionType.getSelectedItem().getValue());
-
-            if (validate(collectionsRequest)) {
-                collectionsRequest = utilsEJB.saveCollectionsRequest(collectionsRequest);
-                collectionsRequestParam = collectionsRequest;
-                this.showMessage("sp.common.save.success", false, null);
-
-                eventType = WebConstants.EVENT_EDIT;
-
-                if (eventType == WebConstants.EVENT_ADD) {
-                    btnSave.setVisible(false);
+    private void loadFields(RequestHasCollectionRequest requestHasCollectionsRequest) {
+        if (requestHasCollectionsRequest != null) {
+            try {
+                if (requestHasCollectionsRequest.getIndApproved()) {
+                    rApprovedYes.setChecked(true);
                 } else {
-                    btnSave.setVisible(true);
+                    rApprovedNo.setChecked(true);
                 }
-            } else {
-                this.showMessage("sp.crud.product.exist", true, null);
+                txtObservations.setText(requestHasCollectionsRequest.getObservations());
+                UrlFile = requestHasCollectionsRequest.getImageFileUrl();
+                if (UrlFile!=null) {
+	                	
+	                AImage image;
+	                image = new org.zkoss.image.AImage(requestHasCollectionsRequest.getImageFileUrl());
+	                org.zkoss.zul.Image imageFile = new org.zkoss.zul.Image();
+	                imageFile.setWidth("250px");
+	                imageFile.setContent(image);
+	                imageFile.setParent(divPreview);
+                }
+            } catch (Exception ex) {
+                showError(ex);
             }
-        } catch (NullParameterException ex) {
-            showError(ex);
-        } catch (GeneralException ex) {
-            showError(ex);
-        } catch (RegisterNotFoundException ex) {
-            showError(ex);
         }
-    }
-
-    private boolean validate(CollectionsRequest collectionRequest) {
-        EJBRequest request1 = new EJBRequest();
-        List<CollectionsRequest> list;
-
-        try {
-            list = (List<CollectionsRequest>) utilsEJB.getCollectionsRequestByID(collectionRequest);
-
-            if (list.isEmpty()) {
-                return true;
-            }
-        } catch (GeneralException ex) {
-            Logger.getLogger(AdminAddProductHasBankController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EmptyListException ex) {
-            Logger.getLogger(AdminAddProductHasBankController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NullParameterException ex) {
-            Logger.getLogger(AdminAddProductHasBankController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
     }
 
     public Boolean validateEmpty() {
-        if (cmbCountry.getSelectedItem() == null) {
-            cmbCountry.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);
-        } else if (cmbCollectionType.getText().isEmpty()) {
-            cmbCollectionType.setFocus(true);
-            this.showMessage("sp.error.collectionsType.notSelected", true, null);
-        } else if (cmbPersonType.getSelectedItem() == null) {
-            cmbPersonType.setFocus(true);
-            this.showMessage("sp.error.personType.notSelected", true, null);
-        } else {
-            return true;
-        }
-        return false;
+        return true;
     }
 
-    public void onClick$btnSave() throws RegisterNotFoundException, NullParameterException, GeneralException {
+  
+
+    public void blockFields() {
+        btnSave.setVisible(false);
+        btnUpload.setDisabled(true);
+    }
+
+    public void onClick$btnBack() {
+    	winAdminCollectionsRequestController.detach();
+    }
+
+    private void saveRequest(RequestHasCollectionRequest _requestHasCollectionsRequest) {
+        try {
+        	RequestHasCollectionRequest requestHasCollectionsRequest = null;
+
+            if (_requestHasCollectionsRequest != null) {
+                requestHasCollectionsRequest = _requestHasCollectionsRequest;
+            } 
+
+            //Guarda la solicitud en requestHasCollectionsRequest
+            requestHasCollectionsRequest.setIndApproved(rApprovedYes.isChecked());
+            requestHasCollectionsRequest.setObservations(txtObservations.getText());
+            requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
+           
+            requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
+            this.showMessage("sp.common.save.success", false, null);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
+    public void onClick$btnSave() {
         if (validateEmpty()) {
             switch (eventType) {
-                case WebConstants.EVENT_ADD:
-                    saveCollectionsRequest(null);
-                    break;
                 case WebConstants.EVENT_EDIT:
-                    saveCollectionsRequest(collectionsRequestParam);
+                    saveRequest(requestHasCollectionsRequestParam);
                     break;
                 default:
                     break;
@@ -199,19 +201,19 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadFields(collectionsRequestParam);
+                loadFields(requestHasCollectionsRequestParam);
+                loadField(requestHasCollectionsRequestParam.getBusinessAffiliationRequestId());
+                loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 loadCmbCountry(eventType);
-                onChange$cmbCountry();
+                loadCmbPersonType(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
-                loadFields(collectionsRequestParam);
+                loadFields(requestHasCollectionsRequestParam);
+                loadField(requestHasCollectionsRequestParam.getBusinessAffiliationRequestId());
+                loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 blockFields();
                 loadCmbCountry(eventType);
-                onChange$cmbCountry();
-                break;
-            case WebConstants.EVENT_ADD:
-                loadCmbCountry(eventType);
-                break;
+                loadCmbPersonType(eventType);         
             default:
                 break;
         }
@@ -220,10 +222,9 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     private void loadCmbCountry(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
         List<Country> countries;
-
         try {
             countries = utilsEJB.getCountries(request1);
-            loadGenericCombobox(countries, cmbCountry, "name", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getCollectionTypeId().getCountryId().getId() : 0));
+            loadGenericCombobox(countries, cmbCountry, "name", evenInteger, Long.valueOf(requestHasCollectionsRequestParam.getCollectionsRequestId() != null ? requestHasCollectionsRequestParam.getCollectionsRequestId().getCollectionTypeId().getCountryId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
             ex.printStackTrace();
@@ -236,73 +237,18 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
         }
     }
 
-//    private void loadCmbPersonType(Integer evenInteger, int countryId) {
-//        EJBRequest request1 = new EJBRequest();
-//        cmbPersonType.getItems().clear();
-//        Map params = new HashMap();
-//        params.put(QueryConstants.PARAM_COUNTRY_ID, countryId);
-//        if (evenInteger == WebConstants.EVENT_ADD) {
-//            params.put(QueryConstants.PARAM_ORIGIN_APPLICATION_ID, Constants.ORIGIN_APPLICATION_WALLET_ADMIN_WEB_ID);
-//        } else {
-//            params.put(QueryConstants.PARAM_ORIGIN_APPLICATION_ID, collectionsRequestParam.getPersonTypeId().getOriginApplicationId().getId());
-//        }
-//        request1.setParams(params);
-//        List<PersonType> personTypes = null;
-//        try {
-//            personTypes = personEJB.getPersonTypeByCountry(request1);
-//            loadGenericCombobox(personTypes, cmbPersonType, "description", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getPersonTypeId().getId() : 0));
-//        } catch (EmptyListException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (GeneralException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (NullParameterException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } finally {
-//            if (personTypes == null) {
-//                this.showMessage("cms.msj.PersonTypeNull", false, null);
-//            }
-//        }
-//    }
-    private void loadCmbPersonType(Integer evenInteger, int countryId) {
+    private void loadCmbPersonType(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
         cmbPersonType.getItems().clear();
         Map params = new HashMap();
-        params.put(QueryConstants.PARAM_COUNTRY_ID, countryId);
+        params.put(QueryConstants.PARAM_COUNTRY_ID, requestHasCollectionsRequestParam.getCollectionsRequestId().getCollectionTypeId().getCountryId().getId());
+        params.put(QueryConstants.PARAM_IND_NATURAL_PERSON, requestHasCollectionsRequestParam.getCollectionsRequestId().getPersonTypeId().getIndNaturalPerson());
+        params.put(QueryConstants.PARAM_ORIGIN_APPLICATION_ID, requestHasCollectionsRequestParam.getCollectionsRequestId().getPersonTypeId().getOriginApplicationId().getId());
         request1.setParams(params);
-        List<PersonType> personTypes = null;
+        List<PersonType> personTypes;
         try {
-            personTypes = personEJB.getPersonTypeByCountry(request1);
-            loadGenericCombobox(personTypes, cmbPersonType, "description", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getPersonTypeId().getId() : 0));
-        } catch (EmptyListException ex) {
-//            showError(ex);
-            this.showMessage("sp.msj.PersonTypeNull", true, null);
-//            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } finally {
-            if (personTypes == null) {
-                this.showMessage("sp.msj.PersonTypeNull", true, null);
-            }
-        }
-    }
-
-    private void loadCmbCollectionType(Integer evenInteger, int countryId) {
-        EJBRequest request = new EJBRequest();
-        cmbCollectionType.getItems().clear();
-        Map params = new HashMap();
-        params.put(QueryConstants.PARAM_COUNTRY_ID, countryId);
-        request.setParams(params);
-        List<CollectionType> collectionTypes;
-        try {
-            collectionTypes = utilsEJB.getCollectionTypeByCountry(request);
-            loadGenericCombobox(collectionTypes, cmbCollectionType, "description", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getCollectionTypeId().getId() : 0));
+            personTypes = utilsEJB.getPersonTypeByCountryByIndNaturalPerson(request1);
+            loadGenericCombobox(personTypes, cmbPersonType, "description", evenInteger, Long.valueOf(requestHasCollectionsRequestParam.getCollectionsRequestId() != null ? requestHasCollectionsRequestParam.getCollectionsRequestId().getPersonTypeId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
             ex.printStackTrace();

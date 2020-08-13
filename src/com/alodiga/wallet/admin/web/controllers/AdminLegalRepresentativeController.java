@@ -59,7 +59,7 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
         }
 
         initialize();
-        initView(eventType, "crud.businessAffiliationRequets");
+//        initView(eventType, "crud.businessAffiliationRequets");
     }
 
     @Override
