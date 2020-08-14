@@ -9,6 +9,7 @@ import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.NaturalPerson;
 import com.alodiga.wallet.common.utils.Constants;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.zk.ui.Component;
@@ -20,11 +21,14 @@ import org.zkoss.zul.Window;
 public class AdminApplicantOFACController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-
+    private Label lblRequestNumber;
+    private Label lblRequestDate;
+    private Label lblStatusRequest;
     private Label lblName;
     private Label lblDocumentType;
     private Label lblIdentificationNumber;
     private Label lblPercentageMatch;
+    private Label lblStatus;
     private PersonEJB personEJB = null;
     private NaturalPerson naturalPersonParam;
     private Button btnSave;
@@ -38,11 +42,15 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
-        if (eventType == WebConstants.EVENT_ADD) {
-            naturalPersonParam = null;
-        } else {
-            naturalPersonParam = (NaturalPerson) Sessions.getCurrent().getAttribute("object");
+        AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
+        if (adminRequestN.getBusinessAffiliationRequets() != null) {
+            afilationRequest = adminRequestN.getBusinessAffiliationRequets();
         }
+//        if (eventType == WebConstants.EVENT_ADD) {
+//            businessAffiliationRequestParam = null;
+//        } else {
+//            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+//        }
         initialize();
     }
 
@@ -58,6 +66,20 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     }
 
     public void clearFields() {
+    }
+
+    private void loadFields(BusinessAffiliationRequest businessAffiliationRequest) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        try {
+            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+
+            btnSave.setVisible(false);
+        } catch (Exception ex) {
+            showError(ex);
+        }
     }
 
     private void loadFields(NaturalPerson applicant) {
@@ -86,7 +108,8 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
 //            }
 //            percentageMatchApplicant = Float.parseFloat(reviewOFAC.getResultReview()) * 100;
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
-            
+            lblStatus.setValue(applicant.getStatusApplicantId().getDescription());
+
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
@@ -96,28 +119,8 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void blockFields() {
     }
 
-//    private void saveApplicantOFAC(ApplicantNaturalPerson _applicantNaturalPerson) {
-//        try {
-//            ApplicantNaturalPerson applicantNaturalPerson = _applicantNaturalPerson;
-//
-//            //Guarda el cambio de status en el solicitante
-//            applicantNaturalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
-//            applicantNaturalPerson = personEJB.saveApplicantNaturalPerson(applicantNaturalPerson);
-//            this.showMessage("sp.common.save.success", false, null);
-//            EventQueues.lookup("updateApplicantOFAC", EventQueues.APPLICATION, true).publish(new Event(""));
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-
     public void onClick$btnSave() {
-//        switch (eventType) {
-//            case WebConstants.EVENT_EDIT:
-//                saveApplicantOFAC(applicantNaturalPersonParam);
-//                break;
-//            default:
-//                break;
-//        }
+
     }
 
     public void onClick$btnBack() {
@@ -127,31 +130,13 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadFields(naturalPersonParam);
+                loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
+                loadFields(afilationRequest);
                 break;
             case WebConstants.EVENT_VIEW:
-                loadFields(naturalPersonParam);
+                loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
                 blockFields();
                 break;
         }
     }
-
-//    private void loadCmbStatusApplicant(Integer evenInteger) {
-//        EJBRequest request1 = new EJBRequest();
-//        List<StatusApplicant> statusApplicantList;
-//
-//        try {
-//            statusApplicantList = requestEJB.getStatusApplicant(request1);
-//            loadGenericCombobox(statusApplicantList, cmbStatusApplicant, "description", evenInteger, Long.valueOf(applicantNaturalPersonParam != null ? applicantNaturalPersonParam.getStatusApplicantId().getId() : 0));
-//        } catch (EmptyListException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (GeneralException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (NullParameterException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        }
-//    }
 }
