@@ -37,23 +37,23 @@
                                             <vlayout>
                                                 <tabbox id="tbxRequestTabs" width="970px" height="700px">
                                                     <tabs>
-                                                        <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
-                                                        <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
                                                         <tab id="tabBusinessAffiliationRequests" label="${c:l('sp.tab.businessAffiliationRequests')}" />
+                                                        <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
                                                         <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
+                                                        <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
                                                     </tabs>
                                                     <tabpanels>
+                                                        <tabpanel>
+                                                            <include src="adminBusinessAffiliationRequestsNatural.zul"/>
+                                                        </tabpanel>
                                                         <tabpanel>
                                                             <include src="listAddress.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="listApplicantOFAC.zul"/>
+                                                            <include src="listCollectionsAffiliationRequest.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="adminBusinessAffiliationRequestsNatural.zul"/>
-                                                        </tabpanel>
-                                                         <tabpanel>
-                                                            <include src="listCollectionsAffiliationRequest.zul"/>
+                                                            <include src="adminApplicantOFAC.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
