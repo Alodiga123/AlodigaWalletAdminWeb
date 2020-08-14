@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminLegalRepresentativeController extends GenericAbstractAdminController {
@@ -47,6 +48,7 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
     private List<PhonePerson> phonePersonList = null;
     private BusinessAffiliationRequest businessAffiliationRequestParam;
     private Integer eventType;
+    private Tab tabBusinessAffiliationRequests;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -59,7 +61,7 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
         }
 
         initialize();
-        initView(eventType, "crud.businessAffiliationRequets");
+//        initView(eventType, "crud.businessAffiliationRequets");
     }
 
     @Override

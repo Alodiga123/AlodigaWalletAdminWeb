@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -52,6 +53,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
     private Profile currentProfile;
     private Integer eventType;
     private BusinessAffiliationRequest businessAffiliationRequetsParam;
+    private Tab tabLegalRepresentative;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -80,7 +82,6 @@ public class ListAddressController extends GenericAbstractListController<PersonH
     public void startListener() {
         EventQueue que = EventQueues.lookup("updateAddress", EventQueues.APPLICATION, true);
         que.subscribe(new EventListener() {
-
             public void onEvent(Event evt) {
                 getData();
                 loadList(personHasAddressList);

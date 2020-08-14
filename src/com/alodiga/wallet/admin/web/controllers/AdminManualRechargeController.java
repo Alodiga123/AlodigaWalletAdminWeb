@@ -11,9 +11,9 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
-import com.alodiga.businessportal.ws.BPBusinessWSProxy;
-import com.alodiga.businessportal.ws.BpBusiness;
-import com.alodiga.businessportal.ws.BusinessSearchType;
+//import com.alodiga.businessportal.ws.BPBusinessWSProxy;
+//import com.alodiga.businessportal.ws.BpBusiness;
+//import com.alodiga.businessportal.ws.BusinessSearchType;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
@@ -94,15 +94,15 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             dtbApprovedRequestDate.setValue(new Timestamp(new java.util.Date().getTime()));
             chbApprovalIndicator.setChecked(transactionApproveRequest.getIndApproveRequest());
             txtObservation.setValue(transactionApproveRequest.getObservations());
-            BPBusinessWSProxy proxy = new BPBusinessWSProxy();
-            try {
-            	BpBusiness bpBussiness = proxy.getBusiness(BusinessSearchType.ID, String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
-            	lblUserName.setValue(bpBussiness.getName()); 
-            	lblTelephone.setValue(bpBussiness.getPhoneNumber()); 
-            	lblEmail.setValue(bpBussiness.getEmail()); 
-            } catch (Exception e) {
-            	this.showMessage("sp.specific.preference.error.search", true, null);  
-            }
+//            BPBusinessWSProxy proxy = new BPBusinessWSProxy();
+//            try {
+//            	BpBusiness bpBussiness = proxy.getBusiness(BusinessSearchType.ID, String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
+//            	lblUserName.setValue(bpBussiness.getName()); 
+//            	lblTelephone.setValue(bpBussiness.getPhoneNumber()); 
+//            	lblEmail.setValue(bpBussiness.getEmail()); 
+//            } catch (Exception e) {
+//            	this.showMessage("sp.specific.preference.error.search", true, null);  
+//            }
         } catch (Exception ex) {
             showError(ex);
         }

@@ -67,15 +67,15 @@ public class AdminMainMenuController extends GenericForwardComposer {
     }
 
     private void loadAccountData() {
-    	 try {
-             currentuser = AccessControl.loadCurrentUser();
-             currentProfile = currentuser.getCurrentProfile();
-             ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
-             ltcLogin.setLabel(currentuser.getLogin());
-             ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
-         } catch (Exception ex) {
-             ex.printStackTrace();
-         }
+        try {
+            currentuser = AccessControl.loadCurrentUser();
+            currentProfile = currentuser.getCurrentProfile();
+            ltcFullName.setLabel(currentuser.getFirstName() + " " + currentuser.getLastName());
+            ltcLogin.setLabel(currentuser.getLogin());
+            ltcProfile.setLabel(currentProfile.getProfileDataByLanguageId(languageId).getAlias());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void loadMenu() {
@@ -101,12 +101,14 @@ public class AdminMainMenuController extends GenericForwardComposer {
                             loadConfigurationsManagementGroup(pg);
                             break;
                         case 5://Configurations Management
-                        	loadTransactionalManagementGroup(pg);
+                            loadTransactionalManagementGroup(pg);
+                            break;
+                        case 6://Manage Membership Requests
+                            loadManageMembershipRequestGroup(pg);
                             break;
                         default:
                             break;
                     }
-
                 }
             }
         } catch (Exception ex) {
@@ -136,7 +138,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadPemissions() {
         try {
-                permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile().getId());
+            permissions = pm.getPermissionByProfileId(currentuser.getCurrentProfile().getId());
             if (permissions != null && !permissions.isEmpty()) {
                 loadMenu();
             }
@@ -168,13 +170,10 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_COLLECTIONS_TYPE, "listCollectionTypes.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_CATEGORY, "listBusinnesCategory.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_COLLECTIONS_REQUEST, "listCollectionsRequest.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_TYPE, "listBusinessType.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_BUSINESS_SERVICE_TYPE, "listBusinessServiceType.zul", permissionGroup, listgroup);
     }
 
     private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {
@@ -200,8 +199,16 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "listManualRecharge.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "listManualWithdrawalApproval.zul", permissionGroup, listgroup);
-     } 
-    
+    }
+
+    private void loadManageMembershipRequestGroup(PermissionGroup permissionGroup) {
+        Listgroup listgroup = createListGroup(permissionGroup);
+        createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_COLLECTIONS_TYPE, "listCollectionTypes.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
+    }
     
     private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {
         Permission permission = loadPermission(permissionId);
