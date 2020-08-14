@@ -21,8 +21,6 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import com.alodiga.wallet.admin.web.components.ListcellEditButton;
-import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
@@ -31,7 +29,9 @@ import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
@@ -44,7 +44,8 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
-    List<RequestHasCollectionRequest> collectionsRequests = null;
+    private List<RequestHasCollectionRequest> collectionsRequests = null;
+    private BusinessAffiliationRequest businessAffiliationRequestParam;
     private User currentUser;
     private Profile currentProfile;
     private Textbox txtName;
@@ -53,6 +54,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
     }
     
@@ -86,9 +88,12 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     public void getData() {
         collectionsRequests = new ArrayList<RequestHasCollectionRequest>();
         try {
-            request.setFirst(0);
-            request.setLimit(null);
-            collectionsRequests = utilsEJB.getRequestsHasCollectionsRequest(request);
+        	  EJBRequest request = new EJBRequest();
+              Map params = new HashMap();
+              params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST, businessAffiliationRequestParam.getId());
+              request.setParams(params);
+            collectionsRequests = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request);
+
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
