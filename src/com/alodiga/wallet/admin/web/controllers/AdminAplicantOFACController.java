@@ -5,11 +5,19 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.exception.EmptyListException;
+import com.alodiga.wallet.common.exception.GeneralException;
+import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.Person;
+import com.alodiga.wallet.common.model.StatusApplicant;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.List;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
 
@@ -20,6 +28,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private Label lblDocumentType;
     private Label lblIdentificationNumber;
     private Label lblPercentageMatch;
+    private Combobox cmbStatusApplicant;
     private PersonEJB personEJB = null;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
@@ -75,15 +84,21 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
 //            if (adminRequestN.getBusinessAffiliationRequets() != null) {
 //                afilationRequest = adminRequestN.getBusinessAffiliationRequets();
 //            }
-//            person.getBusinessAffiliationRequest().getNumberRequest();
+            person.getBusinessAffiliationRequest().getNumberRequest();
             if (person.getPersonTypeId().getIndNaturalPerson() == true) {
                 lblName.setValue(person.getNaturalPerson().getFirstName() + " " + person.getNaturalPerson().getLastName());
                 lblDocumentType.setValue(person.getNaturalPerson().getDocumentsPersonTypeId().getDescription());
                 lblIdentificationNumber.setValue(person.getNaturalPerson().getIdentificationNumber());
             } else {
-                lblName.setValue(person.getLegalPerson().getBusinessName());
-                lblDocumentType.setValue(person.getLegalPerson().getDocumentsPersonTypeId().getDescription());
-                lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
+                if (person.getPersonClassificationId().getId() == 2) {
+                    lblName.setValue(person.getLegalPerson().getBusinessName());
+                    lblDocumentType.setValue(person.getLegalPerson().getDocumentsPersonTypeId().getDescription());
+                    lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
+                } else if (person.getPersonClassificationId().getId() == 3) {
+                    lblName.setValue(person.getLegalRepresentative().getFirstNames() + " " + person.getLegalRepresentative().getLastNames());
+                    lblDocumentType.setValue(person.getLegalRepresentative().getDocumentsPersonTypeId().getDescription());
+                    lblIdentificationNumber.setValue(person.getLegalRepresentative().getIdentificationNumber());
+                }
             }
 
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
@@ -93,27 +108,13 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             showError(ex);
         }
     }
-
-    public void blockFields() {
-
+    
+     public void blockFields() {
+        cmbStatusApplicant.setDisabled(true);
+        
         btnSave.setVisible(false);
     }
-
-//    public boolean validateEmpty() {
-//        if (txtName.getText().isEmpty()) {
-//            txtName.setFocus(true);
-//            this.showMessage("sp.error.country.name", true, null);
-//        } else if (txtShortName.getText().isEmpty()) {
-//            txtShortName.setFocus(true);
-//            this.showMessage("sp.error.country.shortName", true, null);
-//        } else if (txtCode.getText().isEmpty()) {
-//            txtCode.setFocus(true);
-//            this.showMessage("sp.error.country.code", true, null);
-//        } else {
-//            return true;
-//        }
-//        return false;
-//    }
+     
     private void saveAplicantOfac(Person _person) {
         try {
             Person person = null;
@@ -141,7 +142,6 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     }
 
     public void onClick$btnSave() {
-//        if (validateEmpty()) {
         switch (eventType) {
             case WebConstants.EVENT_ADD:
                 saveAplicantOfac(personParam);
@@ -152,23 +152,51 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             default:
                 break;
         }
-//        }
     }
 
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(personParam);
-                ;
+                loadCmbStatusApplicant(eventType);
+                blockFields();
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(personParam);
+                loadCmbStatusApplicant(eventType);
                 blockFields();
                 break;
             case WebConstants.EVENT_ADD:
+                loadCmbStatusApplicant(eventType);
+                blockFields();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void loadCmbStatusApplicant(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<StatusApplicant> statusApplicants;
+        try {
+            statusApplicants = personEJB.getStatusApplicant(request1);
+            if (personParam.getPersonTypeId().getIndNaturalPerson() == true) {
+                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getNaturalPerson().getStatusApplicantId().getId() : 0));
+            } else if (personParam.getPersonClassificationId().getId() == 2) {
+                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalPerson().getStatusApplicantId().getId() : 0));
+            } else if (personParam.getPersonClassificationId().getId() == 3) {
+                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalRepresentative().getStatusApplicantId().getId() : 0));
+            }
+
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
         }
     }
 }
