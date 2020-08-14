@@ -24,6 +24,7 @@ import com.alodiga.wallet.common.model.CollectionsRequest;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.PersonType;
 import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
@@ -167,19 +168,30 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     }
 
     private void saveRequest(RequestHasCollectionRequest _requestHasCollectionsRequest) {
+    	boolean approved = false;
         try {
         	RequestHasCollectionRequest requestHasCollectionsRequest = null;
 
             if (_requestHasCollectionsRequest != null) {
                 requestHasCollectionsRequest = _requestHasCollectionsRequest;
             } 
+            if (rApprovedYes.isChecked()) {
+            	approved = true;
+            } else {
+            	approved = false;
+            }
 
             //Guarda la solicitud en requestHasCollectionsRequest
-            requestHasCollectionsRequest.setIndApproved(rApprovedYes.isChecked());
+            requestHasCollectionsRequest.setIndApproved(approved);
             requestHasCollectionsRequest.setObservations(txtObservations.getText());
             requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
            
             requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
+            EJBRequest request = new EJBRequest();
+            Map params = new HashMap();
+            params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST,requestHasCollectionsRequest.getBusinessAffiliationRequestId().getId());
+            request.setParams(params);
+            utilsEJB.updateBusinessAffiliationRequest(request);
             this.showMessage("sp.common.save.success", false, null);
         } catch (Exception ex) {
             showError(ex);
