@@ -135,7 +135,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
             lblBusinessCategory.setValue(person.getLegalPerson().getBusinessCategoryId().getDescription());
             lblRegistryNumber.setValue(person.getLegalPerson().getRegisterNumber());
             lblRegistrationDate.setValue(simpleDateFormat.format(person.getLegalPerson().getDateInscriptionRegister()));
-            lblPayedCapital.setValue(person.getLegalPerson().getPayedCapital().toString());            
+            lblPayedCapital.setValue(String.valueOf(person.getLegalPerson().getPayedCapital()));            
             lblEmail.setValue(person.getEmail());
             lblWebSite.setValue(person.getWebSite());
             

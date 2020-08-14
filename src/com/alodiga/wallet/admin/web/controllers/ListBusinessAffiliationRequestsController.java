@@ -116,20 +116,20 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
                     item.appendChild(new Listcell(businessAffiliationRequest.getNumberRequest()));
                     item.appendChild(new Listcell(simpleDateFormat.format(businessAffiliationRequest.getDateRequest())));
                     if (businessAffiliationRequest.getBusinessPersonId().getPersonTypeId().getIndNaturalPerson() == true) {
-                            tipo = "Persona Natural";
-                            item.appendChild(new Listcell(tipo));
-                            StringBuilder applicantNameNatural = new StringBuilder(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getFirstName());
-                            applicantNameNatural.append(" ");
-                            applicantNameNatural.append(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getLastName());
-                            item.appendChild(new Listcell(applicantNameNatural.toString()));
-                            adminPage = "TabAffiliationRequestsNatural.zul";
-                        } else {
-                            tipo = "Persona Juridica";
-                            item.appendChild(new Listcell(tipo));
-                            applicantNameLegal = businessAffiliationRequest.getBusinessPersonId().getLegalPerson().getBusinessName();
-                            item.appendChild(new Listcell(applicantNameLegal));
-                            adminPage = "TabAffiliationRequestsLegal.zul";
-                        }
+                        tipo = "Persona Natural";
+                        item.appendChild(new Listcell(tipo));
+                        StringBuilder applicantNameNatural = new StringBuilder(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getFirstName());
+                        applicantNameNatural.append(" ");
+                        applicantNameNatural.append(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getLastName());
+                        item.appendChild(new Listcell(applicantNameNatural.toString()));
+                        adminPage = "TabAffiliationRequestsNatural.zul";
+                    } else {
+                        tipo = "Persona Juridica";
+                        item.appendChild(new Listcell(tipo));
+                        applicantNameLegal = businessAffiliationRequest.getBusinessPersonId().getLegalPerson().getBusinessName();
+                        item.appendChild(new Listcell(applicantNameLegal));
+                        adminPage = "TabAffiliationRequestsLegal.zul";
+                    }
                     item.appendChild(new Listcell(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, businessAffiliationRequest, Permission.EDIT_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, businessAffiliationRequest, Permission.VIEW_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
@@ -144,7 +144,6 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
                 item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
