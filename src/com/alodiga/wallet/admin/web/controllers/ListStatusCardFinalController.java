@@ -1,41 +1,42 @@
 package com.alodiga.wallet.admin.web.controllers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Textbox;
-import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
-import com.alodiga.wallet.admin.web.components.ListcellEditButton;
-import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.Commission;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.StatusCard;
 import com.alodiga.wallet.common.model.StatusCardHasFinalState;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.admin.web.components.ListcellEditButton;
+import com.alodiga.wallet.admin.web.components.ListcellViewButton;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
@@ -45,12 +46,13 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
-    private Textbox txtAlias;
-     private UtilsEJB utilsEJB = null;
-    private List<StatusCardHasFinalState> statusCardFinal = null;
+    private UtilsEJB utilsEJB = null;
+    private List<StatusCardHasFinalState> statusFinal = null;
     private User currentUser;
     private Profile currentProfile;
-    
+    private StatusCard statusCardParam;
+    private StatusCard statusCard = null;
+
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
@@ -60,13 +62,12 @@ public class ListStatusCardFinalController extends GenericAbstractListController
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_PRODUCT));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.EDIT_PRODUCT);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(),Permission.VIEW_PRODUCT);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_STATUS_CARD));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_STATUS_CARD);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_STATUS_CARD);
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     public void startListener() {
@@ -75,7 +76,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 
             public void onEvent(Event evt) {
                 getData();
-                loadList(statusCardFinal);
+                loadList(statusFinal);
             }
         });
     }
@@ -87,38 +88,34 @@ public class ListStatusCardFinalController extends GenericAbstractListController
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "adminStatusCardFinal.zul";
+            adminPage = "/adminStatusCardFinal.zul";
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             startListener();
             getData();
-            loadList(statusCardFinal);
+            loadList(statusFinal);
         } catch (Exception ex) {
             showError(ex);
         }
     }
-//
-//    public List<StatusCardHasFinalState> getFilteredList(String filter) {
-////        List<StatusCardHasFinalState> auxList = new ArrayList<StatusCardHasFinalState>();
-////        for (Iterator<StatusCardHasFinalState> i = statusCardFinal.iterator(); i.hasNext();) {
-////            StatusCardHasFinalState tmp = i.next();
-////            String field = tmp.getStatusCardId().getDescription());
-////            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-////                auxList.add(tmp);
-////            }
-////        }
-////        return false;
-//    }
+
+    public List<StatusCardHasFinalState> getFilteredList(String filter) {
+        List<StatusCardHasFinalState> auxList = new ArrayList<StatusCardHasFinalState>();
+        for (Iterator<StatusCardHasFinalState> i = statusFinal.iterator(); i.hasNext();) {
+            StatusCardHasFinalState tmp = i.next();
+            String field = tmp.getStatusCardId().getCode();
+            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                auxList.add(tmp);
+            }
+        }
+        return auxList;
+    }
 
     public void onClick$btnAdd() throws InterruptedException {
-        try {
             Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
             Map<String, Object> paramsPass = new HashMap<String, Object>();
-            paramsPass.put("object", statusCardFinal);
+            paramsPass.put("object", statusFinal);
             final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
             window.doModal();
-        } catch (Exception ex) {
-            this.showMessage("sp.error.general", true, ex);
-        }
     }
 
     public void loadList(List<StatusCardHasFinalState> list) {
@@ -131,10 +128,10 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 
 	                    item = new Listitem();
 	                    item.setValue(statusCardHasFinal);
-                            item.appendChild(new Listcell(String.valueOf(statusCardHasFinal.getStatusCardId().getId())));
+                            item.appendChild(new Listcell(String.valueOf(statusCardHasFinal.getStatusCardId().getDescription())));
 	                    item.appendChild(new Listcell(statusCardHasFinal.getStatusCardFinalStateId().getCode()));
-	                    item.appendChild(new ListcellEditButton(adminPage, statusCardFinal));
-	                    item.appendChild(new ListcellViewButton(adminPage, statusCardFinal));
+	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, statusFinal, Permission.EDIT_STATUS_CARD_FINAL) : new Listcell());
+                            item.appendChild(permissionRead ? new ListcellViewButton(adminPage, statusFinal, Permission.VIEW_STATUS_CARD_FINAL) : new Listcell());
 	                    item.setParent(lbxRecords);
 	                }
 	            } else {
@@ -152,30 +149,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
         }
     }
 
-    public void getData() {
-        statusCardFinal = new ArrayList<StatusCardHasFinalState>();
-        EJBRequest request1 = new EJBRequest();
-        try {
-            statusCardFinal = utilsEJB.getStatusCardHasFinalState(request1);
-        } catch (NullParameterException ex) {
-            showError(ex);
-        } catch (EmptyListException ex) {
-            showEmptyList();
-        } catch (GeneralException ex) {
-            showError(ex);
-        }
-    }
-    
-     private void showEmptyList() {
-        Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
-        item.appendChild(new Listcell());
-        item.appendChild(new Listcell());
-        item.appendChild(new Listcell());
-        item.setParent(lbxRecords);
-    }
-
-     public Listcell createButtonEditModal(final Object obg) {
+    public Listcell createButtonEditModal(final Object obg) {
         Listcell listcellEditModal = new Listcell();
         try {
             Button button = new Button();
@@ -200,7 +174,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
         }
         return listcellEditModal;
     }
-     
+
     public Listcell createButtonViewModal(final Object obg) {
         Listcell listcellViewModal = new Listcell();
         try {
@@ -226,29 +200,56 @@ public class ListStatusCardFinalController extends GenericAbstractListController
         }
         return listcellViewModal;
     }
-  
+
+    public void getData() {
+       try {
+        //statusFinal
+        //StatusCardHasFinalState
+        AdminStatusCardController adminStatus = new AdminStatusCardController();
+        if (adminStatus.getStatusCardParent().getId() != null){
+            statusCard = adminStatus.getStatusCardParent();
+        }
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.STATUS_KEY, statusCard.getId());
+            request1.setParams(params);
+            statusFinal = utilsEJB.getStatusCardById(request1);
+        } catch (NullParameterException ex) {
+            showError(ex);
+        } catch (EmptyListException ex) {
+            showEmptyList();
+        } catch (GeneralException ex) {
+            showError(ex);
+        } finally {
+            showEmptyList();
+        }
+    }
+
+    private void showEmptyList() {
+        Listitem item = new Listitem();
+        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.setParent(lbxRecords);
+    }
+
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.provider.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.commissions.list"));
+            AccessControl.saveAction(Permission.LIST_STATUS_CARD_FINAL, "Se descargo listado de comisiones en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        txtAlias.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-//            loadList(getFilteredList(txtAlias.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    @Override
-    public List<StatusCardHasFinalState> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
