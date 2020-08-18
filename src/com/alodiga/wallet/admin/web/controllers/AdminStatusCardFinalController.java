@@ -13,6 +13,7 @@ import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Category;
@@ -23,6 +24,8 @@ import com.alodiga.wallet.common.model.StatusCardHasFinalState;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
+import java.util.Date;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Radio;
@@ -33,8 +36,8 @@ import org.zkoss.zul.Window;
 public class AdminStatusCardFinalController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    private Combobox cmbEnterprise;
-    private Textbox txtStatus;
+    private Combobox cmbStatus;
+    private Combobox cmbFinal;
     private UtilsEJB utilsEJB = null;
     private AccessControlEJB accessEJB = null;
     private Button btnSave;
@@ -42,7 +45,7 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
     private StatusCardHasFinalState statusCardFinalParam;
     public static StatusCard statusCardParent = null;
     private Integer eventType;
-    public Window winStatusCardFinal;
+    public Window winStatusFinal;
     private StatusCard statusCard = null;
     private Profile currentProfile;
 
@@ -57,28 +60,11 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
         }
 
         initialize();
-        initView(eventType, "crud.produt");
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        switch (eventType) {
-            case WebConstants.EVENT_EDIT:
-//                disableTab();
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.edit"));
-                break;
-            case WebConstants.EVENT_VIEW:
-//                disableTab();
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.view"));
-                break;
-            case WebConstants.EVENT_ADD:
-                //disableTab();
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.add"));
-                break;
-            default:
-                break;
-        }
         try {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
@@ -97,17 +83,16 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
     
     public void clearFields() {
     }
-
+    
     private void loadFields(StatusCardHasFinalState statusCardHasFinalState) {
         try {
-
+            btnSave.setVisible(true);
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    public void blockFields() {
-        txtStatus.setReadonly(true);
+    public void blockFields() {;
         btnSave.setVisible(false);
     }
 
@@ -119,8 +104,29 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
 
     private void saveStatusFinal(StatusCardHasFinalState _statusCardHasFinalState) {
         try {
-        
-        } catch (Exception ex) {
+            if (_statusCardHasFinalState != null) {
+            	_statusCardHasFinalState.setUpdateDate(new Timestamp(new Date().getTime()));
+            }else {
+            	_statusCardHasFinalState = new StatusCardHasFinalState ();
+            	_statusCardHasFinalState.setCreateDate(new Timestamp(new Date().getTime()));
+            }
+      
+            _statusCardHasFinalState.setStatusCardId((StatusCard) cmbStatus.getSelectedItem().getValue());
+            _statusCardHasFinalState.setStatusCardFinalStateId((StatusCard) cmbFinal.getSelectedItem().getValue());
+            if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusCardHasFinalState(_statusCardHasFinalState.getStatusCardId().getId(),_statusCardHasFinalState.getStatusCardFinalStateId().getId()))
+					|| eventType.equals(WebConstants.EVENT_EDIT)){
+                _statusCardHasFinalState =utilsEJB.saveStatusCardHasFinalState(_statusCardHasFinalState);
+                this.showMessage("sp.common.save.success", false, null);
+				if (eventType == WebConstants.EVENT_ADD) {
+					btnSave.setVisible(false);
+                                } 
+                        }else
+                                this.showMessage("sp.error.status.card.hasFinal.exist", true, null); 
+        } catch (NullParameterException ex) {
+            showError(ex);
+        } catch (GeneralException ex) {
+            showError(ex);
+        } catch (RegisterNotFoundException ex) {
             showError(ex);
         }
     }
@@ -143,20 +149,69 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
             }
         }
     }
-
+    
+      public void onClick$btnBack() {
+        winStatusFinal.detach();
+    }
+     
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(statusCardFinalParam);
+                loadCmbStatus(statusCardFinalParam);
+                loadCmbFinal(statusCardFinalParam);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(statusCardFinalParam);
+                loadCmbStatus(statusCardFinalParam);
+                loadCmbFinal(statusCardFinalParam);
                 blockFields();
                 break;
             case WebConstants.EVENT_ADD:
+                loadCmbStatus(statusCardFinalParam);
+                loadCmbFinal(statusCardFinalParam);
                 break;
             default:
                 break;
+        }
+    }
+    
+     private void loadCmbStatus(StatusCardHasFinalState _status) {
+        cmbStatus.getItems().clear();
+        EJBRequest request1 = new EJBRequest();
+        List<StatusCard> requests;
+        try {
+            requests = utilsEJB.getStatusCard(request1);
+            loadGenericCombobox(requests, cmbStatus, "description", eventType, Long.valueOf(statusCardFinalParam  != null ? statusCardFinalParam.getStatusCardId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        }
+    }
+    
+    
+    private void loadCmbFinal(StatusCardHasFinalState _statusCard) {
+        cmbFinal.getItems().clear();
+        EJBRequest request1 = new EJBRequest();
+        List<StatusCard> requests;
+        try {
+            requests = utilsEJB.getStatusCard(request1);
+            loadGenericCombobox(requests, cmbFinal, "description", eventType, Long.valueOf(statusCardFinalParam != null ? statusCardFinalParam.getStatusCardFinalStateId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
         }
     }
 

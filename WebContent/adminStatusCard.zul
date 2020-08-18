@@ -49,7 +49,7 @@
                                                         </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.crud.businesstype.typebusiness')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.preference.description')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtDescription" width="200px" onChange="self.setValue(self.getValue().toUpperCase().trim());" maxlength="85"/>
                                                                 <label value="*" sclass="lblreq" />

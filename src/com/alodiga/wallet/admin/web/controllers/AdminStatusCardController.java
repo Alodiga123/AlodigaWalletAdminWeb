@@ -36,9 +36,7 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
         } else {
             statusCardParam = (Sessions.getCurrent().getAttribute("object") != null) ? (StatusCard) Sessions.getCurrent().getAttribute("object") : null;
         }
-
         initialize();
-        initView(eventType, "crud.status.card");
     }
 
     @Override
@@ -69,7 +67,6 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
     public void clearFields() {
         txtDescription.setRawValue(null);
         txtCode.setRawValue(null);
-
     }
     
     public StatusCard getStatusCardParent(){
@@ -111,7 +108,7 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
 
             if (_statusCard != null) {
                 statusCard = _statusCard;
-            } else {//New country
+            } else {
                 statusCard = new StatusCard();
             }
 
@@ -155,12 +152,12 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                statusCardParent = statusCardParam;
                 loadFields(statusCardParam);
+                statusCardParent = statusCardParam;
                 break;
             case WebConstants.EVENT_VIEW:
-                statusCardParent = statusCardParam;
                 loadFields(statusCardParam);
+                statusCardParent = statusCardParam;
                 blockFields();
                 break;
             case WebConstants.EVENT_ADD:

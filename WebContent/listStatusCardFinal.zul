@@ -31,8 +31,8 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.code')}" width="400px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.businesstype.service')}" width="450px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.status.card')}" width="400px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.status.business.affiliation.final')}" width="450px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
