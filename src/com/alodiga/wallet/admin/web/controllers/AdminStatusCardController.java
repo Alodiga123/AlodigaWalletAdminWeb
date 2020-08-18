@@ -92,10 +92,10 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (txtCode.getText().isEmpty()) {
             txtCode.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("sp.error.country.code", true, null);
         } else if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("sp.error.businessCategory.description", true, null);
         } else {
             return true;
         }
