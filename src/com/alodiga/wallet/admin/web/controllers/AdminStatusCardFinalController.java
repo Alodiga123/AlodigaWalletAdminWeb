@@ -97,8 +97,16 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
     }
 
     public boolean validateEmpty() {
-        this.showMessage("", false, null);
-        return true;
+        if (cmbStatus.getSelectedItem() == null) {
+            cmbStatus.setFocus(true);
+            this.showMessage("sp.error.countryNotSelected", true, null);
+        }else if (cmbFinal.getSelectedItem() == null) {
+            cmbFinal.setFocus(true);
+            this.showMessage("sp.error.status.card.hasFinal.error", true, null);
+        } else {
+            return true;
+        }
+        return false;
 
     }
 
