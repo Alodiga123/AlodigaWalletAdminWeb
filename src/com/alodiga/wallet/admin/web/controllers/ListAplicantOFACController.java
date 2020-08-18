@@ -1,5 +1,8 @@
 package com.alodiga.wallet.admin.web.controllers;
 
+//import com.alodiga.ws.cumpliments.services.OFACMethodWSProxy;
+//import com.alodiga.ws.cumpliments.services.WsExcludeListResponse;
+//import com.alodiga.ws.cumpliments.services.WsLoginResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.zkoss.util.resource.Labels;
@@ -17,13 +20,18 @@ import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UserEJB;
+import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.StatusApplicant;
+import com.alodiga.wallet.common.model.StatusBusinessAffiliationRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -34,9 +42,12 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
     private Listbox lbxRecords;
     private UserEJB userEJB = null;
     private PersonEJB personEJB = null;
+    private UtilsEJB utilsEJB = null;
     private List<Person> personList = null;
     private User currentUser;
     private Profile currentProfile;
+    private AdminBusinnessAffiliationRequestsLegalController legalRequest;
+    private AdminBusinnessAffiliationRequestsNaturalController naturalRequest;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -65,6 +76,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         try {
             currentUser = AccessControl.loadCurrentUser();
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminAplicantOFAC.zul";
@@ -75,19 +87,6 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         }
     }
 
-//    public List<Person> getFilteredList(String filter) {
-//        List<Person> list = new ArrayList<Person>();
-//        if (personList != null) {
-//            for (Iterator<Person> i = personList.iterator(); i.hasNext();) {
-//                Person tmp = i.next();
-//                String field = tmp.getName().toLowerCase();
-//                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-//                    list.add(tmp);
-//                }
-//            }
-//        }
-//        return list;
-//    }
     public void onClick$btnAdd() throws InterruptedException {
         Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
         Sessions.getCurrent().removeAttribute("object");
@@ -114,24 +113,30 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                         applicantNameNatural.append(" ");
                         applicantNameNatural.append(aplicant.getNaturalPerson().getLastName());
                         item.appendChild(new Listcell(applicantNameNatural.toString()));
-                        item.appendChild(new Listcell(aplicant.getNaturalPerson().getDocumentsPersonTypeId().getDescription()));
+                        item.appendChild(new Listcell(aplicant.getNaturalPerson().getDocumentsPersonTypeId().getCodeIdentification()));
                         item.appendChild(new Listcell(aplicant.getNaturalPerson().getIdentificationNumber()));
-                        item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.mainApplicant")));
+                        item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.naturalPerson")));
+                        item.appendChild(new Listcell(Labels.getLabel("sp.common.yes")));
+                        item.appendChild(new Listcell(aplicant.getNaturalPerson().getStatusApplicantId().getDescription()));
                     } else {
                         if (aplicant.getPersonClassificationId().getId() != 3) {
                             applicantNameLegal = aplicant.getLegalPerson().getBusinessName();
                             item.appendChild(new Listcell(applicantNameLegal));
-                            item.appendChild(new Listcell(aplicant.getLegalPerson().getDocumentsPersonTypeId().getDescription()));
+                            item.appendChild(new Listcell(aplicant.getLegalPerson().getDocumentsPersonTypeId().getCodeIdentification()));
                             item.appendChild(new Listcell(aplicant.getLegalPerson().getIdentificationNumber()));
-                            item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.mainApplicant")));
+                            item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.legalPerson")));
+                            item.appendChild(new Listcell(Labels.getLabel("sp.common.yes")));
+                            item.appendChild(new Listcell(aplicant.getLegalPerson().getStatusApplicantId().getDescription()));
                         } else {
                             StringBuilder applicantLegalR = new StringBuilder(aplicant.getLegalRepresentative().getFirstNames());
                             applicantLegalR.append(" ");
                             applicantLegalR.append(aplicant.getLegalRepresentative().getLastNames());
                             item.appendChild(new Listcell(applicantLegalR.toString()));
-                            item.appendChild(new Listcell(aplicant.getLegalRepresentative().getDocumentsPersonTypeId().getDescription()));
+                            item.appendChild(new Listcell(aplicant.getLegalRepresentative().getDocumentsPersonTypeId().getCodeIdentification()));
                             item.appendChild(new Listcell(aplicant.getLegalRepresentative().getIdentificationNumber()));
-                            item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.legalRepresentative")));
+                            item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.legalPerson")));
+                            item.appendChild(new Listcell(Labels.getLabel("sp.common.no")));
+                            item.appendChild(new Listcell(aplicant.getLegalRepresentative().getStatusApplicantId().getDescription()));
                         }
                     }
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
@@ -194,6 +199,81 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         } catch (Exception ex) {
             showError(ex);
         }
+    }
+
+    public void onClick$btnReviewOFAC() {
+//        int indBlackList = 0;
+//        String lastName = "";
+//        String firstName = "";
+//        float ofacPercentege = 0.5F;
+//        NaturalPerson naturalPerson = new NaturalPerson();
+//        BusinessAffiliationRequest affiliatinRequest = new BusinessAffiliationRequest();
+//        OFACMethodWSProxy ofac = new OFACMethodWSProxy();
+//        try {
+//            WsLoginResponse loginResponse = new WsLoginResponse();
+//            loginResponse = ofac.loginWS("alodiga", "d6f80e647631bb4522392aff53370502");
+//            WsExcludeListResponse ofacResponse = new WsExcludeListResponse();
+//            for (Person applicant : personList) {
+//                naturalPerson = applicant.getNaturalPerson();
+//                affiliatinRequest = applicant.getBusinessAffiliationRequest();
+//                
+//                lastName = applicant.getNaturalPerson().getLastName();
+//                firstName = applicant.getNaturalPerson().getFirstName();
+//                ofacResponse = ofac.queryOFACList(loginResponse.getToken(), lastName, firstName, null, null, null, null, ofacPercentege);
+//
+//                //Guardar el resultado de revisión en lista OFAC para cada solicitante
+//                ReviewOFAC reviewOFAC = new ReviewOFAC();
+//                reviewOFAC.setPersonId(applicant);
+//                reviewOFAC.setRequestId(applicant.getBusinessAffiliationRequest());
+//                reviewOFAC.setResultReview(ofacResponse.getPercentMatch());
+//                reviewOFAC = utilsEJB.saveReviewOFAC(reviewOFAC);
+//
+//                //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
+//                if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
+//                    naturalPerson.setStatusApplicantId(getStatusApplicant(applicant, Constants.STATUS_APPLICANT_BLACK_LIST));
+//                    indBlackList = 1;
+//                } else {
+//                    naturalPerson.setStatusApplicantId(getStatusApplicant(applicant, Constants.STATUS_APPLICANT_BLACK_LIST_OK));
+//                }
+//                naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
+//            }
+//            //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
+//            if (indBlackList == 1) {
+//                affiliatinRequest.setStatusBusinessAffiliationRequestId(getStatusAffiliationRequest(affiliatinRequest, Constants.STATUS_REQUEST_PENDING));
+//            } else {
+//                affiliatinRequest.setStatusBusinessAffiliationRequestId(getStatusAffiliationRequest(affiliatinRequest, Constants.STATUS_REQUEST_BLACK_LIST_OK));
+//            }
+//            affiliatinRequest = utilsEJB.saveBusinessAffiliationRequest(affiliatinRequest);
+//            getData();
+//            loadList(personList);
+            this.showMessage("sp.common.finishReviewOFAC", false, null);
+//        } catch (Exception ex) {
+//            showError(ex);
+//        }
+    }
+    
+    public StatusApplicant getStatusApplicant(Person requestAfilation, int statusRequestId) {
+        StatusApplicant statusAplicant = requestAfilation.getNaturalPerson().getStatusApplicantId();
+        try {
+            EJBRequest request = new EJBRequest();
+            request.setParam(statusRequestId);
+            statusAplicant = personEJB.loadStatusApplicant(request);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return statusAplicant;
+    }
+    
+    public StatusBusinessAffiliationRequest getStatusAffiliationRequest(BusinessAffiliationRequest requestAfilation, int statusRequestId) {
+        StatusBusinessAffiliationRequest statusRequest = requestAfilation.getStatusBusinessAffiliationRequestId();
+        try {
+            EJBRequest request = new EJBRequest();
+            request.setParam(statusRequestId);
+            statusRequest = utilsEJB.loadStatusBusinessAffiliationRequest(request);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return statusRequest;
     }
 
     @Override

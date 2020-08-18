@@ -56,16 +56,13 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
 
     private void loadFields(StatusBusinessAffiliationHasFinalState state) {
         btnSave.setVisible(true);
-    }
-
-   
+    }   
     
     public void blockFields() {
         btnSave.setVisible(false);
     }
 
     private void saveStatus(StatusBusinessAffiliationHasFinalState _status) {
-
         try {
             if (_status != null) {
             	_status.setUpdateDate(new Timestamp(new Date().getTime()));
@@ -92,7 +89,6 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
             showError(ex);
         }
     }
-
    
     public Boolean validateEmpty() {
         if (cmbStatus.getSelectedItem() == null) {
@@ -145,10 +141,11 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     }
 
     private void loadCmbStatus(StatusBusinessAffiliationHasFinalState _status) {
+        cmbStatus.getItems().clear();
         EJBRequest request1 = new EJBRequest();
         List<StatusBusinessAffiliationRequest> requests;
         try {
-        	requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
+            requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
             loadGenericCombobox(requests, cmbStatus, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getStatusBusinessAffiliationRequetsId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
@@ -163,6 +160,7 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     }
 
     private void loadCmbFinal(StatusBusinessAffiliationHasFinalState _status) {
+        cmbFinal.getItems().clear();
         EJBRequest request1 = new EJBRequest();
         List<StatusBusinessAffiliationRequest> requests;
         try {
