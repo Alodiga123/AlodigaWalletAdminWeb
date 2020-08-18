@@ -55,6 +55,17 @@
                                                             <label id="lblIdentificationNumber" value="" width="250px" maxlength="40"/>
                                                         </row>
                                                         <row>
+                                                            <label value="${c:l('sp.tab.businessAffiliationRequests.user')}" sclass="lblbold"/>
+                                                            <label id="lblUser" value="" width="250px" maxlength="40"/>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.applicantionReview.observations')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtObservations" multiline="true" rows="2" width="590px" maxlength="990"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                            </hlayout>   
+                                                        </row>
+                                                        <row>
                                                             <label value="${c:l('sp.businessAffiliationRequests.ofac.percentageMatch')}" sclass="lblbold"/>
                                                             <label id="lblPercentageMatch" value="" width="250px" maxlength="30"/>
                                                         </row>
