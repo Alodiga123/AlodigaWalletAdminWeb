@@ -41,6 +41,7 @@
                                                         <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
                                                         <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
                                                         <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
+                                                        <tab id="tabReview" label="${c:l('sp.tab.businessAffiliationRequests.review')}"/>
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
@@ -54,6 +55,9 @@
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="adminApplicantOFAC.zul"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <include src="adminApplicationReview.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
