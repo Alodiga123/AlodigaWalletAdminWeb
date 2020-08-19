@@ -3,22 +3,35 @@ package com.alodiga.wallet.admin.web.controllers;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
+import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.Country;
+import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.LegalPerson;
+import com.alodiga.wallet.common.model.LegalRepresentative;
+import com.alodiga.wallet.common.model.NaturalPerson;
 import com.alodiga.wallet.common.model.Person;
+import com.alodiga.wallet.common.model.ReviewOfac;
 import com.alodiga.wallet.common.model.StatusApplicant;
+import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminAplicantOFACController extends GenericAbstractAdminController {
@@ -27,9 +40,18 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private Label lblName;
     private Label lblDocumentType;
     private Label lblIdentificationNumber;
+    private Label lblUser;
+    private Textbox txtObservations;
     private Label lblPercentageMatch;
     private Combobox cmbStatusApplicant;
+    private User user = null;
     private PersonEJB personEJB = null;
+    private UtilsEJB utilsEJB = null;
+    private ReviewOfac reviewOfacParam;
+    private LegalPerson legalPersonParam;
+    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private List<ReviewOfac> reviewOfac;
+    private List<LegalPerson> legalPerson;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private Person personParam;
@@ -66,25 +88,58 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                 break;
         }
         try {
+            user = AccessControl.loadCurrentUser();
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
+    public LegalPerson getLegalPersonParam() {
+        legalPersonParam = null;
+        try {
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID, personParam.getLegalRepresentative().getId());
+            request1.setParams(params);
+            legalPerson = personEJB.getLegalPersonByLegalRepresentative(request1);
+            for (LegalPerson r : legalPerson) {
+                legalPersonParam = r;
+            }
+        } catch (Exception ex) {
+        }
+        return legalPersonParam;
+    }
+
+    public ReviewOfac getReviewOfacParam() {
+        reviewOfacParam = null;
+        try {
+            if (personParam.getBusinessAffiliationRequest() != null) {
+                businessAffiliationRequestParam = personParam.getBusinessAffiliationRequest();
+            }
+
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(QueryConstants.PARAM_PERSON_ID, personParam.getId());
+            params.put(QueryConstants.PARAM_BUSINESS_AFFILIATION_REQUEST_ID, businessAffiliationRequestParam.getId());
+            request1.setParams(params);
+            reviewOfac = utilsEJB.getReviewOfacByRequest(request1);
+            for (ReviewOfac r : reviewOfac) {
+                reviewOfacParam = r;
+            }
+        } catch (Exception ex) {
+        }
+        return reviewOfacParam;
+    }
+
     public void clearFields() {
     }
 
-    private void loadFields(Person person) {
-
+    private void loadFieldP(Person person) {
         Float percentageMatchApplicant = 0.00F;
         try {
-//            AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
-//            if (adminRequestN.getBusinessAffiliationRequets() != null) {
-//                afilationRequest = adminRequestN.getBusinessAffiliationRequets();
-//            }
-            person.getBusinessAffiliationRequest().getNumberRequest();
             if (person.getPersonTypeId().getIndNaturalPerson() == true) {
                 lblName.setValue(person.getNaturalPerson().getFirstName() + " " + person.getNaturalPerson().getLastName());
                 lblDocumentType.setValue(person.getNaturalPerson().getDocumentsPersonTypeId().getDescription());
@@ -95,6 +150,9 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                     lblDocumentType.setValue(person.getLegalPerson().getDocumentsPersonTypeId().getDescription());
                     lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
                 } else if (person.getPersonClassificationId().getId() == 3) {
+                    if (getLegalPersonParam() != null) {
+                        businessAffiliationRequestParam = legalPersonParam.getPersonId().getBusinessAffiliationRequest();
+                    }
                     lblName.setValue(person.getLegalRepresentative().getFirstNames() + " " + person.getLegalRepresentative().getLastNames());
                     lblDocumentType.setValue(person.getLegalRepresentative().getDocumentsPersonTypeId().getDescription());
                     lblIdentificationNumber.setValue(person.getLegalRepresentative().getIdentificationNumber());
@@ -108,21 +166,69 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             showError(ex);
         }
     }
-    
-     public void blockFields() {
+
+    private void loadFieldU(User user) {
+        lblUser.setValue(user.getFirstName() + " " + user.getLastName());
+    }
+
+    private void loadFieldR(ReviewOfac reviewOfac) {
+        if (reviewOfac != null) {
+            lblPercentageMatch.setValue(String.valueOf(reviewOfac.getResultReview()));
+            lblUser.setValue(reviewOfac.getUserReviewId().getFirstName() + " " + reviewOfac.getUserReviewId().getLastName());
+            txtObservations.setValue(reviewOfac.getObservations());
+        }
+    }
+
+    public void blockFields() {
         cmbStatusApplicant.setDisabled(true);
-        
+
         btnSave.setVisible(false);
     }
-     
-    private void saveAplicantOfac(Person _person) {
-        try {
-            Person person = null;
 
-            if (_person != null) {
-                person = _person;
+    private void saveReviewOfac(ReviewOfac _reviewOfac) {
+        ReviewOfac reviewOfac = null;
+        Person person = null;
+        NaturalPerson naturalPerson = null;
+        LegalPerson legalPerson = null;
+        LegalRepresentative legalRepresentative = null;
+
+        try {
+            if (_reviewOfac != null) {
+                reviewOfac = _reviewOfac;
             } else {//New country
-                person = new Person();
+                reviewOfac = new ReviewOfac();
+            }
+
+            person = personParam;
+
+            reviewOfac.setPersonId(personParam);
+            reviewOfac.setBusinessAffiliationRequestId(businessAffiliationRequestParam);
+            reviewOfac.setObservations(txtObservations.toString());
+            reviewOfac.setUserReviewId(user);
+            if (_reviewOfac != null) {
+                reviewOfac.setUpdateDate(new Timestamp(new Date().getTime()));
+            } else {
+                reviewOfac.setCreateDate(new Timestamp(new Date().getTime()));
+            }
+            reviewOfac = utilsEJB.saveReviewOfac(reviewOfac);
+
+            if (personParam.getPersonTypeId().getIndNaturalPerson() == true) {
+                naturalPerson = personParam.getNaturalPerson();
+                naturalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
+                naturalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
+                naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
+            } else {
+                if (personParam.getPersonClassificationId().getId() != 3) {
+                    legalPerson = personParam.getLegalPerson();
+                    legalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
+                    legalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
+                    legalPerson = personEJB.saveLegalPerson(legalPerson);
+                } else {
+                    legalRepresentative = personParam.getLegalRepresentative();
+                    legalRepresentative.setUpdateDate(new Timestamp(new Date().getTime()));
+                    legalRepresentative.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
+                    legalRepresentative = personEJB.saveLegalRepresentative(legalRepresentative);
+                }
             }
 
             this.showMessage("sp.common.save.success", false, null);
@@ -141,28 +247,47 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         clearFields();
     }
 
+    public Boolean validateEmpty() {
+        if (txtObservations.getText().isEmpty()) {
+            txtObservations.setFocus(true);
+            this.showMessage("sp.error.observations", true, null);
+        } else {
+            return true;
+        }
+        return false;
+    }
+
     public void onClick$btnSave() {
-        switch (eventType) {
-            case WebConstants.EVENT_ADD:
-                saveAplicantOfac(personParam);
-                break;
-            case WebConstants.EVENT_EDIT:
-                saveAplicantOfac(personParam);
-                break;
-            default:
-                break;
+        if (validateEmpty()) {
+            switch (eventType) {
+                case WebConstants.EVENT_ADD:
+                    saveReviewOfac(reviewOfacParam);
+                    break;
+                case WebConstants.EVENT_EDIT:
+                    saveReviewOfac(reviewOfacParam);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadFields(personParam);
+                loadFieldP(personParam);
+                loadFieldU(user);
+                if (getReviewOfacParam() != null) {
+                    loadFieldR(reviewOfacParam);
+                }
                 loadCmbStatusApplicant(eventType);
-                blockFields();
                 break;
             case WebConstants.EVENT_VIEW:
-                loadFields(personParam);
+                loadFieldP(personParam);
+                loadFieldU(user);
+                if (getReviewOfacParam() != null) {
+                    loadFieldR(reviewOfacParam);
+                }
                 loadCmbStatusApplicant(eventType);
                 blockFields();
                 break;
