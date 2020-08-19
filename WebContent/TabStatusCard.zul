@@ -5,7 +5,7 @@
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 
 <zk xmlns:n="native">
-    <window id="winTabBusinessAffiliationRequestsNatural" width="100%" height="100%" class="general-window">
+    <window id="winTabStatusCard" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminStatusCardController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.businessAffiliationRequestsNP.list')}" onClick='Executions.sendRedirect(&quot;listBusinessAffiliationRequests.zul&quot;)'/>
+                                                    <toolbarbutton label="${c:l('sp.crud.status.card.list')}" onClick='Executions.sendRedirect(&quot;listStatusCard.zul&quot;)'/>
                                                 |
                                                 <toolbarbutton id="tbbTitle" label=""/>
                                             </hlayout>
@@ -35,29 +35,17 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <tabbox id="tbxRequestTabs" width="970px" height="700px">
+                                                <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
                                                     <tabs>
-                                                        <tab id="tabBusinessAffiliationRequests" label="${c:l('sp.tab.businessAffiliationRequests')}" />
-                                                        <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
-                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
-                                                        <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
-                                                        <tab id="tabReview" label="${c:l('sp.tab.businessAffiliationRequests.review')}"/>
+                                                        <tab id="tabStatusCard" label="${c:l('sp.crud.status.card')}" />
+                                                        <tab id="tabStatusCardFinal" label="${c:l('sp.crud.status.card.hasFinal.state')}"/>
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
-                                                            <include src="adminBusinessAffiliationRequestsNatural.zul"/>
+                                                            <include src="adminStatusCard.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="listAddress.zul"/>
-                                                        </tabpanel>
-                                                        <tabpanel>
-                                                            <include src="listCollectionsAffiliationRequest.zul"/>
-                                                        </tabpanel>
-                                                        <tabpanel>
-                                                            <include src="adminApplicantOFAC.zul"/>
-                                                        </tabpanel>
-                                                        <tabpanel>
-                                                            <include src="adminApplicationReview.zul"/>
+                                                            <include src="listStatusCardFinal.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
