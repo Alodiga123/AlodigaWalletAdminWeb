@@ -5,8 +5,6 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-import com.alodiga.wallet.common.ejb.PersonEJB;
-import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
@@ -51,12 +49,10 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
     private Textbox txtObservations;
     private User user = null;
     private ReviewBusinessAffiliationRequest reviewBusinessRequestParam;
-    private List<ReviewBusinessAffiliationRequest> reviewCollectionsRequest;
     private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private List<ReviewBusinessAffiliationRequest> reviewCollectionsRequest;
     private List<RequestHasCollectionRequest> requestHasCollectionsRequestList;
     private List<CollectionsRequest> collectionsByRequestList;
-    private ProductEJB productEJB = null;
-    private PersonEJB personEJB = null;
     private UtilsEJB utilsEJB = null;
     private Button btnSave;
 
@@ -76,8 +72,6 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
         super.initialize();
         try {
             user = AccessControl.loadCurrentUser();
-            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
-            personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             dtbReviewDate.setValue(new Timestamp(new java.util.Date().getTime()));
             this.clearMessage();
@@ -169,7 +163,9 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
     }
 
     public Boolean validateEmpty() {
-        if (txtObservations.getText().isEmpty()) {
+        if ((!rApprovedYes.isChecked()) && (!rApprovedNo.isChecked())) {
+            this.showMessage("sp.error.indApprove", true, null);
+        }else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
             this.showMessage("sp.error.observations", true, null);
         } else {
@@ -206,29 +202,26 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 //Recaudos que han sido revisados por Agente Comercial
                 Map params = new HashMap();
                 EJBRequest request1 = new EJBRequest();
-                params.put(Constants.BUSINESS_AFFILIATION_REQUEST_KEY, businessAffiliationRequestParam.getNumberRequest());
+                params.put(Constants.BUSINESS_AFFILIATION_REQUEST_KEY, businessAffiliationRequestParam.getId());
                 request1.setParams(params);
-//                requestHasCollectionsRequestList = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request1);
+                requestHasCollectionsRequestList = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request1);
                 //Recaudos asociados a la Solicitud
-//                params = new HashMap();
-//                params.put(Constants.COUNTRY_KEY, adminRequest.getRequest().getCountryId().getId());
-//                params.put(Constants.PROGRAM_KEY, adminRequest.getRequest().getProgramId().getId());
-//                params.put(Constants.PRODUCT_TYPE_KEY, adminRequest.getRequest().getProductTypeId().getId());
-//                params.put(Constants.PERSON_TYPE_KEY, adminRequest.getRequest().getPersonTypeId().getId());
-//                request1.setParams(params);
-//                collectionsByRequestList = requestEJB.getCollectionsByRequest(request1);
-//                //Se chequea si hay recaudos sin revisar
-//                if (collectionsByRequestList.size() > requestHasCollectionsRequestList.size()) {
-//                    indReviewCollectionIncomplete = 1;
-//                }
-//                for (RequestHasCollectionsRequest r : requestHasCollectionsRequestList) {
-//                    if (r.getIndApproved() == 0) {
-//                        indReviewCollectionApproved = 1;
-//                    }
-//                    if (r.getUrlImageFile() == null) {
-//                        indReviewCollectionIncomplete = 1;
-//                    }
-//                }
+                params = new HashMap();
+                params.put(Constants.PERSON_TYPE_KEY, businessAffiliationRequestParam.getBusinessPersonId().getPersonTypeId().getId());
+                request1.setParams(params);
+                collectionsByRequestList = utilsEJB.getCollectionsByPersonType(request1);
+                //Se chequea si hay recaudos sin revisar
+                if (collectionsByRequestList.size() > requestHasCollectionsRequestList.size()) {
+                    indReviewCollectionIncomplete = 1;
+                }
+                for (RequestHasCollectionRequest r : requestHasCollectionsRequestList) {
+                    if (r.getIndApproved() == true) {
+                        indReviewCollectionApproved = 1;
+                    }
+                    if (r.getImageFileUrl() == null) {
+                        indReviewCollectionIncomplete = 1;
+                    }
+                }
             }
 
             //Guarda la revision
@@ -241,31 +234,23 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             reviewCollectionsRequest.setCreateDate(new Timestamp(new Date().getTime()));
             reviewCollectionsRequest = utilsEJB.saveReviewBusinessAffiliationRequest(reviewCollectionsRequest);
 
-            //Actualiza el agente comercial en la solictud de tarjeta
-//            requestCard.setUserId(user);
-//            requestCard = requestEJB.saveRequest(requestCard);
             //Si los recaudos están incompletos, se rechaza la solicitud
-//            if (indReviewCollectionIncomplete == 1) {
-////                updateRequestByCollectionsIncomplete(businessAffiliationRequestParam);
-//            } else {
-//                //Verificar que todos los recaudos estén aprobados y que la solicitud este aprobada por el agente comercial
-//                if (indReviewCollectionApproved == 0 && reviewCollectionsRequest.getIndApproved() == true) {
-//                    //Se aprueba la solicitud
-//                    businessAffiliationRequestParam.setStatusBusinessAffiliationRequestId(getStatusBusinessAffiliationRequest(businessAffiliationRequestParam, Constants.STATUS_REQUEST_APPROVED));
-//                    businessAffiliationRequestParam = utilsEJB.saveBusinessAffiliationRequest(businessAffiliationRequestParam);
-//                    //Verificar si el solicitante es jurídico o natural
-////                    if (requestCard.getIndPersonNaturalRequest() == true) {
-////                        //Se crea el cliente natural
-////                        saveNaturalCustomer(requestCard);
-////                    } else {
-////                        //Se crea el cliente jurídico
-////                        saveLegalCustomer(requestCard);
-////                    }
-//                    this.showMessage("cms.common.save.success.customer", false, null);
-////                } else {
-////                    UpdateRequestWithoutApproving(reviewCollectionsRequest);
-//                }
-//            }
+            if (indReviewCollectionIncomplete == 1) {
+                updateRequestByCollectionsIncomplete(businessAffiliationRequestParam);
+                //Se coloca la solicitud en no aprobada
+                UpdateRequestWithoutApproving(reviewCollectionsRequest);
+            } else {
+                //Verificar que todos los recaudos estén aprobados y que la solicitud este aprobada por el agente comercial
+                if (indReviewCollectionApproved == 0 && reviewCollectionsRequest.getIndApproved() == true) {
+                    //Se aprueba la solicitud
+                    businessAffiliationRequestParam.setStatusBusinessAffiliationRequestId(getStatusBusinessAffiliationRequest(businessAffiliationRequestParam, Constants.STATUS_REQUEST_APPROVED));
+                    businessAffiliationRequestParam = utilsEJB.saveBusinessAffiliationRequest(businessAffiliationRequestParam);
+                } else {
+                    //Se coloca la solicitud en no aprobada
+                    UpdateRequestWithoutApproving(reviewCollectionsRequest);
+                }
+            }
+            loadField(businessAffiliationRequestParam);
             this.showMessage("sp.common.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
@@ -285,67 +270,47 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
         return statusRequest;
     }
 
-//    public void UpdateRequestWithoutApproving(ReviewRequest reviewCollectionsRequest) {
-//        boolean indApproved;
-//        try {
-//            updateRequestByCollectionsWithoutApproval(requestCard);
-//            rApprovedYes.setChecked(false);
-//            rApprovedNo.setChecked(true);
-//            indApproved = false;
-//            reviewCollectionsRequest.setIndApproved(indApproved);
-//            reviewCollectionsRequest = requestEJB.saveReviewRequest(reviewCollectionsRequest);
-//            this.showMessage("cms.common.requestNotApproved", false, null);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//
-//    }
-//    public void updateRequestByCollectionsWithoutApproval(Request requestCard) {
-//        try {
-//            EJBRequest request = new EJBRequest();
-//            request.setParam(Constants.STATUS_REQUEST_COLLECTIONS_WITHOUT_APPROVAL);
-//            StatusRequest statusRequestRejected = requestEJB.loadStatusRequest(request);
-//            requestCard.setStatusRequestId(statusRequestRejected);
-//            requestCard = requestEJB.saveRequest(requestCard);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-//
-//    public void updateRequestByCollectionsIncomplete(Request requestCard) {
-//        try {
-//            EJBRequest request = new EJBRequest();
-//            request.setParam(Constants.STATUS_REQUEST_REJECTED);
-//            StatusRequest statusRequestRejected = requestEJB.loadStatusRequest(request);
-//
-//            requestCard.setStatusRequestId(statusRequestRejected);
-//            request.setParam(Constants.REASON_REQUEST_REJECTED_BY_COLLECTIONS);
-//            ReasonRejectionRequest reasonRejectionRequest = requestEJB.loadReasonRejectionRequest(request);
-//
-//            requestCard.setReasonRejectionRequestId(reasonRejectionRequest);
-//            requestCard = requestEJB.saveRequest(requestCard);
-//            this.showMessage("cms.common.requestRejected", false, null);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
-//
-//    
-//
-//    
-//
-//    public StatusCustomer getStatusActiveCustomer() {
-//        StatusCustomer statusCustomer = null;
-//        try {
-//            EJBRequest request = new EJBRequest();
-//            request.setParam(Constants.STATUS_CUSTOMER_ACTIVE);
-//            statusCustomer = personEJB.loadStatusCustomer(request);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//        return statusCustomer;
-//    }
-    
+    public void UpdateRequestWithoutApproving(ReviewBusinessAffiliationRequest reviewCollectionsRequest) {
+        boolean indApproved;
+        try {
+            updateRequestByCollectionsWithoutApproval(businessAffiliationRequestParam);
+            rApprovedYes.setChecked(false);
+            rApprovedNo.setChecked(true);
+            indApproved = false;
+            reviewCollectionsRequest.setIndApproved(indApproved);
+            reviewCollectionsRequest = utilsEJB.saveReviewBusinessAffiliationRequest(reviewCollectionsRequest);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+
+    }
+
+    public void updateRequestByCollectionsWithoutApproval(BusinessAffiliationRequest affiliationRequest) {
+        try {
+            EJBRequest request = new EJBRequest();
+            request.setParam(Constants.STATUS_REQUEST_COLLECTIONS_WITHOUT_APPROVAL);
+            StatusBusinessAffiliationRequest statusRequestRejected = utilsEJB.loadStatusBusinessAffiliationRequest(request);
+
+            affiliationRequest.setStatusBusinessAffiliationRequestId(statusRequestRejected);
+            affiliationRequest = utilsEJB.saveBusinessAffiliationRequest(affiliationRequest);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
+    public void updateRequestByCollectionsIncomplete(BusinessAffiliationRequest affiliationRequest) {
+        try {
+            EJBRequest request = new EJBRequest();
+            request.setParam(Constants.STATUS_REQUEST_REJECTED);
+            StatusBusinessAffiliationRequest statusRequestRejected = utilsEJB.loadStatusBusinessAffiliationRequest(request);
+
+            affiliationRequest.setStatusBusinessAffiliationRequestId(statusRequestRejected);
+            affiliationRequest = utilsEJB.saveBusinessAffiliationRequest(affiliationRequest);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
     public void onClick$btnSave() {
         if (validateEmpty()) {
             switch (eventType) {
@@ -369,7 +334,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                     loadUser();
                     if (getReviewBusinessRequestParam() != null) {
                         loadFields(reviewBusinessRequestParam);
-                    }else{
+                    } else {
                         loadUser();
                         loadDate();
                         dtbReviewDate.setDisabled(true);
@@ -393,7 +358,6 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                     loadDate();
                     dtbReviewDate.setDisabled(true);
                     break;
-
             }
         } catch (EmptyListException ex) {
             Logger.getLogger(AdminApplicationReviewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -403,5 +367,4 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             Logger.getLogger(AdminApplicationReviewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }
