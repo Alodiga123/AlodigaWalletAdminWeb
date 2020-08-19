@@ -130,8 +130,8 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 	                    item.setValue(statusCardHasFinal);
                             item.appendChild(new Listcell(String.valueOf(statusCardHasFinal.getStatusCardId().getDescription())));
 	                    item.appendChild(new Listcell(statusCardHasFinal.getStatusCardFinalStateId().getCode()));
-	                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, statusFinal, Permission.EDIT_STATUS_CARD_FINAL) : new Listcell());
-                            item.appendChild(permissionRead ? new ListcellViewButton(adminPage, statusFinal, Permission.VIEW_STATUS_CARD_FINAL) : new Listcell());
+	                    item.appendChild(createButtonEditModal(statusCardHasFinal));
+                            item.appendChild(createButtonViewModal(statusCardHasFinal));
 	                    item.setParent(lbxRecords);
 	                }
 	            } else {

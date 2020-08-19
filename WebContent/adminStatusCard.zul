@@ -13,7 +13,7 @@
                         <div></div>
                         <div width="100%" align="left" height="100%">
                             <hlayout>
-                                <div width="1000px">
+                                <div width="100%">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -24,7 +24,7 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
+                                                <div align="right" style="margin-right: 45px;">
                                                     <hlayout>
                                                         <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
                                                         <separator/>
@@ -62,7 +62,7 @@
                                         </div>
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                         <!--Buttons-->
-                                        <div align="right">
+                                        <div align="right" style="margin-right: 45px;">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
                                             <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listStatusCard.zul&quot;)"/>
                                         </div>
