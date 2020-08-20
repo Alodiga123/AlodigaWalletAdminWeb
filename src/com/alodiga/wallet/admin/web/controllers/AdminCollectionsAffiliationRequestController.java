@@ -182,7 +182,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             }
 
             //Guarda la solicitud en requestHasCollectionsRequest
-            requestHasCollectionsRequest.setIndApproved(approved);
+//            requestHasCollectionsRequest.setIndApproved(approved);
             requestHasCollectionsRequest.setObservations(txtObservations.getText());
             requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
            
