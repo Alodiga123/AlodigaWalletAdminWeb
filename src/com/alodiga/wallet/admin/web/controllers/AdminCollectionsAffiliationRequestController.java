@@ -130,11 +130,14 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     private void loadFields(RequestHasCollectionRequest requestHasCollectionsRequest) {
         if (requestHasCollectionsRequest != null) {
             try {
-                if (requestHasCollectionsRequest.getIndApproved()) {
-                    rApprovedYes.setChecked(true);
-                } else {
-                    rApprovedNo.setChecked(true);
-                }
+            	short approved=1; 
+            	if (requestHasCollectionsRequest.getIndApproved()!=null) {
+	                if (requestHasCollectionsRequest.getIndApproved()==approved) {
+	                    rApprovedYes.setChecked(true);
+	                } else {
+	                    rApprovedNo.setChecked(true);
+	                }
+            	}
                 txtObservations.setText(requestHasCollectionsRequest.getObservations());
                 UrlFile = requestHasCollectionsRequest.getImageFileUrl();
                 if (UrlFile!=null) {
@@ -168,7 +171,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     }
 
     private void saveRequest(RequestHasCollectionRequest _requestHasCollectionsRequest) {
-    	boolean approved = false;
+    	short approved = 1;
         try {
         	RequestHasCollectionRequest requestHasCollectionsRequest = null;
 
@@ -176,13 +179,13 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
                 requestHasCollectionsRequest = _requestHasCollectionsRequest;
             } 
             if (rApprovedYes.isChecked()) {
-            	approved = true;
+            	approved = 1;
             } else {
-            	approved = false;
+            	approved = 0;
             }
 
             //Guarda la solicitud en requestHasCollectionsRequest
-//            requestHasCollectionsRequest.setIndApproved(approved);
+            requestHasCollectionsRequest.setIndApproved(approved);
             requestHasCollectionsRequest.setObservations(txtObservations.getText());
             requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
            
