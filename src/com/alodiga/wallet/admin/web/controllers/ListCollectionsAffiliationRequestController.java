@@ -159,7 +159,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                     item.setValue(collectionsRequest);
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
-                    item.appendChild(new Listcell(collectionsRequest.getIndApproved()?Labels.getLabel("sp.common.yes"):Labels.getLabel("sp.common.no")));
+                    item.appendChild(new Listcell(collectionsRequest.getIndApproved()!=null?collectionsRequest.getIndApproved().toString():null));
                     item.appendChild(permissionEdit ?createButtonEditModal(collectionsRequest) : new Listcell());
                     item.appendChild(permissionRead ?createButtonViewModal(collectionsRequest) : new Listcell());
                     item.setParent(lbxRecords);
