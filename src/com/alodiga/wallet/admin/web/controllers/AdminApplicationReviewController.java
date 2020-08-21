@@ -214,8 +214,9 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 if (collectionsByRequestList.size() > requestHasCollectionsRequestList.size()) {
                     indReviewCollectionIncomplete = 1;
                 }
+                short approved=1; 
                 for (RequestHasCollectionRequest r : requestHasCollectionsRequestList) {
-                    if (r.getIndApproved() == true) {
+                    if (r.getIndApproved() == approved) {
                         indReviewCollectionApproved = 1;
                     }
                     if (r.getImageFileUrl() == null) {
