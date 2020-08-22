@@ -121,15 +121,19 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                     item = new Listitem();
                     item.setValue(aplicant);
                     if (aplicant.getPersonTypeId().getIndNaturalPerson() == true) {
-                        StringBuilder applicantNameNatural = new StringBuilder(aplicant.getNaturalPerson().getFirstName());
-                        applicantNameNatural.append(" ");
-                        applicantNameNatural.append(aplicant.getNaturalPerson().getLastName());
-                        item.appendChild(new Listcell(applicantNameNatural.toString()));
-                        item.appendChild(new Listcell(aplicant.getNaturalPerson().getDocumentsPersonTypeId().getCodeIdentification()));
-                        item.appendChild(new Listcell(aplicant.getNaturalPerson().getIdentificationNumber()));
-                        item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.naturalPerson")));
-                        item.appendChild(new Listcell(Labels.getLabel("sp.common.yes")));
-                        item.appendChild(new Listcell(aplicant.getNaturalPerson().getStatusApplicantId().getDescription()));
+                        if ((aplicant.getPersonClassificationId().getId() == 1) || (aplicant.getPersonClassificationId().getId() == 2)) {
+                            StringBuilder applicantNameNatural = new StringBuilder(aplicant.getNaturalPerson().getFirstName());
+                            applicantNameNatural.append(" ");
+                            applicantNameNatural.append(aplicant.getNaturalPerson().getLastName());
+                            item.appendChild(new Listcell(applicantNameNatural.toString()));
+                            item.appendChild(new Listcell(aplicant.getNaturalPerson().getDocumentsPersonTypeId().getCodeIdentification()));
+                            item.appendChild(new Listcell(aplicant.getNaturalPerson().getIdentificationNumber()));
+                            item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.naturalPerson")));
+                            item.appendChild(new Listcell(Labels.getLabel("sp.common.yes")));
+                            item.appendChild(new Listcell(aplicant.getNaturalPerson().getStatusApplicantId().getDescription()));
+                            item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
+                            item.appendChild(permissionRead ? new ListcellViewButton(adminPage, aplicant, Permission.VIEW_APLICANT_OFAC) : new Listcell());
+                        }
                     } else {
                         if (aplicant.getPersonClassificationId().getId() != 3) {
                             applicantNameLegal = aplicant.getLegalPerson().getBusinessName();
@@ -139,6 +143,8 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.legalPerson")));
                             item.appendChild(new Listcell(Labels.getLabel("sp.common.yes")));
                             item.appendChild(new Listcell(aplicant.getLegalPerson().getStatusApplicantId().getDescription()));
+                            item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
+                            item.appendChild(permissionRead ? new ListcellViewButton(adminPage, aplicant, Permission.VIEW_APLICANT_OFAC) : new Listcell());
                         } else {
                             StringBuilder applicantLegalR = new StringBuilder(aplicant.getLegalRepresentative().getFirstNames());
                             applicantLegalR.append(" ");
@@ -149,10 +155,10 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             item.appendChild(new Listcell(Labels.getLabel("sp.tab.businessAffiliationRequests.legalPerson")));
                             item.appendChild(new Listcell(Labels.getLabel("sp.common.no")));
                             item.appendChild(new Listcell(aplicant.getLegalRepresentative().getStatusApplicantId().getDescription()));
+                            item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
+                            item.appendChild(permissionRead ? new ListcellViewButton(adminPage, aplicant, Permission.VIEW_APLICANT_OFAC) : new Listcell());
                         }
                     }
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, aplicant, Permission.VIEW_APLICANT_OFAC) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
