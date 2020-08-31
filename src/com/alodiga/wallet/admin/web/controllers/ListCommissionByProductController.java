@@ -136,7 +136,6 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-
                 for (Commission commission : list) {
                     item = new Listitem();
                     item.setValue(commission);
@@ -152,8 +151,6 @@ public class ListCommissionByProductController extends GenericAbstractListContro
                     item.appendChild(new Listcell(value));
                     item.appendChild(createButtonEditModal(commission));
                     item.appendChild(createButtonViewModal(commission));
-//                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, commission, Permission.EDIT_COMMISSION) : new Listcell());
-//                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, commission, Permission.VIEW_COMMISSION) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -227,11 +224,15 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         Product product = null;
         commissions = new ArrayList<Commission>();
         try {
-            EJBRequest request1 = new EJBRequest();
-            Map params = new HashMap();
-            params.put(Constants.PRODUCT_KEY, productParam.getId());
-            request1.setParams(params);
-            commissions = utilsEJB.getCommissionByProduct(request1);
+            if (eventType != WebConstants.EVENT_ADD) {
+                EJBRequest request1 = new EJBRequest();
+                Map params = new HashMap();
+                params.put(Constants.PRODUCT_KEY, productParam.getId());
+                request1.setParams(params);
+                commissions = utilsEJB.getCommissionByProduct(request1);
+            } else {
+                commissions = null;
+            }          
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
