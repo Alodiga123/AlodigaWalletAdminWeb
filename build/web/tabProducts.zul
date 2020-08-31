@@ -43,13 +43,13 @@
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
-                                                            <include src="listProductsHasBank.zul"/>
+                                                            <include src="adminProduct.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="listCommissionByProduct.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="adminProduct.zul"/>
+                                                            <include src="listProductsHasBank.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
