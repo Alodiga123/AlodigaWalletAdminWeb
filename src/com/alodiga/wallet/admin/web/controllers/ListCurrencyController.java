@@ -128,6 +128,7 @@ public class ListCurrencyController extends GenericAbstractListController<Curren
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilterList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -178,10 +179,6 @@ public class ListCurrencyController extends GenericAbstractListController<Curren
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    public void loadDataList(List<Currency> list) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
