@@ -2,34 +2,19 @@
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
 <?page title="${c:l('sp.common.page.title')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
-<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
+<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
+
 <zk xmlns:n="native">
-    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListProductHasBankController" class="general-window">
+    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListProductsHasBankController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
-            <north border="none" size="52px" class="content-transparent">
-                <include src="adminHeader.zul"/>
-            </north>
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout>
-                        <div></div>
                         <div width="100%" align="left" height="100%">
                             <hlayout>
-                                <div>
-                                    <include src="adminMainMenu.zul"/>
-                                </div>
                                 <div width="1000px">
                                     <vlayout>
-                                        <div height="20px" width="100%" align="100%">
-                                            <!--Bread crumb-->
-                                            <hlayout>
-                                                <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
-                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.product.list')}" />
-                                            </hlayout>
-                                        </div>
-                                        <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
@@ -37,7 +22,6 @@
                                                     <label value="${c:l('sp.crud.product')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
-
                                                 <hlayout>
                                                     <!--Add button-->
                                                     <div align="left" width="385px">
@@ -49,7 +33,6 @@
                                                         <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                     </div>
                                                 </hlayout>
-
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
@@ -61,17 +44,9 @@
                                                     <listheader label="${c:l('sp.crud.product.integration.type')}" width="180px" sort="auto"/>
                                                     <listheader label="${c:l('sp.common.enabled')}" width="100px" sort="auto"/>
                                                     <listheader label="-" width="80px"/>
-                                                    <listheader label="-" width="80px"/> 
-                                                    
+                                                    <listheader label="-" width="80px"/>                                                     
                                                 </listhead>
                                             </listbox>
-                                            
-
-
-
-
-
-
                                         </div>
                                         <!--Download button-->
                                         <div align="right">
@@ -80,16 +55,11 @@
                                         </div>
                                     </vlayout>
                                 </div>
-                                <div></div>
                             </hlayout>
                         </div>
-                        <div></div>
                     </hlayout>
                 </div>
             </center>
-            <south border="none" size="40px">
-                <include src="adminFooter.zul"/>
-            </south>
         </borderlayout>
     </window>
 </zk>

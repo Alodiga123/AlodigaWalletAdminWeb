@@ -23,10 +23,7 @@
                                                 <div align="right">
                                                     <hlayout>
                                                         <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
+                                                        
                                                     </hlayout>
                                                 </div>
                                                 <grid fixedLayout="true">
@@ -47,15 +44,15 @@
                                                         <row>
                                                             <hlayout>
                                                                 <combobox id="cmbEnterprise" width="260px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbCategory" width="260px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbProductIntegrationType" width="260px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
@@ -67,15 +64,15 @@
                                                         <row>
                                                             <hlayout>
                                                                 <textbox id="txtName" width="260px" maxlength="60"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <textbox id="txtSymbol" width="260px"  maxlength="60"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <textbox id="txtReferenceCode" width="260px"  maxlength="60"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout> 
                                                         </row>
                                                         <row>
@@ -86,11 +83,11 @@
                                
                                                             <hlayout>
                                                                 <textbox id="txtRatesUrl" width="260px"  maxlength="60"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>  
                                                             <hlayout>
                                                                 <textbox id="txtAccessNumberUrl" width="260px"  maxlength="60"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <group label="${c:l('sp.common.configuration')}"/> 
