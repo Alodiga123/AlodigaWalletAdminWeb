@@ -22,7 +22,7 @@
                                             <vlayout>
                                                 <div align="right">
                                                     <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
+                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
                                                         
                                                     </hlayout>
                                                 </div>

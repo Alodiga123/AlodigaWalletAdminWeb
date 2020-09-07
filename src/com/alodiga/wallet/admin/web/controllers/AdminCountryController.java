@@ -5,6 +5,7 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.exception.DuplicateEntryException;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -123,7 +124,7 @@ public class AdminCountryController extends GenericAbstractAdminController {
         return false;
     }
 
-    private void saveBank(Country _country) {
+    private void saveCountry(Country _country) {
         try {
             Country country = null;
 
@@ -145,10 +146,16 @@ public class AdminCountryController extends GenericAbstractAdminController {
             if (txtAlternativeName3.getValue() != null) {
                 country.setAlternativeName3(txtAlternativeName3.getText());
             }
-            country = utilsEJB.saveCountry(country);
-            countryParam = country;
-            eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+
+            try {
+                country = utilsEJB.saveNewCountry(country);
+                countryParam = country;
+                eventType = WebConstants.EVENT_EDIT;
+                this.showMessage("sp.common.save.success", false, null);
+            } catch (DuplicateEntryException e) {
+                this.showMessage("sp.common.save.fail", false, null);
+                return;
+            }
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
@@ -168,10 +175,10 @@ public class AdminCountryController extends GenericAbstractAdminController {
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBank(countryParam);
+                    saveCountry(countryParam);
                     break;
                 case WebConstants.EVENT_EDIT:
-                    saveBank(countryParam);
+                    saveCountry(countryParam);
                     break;
                 default:
                     break;

@@ -162,11 +162,13 @@ public class ListCountriesController extends GenericAbstractListController<Count
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            SimpleDateFormat sdg = new SimpleDateFormat("dd/MM/yyyy");
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            String date1 = sdg.format(timestamp);
-            Utils.exportExcel(lbxRecords, (Labels.getLabel("sp.crud.counties.list")) + "_" + date1);
-            AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Paises en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.counties.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
         } catch (Exception ex) {
             showError(ex);
         }

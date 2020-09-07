@@ -18,6 +18,7 @@ import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
+import com.alodiga.wallet.admin.web.utils.PDFUtil;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.ProductEJB;
@@ -34,6 +35,7 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ListProductsController extends GenericAbstractListController<Product> {
 
@@ -193,16 +195,38 @@ public class ListProductsController extends GenericAbstractListController<Produc
         item.setParent(lbxRecords);
     }
 
-    public void onClick$btnDownload() throws InterruptedException {
+
+    
+public void onClick$btnDownload() throws InterruptedException {
         try {
-            SimpleDateFormat sdg = new SimpleDateFormat("dd/MM/yyyy");
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            String date1 = sdg.format(timestamp);
-            Utils.exportExcel(lbxRecords, (Labels.getLabel("sp.crud.product.list")) + "_" + date1);
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
         } catch (Exception ex) {
             showError(ex);
         }
     }
+
+public void onClick$btnExportPdf() throws InterruptedException {
+        try {
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.list"));
+            file.append("_");
+            file.append(date);
+            StringBuilder productTitle = new StringBuilder(Labels.getLabel("sp.crud.product.product"));
+            PDFUtil.exportPdf(file.toString(), productTitle.toString(), lbxRecords, 2);            
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
+
 
     public void onClick$btnClear() throws InterruptedException {
         txtAlias.setText("");
