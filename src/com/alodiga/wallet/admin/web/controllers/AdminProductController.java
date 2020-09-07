@@ -66,6 +66,7 @@ public class AdminProductController extends GenericAbstractAdminController {
     private Integer eventType;
     private boolean editingPassword = false;
     private Tab tabProductHasBank;
+    private Tab tabCommissionByProduct;
     private Profile currentProfile;
 
     @Override
@@ -76,11 +77,9 @@ public class AdminProductController extends GenericAbstractAdminController {
             productParam = null;
         } else {
             productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
-            productParent= productParam;
+            productParent = productParam;
         }
-
         initialize();
-        initView(eventType, "crud.produt");
     }
 
     @Override
@@ -88,15 +87,14 @@ public class AdminProductController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-//                disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-//                disableTab();
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                //disableTab();
+                tabCommissionByProduct.setDisabled(true);
+                tabProductHasBank.setDisabled(true);
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.product.add"));
                 break;
             default:
@@ -192,7 +190,7 @@ public class AdminProductController extends GenericAbstractAdminController {
             } else {
                 rIsPaymentInfoNo.setChecked(true);
             }
-            productParent = product;
+            
         } catch (Exception ex) {
             showError(ex);
         }
@@ -202,13 +200,11 @@ public class AdminProductController extends GenericAbstractAdminController {
         cmbEnterprise.setReadonly(true);
         cmbCategory.setReadonly(true);
         cmbProductIntegrationType.setReadonly(true);
-
         txtName.setReadonly(true);
         txtSymbol.setReadonly(true);
         txtReferenceCode.setReadonly(true);
         txtRatesUrl.setReadonly(true);
         txtAccessNumberUrl.setReadonly(true);
-
         btnSave.setVisible(false);
     }
 
@@ -343,13 +339,12 @@ public class AdminProductController extends GenericAbstractAdminController {
             EJBRequest request1 = new EJBRequest();
             request1.setParam(product);
             product = productEJB.saveProduct(request1);
-            productParam = product;
             productParent = product;
-            eventType = WebConstants.EVENT_EDIT;
             this.showMessage("sp.common.save.success", false, null);
-
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
+                tabCommissionByProduct.setDisabled(false);
+                tabProductHasBank.setDisabled(false);
             } else {
                 btnSave.setVisible(true);
             }

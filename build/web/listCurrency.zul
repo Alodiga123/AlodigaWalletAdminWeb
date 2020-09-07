@@ -54,7 +54,7 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.country.name')}" width="500px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.currency.nameMoney')}" width="500px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.currency.symbolMoney')}" width="400px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>

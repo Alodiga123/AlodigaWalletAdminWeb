@@ -43,13 +43,13 @@
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
-                                                            <include src="listProductsHasBank.zul"/>
+                                                            <include src="adminProduct.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="listCommissionByProduct.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="adminProduct.zul"/>
+                                                            <include src="listProductsHasBank.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>
@@ -57,13 +57,14 @@
                                         </div>
                                     </vlayout>
                                 </div>
-                                <div></div>
                             </hlayout>
                         </div>
-                        <div></div>
                     </hlayout>
                 </div>
             </center>
+            <south border="none" size="40px">
+                <include src="adminFooter.zul"/>
+            </south>
         </borderlayout>
     </window>
 </zk>

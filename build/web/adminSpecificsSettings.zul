@@ -73,7 +73,7 @@
                                                           <label value="${c:l('sp.specific.preference.bussiness')}" sclass="lblbold"/>
                                                              <hlayout>
                                                                 <textbox id="txtBussiness" width="150px" constraint="no empty: ${c:l('error.field.required')}" maxlength="10" disabled="true"/>
-                                                                <textbox id="txtEmailBussiness" width="150px" constraint="no empty: ${c:l('error.field.required')}" maxlength="10"/>
+                                                                <textbox id="txtEmailBussiness" width="250px" tooltiptext="${c:l('sp.specific.preference.search')}"/>
                                                                 <button  id="btnSearch" width="100px" label="${c:l('sp.common.actions.search')}" class="open orange"/>
                                                             </hlayout>
                                                           </row>

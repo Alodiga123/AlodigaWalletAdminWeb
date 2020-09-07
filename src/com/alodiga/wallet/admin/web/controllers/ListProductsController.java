@@ -32,6 +32,8 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class ListProductsController extends GenericAbstractListController<Product> {
 
@@ -145,9 +147,9 @@ public class ListProductsController extends GenericAbstractListController<Produc
 	                    item = new Listitem();
 	                    item.setValue(product);
 	                    item.appendChild(new Listcell(product.getName()));
-                            item.appendChild(new Listcell(product.getEnterpriseId().getName()));
-	                    item.appendChild(new Listcell(product.getCategoryId().getName()));
-                            item.appendChild(new Listcell(product.getProductIntegrationTypeId().getName()));
+                            item.appendChild(new Listcell(product.getReferenceCode()));
+                            item.appendChild(new Listcell(product.getSymbol()));
+                            item.appendChild(new Listcell(product.getCategoryId().getName()));
                             item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("sp.crud.product.yes"):Labels.getLabel("sp.crud.product.no"))));
 	                    item.appendChild(new ListcellEditButton(adminPage, product));
 	                    item.appendChild(new ListcellViewButton(adminPage, product));
@@ -193,7 +195,10 @@ public class ListProductsController extends GenericAbstractListController<Produc
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.provider.list"));
+            SimpleDateFormat sdg = new SimpleDateFormat("dd/MM/yyyy");
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            String date1 = sdg.format(timestamp);
+            Utils.exportExcel(lbxRecords, (Labels.getLabel("sp.crud.product.list")) + "_" + date1);
         } catch (Exception ex) {
             showError(ex);
         }

@@ -1,5 +1,5 @@
 
-<div width="250px" height="1300px" apply="com.alodiga.wallet.admin.web.controllers.AdminMainMenuController">
+<div width="250px" height="1500px" apply="com.alodiga.wallet.admin.web.controllers.AdminMainMenuController">
     <image id="imgLogo" src="/images/logo_header.png" style="cursor:pointer" />
     <listbox id="lbxAccount" width="245px" style="background-color: green; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;border-width: 1px;border-color: gray;" class="borderedFrame">
         <listgroup open="true">
