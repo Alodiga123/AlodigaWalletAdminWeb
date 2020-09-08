@@ -56,10 +56,10 @@
                                              <listbox id="lbxRecords" fixedLayout="true" width="1000px" height="500px" mold="paging">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.product')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enterprise')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product.codeReference')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.product.simbolo')}" width="180px" sort="auto"/>
                                                     <listheader label="${c:l('sp.home.category')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.product.integration.type')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enabled')}" width="100px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.enabled')}" width="100px" sort="auto"/>                                                    
                                                     <listheader label="-" width="80px"/>
                                                     <listheader label="-" width="80px"/> 
                                                     

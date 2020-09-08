@@ -29,6 +29,7 @@ import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.util.HashMap;
@@ -48,10 +49,16 @@ public class ListProductsHasBankController extends GenericAbstractListController
     private User currentUser;
     private Profile currentProfile;
     private Product product;
+    private Product productParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        if (eventType == WebConstants.EVENT_ADD) {
+            productParam = null;
+        } else {
+            productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
+        }
         initialize();
     }
 
@@ -89,7 +96,9 @@ public class ListProductsHasBankController extends GenericAbstractListController
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             startListener();
             getData();
-            loadList(bankHasProductList);
+            if (bankHasProductList != null) {
+                loadList(bankHasProductList);
+            }
         } catch (Exception ex) {
             showError(ex);
         }
@@ -179,22 +188,35 @@ public class ListProductsHasBankController extends GenericAbstractListController
     }
 
     public void getData() {
-        EJBRequest request1 = new EJBRequest();
         bankHasProductList = new ArrayList<BankHasProduct>();
-        product= (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
-
-        AdminProductController admin= new AdminProductController();
-        admin.setProductParent(product);
-        request1.setParam(product);
-        
         try {
-            bankHasProductList = productEJB.getBankHasProduct(request1);
+            if (eventType != WebConstants.EVENT_ADD) {
+                    EJBRequest request1 = new EJBRequest();
+                    Map params = new HashMap();
+                    params.put(Constants.PRODUCT_KEY, productParam.getId());
+                    request1.setParams(params);
+                    bankHasProductList = productEJB.getBankHasProduct(request1);
+                } else {
+                    bankHasProductList = null;
+                }       
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
+            showEmptyList();
         } catch (GeneralException ex) {
             showError(ex);
+        } finally {
+            showEmptyList();
         }
+    }
+    
+    private void showEmptyList() {
+        Listitem item = new Listitem();
+        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.setParent(lbxRecords);
     }
 
     public void onClick$btnDownload() throws InterruptedException {

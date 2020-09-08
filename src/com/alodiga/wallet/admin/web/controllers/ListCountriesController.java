@@ -29,6 +29,10 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.zkoss.zul.Textbox;
 
 public class ListCountriesController extends GenericAbstractListController<Country> {
 
@@ -39,6 +43,7 @@ public class ListCountriesController extends GenericAbstractListController<Count
     private List<Country> countries = null;
     private User currentUser;
     private Profile currentProfile;
+    private Textbox txtName;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -106,7 +111,7 @@ public class ListCountriesController extends GenericAbstractListController<Count
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                
+
                 for (Country country : list) {
                     item = new Listitem();
                     item.setValue(country);
@@ -157,7 +162,10 @@ public class ListCountriesController extends GenericAbstractListController<Count
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.counties.list"));
+            SimpleDateFormat sdg = new SimpleDateFormat("dd/MM/yyyy");
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            String date1 = sdg.format(timestamp);
+            Utils.exportExcel(lbxRecords, (Labels.getLabel("sp.crud.counties.list")) + "_" + date1);
             AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Paises en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -165,11 +173,12 @@ public class ListCountriesController extends GenericAbstractListController<Count
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }

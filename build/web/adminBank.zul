@@ -8,30 +8,13 @@
     <window id="winAdminBank" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminBankController">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
-            <north border="none" size="52px" class="content-transparent">
-                <include src="adminHeader.zul"/>
-            </north>
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout >
-                        <div></div>
-                        <div width="100%" align="left" height="100%">
+                       <div width="1200px" align="left" height="600px">
                             <hlayout>
-                                <div>
-                                    <include src="adminMainMenu.zul"/>
-                                </div>
-                                <div width="1000px">
+                                <div width="950px">
                                     <vlayout>
-                                        <div height="20px" width="100%" align="left">
-                                            <!--Bread crumb-->
-                                            <hlayout>
-                                                <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
-                                                |
-                                                <toolbarbutton label="${c:l('sp.crud.bank.list')}" onClick='Executions.sendRedirect(&quot;listBank.zul&quot;)'/>
-                                                |
-                                                <toolbarbutton id="tbbTitle" label=""/> 
-                                            </hlayout>
-                                        </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
@@ -48,7 +31,7 @@
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
-                                                        <column label="" width="600px"/>
+                                                        <column label="" width="645px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>
@@ -106,9 +89,7 @@
                     </hlayout>
                 </div>
             </center>
-            <south border="none" size="40px">
-                <include src="adminFooter.zul"/>
-            </south>
+
         </borderlayout>
     </window>
 </zk>
