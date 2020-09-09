@@ -28,6 +28,8 @@ import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -130,6 +132,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         Locale locale = new Locale("es", "ES");
         String value = "";
         String comission = "";
+        String apply= "";
         NumberFormat numberFormat = NumberFormat.getInstance(locale);
         try {
             lbxRecords.getItems().clear();
@@ -142,11 +145,18 @@ public class ListCommissionByProductController extends GenericAbstractListContro
                     value = numberFormat.format(commission.getValue());
                     item.appendChild(new Listcell(commission.getProductId().getName()));
                     item.appendChild(new Listcell(commission.getTransactionTypeId().getValue()));
+                   if (commission.getIndApplicationCommission() == 1){
+                        apply = Labels.getLabel("sp.common.yes");
+                    } else {
+                        apply = Labels.getLabel("sp.common.no");
+                    }
+                    
                     if (commission.getIsPercentCommision() == 1) {
                         comission = Labels.getLabel("sp.common.yes");
                     } else {
                         comission = Labels.getLabel("sp.common.no");
                     }
+                    item.appendChild(new Listcell(apply));
                     item.appendChild(new Listcell(comission));
                     item.appendChild(new Listcell(value));
                     item.appendChild(createButtonEditModal(commission));
@@ -254,8 +264,14 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     }
 
     public void onClick$btnDownload() throws InterruptedException {
-        try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.commissions.list"));
+         try {
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.commissions.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
             AccessControl.saveAction(Permission.LIST_COMMISSION, "Se descargo listado de comisiones en formato excel");
         } catch (Exception ex) {
             showError(ex);

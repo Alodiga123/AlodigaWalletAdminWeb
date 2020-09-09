@@ -5,9 +5,15 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.Country;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Textbox;
@@ -27,6 +33,8 @@ public class AdminCountryController extends GenericAbstractAdminController {
     private Toolbarbutton tbbTitle;
     private Country countryParam;
     private Integer eventType;
+    List<Country> countryCodeList = new ArrayList<Country>();
+    List<Country> countryNameList = new ArrayList<Country>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -122,6 +130,41 @@ public class AdminCountryController extends GenericAbstractAdminController {
         }
         return false;
     }
+    
+    public boolean validateCountry() {
+     try {
+            //Valida si ya existe el codigo del pais
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PARAM_CODE, txtCode.getValue());
+            request1.setParams(params);
+            countryCodeList = utilsEJB.getValidateCountryByCode(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        } finally {
+            if(countryCodeList.size() > 0){
+            this.showMessage("sp.crud.country.error.code", true, null);
+            txtCode.setFocus(true);  
+            return false;  
+          }    
+        } try {
+                //Valida si el nombre del pais ingresado ya existe en BD
+                EJBRequest request1 = new EJBRequest();
+                Map params = new HashMap();
+                params.put(Constants.PARAM_NAME, txtName.getValue());
+                request1.setParams(params);
+                countryNameList= utilsEJB.getValidateCountryByName(request1);
+            } catch (Exception ex) {
+                showError(ex);
+            } finally {
+                if (countryNameList.size() > 0) {
+                    this.showMessage("sp.crud.country.error.name", true, null);
+                    txtName.setFocus(true);
+                    return false;
+                }
+            }                        
+        return true;
+    }
 
     private void saveBank(Country _country) {
         try {
@@ -168,7 +211,9 @@ public class AdminCountryController extends GenericAbstractAdminController {
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBank(countryParam);
+                    if (validateCountry()){
+                        saveBank(countryParam);    
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBank(countryParam);

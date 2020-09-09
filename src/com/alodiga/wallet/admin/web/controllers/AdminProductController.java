@@ -206,6 +206,22 @@ public class AdminProductController extends GenericAbstractAdminController {
         txtRatesUrl.setReadonly(true);
         txtAccessNumberUrl.setReadonly(true);
         btnSave.setVisible(false);
+        rEnabledYes.setDisabled(true);
+        rEnabledNo.setDisabled(true);
+        rIsFreeYes.setDisabled(true);
+        rIsFreeNo.setDisabled(true);
+        rIsAlocashProductYes.setDisabled(true);
+        rIsAlocashProductNo.setDisabled(true);
+        rIsPayTopUpYes.setDisabled(true);
+        rIsPayTopUpNo.setDisabled(true);
+        rIsExchangeProductYes.setDisabled(true);
+        rIsExchangeProductNo.setDisabled(true);
+        rIsRemettenceYes.setDisabled(true);
+        rIsRemettenceNo.setDisabled(true);
+        rTaxIncludeYes.setDisabled(true);
+        rTaxIncludeNo.setDisabled(true);
+        rIsPaymentInfoYes.setDisabled(true);
+        rIsPaymentInfoNo.setDisabled(true);
     }
 
     public boolean validateEmpty() {

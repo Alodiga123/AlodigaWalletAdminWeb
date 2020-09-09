@@ -34,6 +34,7 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ListProductsController extends GenericAbstractListController<Product> {
 
@@ -195,10 +196,14 @@ public class ListProductsController extends GenericAbstractListController<Produc
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            SimpleDateFormat sdg = new SimpleDateFormat("dd/MM/yyyy");
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            String date1 = sdg.format(timestamp);
-            Utils.exportExcel(lbxRecords, (Labels.getLabel("sp.crud.product.list")) + "_" + date1);
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_PRODUCT, "Se descargo listado de productos en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
