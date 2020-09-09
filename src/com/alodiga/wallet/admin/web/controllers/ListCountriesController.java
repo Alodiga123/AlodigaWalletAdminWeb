@@ -83,17 +83,17 @@ public class ListCountriesController extends GenericAbstractListController<Count
     }
 
     public List<Country> getFilteredList(String filter) {
-        List<Country> list = new ArrayList<Country>();
-        if (countries != null) {
-            for (Iterator<Country> i = countries.iterator(); i.hasNext();) {
-                Country tmp = i.next();
-                String field = tmp.getName().toLowerCase();
-                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                    list.add(tmp);
-                }
+        List<Country> countriesaux = new ArrayList<Country>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                countriesaux = utilsEJB.getSearchCountry(filter);
+            } else {
+                return countries;
             }
+        } catch (Exception ex) {
+            showError(ex);
         }
-        return list;
+        return countriesaux;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
@@ -162,11 +162,14 @@ public class ListCountriesController extends GenericAbstractListController<Count
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            SimpleDateFormat sdg = new SimpleDateFormat("dd/MM/yyyy");
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            String date1 = sdg.format(timestamp);
-            Utils.exportExcel(lbxRecords, (Labels.getLabel("sp.crud.counties.list")) + "_" + date1);
-            AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Paises en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.country.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_COUNTRIES, "Se descargo listado de países en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
