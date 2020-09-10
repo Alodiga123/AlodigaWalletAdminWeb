@@ -100,6 +100,9 @@ public class AdminMainMenuController extends GenericForwardComposer {
                         case 3://Configurations Management
                             loadConfigurationsManagementGroup(pg);
                             break;
+                        case 4://Configurations Reports
+                            loadReportsManagementGroup(pg);
+                            break;
                         case 5://Configurations Management
                             loadTransactionalManagementGroup(pg);
                             break;
@@ -118,8 +121,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
     }
 
     private boolean existPermissionInGroup(List<Permission> ps, Long permissionGroupId) {
-        for (Permission p : ps) {
-            if (p.getPermissionGroup().getId().equals(permissionGroupId)) {
+            for (Permission p : ps) {
+                if (p.getPermissionGroup().getId().equals(permissionGroupId)) {
                 return true;
             }
         }
@@ -166,8 +169,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_COUNTRIES, "listCountries.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_CURRENCIES, "listCurrency.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
-        createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
+        //createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
+        //createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_CATEGORY, "listBusinnesCategory.zul", permissionGroup, listgroup);
@@ -211,7 +214,13 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
     }
-    
+    private void loadReportsManagementGroup(PermissionGroup permissionGroup) {
+        Listgroup listgroup = createListGroup(permissionGroup);
+        createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
+        
+    }
+
     private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {
         Permission permission = loadPermission(permissionId);
         if (permission != null) {

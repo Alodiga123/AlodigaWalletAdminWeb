@@ -20,19 +20,10 @@
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
-                                                <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.common.description')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtName" value="" width="100px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
-                                                </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
                                                     <div align="left" width="490px">
                                                         <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}" visible="true"/>
-                                                    </div>
-                                                    <!--Filters button-->
-                                                    <div align="right" width="460px">
-                                                        <button id="btnSearch" width="80px" label="${c:l('sp.common.actions.search')}" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
-                                                        <button id="btnBack" width="80px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listCommissionByProduct.zul&quot;)"/>
                                                     </div>
                                                 </hlayout>
                                             </vlayout>
@@ -40,10 +31,11 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="950px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.commission.product')}" width="220px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.commission.transactionType')}" width="240px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.commission.product')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.commission.transactionType')}" width="220px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.applyCommission.value')}" width="120px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.commission.percentCommision')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.commission.value')}" width="200px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.commission.value')}" width="120px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

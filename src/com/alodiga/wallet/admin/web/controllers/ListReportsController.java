@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.zkoss.zul.Textbox;
 
-public class ListCountriesController extends GenericAbstractListController<Country> {
+public class ListReportsController extends GenericAbstractListController<Country> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
@@ -83,17 +83,17 @@ public class ListCountriesController extends GenericAbstractListController<Count
     }
 
     public List<Country> getFilteredList(String filter) {
-        List<Country> countriesaux = new ArrayList<Country>();
-        try {
-            if (filter != null && !filter.equals("")) {
-                countriesaux = utilsEJB.getSearchCountry(filter);
-            } else {
-                return countries;
+        List<Country> list = new ArrayList<Country>();
+        if (countries != null) {
+            for (Iterator<Country> i = countries.iterator(); i.hasNext();) {
+                Country tmp = i.next();
+                String field = tmp.getName().toLowerCase();
+                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                    list.add(tmp);
+                }
             }
-        } catch (Exception ex) {
-            showError(ex);
         }
-        return countriesaux;
+        return list;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
@@ -165,11 +165,10 @@ public class ListCountriesController extends GenericAbstractListController<Count
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.country.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.counties.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
-            AccessControl.saveAction(Permission.LIST_COUNTRIES, "Se descargo listado de países en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }

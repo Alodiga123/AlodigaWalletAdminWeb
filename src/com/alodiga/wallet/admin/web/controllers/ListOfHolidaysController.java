@@ -22,6 +22,7 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
+import com.alodiga.wallet.common.model.CalendarDays;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
@@ -34,13 +35,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.zkoss.zul.Textbox;
 
-public class ListCountriesController extends GenericAbstractListController<Country> {
+public class ListOfHolidaysController extends GenericAbstractListController<CalendarDays> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private UserEJB userEJB = null;
     private UtilsEJB utilsEJB = null;
-    private List<Country> countries = null;
+    private List<CalendarDays> calendarDays = null;
     private User currentUser;
     private Profile currentProfile;
     private Textbox txtName;
@@ -54,9 +55,9 @@ public class ListCountriesController extends GenericAbstractListController<Count
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_COUNTRY));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_COUNTRY);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_COUNTRY);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_OF_HOLIDAYS));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_OF_HOLIDAYS);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_OF_HOLIDAYS);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -74,26 +75,26 @@ public class ListCountriesController extends GenericAbstractListController<Count
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "adminCountry.zul";
+            adminPage = "adminOfHolidays.zul";
             getData();
-            loadList(countries);
+            loadList(calendarDays);
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    public List<Country> getFilteredList(String filter) {
-        List<Country> countriesaux = new ArrayList<Country>();
-        try {
-            if (filter != null && !filter.equals("")) {
-                countriesaux = utilsEJB.getSearchCountry(filter);
-            } else {
-                return countries;
+    public List<CalendarDays> getFilteredList(String filter) {
+        List<CalendarDays> list = new ArrayList<CalendarDays>();
+        if (calendarDays != null) {
+            for (Iterator<CalendarDays> i = calendarDays.iterator(); i.hasNext();) {
+                CalendarDays tmp = i.next();
+                String field = tmp.getCountryId().getName().toLowerCase();
+                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
+                    list.add(tmp);
+                }
             }
-        } catch (Exception ex) {
-            showError(ex);
         }
-        return countriesaux;
+        return list;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
@@ -105,21 +106,23 @@ public class ListCountriesController extends GenericAbstractListController<Count
     public void onClick$btnDelete() {
     }
 
-    public void loadList(List<Country> list) {
+    public void loadList(List<CalendarDays> list) {
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
 
-                for (Country country : list) {
+                for (CalendarDays calendarDays : list) {
                     item = new Listitem();
-                    item.setValue(country);
-                    item.appendChild(new Listcell(country.getName()));
-                    item.appendChild(new Listcell(country.getShortName()));
-                    item.appendChild(new Listcell(country.getCode()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, country, Permission.EDIT_COUNTRY) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, country, Permission.VIEW_COUNTRY) : new Listcell());
+                    item.setValue(calendarDays);
+                    String pattern = "yyyy-MM-dd";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                    item.appendChild(new Listcell(calendarDays.getCountryId().getName()));
+                    item.appendChild(new Listcell(simpleDateFormat.format(calendarDays.getHolidayDate())));
+                    item.appendChild(new Listcell(calendarDays.getDescription()));
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, calendarDays, Permission.EDIT_OF_HOLIDAYS) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, calendarDays, Permission.VIEW_OF_HOLIDAYS) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -137,11 +140,11 @@ public class ListCountriesController extends GenericAbstractListController<Count
     }
 
     public void getData() {
-        countries = new ArrayList<Country>();
+        calendarDays = new ArrayList<CalendarDays>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-            countries = utilsEJB.getCountries(request);
+            calendarDays = utilsEJB.getCalendarDays(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -165,11 +168,10 @@ public class ListCountriesController extends GenericAbstractListController<Count
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.country.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.calendarDays.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
-            AccessControl.saveAction(Permission.LIST_COUNTRIES, "Se descargo listado de países en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
