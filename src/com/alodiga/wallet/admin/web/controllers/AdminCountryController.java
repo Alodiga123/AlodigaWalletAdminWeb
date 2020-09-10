@@ -6,6 +6,7 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminCont
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.exception.DuplicateEntryException;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -166,7 +167,7 @@ public class AdminCountryController extends GenericAbstractAdminController {
         return true;
     }
 
-    private void saveBank(Country _country) {
+    private void saveCountry(Country _country) {
         try {
             Country country = null;
 
@@ -188,10 +189,16 @@ public class AdminCountryController extends GenericAbstractAdminController {
             if (txtAlternativeName3.getValue() != null) {
                 country.setAlternativeName3(txtAlternativeName3.getText());
             }
-            country = utilsEJB.saveCountry(country);
-            countryParam = country;
-            eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+
+            try {
+                country = utilsEJB.saveNewCountry(country);
+                countryParam = country;
+                eventType = WebConstants.EVENT_EDIT;
+                this.showMessage("sp.common.save.success", false, null);
+            } catch (DuplicateEntryException e) {
+                this.showMessage("sp.common.save.fail", false, null);
+                return;
+            }
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
@@ -216,7 +223,7 @@ public class AdminCountryController extends GenericAbstractAdminController {
                     }
                     break;
                 case WebConstants.EVENT_EDIT:
-                    saveBank(countryParam);
+                    saveCountry(countryParam);
                     break;
                 default:
                     break;
