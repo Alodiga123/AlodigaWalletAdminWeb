@@ -219,7 +219,7 @@ public class AdminCountryController extends GenericAbstractAdminController {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
                     if (validateCountry()){
-                        saveBank(countryParam);    
+                        saveCountry(countryParam);    
                     }
                     break;
                 case WebConstants.EVENT_EDIT:
