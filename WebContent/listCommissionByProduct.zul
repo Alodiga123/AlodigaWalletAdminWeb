@@ -22,8 +22,11 @@
                                             <vlayout>
                                                 <hlayout>
                                                     <!--Add button-->
-                                                    <div align="left" width="490px">
+                                                    <div align="left" width="485px">
                                                         <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}" visible="true"/>
+                                                    </div>
+                                                    <div align="right" width="460px">
+                                                        <button id="btnBack" width="80px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listProducts.zul&quot;)"/>
                                                     </div>
                                                 </hlayout>
                                             </vlayout>

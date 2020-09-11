@@ -206,7 +206,7 @@ public void onClick$btnDownload() throws InterruptedException {
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
-            AccessControl.saveAction(Permission.LIST_PRODUCT, "Se descargo listado de productos en stock formato excel");
+            AccessControl.saveAction(Permission.LIST_PRODUCTS, "Se descargo listado de productos en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }

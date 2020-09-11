@@ -15,6 +15,7 @@ import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.Commission;
 import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.TransactionType;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -23,14 +24,16 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Doublebox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Window;
 
 public class AdminCommissionsByProductController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    private Combobox cmbProduct;
+    private Label lblProduct;
     private Combobox cmbTrasactionType;
     private Radio rPercentCommisionYes;
     private Radio rPercentCommisionNo;
@@ -47,6 +50,10 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
     private Integer eventType;
     public Window winAdminCommissionByProduct;
     private Product productParam;
+    private Product product = null;
+    private Product productId = null;
+    private Tab tabCommissionByProduct;
+    private Label testPorcent;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -58,6 +65,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
             commissionParam = (Commission) Sessions.getCurrent().getAttribute("object");
         }
         initialize();
+        getProduct();
     }
 
     @Override
@@ -76,6 +84,34 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         dblValue.setRawValue(null);
         dtbBeginningDate.setRawValue(null);
         dtbEndingDate.setRawValue(null);
+    }
+    
+    public void onSelect$tabCommissionByProduct() {
+        try {
+            doAfterCompose(self);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+    
+    public void getProduct(){
+        AdminProductController adminProduct = new AdminProductController();
+        if(adminProduct.getProductParent().getId() != null){
+            product = adminProduct.getProductParent();
+            lblProduct.setValue(product.getName()); 
+        }
+    }
+   
+    public void onClick$rPercentCommisionYes(){
+         if (rPercentCommisionYes.isChecked()) {
+            testPorcent.setValue(Labels.getLabel("sp.tab.comission.porcentcomission"));  
+        } 
+    }
+    
+    public void onClick$rPercentCommisionNo(){
+        if(rPercentCommisionNo.isChecked()) {
+            testPorcent.setValue(Labels.getLabel("sp.crud.commission.value")); 
+         }
     }
 
     private void loadFields(Commission commission) {
@@ -102,17 +138,13 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         rPercentCommisionYes.setDisabled(true);
         rPercentCommisionNo.setDisabled(true);
         dblValue.setDisabled(true);
-        cmbProduct.setReadonly(true);
         cmbTrasactionType.setReadonly(true);
 
         btnSave.setVisible(false);
     }
 
     public boolean validateEmpty() {
-        if (cmbProduct.getSelectedItem() == null) {
-            cmbProduct.setFocus(true);
-            this.showMessage("sp.error.products.notSelected", true, null);
-        } else if (cmbTrasactionType.getSelectedItem() == null) {
+         if (cmbTrasactionType.getSelectedItem() == null) {
             cmbTrasactionType.setFocus(true);
             this.showMessage("sp.error.trasacctionType.notSelected", true, null);
         } else if ((!rPercentCommisionYes.isChecked()) && (!rPercentCommisionNo.isChecked())) {
@@ -123,6 +155,10 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
             this.showMessage("sp.error.date.beginningDate", true, null);
+        } else if(!dtbBeginningDate.getValue().before(dtbEndingDate.getValue())){
+            this.showMessage("sp.tab.commission.error.beginningDate", true, null);
+        } else if(!dtbEndingDate.getValue().after(dtbBeginningDate.getValue())){
+            this.showMessage("sp.tab.commission.error.endingDate", true, null);  
         } else {
             return true;
         }
@@ -146,7 +182,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
                 percentCommision = 0;
             }
             
-            commission.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+            commission.setProductId(product);
             commission.setTransactionTypeId((TransactionType) cmbTrasactionType.getSelectedItem().getValue());
             commission.setIsPercentCommision(percentCommision);
             commission.setValue(dblValue.getValue().floatValue());
@@ -191,18 +227,21 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(commissionParam);
-                cmbProduct.setDisabled(true);
-                loadCmbProduct(eventType);
                 loadCmbTrasactionType(eventType);
+                onClick$rPercentCommisionYes();
+                onClick$rPercentCommisionNo();
+                cmbTrasactionType.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(commissionParam);
                 blockFields();
-                loadCmbProduct(eventType);
                 loadCmbTrasactionType(eventType);
+                onClick$rPercentCommisionYes();
+                onClick$rPercentCommisionNo();
                 break;
             case WebConstants.EVENT_ADD:
-                loadCmbProduct(eventType);
+                onClick$rPercentCommisionYes();
+                onClick$rPercentCommisionNo();
                 loadCmbTrasactionType(eventType);
                 break;
             default:
@@ -210,23 +249,23 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         }
     }
 
-    private void loadCmbProduct(Integer evenInteger) {
-        EJBRequest request1 = new EJBRequest();
-        List<Product> products;
-        try {
-            products = productEJB.getProducts(request1);
-            loadGenericCombobox(products, cmbProduct, "name", evenInteger, Long.valueOf(commissionParam != null ? commissionParam.getProductId().getId() : 0));
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        }
-    }
+//    private void loadCmbProduct(Integer evenInteger) {
+//        EJBRequest request1 = new EJBRequest();
+//        List<Product> products;
+//        try {
+//            products = productEJB.getProducts(request1);
+//            loadGenericCombobox(products, cmbProduct, "name", evenInteger, Long.valueOf(commissionParam != null ? commissionParam.getProductId().getId() : 0));
+//        } catch (EmptyListException ex) {
+//            showError(ex);
+//            ex.printStackTrace();
+//        } catch (GeneralException ex) {
+//            showError(ex);
+//            ex.printStackTrace();
+//        } catch (NullParameterException ex) {
+//            showError(ex);
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void loadCmbTrasactionType(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
