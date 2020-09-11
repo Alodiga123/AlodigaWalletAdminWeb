@@ -168,7 +168,6 @@ public class ListProductsHasBankController extends GenericAbstractListController
 
 	                    item = new Listitem();
 	                    item.setValue(bankHasProduct);
-	                    item.appendChild(new Listcell(bankHasProduct.getProductId().getName()));
                             item.appendChild(new Listcell(bankHasProduct.getBankId().getName()));
 	                    item.appendChild(createButtonEditModal(bankHasProduct));
                             item.appendChild(createButtonViewModal(bankHasProduct));
