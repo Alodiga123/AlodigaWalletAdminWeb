@@ -59,8 +59,7 @@
                                                         <row>
                                                             <label value="${c:l('sp.crud.bank.aba')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtAba" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <textbox id="txtAba" maxlength="255" width="250px"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>

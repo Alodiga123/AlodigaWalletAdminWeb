@@ -8,6 +8,7 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
@@ -68,9 +69,8 @@ public class AdminBankController extends GenericAbstractAdminController {
     private void loadFields(Bank bank) {
         try {
             txtName.setText(bank.getName());
-//            txtCodeSwift.setText(bank.getCodeSwift());
-            txtAba.setText(bank.getAba());
-            
+            txtCodeSwift.setText(bank.getSwiftCode());
+            txtAba.setText(bank.getAbaCode());            
             btnSave.setVisible(true);
         } catch (Exception ex) {
             showError(ex);
@@ -79,7 +79,7 @@ public class AdminBankController extends GenericAbstractAdminController {
 
     public void blockFields() {
         txtName.setDisabled(true);
-//        txtCodeSwift.setDisabled(true);
+        txtCodeSwift.setDisabled(true);
         txtAba.setDisabled(true);
         cmbCountry.setDisabled(true);
         cmbEnterprise.setDisabled(true);
@@ -91,9 +91,9 @@ public class AdminBankController extends GenericAbstractAdminController {
         if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
             this.showMessage("sp.error.field.cannotNull", true, null);
-//        } else if (txtCodeSwift.getText().isEmpty()) {
-//            txtCodeSwift.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
+        } else if (txtCodeSwift.getText().isEmpty()) {
+            txtCodeSwift.setFocus(true);
+            this.showMessage("sp.error.field.cannotNull", true, null);
         } else {
             return true;
         }
@@ -114,8 +114,10 @@ public class AdminBankController extends GenericAbstractAdminController {
             bank.setName(txtName.getText());
             bank.setEnterpriseId((Enterprise) cmbEnterprise.getSelectedItem().getValue());
             bank.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
-            bank.setAba(txtAba.getText());
-//            bank.setCodeSwift(txtCodeSwift.getText());
+            if (txtAba.getText() != "") {
+                bank.setAbaCode(txtAba.getText());
+            }            
+            bank.setSwiftCode(txtCodeSwift.getText());
             bank = utilsEJB.saveBank(bank);
             bankParam = bank;
             eventType = WebConstants.EVENT_EDIT;
