@@ -35,6 +35,7 @@ public class AdminBankController extends GenericAbstractAdminController {
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private Bank bankParam;
+    public static Bank bankParent = null;
     private Integer eventType;
     private Tab tabBankOperator;
 
@@ -46,6 +47,7 @@ public class AdminBankController extends GenericAbstractAdminController {
             bankParam = null;
         } else {
             bankParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Bank) Sessions.getCurrent().getAttribute("object") : null;
+            bankParent = bankParam;
         }
 
         initialize();
@@ -60,6 +62,10 @@ public class AdminBankController extends GenericAbstractAdminController {
         } catch (Exception ex) {
             showError(ex);
         }
+    }
+    
+    public Bank getBankParent(){
+        return this.bankParent;
     }
 
     public void clearFields() {
@@ -88,12 +94,21 @@ public class AdminBankController extends GenericAbstractAdminController {
     }
 
     public boolean validateEmpty() {
-        if (txtName.getText().isEmpty()) {
+        if (cmbCountry.getSelectedItem()  == null) {
+            cmbCountry.setFocus(true);
+            this.showMessage("sp.error.countryNotSelected", true, null);     
+        } else if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("sp.crud.empty.bank", true, null);
         } else if (txtCodeSwift.getText().isEmpty()) {
             txtCodeSwift.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("sp.crud.empty.codeSwift", true, null);
+        } else if (txtAba.getText().isEmpty()) {
+            txtAba.setFocus(true);
+            this.showMessage("sp.crud.empty.codeAba", true, null);
+        } else if (cmbEnterprise.getSelectedItem() == null) {
+            cmbEnterprise.setFocus(true);
+            this.showMessage("sp.error.enteprise.notSelected", true, null);
         } else {
             return true;
         }

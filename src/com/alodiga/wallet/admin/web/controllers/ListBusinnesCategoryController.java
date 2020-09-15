@@ -27,6 +27,8 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.zkoss.zul.Textbox;
 
 public class ListBusinnesCategoryController extends GenericAbstractListController<BusinessCategory> {
@@ -138,13 +140,34 @@ public class ListBusinnesCategoryController extends GenericAbstractListControlle
         }
     }
 
+   
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.businnesCategory.list"));
-            AccessControl.saveAction(Permission.LIST_BUSINESS_CATEGORY, "Se descargo listado de Categoria de Comercios en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.businnesCategory.list.excel"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_BUSINESS_CATEGORY, "Se descargo listado de categorías de comercio en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
+    }
+    
+    public List<BusinessCategory> getFilteredList(String filter) {
+        List<BusinessCategory> businessCategoriesaux = new ArrayList<BusinessCategory>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                businessCategoriesaux = utilsEJB.getSearchBusinessCategory(filter);
+            } else {
+                return businessCategoryList;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return businessCategoriesaux;
     }
 
     public void onClick$btnClear() throws InterruptedException {
@@ -153,17 +176,12 @@ public class ListBusinnesCategoryController extends GenericAbstractListControlle
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-//            loadDataList(getFilterList(txtName.getText()));
+            loadDataList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
     }
-
-    @Override
-    public List<BusinessCategory> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
     @Override
     public void loadList(List<BusinessCategory> list) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -15,6 +15,10 @@ import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.Commission;
 import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.TransactionType;
+import com.alodiga.wallet.common.utils.Constants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
@@ -54,6 +58,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
     private Product productId = null;
     private Tab tabCommissionByProduct;
     private Label testPorcent;
+    List<Commission> comissionList = new ArrayList<Commission>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -139,7 +144,6 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         rPercentCommisionNo.setDisabled(true);
         dblValue.setDisabled(true);
         cmbTrasactionType.setReadonly(true);
-
         btnSave.setVisible(false);
     }
 
@@ -164,10 +168,30 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         }
         return false;
     }
+    
+    public boolean validateComissionByProduct(){
+        TransactionType transactionTypee =(TransactionType) cmbTrasactionType.getSelectedItem().getValue();
+        try {
+            //Valida que la comision del producto no exista
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PRODUCT_KEY, product.getId());
+            params.put(Constants.TRANSACTION_TYPE_KEY, transactionTypee.getId());
+            request1.setParams(params);
+            comissionList = utilsEJB.getCommissionByProductAndTranssactionType(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        } if (comissionList.size() > 0) {
+                this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
+                dblValue.setFocus(true);
+                return false;
+            }
+        return true;
+    }
 
     private void saveBank(Commission _commission) {
         Commission commission = null;
-
+        
         try {
 
             if (_commission != null) {
@@ -208,7 +232,9 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBank(commissionParam);
+                    if(validateComissionByProduct()){
+                         saveBank(commissionParam);
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBank(commissionParam);
@@ -248,24 +274,6 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
                 break;
         }
     }
-
-//    private void loadCmbProduct(Integer evenInteger) {
-//        EJBRequest request1 = new EJBRequest();
-//        List<Product> products;
-//        try {
-//            products = productEJB.getProducts(request1);
-//            loadGenericCombobox(products, cmbProduct, "name", evenInteger, Long.valueOf(commissionParam != null ? commissionParam.getProductId().getId() : 0));
-//        } catch (EmptyListException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (GeneralException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (NullParameterException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void loadCmbTrasactionType(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();

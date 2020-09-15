@@ -34,6 +34,10 @@
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
+                                                <hlayout style="text-align:right">
+                                                    <label value="${c:l('sp.crud.requestCollection.country')}" width="80px" sclass="lblbold"/>
+                                                    <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
                                                     <div align="left" width="385px">
