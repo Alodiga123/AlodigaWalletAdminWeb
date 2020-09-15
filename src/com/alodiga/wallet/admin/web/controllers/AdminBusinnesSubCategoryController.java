@@ -12,6 +12,10 @@ import java.util.List;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessCategory;
 import com.alodiga.wallet.common.model.BusinessSubCategory;
+import com.alodiga.wallet.common.utils.Constants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -35,7 +39,8 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
     private Integer eventType;
     public Window winAdminBusinnesSubCategory;
     private BusinessCategory businessCategory;
-
+    List<BusinessSubCategory> businessSubCategoryList = new ArrayList<BusinessSubCategory>();
+    
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
@@ -116,6 +121,23 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
         }
         return false;
     }
+    
+    public boolean validateCodeMMC(){
+        try{
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PARAM_MCC_CODE, txtMccCode.getValue());
+            request1.setParams(params);
+            businessSubCategoryList = utilsEJB.getBusinessSubCategoryValidateCodeMCC(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        }   if (businessSubCategoryList.size() > 0) {
+                this.showMessage("sp.crud.businnesCategory.code.existBD", true, null);
+                txtMccCode.setFocus(true);
+                return false;
+            }
+         return true;   
+    }
 
     private void saveBusinessSubCategory(BusinessSubCategory _businessSubCategory) {
         BusinessSubCategory businessSubCategory = null;
@@ -149,7 +171,9 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBusinessSubCategory(businessSubCategoryParam);
+                    if(validateCodeMMC()){
+                     saveBusinessSubCategory(businessSubCategoryParam);
+                    }                    
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBusinessSubCategory(businessSubCategoryParam);

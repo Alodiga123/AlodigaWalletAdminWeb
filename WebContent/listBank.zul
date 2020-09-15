@@ -32,27 +32,47 @@
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
-                                            <!--Filters for Searching-->
                                             <vlayout>
+                                                <grid fixedLayout="true">
+                                                    <columns>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="250px"/>
+                                                    </columns>
+                                                    <rows>
+                                                        <row>
+                                                            <hlayout style="text-align:center">
+                                                                <label value="${c:l('sp.common.bank.name')}" width="80px" sclass="lblbold"/>
+                                                                <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                            </hlayout>
+                                                            <hlayout style="text-align:center">
+                                                                <label value="${c:l('sp.common.country')}" width="80px" sclass="lblbold"/>
+                                                                <textbox id="txtCountry" value="" width="200px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                            </hlayout>
+                                                            <!--Filters button-->
+                                                            <div align="center" width="250px">
+                                                                <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
+                                                                <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
+                                                            </div>
+                                                        </row>                                                        
+                                                    </rows>   
+                                                </grid>                                                  
                                                 <hlayout>
                                                     <!--Add button-->
                                                     <div align="left" width="495px">
-                                                        <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}"/>
-                                                    </div>
-                                                    <!--Filters button-->
-                                                    <div align="right" width="890px">
-                                                        <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
-                                                        <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
-                                                    </div>
+                                                        <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}" visible="true"/>
+                                                    </div>                                                    
                                                 </hlayout>
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.bank.name')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.product.enterprise')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.country')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.bank.name')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.country')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.bank.codeSwift')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.bank.codeAba')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.product.enterprise')}" width="180px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

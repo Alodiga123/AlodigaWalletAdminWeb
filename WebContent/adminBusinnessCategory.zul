@@ -21,11 +21,7 @@
                                             <vlayout>
                                                 <div align="right">
                                                     <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
+                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
                                                     </hlayout>
                                                 </div>
                                                 <grid fixedLayout="true">
@@ -38,16 +34,12 @@
                                                             <label value="${c:l('sp.crud.businnesSubCategory.category')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtDescription" maxlength="80" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max80')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.businnesSubCategory.mccCode')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtMccCode" maxlength="10" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max10')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>

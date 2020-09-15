@@ -113,12 +113,18 @@ public class ListExchangeRateController extends GenericAbstractListController<Ex
                 for (ExchangeRate exchangeRate : list) {
                     item = new Listitem();
                     item.setValue(exchangeRate);
-                    String pattern = "yyyy-MM-dd";
+                    String pattern = "dd-MM-yyyy";
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                     item.appendChild(new Listcell(exchangeRate.getProductId().getName()));
                     value = numberFormat.format(exchangeRate.getValue());
                     item.appendChild(new Listcell(value));
                     item.appendChild(new Listcell(simpleDateFormat.format(exchangeRate.getBeginningDate())));
+                    if(exchangeRate.getEndingDate() != null){
+                    item.appendChild(new Listcell(simpleDateFormat.format(exchangeRate.getEndingDate())));   
+                    } else {
+                    item.appendChild(new Listcell(""));
+                    }
+                    
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, exchangeRate, Permission.EDIT_EXCHANGE_RATE) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, exchangeRate, Permission.VIEW_EXCHANGE_RATE) : new Listcell());
                     item.setParent(lbxRecords);

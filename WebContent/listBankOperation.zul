@@ -20,27 +20,27 @@
                                         <div>
 					    <!--Filters for Searching-->
                                             <vlayout>
-                                                  <hlayout id="hParams2" style="text-align:right" sclass="z-valign-middle">
+                                                <hlayout id="hParams2" style="text-align:left" sclass="z-valign-middle">
                                                     <label value="${c:l('sp.crud.bank.operaton.type')}" sclass="lblbold"/>
-                                                    <combobox id="cmbOperationType" width="140px" mold="rounded" readonly="true"/>
+                                                    <combobox id="cmbOperationType" width="110px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('sp.crud.bank.operaton.mode')}" sclass="lblbold"/>
-                                                    <combobox id="cmbOperationMode" width="140px" mold="rounded" readonly="true"/>
+                                                    <combobox id="cmbOperationMode" width="100px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('sp.crud.bank.operaton.product')}" sclass="lblbold"/>
-                                                    <combobox id="cmbProduct" width="140px" mold="rounded" readonly="true"/>
-                                                    <label value="${c:l('sp.crud.bank.operaton.bank')}" sclass="lblbold"/>
-                                                    <combobox id="cmbBank" width="180px" mold="rounded" readonly="true"/>        
+                                                    <combobox id="cmbProduct" width="100px" mold="rounded" readonly="true"/>
+                                                    <label value="${c:l('sp.crud.bank.beginningDate')}"  sclass="lblbold"/>
+                                                    <datebox id="dtbBeginningDate" width="100px" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/> 
+                                                    <label value="${c:l('sp.crud.bank.endingDate')}" sclass="lblbold"/>
+                                                    <datebox id="dtbEndingDate" width="100px" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>  
                                                 </hlayout>
-                                                  <hlayout id="hParams" style="text-align:right" sclass="z-valign-middle">            
-                                                    <label value="${c:l('sp.common.beginningDate')}"  sclass="lblbold"/>
-                                                    <datebox id="dtbBeginningDate"  format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
-                                                    <label value="${c:l('sp.common.endingDate')}" sclass="lblbold"/>
-                                                    <datebox id="dtbEndingDate" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
-                                                    <separator/>
-                                                    <separator/>
+                                                <div id="hParams" align="right" style="margin-right:20px" sclass="z-valign-middle">     
                                                     <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                     <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
-                                                </hlayout>
-                                            </vlayout>
+                                                </div>
+                                                <div align="left" width="10px">
+                                                   <label value="${c:l('sp.tab.bank.name')}" sclass="lblexample" /> 
+                                                   <label id="lblBankName" value=" " sclass="lblbold"/>
+                                                </div>
+                                            </vlayout>                                         
                                             <separator/>                                    
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                         <!--Download button-->
@@ -48,13 +48,13 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="970px" height="450px" mold="paging" pageSize="15">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.list.bank.operaton.number')}" width="170px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.list.bank.operaton.bank')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.list.bank.operaton.type')}" width="110px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.list.bank.operaton.mode')}" width="110px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.list.bank.operaton.number')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.list.bank.operaton.date')}" width="115px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.list.bank.operaton.type')}" width="120px" sort="auto"/>
                                                     <listheader label="${c:l('sp.list.bank.operaton.product')}" width="140px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.list.bank.operaton.date')}" width="105px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.list.bank.operaton.status')}" width="110px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.transaction.amount')}" width="130px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.commissions')}" width="130px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.list.bank.operaton.mode')}" width="110px" sort="auto"/>        
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
                                             </listbox>
