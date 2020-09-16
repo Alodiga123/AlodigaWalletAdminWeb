@@ -32,11 +32,14 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
 public class ListProductsHasBankController extends GenericAbstractListController<BankHasProduct> {
@@ -44,6 +47,7 @@ public class ListProductsHasBankController extends GenericAbstractListController
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtAlias;
+    private Label lblproductName;
     private ProductEJB productEJB = null;
     private List<BankHasProduct> bankHasProductList = null;
     private User currentUser;
@@ -60,6 +64,7 @@ public class ListProductsHasBankController extends GenericAbstractListController
             productParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Product) Sessions.getCurrent().getAttribute("object") : null;
         }
         initialize();
+        getProduct();
     }
 
     @Override
@@ -168,7 +173,6 @@ public class ListProductsHasBankController extends GenericAbstractListController
 
 	                    item = new Listitem();
 	                    item.setValue(bankHasProduct);
-	                    item.appendChild(new Listcell(bankHasProduct.getProductId().getName()));
                             item.appendChild(new Listcell(bankHasProduct.getBankId().getName()));
 	                    item.appendChild(createButtonEditModal(bankHasProduct));
                             item.appendChild(createButtonViewModal(bankHasProduct));
@@ -218,10 +222,28 @@ public class ListProductsHasBankController extends GenericAbstractListController
         item.appendChild(new Listcell());
         item.setParent(lbxRecords);
     }
+    
+    public void getProduct(){
+        AdminProductController adminProduct = new AdminProductController();
+        if(adminProduct.getProductParent().getId() != null){
+            product = adminProduct.getProductParent();
+            lblproductName.setValue(product.getName()); 
+        }
+    }
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.provider.list"));
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            String products =  product.getName();
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.listBank"));
+            file.append("_");
+            file.append(products);
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_PRODUCTS, "Se descargo listado de productos en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }

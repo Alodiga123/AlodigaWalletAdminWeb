@@ -29,6 +29,7 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import org.zkoss.zul.Textbox;
 
 public class ListBankController extends GenericAbstractListController<Bank> {
 
@@ -39,6 +40,9 @@ public class ListBankController extends GenericAbstractListController<Bank> {
     private List<Bank> banks = null;
     private User currentUser;
     private Profile currentProfile;
+    private Textbox txtAlias;
+    private Textbox txtCountry;
+    private int optionFilter = 0;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -97,20 +101,6 @@ public class ListBankController extends GenericAbstractListController<Bank> {
         return cell;
     }
 
-    public List<Bank> getFilteredList(String filter) {
-        List<Bank> list = new ArrayList<Bank>();
-        if (banks != null) {
-            for (Iterator<Bank> i = banks.iterator(); i.hasNext();) {
-                Bank tmp = i.next();
-                String field = tmp.getName().toLowerCase();
-                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                    list.add(tmp);
-                }
-            }
-        }
-        return list;
-    }
-
     public void onClick$btnAdd() throws InterruptedException {
         Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
         Sessions.getCurrent().removeAttribute("object");
@@ -146,8 +136,10 @@ public class ListBankController extends GenericAbstractListController<Bank> {
                     item = new Listitem();
                     item.setValue(bank);
                     item.appendChild(new Listcell(bank.getName()));
-                    item.appendChild(new Listcell(bank.getEnterpriseId().getName()));
                     item.appendChild(new Listcell(bank.getCountryId().getName()));
+                    item.appendChild(new Listcell(bank.getSwiftCode()));
+                    item.appendChild(new Listcell(bank.getAbaCode()));
+                    item.appendChild(new Listcell(bank.getEnterpriseId().getName()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, bank, Permission.EDIT_BANK) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, bank, Permission.VIEW_BANK) : new Listcell());
                     item.setParent(lbxRecords);
@@ -199,13 +191,56 @@ public class ListBankController extends GenericAbstractListController<Bank> {
             showError(ex);
         }
     }
-
+    
+    public List<Bank> getFilteredList(String filter) {
+       List<Bank> bankaux = new ArrayList<Bank>();
+       Bank bankks = null;
+       List<Bank> bankList = null;
+        try {
+            if (filter != null && !filter.equals("")) {
+                if (optionFilter == 1) {
+                   bankaux = utilsEJB.getSearchBank(filter);
+                   bankaux.add(bankks);
+                } else {
+                    bankList = utilsEJB.searchBankByCountry(filter);
+                    for (Bank b: bankList) {
+                        bankaux.add(b);
+                    }
+                }
+            } else {
+                return banks;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return bankaux;
+    }
+    
     public void onClick$btnClear() throws InterruptedException {
-        
+        txtAlias.setText("");
+        txtCountry.setText("");
+    }
+    
+    public void onFocus$txtAlias() {
+        txtCountry.setText("");
+    }
+    
+    public void onFocus$txtCountry() {
+        txtAlias.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
+        String txtFilter = "";
         try {
+            if (txtAlias.getText() != "") {
+                txtFilter = txtAlias.getText();
+                optionFilter = 1;
+            }
+            else if (txtCountry.getText() != "") {
+                txtFilter = txtCountry.getText();
+                optionFilter = 2;
+            }   
+            loadList(getFilteredList(txtFilter));
         } catch (Exception ex) {
             showError(ex);
         }
