@@ -66,7 +66,6 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
         }
 
         initialize();
-//        initView(eventType, "crud.businessAffiliationRequets");
     }
 
     @Override
