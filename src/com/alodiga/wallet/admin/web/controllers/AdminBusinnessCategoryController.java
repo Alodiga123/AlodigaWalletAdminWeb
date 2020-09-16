@@ -5,7 +5,6 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-//import com.alodiga.wallet.common.ejb.AccessControlEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessCategory;
@@ -27,7 +26,6 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
     private Textbox txtDescription;
     private Textbox txtMccCode;
     private UtilsEJB utilsEJB = null;
-//    private AccessControlEJB accessEJB = null;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private BusinessCategory businessCategoryParam;
@@ -46,9 +44,7 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
             businessCategoryParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessCategory) Sessions.getCurrent().getAttribute("object") : null;
             businessCategoryParent = businessCategoryParam;
         }
-
         initialize();
-        initView(eventType, "crud.businessCategory");
     }
 
     @Override
