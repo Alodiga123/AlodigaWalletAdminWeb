@@ -34,30 +34,52 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout>
+                                                
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="200px"/>
-                                                        <column label="" width="690px"/>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="400px"/>
                                                     </columns> 
                                                     <rows>
                                                         <row>
                                                             <label value="${c:l('sp.common.country')}" sclass="lblbold"/>
-                                                            <label value="${c:l('cms.common.description')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbCountry" width="200px" mold="rounded" readonly="true" />
+                                                            </hlayout>
                                                         </row>
+                                                        
                                                         <row>
-                                                            <combobox id="cmbCountry" width="180px" mold="rounded" readonly="true" />
-                                                            <textbox id="txtDescription" constraint="no empty" maxlength="80" width="650px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.userSource')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbOriginApplication" width="200px" mold="rounded" readonly="true" />
+                                                            </hlayout>
                                                         </row>
+                                                        
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.requestCollection.personType')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbPersonType" width="200px" mold="rounded" readonly="true" />
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('cms.common.description')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtDescription" constraint="no empty" maxlength="80" width="196px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
                                                     </rows>
                                                 </grid>
                                             </vlayout>
