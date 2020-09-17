@@ -34,16 +34,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout> 
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
@@ -54,8 +54,6 @@
                                                             <label value="${c:l('sp.common.login')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtLogin" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
@@ -63,31 +61,24 @@
                                                             <hlayout>
                                                                 <textbox id="txtPassword" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}" type = "password"/>
                                                                 <button id="btnEditPassword" width="30px" image="/images/icon-edit.png" class="open orange"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtName" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.common.lastName')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtLastName" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.common.email')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtEmail" maxlength="45" constraint="/.+@.+\.[a-z]+/, no empty: ${c:l('error.field.email')}" width="320px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                                 <separator/>
                                                                 <label value="${c:l('sp.common.email.example')}" sclass="lblexample"/>
                                                             </hlayout>
@@ -96,8 +87,6 @@
                                                             <label value="${c:l('sp.common.phoneNumber')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtPhoneNumber" value="" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                                 <separator/>
                                                                 <label value="${c:l('sp.common.phoneNumber.example')}" sclass="lblexample"/>
                                                             </hlayout>
@@ -124,7 +113,6 @@
                                                             <label value="${c:l('sp.common.profile')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbProfiles" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                     </rows>

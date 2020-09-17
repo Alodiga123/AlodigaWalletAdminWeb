@@ -24,16 +24,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout>
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="290px"/>
@@ -50,15 +50,12 @@
                                                         <row>
                                                             <hlayout>
                                                                 <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbDocumentPersonType" width="250px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <intbox id="indIdentification" width="250px" maxlength="15"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         
@@ -71,15 +68,12 @@
                                                         <row>
                                                             <hlayout>
                                                               <textbox id="txtName" width="250px" maxlength="15"/> 
-                                                              <label value="*" sclass="lblreq" /> 
                                                             </hlayout>
                                                             <hlayout>
-                                                             <textbox id="txtLastName" width="250px" maxlength="15"/>
-                                                             <label value="*" sclass="lblreq" />    
+                                                             <textbox id="txtLastName" width="250px" maxlength="15"/>  
                                                             </hlayout>
                                                             <hlayout>
                                                              <textbox id="txtEmail" width="250px" maxlength="30"/> 
-                                                             <label value="*" sclass="lblreq" /> 
                                                             </hlayout>
                                                         </row>
                                                         
@@ -91,11 +85,9 @@
                                                         <row>
                                                             <hlayout>
                                                                 <combobox id="cmbPositionEnterprise" width="250px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbComercialAgency" width="250px" mold="rounded" readonly="true" />
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row> 
                                                         

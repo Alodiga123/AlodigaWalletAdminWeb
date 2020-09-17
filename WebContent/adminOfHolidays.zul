@@ -35,16 +35,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout> 
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
@@ -55,7 +55,6 @@
                                                             <label value="${c:l('sp.crud.calendarDays.country')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         
@@ -63,15 +62,12 @@
                                                             <label value="${c:l('sp.crud.calendarDays.holidayDate')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <datebox id="dtbHolidayDate" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.calendarDays.description')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtName" maxlength="255" width="250px" style="text-transform:uppercase"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>

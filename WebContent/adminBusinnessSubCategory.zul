@@ -18,7 +18,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="center"></div>
                                         <div>
                                             <vlayout>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout> 
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
@@ -33,16 +42,12 @@
                                                             <label value="${c:l('sp.crud.businnesSubCategory.subCategory')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtDescription" maxlength="80" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max80')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.businnesSubCategory.mccCode')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtMccCode" maxlength="10" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max10')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>
