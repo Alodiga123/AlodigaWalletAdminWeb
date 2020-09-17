@@ -55,7 +55,6 @@
                                                             <hlayout>
                                                                 <textbox id="txtAlias" width="320px" constraint="no empty: ${c:l('error.field.required')}" maxlength="45"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     
@@ -78,14 +77,12 @@
                                                             <hlayout>
                                                                 <textbox id="txtAliasEnglish" width="320px" maxlength="45" constraint="no empty: ${c:l('error.field.required')}"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.common.description')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtDescriptionEnglish" width="320px" rows="2" maxlength="255"/>
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <group label="${c:l('sp.common.spanish')}" />
@@ -94,14 +91,12 @@
                                                             <hlayout>
                                                                 <textbox id="txtAliasSpanish" width="320px" maxlength="45" constraint="no empty: ${c:l('error.field.required')}"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max45')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.common.description')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtDescriptionSpanish" width="320px" rows="2" maxlength="255" />
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>
