@@ -55,9 +55,11 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="995px" height="410px">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.fullName')}" width="280px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.login')}" width="280px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.profile')}" width="280px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.name')}" width="169px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.login')}" width="169px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.employee.email')}" width="169px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.employeePhone.phoneNumber')}" width="169px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.profile')}" width="169px" sort="auto"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>

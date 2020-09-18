@@ -43,13 +43,14 @@
                                                         <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
                                                     </hlayout>
                                                 </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="200px"/>
                                                         <column label="" width="790px"/>
                                                     </columns>
                                                     <rows>
+                                                        <group label="${c:l('sp.crud.profile')}" />
                                                         <row>
                                                             <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
                                                             <hlayout>
@@ -67,13 +68,13 @@
                                                 <label value="${c:l('sp.common.data.multilanguage')}" sclass="lblbold"/>
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="1090px"/>
+                                                        <column label="" width="200px"/>
+                                                        <column label="" width="790px"/>
                                                     </columns>
                                                     <rows>
                                                         <group label="${c:l('sp.common.english')}" />
                                                         <row>
-                                                            <label value="${c:l('sp.common.alias')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.pofile.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtAliasEnglish" width="320px" maxlength="45" constraint="no empty: ${c:l('error.field.required')}"/>
                                                                 <label value="*" sclass="lblreq" />
@@ -87,7 +88,7 @@
                                                         </row>
                                                         <group label="${c:l('sp.common.spanish')}" />
                                                         <row>
-                                                            <label value="${c:l('sp.common.alias')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.pofile.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtAliasSpanish" width="320px" maxlength="45" constraint="no empty: ${c:l('error.field.required')}"/>
                                                                 <label value="*" sclass="lblreq" />
@@ -106,9 +107,9 @@
                                                 <listbox id="lbxPermissions" fixedLayout="true" multiple="true" checkmark="true" width="1395px" height="300px">
                                                     <listhead>
                                                         <listheader label="" width="30px"/>
-                                                        <listheader label="${c:l('sp.common.name')}" width="345px"/>
-                                                        <listheader label="${c:l('sp.crud.profile.permission.action')}" width="250px"/>
-                                                        <listheader label="${c:l('sp.crud.profile.permission.entity')}" width="250px"/>
+                                                        <listheader label="${c:l('sp.crud.profile.functions.system')}" width="345px"/>
+                                                        <listheader label="${c:l('sp.crud.profile.permission.screen')}" width="250px"/>
+                                                        <listheader label="${c:l('sp.crud.profile.permission.entityDB')}" width="250px"/>
                                                     </listhead>
                                                 </listbox>
                                             </vlayout>
