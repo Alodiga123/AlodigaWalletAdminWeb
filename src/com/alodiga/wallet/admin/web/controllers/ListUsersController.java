@@ -32,6 +32,8 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ListUsersController extends GenericAbstractListController<User> {
 
@@ -155,8 +157,9 @@ public class ListUsersController extends GenericAbstractListController<User> {
                     item.setValue(user);
                     item.appendChild(new Listcell(user.getFirstName() + " " + user.getLastName()));
                     item.appendChild(new Listcell(user.getLogin()));
+                    item.appendChild(new Listcell(user.getEmail()));
+                    item.appendChild(new Listcell(user.getPhoneNumber()));
                     item.appendChild(new Listcell(user.getCurrentProfile().getProfileDataByLanguageId(languageId).getAlias()));
-                    System.out.println("---------------user "+ user.getEmail());
                     item.appendChild(permissionChangeStatus ? initEnabledButton(user.getEnabled(), item) : new Listcell());
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, user,Permission.EDIT_USER) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, user,Permission.VIEW_USER) : new Listcell());
@@ -195,9 +198,15 @@ public class ListUsersController extends GenericAbstractListController<User> {
     }
 
     public void onClick$btnDownload() throws InterruptedException {
-        try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.user.list"));
-            AccessControl.saveAction(Permission.LIST_USERS, "Se descargo listado de productos en stock formato excel");
+                try {
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.user.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_PRODUCTS, "Se descargo listado de productos en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
