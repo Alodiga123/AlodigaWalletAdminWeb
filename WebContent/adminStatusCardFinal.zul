@@ -4,7 +4,7 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winStatusFinal" title="${c:l('sp.tab.commission.commissionByProduct')}" width="950px" height="300px" apply="com.alodiga.wallet.admin.web.controllers.AdminStatusCardFinalController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winStatusFinal" title="${c:l('sp.crud.status.card.hasFinal.state')}" width="950px" height="300px" apply="com.alodiga.wallet.admin.web.controllers.AdminStatusCardFinalController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
@@ -28,15 +28,13 @@
                                                         <row>
                                                             <label value="${c:l('sp.crud.status.card')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbStatus" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <label id="lblStatusCard"  value="" width="250px"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.status.business.affiliation.final')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbFinal" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>                                        
                                                     </rows>
@@ -44,11 +42,17 @@
                                             </vlayout>
                                         </div>
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
-                                        <!--Buttons-->
-                                        <div align="right">
-                                            <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray"/>
-                                        </div>
+                                        <hlayout>
+                                        <!--Add button-->
+                                            <div align="left" width="495px">
+                                                <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}" visible="true"/>
+                                            </div>
+                                            <!--Buttons-->
+                                            <div align="right" width="400px">
+                                                <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
+                                                <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray"/>
+                                            </div>
+                                       </hlayout> 
                                     </vlayout>
                                 </div>
                             </hlayout>

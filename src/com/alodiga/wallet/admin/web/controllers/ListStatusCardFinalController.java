@@ -31,6 +31,8 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -40,18 +42,23 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Window;
 
 public class ListStatusCardFinalController extends GenericAbstractListController<StatusCardHasFinalState> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
+    private Label lblCard;
     private UtilsEJB utilsEJB = null;
     private List<StatusCardHasFinalState> statusFinal = null;
     private User currentUser;
     private Profile currentProfile;
     private StatusCard statusCardParam;
     private StatusCard statusCard = null;
+    private StatusCard status = null;
+    private Tab tabStatusCardFinal;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -73,7 +80,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
     public void startListener() {
         EventQueue que = EventQueues.lookup("updateStatusCardFinal", EventQueues.APPLICATION, true);
         que.subscribe(new EventListener() {
-
+            
             public void onEvent(Event evt) {
                 getData();
                 loadList(statusFinal);
@@ -93,11 +100,32 @@ public class ListStatusCardFinalController extends GenericAbstractListController
             startListener();
             getData();
             loadList(statusFinal);
+            getStatusCard();
         } catch (Exception ex) {
             showError(ex);
         }
     }
-
+     
+    public void onSelect$tabStatusCardFinal() {
+        try {
+            doAfterCompose(self);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+    
+    public void getStatusCard(){
+        AdminStatusCardController adminStatusCard = new AdminStatusCardController();
+        if(adminStatusCard.getStatusCardParent().getId() != null){
+            status = adminStatusCard.getStatusCardParent();
+        }
+            String statuscards =  status.getDescription();
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.status.cardLabel"));
+            file.append(" ");
+            file.append(statuscards);
+            lblCard.setValue(file.toString());
+    }
+    
     public List<StatusCardHasFinalState> getFilteredList(String filter) {
         List<StatusCardHasFinalState> auxList = new ArrayList<StatusCardHasFinalState>();
         for (Iterator<StatusCardHasFinalState> i = statusFinal.iterator(); i.hasNext();) {
@@ -128,8 +156,8 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 
 	                    item = new Listitem();
 	                    item.setValue(statusCardHasFinal);
+                            item.appendChild(new Listcell(statusCardHasFinal.getStatusCardFinalStateId().getCode()));
                             item.appendChild(new Listcell(String.valueOf(statusCardHasFinal.getStatusCardId().getDescription())));
-	                    item.appendChild(new Listcell(statusCardHasFinal.getStatusCardFinalStateId().getCode()));
 	                    item.appendChild(createButtonEditModal(statusCardHasFinal));
                             item.appendChild(createButtonViewModal(statusCardHasFinal));
 	                    item.setParent(lbxRecords);
@@ -235,9 +263,19 @@ public class ListStatusCardFinalController extends GenericAbstractListController
     }
 
     public void onClick$btnDownload() throws InterruptedException {
+        
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.commissions.list"));
-            AccessControl.saveAction(Permission.LIST_STATUS_CARD_FINAL, "Se descargo listado de comisiones en formato excel");
+            String pattern = "dd-MM-yyyy";
+            String statuscards =  status.getDescription();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.status.cardFinal.download"));
+            file.append("_");
+            file.append(statuscards);
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_PRODUCTS, "Se descargo listado de productos en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
