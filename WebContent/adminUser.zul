@@ -14,7 +14,7 @@
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="1300px" align="left" height="800px">
+                        <div width="1300px" align="left" height="100%">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
@@ -34,90 +34,134 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <hlayout>
-                                                    <div align="left" width="400px">
-                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
-                                                    </div>                                                
-                                                    <div align="right" width="485px">
-                                                        <hlayout>
-                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
-                                                        </hlayout>
-                                                    </div>
-                                                </hlayout> 
+                                                <div align="right">
+                                                    <hlayout>
+                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                    </hlayout>
+                                                </div>
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
-                                                        <column label="" width="698px"/>
+                                                        <column label="" width="300px"/>
+                                                        <column label="" width="300px"/>
                                                     </columns>
+
                                                     <rows>
+                                                        <group label="${c:l('sp.crud.data.employee')}"/> 
                                                         <row>
+                                                            <label value="${c:l('sp.crud.user.nameAnd.lastname')}" sclass="lblbold"/> 
+                                                            
+                                                            <label value="${c:l('sp.crud.employee.position')}" sclass="lblbold"/>
+                                                            
+                                                            <label value="${c:l('sp.crud.employeePhone.extensionPhone')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <hlayout>
+                                                                <combobox id="cmbEmployee" width="250px" mold="rounded" readonly="true" />
+                                                            </hlayout>
+                                                            
+                                                            <hlayout>
+                                                                <label id="lblPosition" width="250px"/>
+                                                            </hlayout>
+                                                            
+                                                            <hlayout>
+                                                                <label id="lblUserExtAlodiga" width="250px"/>
+                                                            </hlayout>  
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.country.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.identificationType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.identificationNumber')}" sclass="lblbold"/> 
+                                                            
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblCountry" width="250px"/> 
+                                                            </hlayout>
+                                                            
+                                                            <hlayout>
+                                                                <label id="lblIdentificactionType" width="250px"/>
+                                                            </hlayout>
+                                                            
+                                                            <hlayout>
+                                                                <label id="lblIdentificationNumber" value=" " width="250px"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.agencyComercial.employee')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.city')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>    
+                                                        </row>
+                                                        
+                                                        <row> 
+                                                            <hlayout>
+                                                                <label id="lblComercialAgency" value=" " width="250px"/>
+                                                            </hlayout> 
+                                                            
+                                                            <hlayout>
+                                                                <label id="lblCityEmployee" value=" " width="250px"/>
+                                                            </hlayout>
+                                                            
+                                                            <hlayout>
+                                                                <label id="lblEmailEmployee" value=" " width="250px"/> 
+                                                            </hlayout>  
+                                                        </row>
+
+                                                        <group label="${c:l('sp.crud.user.authorizeRegistration')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.data.employee')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employeePhone')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <hlayout>
+                                                                <combobox id="cmbAuthorizeEmployee" width="250px" mold="rounded" readonly="true" />
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblAuthorizeExtAlodiga" width="250px"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <group label="${c:l('sp.crud.user.register.user')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.common.profile')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.common.login')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.password')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <hlayout>
+                                                                <combobox id="cmbProfiles" width="250px" mold="rounded" readonly="true" />
+                                                            </hlayout>
                                                             <hlayout>
                                                                 <textbox id="txtLogin" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
                                                             </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.password')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtPassword" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}" type = "password"/>
-                                                                <button id="btnEditPassword" width="30px" image="/images/icon-edit.png" class="open orange"/>
+                                                                <textbox id="txtPassword" type="password" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
                                                             </hlayout>
                                                         </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtName" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.lastName')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtLastName" maxlength="45" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.email')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtEmail" maxlength="45" constraint="/.+@.+\.[a-z]+/, no empty: ${c:l('error.field.email')}" width="320px"/>
-                                                                <separator/>
-                                                                <label value="${c:l('sp.common.email.example')}" sclass="lblexample"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.common.phoneNumber')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtPhoneNumber" value="" width="320px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <separator/>
-                                                                <label value="${c:l('sp.common.phoneNumber.example')}" sclass="lblexample"/>
-                                                            </hlayout>
-                                                        </row>
-<!--                                                         <row> -->
-<!--                                                             <label value="${c:l('sp.common.receiveTopNotification')}" sclass="lblbold"/> -->
-<!--                                                             <checkbox id="cbxReceiveTopNotification" checked="true"/> -->
-<!--                                                         </row> -->
-                                                    
                                                         <row>
                                                             <label value="${c:l('sp.common.enabled')}" sclass="lblbold"/>
-                                                            <checkbox id="cbxEnabled" checked="true"/>
                                                         </row>
-                                                    </rows>
-                                                </grid>
-
-                                                <grid fixedLayout="true">
-                                                    <columns>
-                                                        <column label="" width="200px"/>
-                                                        <column label="" width="790px"/>
-                                                    </columns>
-                                                    <rows>
                                                         <row>
-                                                            <label value="${c:l('sp.common.profile')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <combobox id="cmbProfiles" width="250px" mold="rounded" readonly="true"/>
-                                                            </hlayout>
+                                                            <hbox>
+                                                                <radiogroup id="EnabledActive" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="rEnabledYes" label="${c:l('sp.common.yes')}" radiogroup="EnabledActive" />
+                                                                            <radio id="rEnabledNo" label="${c:l('sp.common.no')} " radiogroup="EnabledActive" checked = "true"/>
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>
                                                         </row>
+                                                           
                                                     </rows>
+                                                    
+                                                    
                                                 </grid>
-                                                
                                             </vlayout>
                                         </div>
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>

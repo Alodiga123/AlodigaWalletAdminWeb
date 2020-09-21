@@ -159,7 +159,12 @@ public class ListUsersController extends GenericAbstractListController<User> {
                     item.appendChild(new Listcell(user.getLogin()));
                     item.appendChild(new Listcell(user.getEmail()));
                     item.appendChild(new Listcell(user.getPhoneNumber()));
-                    item.appendChild(new Listcell(user.getCurrentProfile().getProfileDataByLanguageId(languageId).getAlias()));
+                    if(user.getCurrentProfile() != null){
+                     item.appendChild(new Listcell(user.getCurrentProfile().getProfileDataByLanguageId(languageId).getAlias()));   
+                    } else {
+                        item.appendChild(new Listcell(""));
+                    }
+                    
                     item.appendChild(permissionChangeStatus ? initEnabledButton(user.getEnabled(), item) : new Listcell());
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, user,Permission.EDIT_USER) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, user,Permission.VIEW_USER) : new Listcell());
