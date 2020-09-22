@@ -217,6 +217,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
     private void loadReportsManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
+        createCell(Permission.MANAGEMENT_REPORT, "managementAdminReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
         
     }
