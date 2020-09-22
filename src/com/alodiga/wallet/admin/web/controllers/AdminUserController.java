@@ -35,7 +35,6 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.Encoder;
 import com.alodiga.wallet.common.utils.QueryConstants;
 import java.util.Date;
-import jxl.write.DateTime;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 
@@ -91,13 +90,14 @@ public class AdminUserController extends GenericAbstractAdminController {
     }
 
     public void clearFields() {
-
+        loadProfiles(true);
     }
 
     private void loadFields(User user) {
         PhonePerson phonePersonUser = null;
         List<PhonePerson> phonePersonEmployeeAuthorizeList = null;
         PhonePerson phonePersonEmployeeAuthorize = null;
+        
         try{
             txtLogin.setText(user.getLogin());
             txtPassword.setText(user.getPassword());
@@ -106,6 +106,16 @@ public class AdminUserController extends GenericAbstractAdminController {
             lblIdentificationNumber.setValue(String.valueOf(user.getEmployeeId().getIdentificationNumber()));
             lblEmailEmployee.setValue(user.getEmployeeId().getPersonId().getEmail());
             lblCountry.setValue(user.getEmployeeId().getPersonId().getCountryId().getName());
+            cmbEmployee.setDisabled(true);
+            cmbAuthorizeEmployee.setDisabled(true);
+            btnSave.setVisible(true);
+            
+            if (user.getEnabled() == true) {
+                rEnabledYes.setChecked(true);
+            } else {
+                rEnabledNo.setChecked(true);
+            }
+            
             if (user.getEmployeeId().getComercialAgencyId().getCityId() != null) {
                 lblCityEmployee.setValue(user.getEmployeeId().getComercialAgencyId().getCityId().getName());
             } else {
@@ -125,7 +135,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                     phonePersonUser = phoneUser;
                 }
                 lblUserExtAlodiga.setValue(phonePersonUser.getExtensionPhoneNumber());
-            }
+            } 
             
             if (user.getAuthorizedEmployeeId() != null) {
                 EJBRequest request = new EJBRequest();
@@ -137,15 +147,8 @@ public class AdminUserController extends GenericAbstractAdminController {
                     phonePersonEmployeeAuthorize = phoneEmployeeAuthorize;
                 }
                 lblAuthorizeExtAlodiga.setValue(phonePersonEmployeeAuthorize.getExtensionPhoneNumber());
-            }
-            if (user.getEnabled() == true) {
-                rEnabledYes.setChecked(true);
-            } else {
-                rEnabledNo.setChecked(true);
-            }
-            btnSave.setVisible(true);
-            cmbEmployee.setDisabled(true);
-            cmbAuthorizeEmployee.setDisabled(true);         
+            } 
+    
         } catch (Exception ex) {
             showError(ex);
         }
@@ -168,6 +171,9 @@ public class AdminUserController extends GenericAbstractAdminController {
         } else if (cmbAuthorizeEmployee.getSelectedItem() == null) {
             cmbAuthorizeEmployee.setFocus(true);
             this.showMessage("sp.error.authorizeEmployee.noSelected", true, null);
+        } else if (cmbProfiles.getSelectedItem() == null) {
+            cmbProfiles.setFocus(true);
+            this.showMessage("sp.error.profile.notSelected", true, null);
         } else if (txtLogin.getText().isEmpty()) {
             txtLogin.setFocus(true);
             this.showMessage("sp.error.login.empty", true, null);
@@ -272,13 +278,16 @@ public class AdminUserController extends GenericAbstractAdminController {
     private void saveUser(User _user) {
         boolean indEnabled = true;
         boolean received = true;
+        Person person = null;
         try {
             User user = null;
-
+            
             if (_user != null) {
                 user = _user;
+                person = user.getPersonId();
             } else {
                 user = new User();
+                person = new Person();
             }
 
             if (rEnabledYes.isChecked()) {
@@ -292,11 +301,14 @@ public class AdminUserController extends GenericAbstractAdminController {
             PersonClassification personClassification = personEJB.loadPersonClassification(request1);
             
             //Guardar la persona
-            Person person = new Person();
             person.setCountryId(employee.getPersonId().getCountryId());
             person.setPersonTypeId(employee.getDocumentsPersonTypeId().getPersonTypeId());
             person.setEmail(lblEmailEmployee.getValue().toString());
-            person.setCreateDate(new Timestamp(new Date().getTime()));
+            if (eventType == WebConstants.EVENT_ADD) {
+                person.setCreateDate(new Timestamp(new Date().getTime()));
+            } else {
+                person.setUpdateDate(new Timestamp(new Date().getTime()));
+            }
             person.setPersonClassificationId(personClassification);
             person = personEJB.savePerson(person);
             
@@ -315,7 +327,38 @@ public class AdminUserController extends GenericAbstractAdminController {
             user.setAuthorizedEmployeeId((Employee) cmbAuthorizeEmployee.getSelectedItem().getValue());
             user.setEnabled(indEnabled);
             user.setCreationDate(new Date());
-            user = userEJB.saveUser(user);
+            
+            List<UserHasProfile> uhphes = new ArrayList<UserHasProfile>();
+            Profile profile = (Profile) cmbProfiles.getSelectedItem().getValue();
+            UserHasProfile uhphe = new UserHasProfile();
+            uhphe.setUser(user);
+            uhphe.setProfile(profile);
+            uhphe.setBeginningDate(new Timestamp(new java.util.Date().getTime()));
+            uhphes.add(uhphe);
+            
+             user.setUserHasProfile(uhphes);
+            if (_user != null && _user.getId() != null) {//Is update
+                user.setId(_user.getId());
+                if (!editingPassword) {
+                    user.setPassword(userParam.getPassword());
+                }
+                List<UserHasProfile> auxUhphes = new ArrayList<UserHasProfile>();
+                List<UserHasProfile> activeUhphes = new ArrayList<UserHasProfile>();
+                auxUhphes = userParam.getUserHasProfile();
+
+                for (int i = 0; i < auxUhphes.size(); i++) {
+                    if (auxUhphes.get(i).getEndingDate() == null) {
+                        activeUhphes.add(auxUhphes.get(i));
+                    }
+                }
+                for (int i = 0; i < activeUhphes.size(); i++) {
+                    activeUhphes.get(i).setEndingDate(new Timestamp(new java.util.Date().getTime()));
+                }
+                user.getUserHasProfile().addAll(activeUhphes);
+
+            }
+            request.setParam(user);
+            userParam = userEJB.saveUser(request);
             userParam = user;
             this.showMessage("sp.common.save.success", false, null);
             btnSave.setVisible(false);
@@ -427,9 +470,10 @@ public class AdminUserController extends GenericAbstractAdminController {
                     List<UserHasProfile> uhphes = userParam.getUserHasProfile();
                     for (int y = 0; y < uhphes.size(); y++) {
                         Profile p = uhphes.get(y).getProfile();
-                        if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() == null) {
+                        if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() != null) {
                             cmbProfiles.setSelectedIndex(i);
                         }
+                        
                     }
                 }
             }
