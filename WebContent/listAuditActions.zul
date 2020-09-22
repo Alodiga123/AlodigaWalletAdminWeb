@@ -13,13 +13,12 @@
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout>
-                        <div></div>
-                        <div width="1800px" align="left" height="670px">
+                        <div width="1200px" align="left" height="670px">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1400px">
+                                <div width="1080px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -31,18 +30,17 @@
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
-
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:center" >
                                                     <label value="${c:l('sp.auditActions.userLogin')}" sclass="lblbold"/>
-                                                    <textbox id="txtLogin" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <textbox id="txtLogin" value="" width="100px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
                                                     <label value="${c:l('sp.common.user')}" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
                                                     <label value="${c:l('sp.auditActions.permission')}" sclass="lblbold"/>
-                                                    <combobox id="cmbPermissions" width="130px" mold="rounded" readonly="true"/>
+                                                    <combobox id="cmbPermissions" width="100px" mold="rounded" readonly="true"/>
                                                     <separator/>
                                                     <label value="${c:l('sp.common.beginningDateFrom')}"  sclass="lblbold"/>
                                                     <datebox id="dtbBeginningDate"  format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
@@ -51,33 +49,28 @@
                                                     <datebox id="dtbEndingDate" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
-                                                    <!--Add button-->
-                                                    <div align="left" width="495px">
-                                                    </div>
                                                     <!--Filters button-->
-                                                    <div align="right" width="900px">
+                                                    <div align="right" width="200px">
                                                         <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                         <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                     </div>
                                                 </hlayout>
-
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="1395px" height="530px" mold="paging" pageSize="28">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="1080px" height="530px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="275px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="275px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.permission')}" width="275px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.date')}" width="175px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.info')}" width="395px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="140px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="140px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.permission')}" width="200px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.date')}" width="120px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.info')}" width="200px" sort="auto"/>
                                                 </listhead>
                                             </listbox>
-
                                         </div>
                                         <!--Download button-->
                                           <label id="lblInfo" value="" sclass="lblbold" visible="false"/>
-                                        <div align="right">
+                                        <div align="left">
                                             <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>
