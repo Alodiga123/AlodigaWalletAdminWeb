@@ -30,6 +30,7 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
@@ -38,11 +39,12 @@ import org.zkoss.zul.Window;
 public class AdminStatusCardFinalController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    private Combobox cmbStatus;
+    private Label lblStatusCard;
     private Combobox cmbFinal;
     private UtilsEJB utilsEJB = null;
     private AccessControlEJB accessEJB = null;
     private Button btnSave;
+    private Button btnAdd;
     private Toolbarbutton tbbTitle;
     private StatusCardHasFinalState statusCardFinalParam;
     public static StatusCard statusCardParent = null;
@@ -80,8 +82,15 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
        AdminStatusCardController adminStatusCard = new AdminStatusCardController();
        if (adminStatusCard.getStatusCardParent().getId() != null){
            statusCard = adminStatusCard.getStatusCardParent();
-       }    
+       }  
+       lblStatusCard.setValue(statusCard.getDescription());
    }
+   
+   public void onClick$btnAdd() {
+        btnAdd.setVisible(true);
+        cmbFinal.setValue("");
+        this.clearMessage();
+    }
     
     public void clearFields() {
     }
@@ -99,10 +108,7 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
     }
 
     public boolean validateEmpty() {
-        if (cmbStatus.getSelectedItem() == null) {
-            cmbStatus.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);
-        }else if (cmbFinal.getSelectedItem() == null) {
+        if (cmbFinal.getSelectedItem() == null) {
             cmbFinal.setFocus(true);
             this.showMessage("sp.error.status.card.hasFinal.error", true, null);
         } else {
@@ -170,43 +176,23 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(statusCardFinalParam);
-                loadCmbStatus(statusCardFinalParam);
                 loadCmbFinal(statusCardFinalParam);
+                obtainStatusCard();
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(statusCardFinalParam);
-                loadCmbStatus(statusCardFinalParam);
                 loadCmbFinal(statusCardFinalParam);
                 blockFields();
+                obtainStatusCard();
                 break;
             case WebConstants.EVENT_ADD:
-                loadCmbStatus(statusCardFinalParam);
                 loadCmbFinal(statusCardFinalParam);
+                obtainStatusCard();
                 break;
             default:
                 break;
         }
     }
-    
-     private void loadCmbStatus(StatusCardHasFinalState _status) {
-        cmbStatus.getItems().clear();
-        EJBRequest request1 = new EJBRequest();
-        List<StatusCard> requests;
-        try {
-            requests = utilsEJB.getStatusCard(request1);
-            loadGenericCombobox(requests, cmbStatus, "description", eventType, Long.valueOf(statusCardFinalParam  != null ? statusCardFinalParam.getStatusCardId().getId() : 0));
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        }
-    }
-    
     
     private void loadCmbFinal(StatusCardHasFinalState _statusCard) {
         cmbFinal.getItems().clear();

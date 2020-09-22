@@ -15,16 +15,29 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
+import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.GeneralUtils;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.common.ejb.AccessControlEJB;
 import com.alodiga.wallet.common.ejb.AuditoryEJB;
+import com.alodiga.wallet.common.ejb.UserEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
+import com.alodiga.wallet.common.exception.GeneralException;
+import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.AuditAction;
 import com.alodiga.wallet.common.model.Permission;
+import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ListAuditActionsController extends GenericAbstractListController<AuditAction> {
 
@@ -35,6 +48,8 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
     private Combobox cmbPermissions;
     private AccessControlEJB accessControlEJB;
     private AuditoryEJB auditoryEJB;
+    private UserEJB userEJB;
+    private List<AuditAction> auditActions = null; 
     private Datebox dtbBeginningDate;
     private Datebox dtbEndingDate;
     private Label lblInfo;
@@ -61,6 +76,9 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             dtbEndingDate.setValue(new Timestamp(new java.util.Date().getTime()));
             accessControlEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
+            userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
+            getData();
+            loadList(auditActions);
             loadPermisssions();
 
         } catch (Exception ex) {
@@ -108,16 +126,53 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
     }
 
     public void getData() {
+       auditActions = new ArrayList<AuditAction>();
+       EJBRequest request1 = new EJBRequest();
+       try {
+            auditActions = auditoryEJB.getAuditAction(request1);
+        } catch (NullParameterException ex) {
+            showError(ex);
+        } catch (EmptyListException ex) {
+        } catch (GeneralException ex) {
+            showError(ex);
+        } catch (RegisterNotFoundException ex) {
+        }
+    }
+    
+    public void onChange$txtLogin() {
+    String login = txtLogin.getValue();
+    List<User> userList = new ArrayList<User>();
+    User userNames = null;
+        try{
+            EJBRequest request = new EJBRequest();
+            HashMap params = new HashMap();
+            params.put(Constants.PARAM_LOGIN, login);
+            request.setParams(params);
+            userList = userEJB.getUserByLogin(request);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        for (User userName : userList) {
+                    userNames = userName;
+                }
+        txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());
         
     }
-
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.auditActions.list"));
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.auditActions.list.excel"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_AUDI, "Se descargo listado de Auditoría de Sistemas en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
     }
+    
 
     public void onClick$btnClear() throws InterruptedException {
         txtName.setText("");

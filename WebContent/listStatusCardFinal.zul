@@ -21,8 +21,11 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout>
+                                                    <div align="right" width="65px">
+                                                        <label id="lblCard" value=" " sclass="lblexample"/>
+                                                    </div>
                                                     <!--Add button-->
-                                                    <div align="left" width="385px">
+                                                    <div align="right" width="800px">
                                                         <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}"/>
                                                     </div>
                                                 </hlayout>
@@ -31,15 +34,15 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.status.card')}" width="400px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.status.business.affiliation.final')}" width="450px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.status.cardfinal.code')}" width="400px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.status.cardfinal.finalStatus.permitted')}" width="450px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
                                             </listbox>
                                         </div>
                                         <!--Download button-->
-                                        <div align="right">
+                                        <div align="right" width="950px">
                                             <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>

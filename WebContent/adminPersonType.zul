@@ -2,10 +2,9 @@
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
 <?page title="${c:l('sp.crud.profile.admin')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
-<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
-
+<!--<?init class="com.alodiga.services.provider.web.security.InitiatorLoggedUser" ?>-->
 <zk xmlns:n="native">
-    <window id="winAdminCommission" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionController">
+    <window id="winAdminCollectionType" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminPersonTypeController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -15,21 +14,21 @@
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="100%" align="left" height="100%">
+                        <div width="1200px" align="left" height="780px">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1000px">
+                                <div width="900px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
-                                                |
-                                                <toolbarbutton label="${c:l('sp.crud.commissions.list')}" onClick='Executions.sendRedirect(&quot;listCommission.zul&quot;)'/>
-                                                |
-                                                <toolbarbutton id="tbbTitle" label=""/> 
+                                                 |
+                                                <toolbarbutton label="${c:l('sp.crud.person.type.list')}" onClick='Executions.sendRedirect(&quot;listPersonType.zul&quot;)'/>                      
+                                                 |
+                                                <toolbarbutton id= "tbbTitle" label="${c:l('sp.crud.personType.add')}"/>
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -44,57 +43,41 @@
                                                             <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
                                                         </hlayout>
                                                     </div>
-                                                </hlayout> 
+                                                </hlayout>
+                                                
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="300px"/>
-                                                    </columns>
+                                                        <column label="" width="220px"/>
+                                                        <column label="" width="220px"/>
+                                                        <column label="" width="220px"/>
+                                                        <column label="" width="220px"/>
+                                                    </columns> 
                                                     <rows>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.commission.product')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <combobox id="cmbProduct" width="270px" mold="rounded" readonly="true"/>
-                                                            </hlayout>
+                                                            <label value="${c:l('sp.crud.documentPersonType.personType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('cms.common.countryName')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.application')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.isNaturalPerson')}" sclass="lblbold"/>
                                                         </row>
+                                                        
                                                         <row>
-                                                            <label value="${c:l('sp.crud.commission.transactionType')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbTrasactionType" width="270px" mold="rounded" readonly="true"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.commission.percentCommision')}" sclass="lblbold"/>
-                                                            <hbox width="270px">
-                                                                <radiogroup id="percentCommision" onCheck="choice1.value = self.selectedItem.label" />
+                                                                <textbox id="txtName" width="190px" constraint="no empty: ${c:l('error.field.required')}" maxlength="60"/>
+                                                            </hlayout>  
+                                                            <combobox id="cmbCountry" width="200px" mold="rounded" readonly="true" />
+                                                            <combobox id="cmbOriginApplication" width="200px" mold="rounded" readonly="true" />
+                                                            
+                                                            <hbox>
+                                                                <radiogroup id="isNaturalPerson" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
                                                                     <rows>
                                                                         <row>
-                                                                            <radio id="rPercentCommisionYes" label="${c:l('sp.common.yes')}" radiogroup="percentCommision" />
-                                                                            <radio id="rPercentCommisionNo" label="${c:l('sp.common.no')}" radiogroup="percentCommision" />
+                                                                            <radio id="rIsNaturalPersonYes" label="${c:l('sp.common.yes')}" radiogroup="isNaturalPerson" />
+                                                                            <radio id="rIsNaturalPersonNo" label="${c:l('sp.common.no')} " radiogroup="isNaturalPerson" />
                                                                         </row>
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.commission.value')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <doublebox id="dblValue" width="265px" constraint="no negative" format="#,###.##" maxlength="20"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.exchangeRate.beginningDate')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <datebox id="dtbBeginningDate" width="270px"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.exchangeRate.endingDate')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <datebox id="dtbEndingDate" width="270px"/>
-                                                            </hlayout>
                                                         </row>
                                                     </rows>
                                                 </grid>
@@ -104,7 +87,7 @@
                                         <!--Buttons-->
                                         <div align="right">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listCommission.zul&quot;)"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listPersonType.zul&quot;)"/>
                                         </div>
                                     </vlayout>
                                 </div>

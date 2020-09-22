@@ -120,6 +120,8 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
         txtPhone.setReadonly(true);
         txtAreaCode.setReadonly(true);
         txtPhoneExtension.setReadonly(true);
+        rIsPrincipalNumberYes.setDisabled(true);
+        rIsPrincipalNumberNo.setDisabled(true);
         btnSave.setVisible(false);
     }
 

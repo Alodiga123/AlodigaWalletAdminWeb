@@ -12,8 +12,8 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.CollectionType;
 import com.alodiga.wallet.common.model.Permission;
+import com.alodiga.wallet.common.model.PersonType;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -32,13 +32,13 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 
-public class ListCollectionTypesControllers extends GenericAbstractListController<CollectionType> {
+public class ListPersonTypeController extends GenericAbstractListController<PersonType> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtName;
     private UtilsEJB utilsEJB = null;
-    private List<CollectionType> collectionType = null;
+    private List<PersonType> personTypeList = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -53,45 +53,53 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
     public void initialize() {
         super.initialize();
         try {
-            //currentUser = (User) session.getAttribute(Constants.USER_OBJ_SESSION);
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
-            adminPage = "adminCollectionTypes.zul";
+            adminPage = "adminPersonType.zul";
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             checkPermissions();
             getData();
-            loadList(collectionType);
+            loadList(personTypeList);
         } catch (Exception ex) {
             showError(ex);
         }
     }
     
    public void getData() {
-    collectionType = new ArrayList<CollectionType>();
+        personTypeList = new ArrayList<PersonType>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-            collectionType = utilsEJB.getCollectionType(request);
+            personTypeList = utilsEJB.getPersonType(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
+            showEmptyList();
         } catch (GeneralException ex) {
             showError(ex);
         }
     }
-
-
+   
     @Override
     public void checkPermissions() {
         try {
-            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_TYPE_OF_COLLECTIONS));
-            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_TYPE_OF_COLLECTIONS);
-            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_TYPE_OF_COLLECTIONS);
+            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_PERSON_TYPE));
+            permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_PERSON_TYPE);
+            permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_PERSON_TYPE);
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
+    
+     private void showEmptyList() {
+        Listitem item = new Listitem();
+        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.appendChild(new Listcell());
+        item.setParent(lbxRecords);
+    }
+     
     public void onClick$btnAdd() throws InterruptedException {
         Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
         Sessions.getCurrent().removeAttribute("object");
@@ -104,7 +112,7 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("cms.menu.collectionsType.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.person.type.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -116,7 +124,6 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
 
     public void onClick$btnClear() throws InterruptedException {
         txtName.setText("");
-        loadList(collectionType);
     }
 
     public void onClick$btnSearch() throws InterruptedException {
@@ -127,87 +134,34 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
         }
     }
     
-   /* public List<CollectionType> getFilterList(String filter) {
-        List<CollectionType> collectionTypeList = new ArrayList<CollectionType>();
+    public List<PersonType> getFilteredList(String filter) {
+        List<PersonType> personTypeaux = new ArrayList<PersonType>();
         try {
             if (filter != null && !filter.equals("")) {
-                collectionTypeList = utilsEJB.getSearchCollectionType(filter);
+                personTypeaux = utilsEJB.getSearchPersonTypeByCountry(filter);
             } else {
-                return collectionType;
+                return personTypeList;
             }
         } catch (Exception ex) {
             showError(ex);
         }
-        return collectionTypeList;
+        return personTypeaux;   
     }
-   
-    public void startListener() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
 
-   /* public void loadDataList(List<CollectionType> list) {
-          try {
+    public void loadList(List<PersonType> list) {
+        try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (CollectionType collectionType : list) {
+                for (PersonType personType : list) {
                     item = new Listitem();
-                    item.setValue(collectionType);
-                    item.appendChild(new Listcell(collectionType.getCountryId().getName()));
-                    item.appendChild(new Listcell(collectionType.getDescription()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionType, Permission.EDIT_TYPE_OF_COLLECTIONS) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionType, Permission.VIEW_TYPE_OF_COLLECTIONS) : new Listcell());
-                    item.setParent(lbxRecords);
-                }
-            } else {
-                btnDownload.setVisible(false);
-                item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell());
-                item.appendChild(new Listcell());
-                item.setParent(lbxRecords);
-            }
-
-        } catch (Exception ex) {
-           showError(ex);
-        }
-    }*/
-     
-    public List<CollectionType> getFilteredList(String filter) {
-        List<CollectionType> auxList = new ArrayList<CollectionType>();
-        for (Iterator<CollectionType> i = collectionType.iterator(); i.hasNext();) {
-            CollectionType tmp = i.next();
-            String field = tmp.getDescription().toLowerCase();
-            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                auxList.add(tmp);
-            }
-        }
-        return auxList;    
-    }
-
-    @Override
-    public void loadList(List<CollectionType> list) {
- try {
-            lbxRecords.getItems().clear();
-            Listitem item = null;
-            if (list != null && !list.isEmpty()) {
-                btnDownload.setVisible(true);
-                for (CollectionType collectionType : list) {
-                    item = new Listitem();
-                    item.setValue(collectionType);
-                    item.appendChild(new Listcell(collectionType.getCountryId().getName()));
-                    item.appendChild(new Listcell(collectionType.getDescription()));
-                    
-                    if (collectionType.getPersonTypeId() != null) {
-                        item.appendChild(new Listcell(collectionType.getPersonTypeId().getDescription()));
-                    } else {
-                        item.appendChild(new Listcell(""));
-                    }
-                    
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionType, Permission.EDIT_TYPE_OF_COLLECTIONS) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionType, Permission.VIEW_TYPE_OF_COLLECTIONS) : new Listcell());
+                    item.setValue(personType);
+                    item.appendChild(new Listcell(personType.getDescription()));
+                    item.appendChild(new Listcell(personType.getCountryId().getName()));
+                    item.appendChild(new Listcell(personType.getOriginApplicationId().getName()));
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, personType, Permission.EDIT_PERSON_TYPE) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, personType, Permission.VIEW_PERSON_TYPE) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -229,4 +183,6 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
     public void startListener() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 }

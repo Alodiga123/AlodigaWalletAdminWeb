@@ -10,9 +10,14 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.CollectionType;
 import com.alodiga.wallet.common.model.Country;
+import com.alodiga.wallet.common.model.OriginApplication;
+import com.alodiga.wallet.common.model.PersonType;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
@@ -26,8 +31,11 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
     private static final long serialVersionUID = -9145887024839938515L;
     private Textbox txtDescription;
     private Combobox cmbCountry;
+    private Combobox cmbOriginApplication;
+    private Combobox cmbPersonType;
     private UtilsEJB utilsEJB = null;
     private CollectionType collectionTypeParam;
+    private OriginApplication originApplicationParam;
     private Toolbarbutton tbbTitle;
     private Button btnSave;
 
@@ -67,7 +75,25 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
             showError(ex);
         }
     }
+    
+    
+    public void onChange$cmbOriginApplication() {
+        Country country = (Country) cmbCountry.getSelectedItem().getValue();
+        OriginApplication origin = (OriginApplication) cmbOriginApplication.getSelectedItem().getValue();
+        loadCmbPersonType(eventType, country.getId().intValue(), origin.getId());
+    } 
+    
+    public void onChange$cmbCountry() {
+        if (cmbCountry.getSelectedItem() == null) {
+           cmbOriginApplication.setDisabled(true);
+           cmbPersonType.setDisabled(true);
+        } else {
+            cmbOriginApplication.setDisabled(false);
+            cmbPersonType.setDisabled(false);
+        }           
 
+    }
+    
     public void clearFields() {
         txtDescription.setRawValue(null);
     }
@@ -115,10 +141,11 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
             //insertando en collectionType
             collectionType.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
             collectionType.setDescription(txtDescription.getText());
+            collectionType.setPersonTypeId((PersonType) cmbPersonType.getSelectedItem().getValue());
             collectionType = utilsEJB.saveCollectionType(collectionType);
             collectionTypeParam = collectionType;
             this.showMessage("sp.common.save.success", false, null);
-            btnSave.setDisabled(true);
+            btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -144,15 +171,21 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(collectionTypeParam);
+                loadCmbOriginApplication(eventType);
                 loadCmbCountry(eventType);
+                onChange$cmbOriginApplication();
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(collectionTypeParam);
                 blockFields();
+                loadCmbOriginApplication(eventType);
                 loadCmbCountry(eventType);
+                onChange$cmbOriginApplication();
                 break;
             case WebConstants.EVENT_ADD:
+                loadCmbOriginApplication(eventType);
                 loadCmbCountry(eventType);
+                onChange$cmbCountry();
                 break;
             default:
                 break;
@@ -163,10 +196,53 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
         //cmbCountry
         EJBRequest request1 = new EJBRequest();
         List<Country> countries;
-
         try {
             countries = utilsEJB.getCountries(request1);
             loadGenericCombobox(countries, cmbCountry, "name", evenInteger, Long.valueOf(collectionTypeParam != null ? collectionTypeParam.getCountryId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        }
+    }
+    
+    private void loadCmbOriginApplication(Integer evenInteger) {
+        //cmbOriginAplication
+        EJBRequest request1 = new EJBRequest();
+        List<OriginApplication> originAplication;
+
+        try {
+            originAplication = utilsEJB.getOriginApplications(request1);
+            loadGenericCombobox(originAplication, cmbOriginApplication, "name", evenInteger, Long.valueOf(collectionTypeParam != null ? collectionTypeParam.getPersonTypeId().getOriginApplicationId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        }
+    }
+       
+    
+    private void loadCmbPersonType(Integer evenInteger, int countryId, int originApplicationId) {
+        cmbPersonType.getItems().clear();        
+        EJBRequest request1 = new EJBRequest();
+        Map params = new HashMap();
+        params.put(QueryConstants.PARAM_COUNTRY_ID, countryId);
+        params.put(QueryConstants.PARAM_ORIGIN_APPLICATION_ID, originApplicationId);
+        request1.setParams(params);
+        List<PersonType> personType;
+        try {
+            personType = utilsEJB.getPersonTypeByCountryByOriginApplication(request1);
+            loadGenericCombobox(personType, cmbPersonType, "description", evenInteger, Long.valueOf(collectionTypeParam != null ? collectionTypeParam.getPersonTypeId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
             ex.printStackTrace();
