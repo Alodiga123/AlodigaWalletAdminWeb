@@ -31,7 +31,7 @@ public class WebConstants {
     public static final String PREFIX_PRODUCT = "pro_";
     public static final String PREFIX_T_STATUS = "tSta_";
     public static final String PREFIX_PROVIDER = "prov__";
-    public static final String CONNECTIONPOOL = "jdbc/Multilevelchannel";
+    public static final String CONNECTIONPOOL = "jdbc/AlodigaWallet";
     public static final String COLUMN_LABEL = "columnLabel";
     public static final String DATA = "data";
     public static final String ID_PARAM_REPORT_OPEN = "/*<accountSql>*/";

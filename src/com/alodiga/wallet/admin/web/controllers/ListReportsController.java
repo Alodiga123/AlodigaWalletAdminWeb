@@ -78,6 +78,7 @@ public class ListReportsController extends GenericAbstractListController<Report>
         try {
             currentUser = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            reportEJB = (ReportEJB) EJBServiceLocator.getInstance().get(EjbConstants.REPORT_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminReport.zul";

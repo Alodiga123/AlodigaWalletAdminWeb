@@ -169,8 +169,6 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_COUNTRIES, "listCountries.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_CURRENCIES, "listCurrency.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
-        //createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
-        //createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_CATEGORY, "listBusinnesCategory.zul", permissionGroup, listgroup);
@@ -182,7 +180,6 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
-//        createCell(Permission.AUDIT_ACTIONS, "listAuditActions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_AUDI, "listAuditActions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PROFILES, "listProfiles.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_USERS, "listUsers.zul", permissionGroup, listgroup);
@@ -218,7 +215,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
     private void loadReportsManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
-        createCell(Permission.MANAGEMENT_REPORT, "managementAdminReport.zul", permissionGroup, listgroup);
+        createCell(Permission.MANAGEMENT_REPORT, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
         
     }
