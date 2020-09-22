@@ -128,7 +128,7 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
             	statusCardHasFinalState = new StatusCardHasFinalState ();
             	statusCardHasFinalState.setCreateDate(new Timestamp(new Date().getTime()));
             }      
-            statusCardHasFinalState.setStatusCardId((StatusCard) cmbStatus.getSelectedItem().getValue());
+            statusCardHasFinalState.setStatusCardId(statusCard);
             statusCardHasFinalState.setStatusCardFinalStateId((StatusCard) cmbFinal.getSelectedItem().getValue());
             if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusCardHasFinalState(statusCardHasFinalState.getStatusCardId().getId(),statusCardHasFinalState.getStatusCardFinalStateId().getId()))
 		|| eventType.equals(WebConstants.EVENT_EDIT)){
