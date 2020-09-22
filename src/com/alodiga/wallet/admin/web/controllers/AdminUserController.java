@@ -238,7 +238,7 @@ public class AdminUserController extends GenericAbstractAdminController {
         lblIdentificationNumber.setValue(String.valueOf(employee.getIdentificationNumber()));
         lblEmailEmployee.setValue(employee.getPersonId().getEmail());
         if (employee.getPersonId().getPhonePerson() != null) {
-            lblUserExtAlodiga.setValue(employee.getPersonId().getPhonePerson().getExtensionPhoneNumber());
+            lblUserExtAlodiga.setValue(employee.getPersonId().getPhonePerson().getNumberPhone());
         } else {
                     EJBRequest request = new EJBRequest();
                     HashMap params = new HashMap();
@@ -248,7 +248,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                     for (PhonePerson phoneUser : phonePersonUserList) {
                         phonePersonEmployee = phoneUser;
                     }
-                    lblUserExtAlodiga.setValue(phonePersonEmployee.getExtensionPhoneNumber());
+                    lblUserExtAlodiga.setValue(phonePersonEmployee.getNumberPhone());
                 }
         } catch (Exception ex) {
             showError(ex);
@@ -314,7 +314,7 @@ public class AdminUserController extends GenericAbstractAdminController {
             
             //Guarda el Usuario
             user.setLogin(txtLogin.getText());
-            user.setPassword(txtPassword.getText());
+            user.setPassword(Encoder.MD5(txtPassword.getText()));
             user.setPersonId(person);
             user.setDocumentsPersonTypeId(employee.getDocumentsPersonTypeId());
             user.setIdentificationNumber(lblIdentificationNumber.getValue());
@@ -336,7 +336,7 @@ public class AdminUserController extends GenericAbstractAdminController {
             uhphe.setBeginningDate(new Timestamp(new java.util.Date().getTime()));
             uhphes.add(uhphe);
             
-             user.setUserHasProfile(uhphes);
+            user.setUserHasProfile(uhphes);
             if (_user != null && _user.getId() != null) {//Is update
                 user.setId(_user.getId());
                 if (!editingPassword) {
@@ -359,7 +359,6 @@ public class AdminUserController extends GenericAbstractAdminController {
             }
             request.setParam(user);
             userParam = userEJB.saveUser(request);
-            userParam = user;
             this.showMessage("sp.common.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
