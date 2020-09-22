@@ -50,9 +50,10 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.exchangeRate.product')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.exchangeRate.value')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.exchangeRate.beginningDate')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.exchangeRate.product')}" width="225px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.exchangeRate.value')}" width="225px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.exchangeRate.beginningDate')}" width="225px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.exchangeRate.endingDate')}" width="225px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

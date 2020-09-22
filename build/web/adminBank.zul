@@ -35,11 +35,30 @@
                                                     </columns>
                                                     <rows>
                                                         <row>
+                                                            <label value="${c:l('sp.crud.bank.country')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
                                                             <label value="${c:l('sp.common.bank.name')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtName" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                                <textbox id="txtName" maxlength="255" width="250px"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.bank.codeSwift')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtCodeSwift" maxlength="255" width="250px"/>
+                                                                <label value="*" sclass="lblreq" />
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.bank.codeAba')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtAba" maxlength="255" width="250px"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
@@ -49,27 +68,7 @@
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.codeSwift')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtCodeSwift" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.aba')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtAba" maxlength="255" width="250px" constraint="no empty: ${c:l('error.field.required')}"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.country')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
+
                                                     </rows>
                                                 </grid>
                                             </vlayout>
