@@ -34,20 +34,20 @@
 
                                             <!--Filters for Searching-->
                                             <vlayout>
-                                                <hlayout style="text-align:right" >
+                                                <hlayout style="text-align:center" >
                                                     <label value="${c:l('sp.auditActions.userLogin')}" sclass="lblbold"/>
                                                     <textbox id="txtLogin" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.auditActions.userName')}" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.common.user')}" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
                                                     <label value="${c:l('sp.auditActions.permission')}" sclass="lblbold"/>
                                                     <combobox id="cmbPermissions" width="130px" mold="rounded" readonly="true"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.common.beginningDate')}"  sclass="lblbold"/>
+                                                    <label value="${c:l('sp.common.beginningDateFrom')}"  sclass="lblbold"/>
                                                     <datebox id="dtbBeginningDate"  format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.common.endingDate')}" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.common.endingDateFrom')}" sclass="lblbold"/>
                                                     <datebox id="dtbEndingDate" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>

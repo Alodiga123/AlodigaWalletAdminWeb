@@ -4,14 +4,14 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminAddCommerceCategory" title="${c:l('cms.tab.commerceCategoryMain')}" width="950px" height="300px" apply="com.alodiga.wallet.admin.web.controllers.AdminAddProductHasBankController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winAdminAddCommerceCategory" title="${c:l('sp.crud.product.bank.product')}" width="950px" height="350px" apply="com.alodiga.wallet.admin.web.controllers.AdminAddProductHasBankController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="1200px" align="left" height="780px">
+                        <div width="1200px" align="left" height="300px">
                             <hlayout>
                                 <div width="900px">
                                     <vlayout>
@@ -23,7 +23,6 @@
                                                     <columns>
                                                         <column label="" width="300px"/>
                                                         <column label="" width="300px"/>
-                                                        <column label="" width="200px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>
@@ -32,7 +31,7 @@
                                                         </row>
                                                         <row>
                                                             <hlayout>
-                                                            <label id="lblProduct" width="250px"/>                                                                <label value="*" sclass="lblreq" />
+                                                            <label id="lblProduct" width="250px"/>                                                                
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbBank" width="250px" mold="rounded" readonly="true" />
