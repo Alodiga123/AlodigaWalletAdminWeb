@@ -35,8 +35,8 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.crud.country.name')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <label value="${c:l('sp.common.alias')}" width="80px" sclass="lblbold"/>
+                                                    <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
@@ -54,11 +54,10 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.transaction.creationDate')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.country.shortName')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.country.code')}" width="300px" sort="auto"/>
-                                                    <listheader label="-" width="45px"/>
-                                                    <listheader label="-" width="45px"/>
+                                                    <listheader label="${c:l('sp.common.name')}" width="730px" sort="auto"/>
+                                                    <listheader label="-" width="50px"/>
+                                                    <listheader label="-" width="50px"/>
+                                                    <listheader label="-" width="50px"/>
                                                 </listhead>
                                             </listbox>
                                         </div>

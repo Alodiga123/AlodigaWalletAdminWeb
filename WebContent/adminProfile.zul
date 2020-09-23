@@ -104,7 +104,7 @@
                                                 </grid>
 
                                                 <label value="${c:l('sp.crud.profile.permissions')}" sclass="lblbold"/>
-                                                <listbox id="lbxPermissions" fixedLayout="true" multiple="true" checkmark="true" width="1395px" height="300px">
+                                                <listbox id="lbxPermissions" fixedLayout="true" multiple="true" checkmark="true" width="1395px" height="300px" mold="paging" pageSize="8">
                                                     <listhead>
                                                         <listheader label="" width="30px"/>
                                                         <listheader label="${c:l('sp.crud.profile.functions.system')}" width="345px"/>

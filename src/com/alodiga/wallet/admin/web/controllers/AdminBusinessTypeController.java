@@ -57,7 +57,9 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         businessTypeParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessType) Sessions.getCurrent().getAttribute("object") : null;
-        businessTypeId = businessTypeParam.getId();
+        if (businessTypeParam != null) {
+            businessTypeId = businessTypeParam.getId();
+        }        
         user = AccessControl.loadCurrentUser();
         initialize();
         initView(eventType, "sp.crud.businesstype");
@@ -117,6 +119,7 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
             request.setFirst(0);
             request.setFirst(null);            
             businessServiceList = utilsEJB.getBusinessServiceType(request);
+            lbxRecords.getItems().clear();
             if (businessServiceList != null && !businessServiceList.isEmpty()) {
                 for (BusinessServiceType businessServices : businessServiceList) {
                         Listitem item = new Listitem(); 
