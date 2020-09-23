@@ -59,12 +59,11 @@
                                                         </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.userSource')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.origin.aplication')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbOriginApplication" width="200px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                         </row>
-                                                        
                                                         
                                                         <row>
                                                             <label value="${c:l('sp.crud.requestCollection.personType')}" sclass="lblbold"/>

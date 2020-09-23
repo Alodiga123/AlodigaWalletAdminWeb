@@ -215,19 +215,14 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
                 loadCmbCountry(eventType);                
                 onChange$cmbOriginAplication();
                 onChange$cmbPersonType();
-//                onChange$cmbCountry();                
-//                loadCmbCountry(eventType);
-                
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(collectionsRequestParam);
                 blockFields();
-                onChange$cmbCountry();
                 loadCmbOriginAplication(eventType);
-                loadCmbCountry(eventType);
+                loadCmbCountry(eventType);                
+                onChange$cmbOriginAplication();
                 onChange$cmbPersonType();
-//                loadCmbCountry(eventType);
-//                onChange$cmbCountry();
                 break;
             case WebConstants.EVENT_ADD:
                 onChange$cmbCountry();
@@ -265,7 +260,14 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
         List<OriginApplication> originApplications;
         try {
             originApplications = utilsEJB.getOriginApplications(request1);
-            loadGenericCombobox(originApplications, cmbOriginAplication, "name", evenInteger, 3L);
+             if (eventType == WebConstants.EVENT_EDIT) {
+                 loadGenericCombobox(originApplications, cmbOriginAplication, "name", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getPersonTypeId().getOriginApplicationId().getId() : 0));
+             }else if  (eventType == WebConstants.EVENT_ADD){
+                 loadGenericCombobox(originApplications, cmbOriginAplication, "name", evenInteger, 3L);
+             }else if  (eventType == WebConstants.EVENT_VIEW){
+                 loadGenericCombobox(originApplications, cmbOriginAplication, "name", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getPersonTypeId().getOriginApplicationId().getId() : 0));
+             }    
+            
         } catch (EmptyListException ex) {
             showError(ex);
             ex.printStackTrace();
@@ -280,7 +282,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
 
     private void loadCmbPersonType(Integer evenInteger, Long countryId, Integer originAplicationId) {
         EJBRequest request1 = new EJBRequest();
-        cmbPersonType.getItems().clear();
+        //cmbPersonType.getItems().clear();
         Map params = new HashMap();
         params.put(QueryConstants.PARAM_COUNTRY_ID, countryId);
         params.put(QueryConstants.PARAM_ORIGIN_APPLICATION_ID, originAplicationId);
@@ -308,7 +310,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
 
     private void loadCmbCollectionType(Integer evenInteger, Long countryId, Integer personType) {
         EJBRequest request = new EJBRequest();
-        cmbCollectionType.getItems().clear();
+       // cmbCollectionType.getItems().clear();
         Map params = new HashMap();
         params.put(QueryConstants.PARAM_COUNTRY_ID, countryId);
         params.put(QueryConstants.PERSON_TYPE_ID, personType);
