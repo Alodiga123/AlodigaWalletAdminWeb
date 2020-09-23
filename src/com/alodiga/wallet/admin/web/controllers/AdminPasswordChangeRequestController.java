@@ -72,6 +72,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             passwordChangeRequestParam = (PasswordChangeRequest) Sessions.getCurrent().getAttribute("object");
         }
         initialize();
+        UserInformation();
         initView(eventType, "crud.passwordChangeRequest");
     }
 
@@ -100,7 +101,13 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             showError(ex);
         }
     }
-
+    
+    public void UserInformation(){
+        lblUser.setValue(user.getFirstName() + " " + user.getLastName());
+        lblIdentificationNumber.setValue(user.getIdentificationNumber());
+        lblComercialAgency.setValue(user.getEmployeeId().getComercialAgencyId().getName());
+    }
+    
     public void onChange$txtRepeatNewPassword() {
         this.clearMessage();
         if (!txtRepeatNewPassword.getValue().equals(txtNewPassword.getValue())) {

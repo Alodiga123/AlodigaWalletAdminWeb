@@ -178,7 +178,6 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
             PersonClassification personClassification = personEJB.loadPersonClassification(request1);
             
             //Guardar la persona
-            
             person.setEmail(txtEmail.getText());
             person.setPersonTypeId(((DocumentsPersonType) cmbDocumentPersonType.getSelectedItem().getValue()).getPersonTypeId());
             person.setPersonClassificationId(personClassification);
@@ -254,7 +253,6 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
         }
     }
     
-    
     private void loadCmbContryId(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
         List<Country> countries;
@@ -303,7 +301,7 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
             showError(ex);
         } finally {
             if (documentsPersonType == null) {
-                this.showMessage("cms.msj.DocumentsPersonTypeNull", false, null);
+                this.showMessage("sp.msj.DocumentsPersonTypeNull", false, null);
             }
         }
     }
