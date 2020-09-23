@@ -52,11 +52,10 @@
                                                     </columns>
                                                     <rows>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.country.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtName" maxlength="255" width="250px" style="text-transform:uppercase"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
@@ -64,7 +63,6 @@
                                                             <hlayout>
                                                                 <textbox id="txtShortName" maxlength="5" width="250px"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max5')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
@@ -72,28 +70,24 @@
                                                             <hlayout>
                                                                 <textbox id="txtCode" maxlength="5" width="250px"/>
                                                                 <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max5')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.country.alternativeName1')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtAlternativeName1" maxlength="255" width="250px"/>
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.country.alternativeName2')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtAlternativeName2" maxlength="255" width="250px"/>
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.country.alternativeName3')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtAlternativeName3" maxlength="255" width="250px"/>
-                                                                <label value="${c:l('sp.common.max255')}" sclass="lblexample"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>

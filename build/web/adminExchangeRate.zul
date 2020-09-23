@@ -61,7 +61,7 @@
                                                         <row>
                                                             <label value="${c:l('sp.crud.exchangeRate.value')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <doublebox id="dblValue" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
+                                                                <doublebox id="dblValue" width="245px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
@@ -76,7 +76,6 @@
                                                             <label value="${c:l('sp.crud.exchangeRate.endingDate')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <datebox id="dtbEndingDate" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                     </rows>
