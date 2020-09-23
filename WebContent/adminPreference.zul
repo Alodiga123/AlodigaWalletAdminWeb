@@ -53,9 +53,16 @@
                                                     <rows>
                                                         
                                                         <row>
-                                                            <label value="${c:l('cms.common.description')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtPreference" constraint="no empty" maxlength="80" width="196px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('cms.common.description')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtDescription" value="" rows="2" width="196px"/>
                                                             </hlayout>
                                                         </row>
                                                         

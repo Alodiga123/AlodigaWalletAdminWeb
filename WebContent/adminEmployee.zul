@@ -4,31 +4,24 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
 <zk xmlns:n="native">
-    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminEmployeeController" class="general-window">
+    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminEmployeeController">
         <style src="/css/general.css"/>
-        <borderlayout width="100%" height="100%" class="content-transparent">
+        <borderlayout width="970px" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
-                    <hlayout>
+                    <hlayout >
                         <div></div>
-                        <div width="100%" align="left" height="100%">
+                        <div width="970px" align="left" height="100%">
                             <hlayout>
                                 <div width="100%">
                                     <vlayout>
-                                        <div height="20px" width="100%" align="left">
-                                            <!--Bread crumb-->
-                                            <hlayout>
-                                                <toolbarbutton id="tbbCurrentAction" />
-                                            </hlayout>
-                                        </div>
-                                        <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
                                                 <hlayout>
                                                     <div align="left" width="400px">
                                                         <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
                                                     </div>                                                
-                                                    <div align="right" width="485px">
+                                                    <div align="right" width="535px">
                                                         <hlayout>
                                                             <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
                                                         </hlayout>
