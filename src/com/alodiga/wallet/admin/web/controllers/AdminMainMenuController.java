@@ -97,9 +97,6 @@ public class AdminMainMenuController extends GenericForwardComposer {
                         case 2://Secutiry Management
                             loadSecurityManagementGroup(pg);
                             break;
-                        case 3://Configurations Management
-                            loadConfigurationsManagementGroup(pg);
-                            break;
                         case 4://Configurations Reports
                             loadReportsManagementGroup(pg);
                             break;
@@ -187,13 +184,6 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_PASSWORD_CHANGE_REQUEST, "listPasswordChangeRequest.zul", permissionGroup, listgroup);
     }
 
-    private void loadConfigurationsManagementGroup(PermissionGroup permissionGroup) {
-        Listgroup listgroup = createListGroup(permissionGroup);
-        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
-        createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
-        createCell(Permission.BALANCE_ADJUSMENT, "balanceAdjusmentView.zul", permissionGroup, listgroup);
-    }
-
     private void loadTransactionalManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_COMMISSION, "listCommission.zul", permissionGroup, listgroup);
@@ -212,6 +202,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
+        createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
     }
     private void loadReportsManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);

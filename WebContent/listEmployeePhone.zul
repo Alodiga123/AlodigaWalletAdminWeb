@@ -31,7 +31,7 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.employeePhone.codeCountry')}" width="100px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.employeePhone.codeCountry')}" width="165px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.employeePhone.areaCode')}" width="100px" sort="auto"/>                                                     
                                                     <listheader label="${c:l('sp.crud.employeePhone.phoneNumber')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.employeePhone.extension')}" width="150px" sort="auto"/>
@@ -43,7 +43,7 @@
                                             </listbox>
                                         </div>
                                         <!--Download button-->
-                                        <div align="right">
+                                        <div align="right" width="950px">
                                             <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>

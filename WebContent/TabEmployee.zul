@@ -38,7 +38,7 @@
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
                                                     <tabs>
                                                         <tab id="tabEmployee" label="${c:l('sp.crud.data.employee')}" />
-                                                        <tab id="tabEmployeePhone" label="${c:l('sp.common.phone')}"/> 
+                                                        <tab id="tabEmployeePhone" label="${c:l('sp.crud.employeePhone.phones')}"/> 
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>

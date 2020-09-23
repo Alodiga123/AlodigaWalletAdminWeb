@@ -38,6 +38,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     private static final long serialVersionUID = -9145887024839938515L;
     private Textbox txtPreference;
     private Textbox txtCode;
+    private Textbox txtDescription;
     private Combobox cmbTypePreference;
     private Combobox cmbTypeData;
     private Radio rEnabledYes;
@@ -95,6 +96,8 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     private void loadFields(PreferenceField preferenceField) {
         try {
             txtPreference.setText(preferenceField.getName());
+            txtCode.setText(preferenceField.getCode());  
+            txtDescription.setText(preferenceField.getDescription()); 
             btnSave.setVisible(true);
             if (preferenceField.getEnabled() == 1) {
                 rEnabledYes.setChecked(true);
@@ -109,6 +112,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     public void blockFields() {
        txtPreference.setDisabled(true);
        txtCode.setDisabled(true);  
+       txtDescription.setDisabled(true); 
        btnSave.setVisible(false);
        rEnabledYes.setDisabled(true);
        rEnabledNo.setDisabled(true);
@@ -168,7 +172,8 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             }
 
             preference.setName(txtPreference.getText());
-//          preference.setCode(txtCode.getText());
+            preference.setDescription(txtDescription.getText());
+            preference.setCode(txtCode.getText());
             preference.setPreferenceId((Preference) cmbTypePreference.getSelectedItem().getValue());
             preference.setPreferenceTypeId((PreferenceType) cmbTypeData.getSelectedItem().getValue());
             preference.setEnabled(indEnable);
@@ -195,7 +200,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    savePreferenceField(null);
+                    if(validatePreferenceCode()){
+                      savePreferenceField(null);  
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     savePreferenceField(preferenceFieldParam);

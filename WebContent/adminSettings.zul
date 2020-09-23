@@ -26,7 +26,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                  |
-                                                <toolbarbutton id="tbbCurrentAction" label="${c:l('sp.crud.settings.admin')}"/>
+                                                <toolbarbutton id="tbbCurrentAction" label="${c:l('sp.crud.settings.mainSettings')}"/>
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
