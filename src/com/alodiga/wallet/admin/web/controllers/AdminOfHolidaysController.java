@@ -123,12 +123,12 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
 
             if (_calendarDays != null) {
                 calendarDays = _calendarDays;
-                _calendarDays.setUpdateDate(dtbHolidayDate.getValue());
-                _calendarDays.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
-                _calendarDays.setHolidayDate(dtbHolidayDate.getValue());
-                _calendarDays.setDescription(txtName.getValue().toUpperCase());
+                calendarDays.setUpdateDate(dtbHolidayDate.getValue());
+                calendarDays.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
+                calendarDays.setHolidayDate(dtbHolidayDate.getValue());
+                calendarDays.setDescription(txtName.getValue().toUpperCase());
                 
-            } else {//New country
+            } else {
                 calendarDays = new CalendarDays();
                 calendarDays.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
                 calendarDays.setHolidayDate(dtbHolidayDate.getValue());
