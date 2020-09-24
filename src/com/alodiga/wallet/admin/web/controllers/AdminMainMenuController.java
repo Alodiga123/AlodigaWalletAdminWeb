@@ -192,6 +192,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "listManualRecharge.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "listManualWithdrawalApproval.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
+         createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
     }
 
     private void loadManageMembershipRequestGroup(PermissionGroup permissionGroup) {
