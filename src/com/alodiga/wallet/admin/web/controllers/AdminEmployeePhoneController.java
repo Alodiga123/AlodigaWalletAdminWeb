@@ -76,7 +76,6 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
         } else {
             phonePersonParam = (Sessions.getCurrent().getAttribute("object") != null) ? (PhonePerson) Sessions.getCurrent().getAttribute("object") : null;
         }
-
         initialize();
     }
 
@@ -88,6 +87,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
+            showError(ex);
         }
     }
     
@@ -148,6 +148,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     
     public boolean validatePhone() {
         Employee employee = null;
+        phonePersonList.clear();
         try {    
             //Empleado Principal
             AdminEmployeeController adminEmployee = new AdminEmployeeController();
@@ -177,8 +178,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             PhonePerson phonePerson = null;
 
             if (_phonePerson != null) {
-
-           phonePerson = _phonePerson;
+                phonePerson = _phonePerson;
             } else {
                 phonePerson = new PhonePerson();
             }
@@ -203,9 +203,15 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             phonePerson.setExtensionPhoneNumber(txtPhoneExtension.getText());  
             phonePerson.setIndMainPhone(indPrincipalPhone);
             phonePerson.setPhoneTypeId((PhoneType) cmbPhoneType.getSelectedItem().getValue());
-            phonePerson.setCreateDate(new Timestamp(new Date().getTime()));
+            if (eventType == WebConstants.EVENT_ADD) {
+                phonePerson.setCreateDate(new Timestamp(new Date().getTime()));
+            } else {
+                phonePerson.setUpdateDate(new Timestamp(new Date().getTime()));
+            }
+ 
             phonePerson = personEJB.savePhonePerson(phonePerson);
             this.showMessage("sp.common.save.success", false, null);
+            EventQueues.lookup("updatePhonePerson", EventQueues.APPLICATION, true).publish(new Event(""));
             btnSave.setVisible(false);
             
             } catch (Exception ex) {
@@ -218,6 +224,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     }
 
     public void onClick$btnSave() {
+        this.clearMessage();
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
