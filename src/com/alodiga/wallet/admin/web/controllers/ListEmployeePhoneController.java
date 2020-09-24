@@ -78,14 +78,6 @@ public class ListEmployeePhoneController extends GenericAbstractListController<P
         }
     }
     
-    public void onSelect$tabEmployeePhone() {
-        try {
-            doAfterCompose(self);
-        } catch (Exception ex) {
-            showError(ex);
-        }
-    }
-    
     public void startListener() {
         EventQueue que = EventQueues.lookup("updatePhonePerson", EventQueues.APPLICATION, true);
         que.subscribe(new EventListener() {

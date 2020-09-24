@@ -137,6 +137,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     
     public boolean validatePreferenceCode() {
         PreferenceField preferenceField = null;
+        preferenceFieldList.clear();
         try{
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();

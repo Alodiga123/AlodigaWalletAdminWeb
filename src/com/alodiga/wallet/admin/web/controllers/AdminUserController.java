@@ -83,7 +83,6 @@ public class AdminUserController extends GenericAbstractAdminController {
             accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
-            loadData();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -370,13 +369,6 @@ public class AdminUserController extends GenericAbstractAdminController {
         clearFields();
     }
 
-    public void onClick$btnEditPassword() {
-        txtPassword.setReadonly(false);
-        txtPassword.setRawValue(null);
-        txtPassword.setFocus(true);
-        editingPassword = true;
-    }
-
     public void onClick$btnSave() {
         if (validateEmpty()) {
             switch (eventType) {
@@ -481,6 +473,24 @@ public class AdminUserController extends GenericAbstractAdminController {
         }
     }
     
+//    private void loadCmbAuthorizeEmployee(Integer evenInteger) {
+//        EJBRequest request1 = new EJBRequest();
+//        List<Employee> employeeList;
+//        try {
+//            employeeList = personEJB.getEmployee(request1);
+//            loadGenericCombobox(employeeList, cmbAuthorizeEmployee, "firstNames", evenInteger, Long.valueOf(userParam != null ? userParam.getAuthorizedEmployeeId().getId() : 0));
+//        } catch (EmptyListException ex) {
+//            showError(ex);
+//            ex.printStackTrace();
+//        } catch (GeneralException ex) {
+//            showError(ex);
+//            ex.printStackTrace();
+//        } catch (NullParameterException ex) {
+//            showError(ex);
+//            ex.printStackTrace();
+//        }
+//    }
+    
     private void loadCmbAuthorizeEmployee(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
         List<Employee> employeeList;
@@ -493,7 +503,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                 nameEmployee = employeeList.get(i).getFirstNames() + " " + employeeList.get(i).getLastNames();
                 item.setLabel(nameEmployee);
                 item.setParent(cmbAuthorizeEmployee);
-                if (eventType != 1) {
+                if (eventType != WebConstants.EVENT_ADD) {
                     if (employeeList.get(i).getId().equals(userParam.getAuthorizedEmployeeId().getId())) {
                         cmbAuthorizeEmployee.setSelectedItem(item);
                     }
@@ -508,4 +518,5 @@ public class AdminUserController extends GenericAbstractAdminController {
         }
     }
     
+
 }

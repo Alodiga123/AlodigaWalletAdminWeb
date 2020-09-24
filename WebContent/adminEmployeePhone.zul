@@ -82,7 +82,7 @@
                                                                     <rows>
                                                                         <row>
                                                                             <radio id="rIsPrincipalNumberYes" label="${c:l('sp.crud.employeePhone.Yes')}" radiogroup="isPrincipalNumber" />
-                                                                            <radio id="rIsPrincipalNumerNo" label="${c:l('sp.crud.employeePhone.No')} " radiogroup="isPrincipalNumber" checked="true" />
+                                                                            <radio id="rIsPrincipalNumberNo" label="${c:l('sp.crud.employeePhone.No')} " radiogroup="isPrincipalNumber"/>
                                                                         </row>
                                                                     </rows>
                                                                 </grid>
