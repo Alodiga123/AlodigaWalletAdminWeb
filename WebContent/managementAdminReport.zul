@@ -64,7 +64,7 @@
                                                 <separator/>
                                                 <div align="right" width="900px">
                                                     <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
-<!--                                                    <button id="btnExport" width="150px" image="/images/icon-excel.gif" label="${c:l('sp.common.actions.exportExcel')}" class="open gray"/>-->
+                                                    <button id="btnExport" width="150px" image="/images/icon-excel.gif" label="${c:l('sp.common.actions.exportExcel')}" class="open gray"/>
                                                 </div>
                                         </vlayout>
                                     </vlayout>

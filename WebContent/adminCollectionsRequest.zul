@@ -58,9 +58,9 @@
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.requestCollection.collectionTypes')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.country.origin.aplication')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbCollectionType" width="250px" mold="rounded" readonly="true"/>
+                                                                <combobox id="cmbOriginAplication" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
@@ -69,6 +69,12 @@
                                                                 <combobox id="cmbPersonType" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
                                                         </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.requestCollection.collectionTypes')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbCollectionType" width="250px" mold="rounded" readonly="true"/>
+                                                            </hlayout>
+                                                        </row>                                                        
                                                     </rows>
                                                 </grid>
                                             </vlayout>

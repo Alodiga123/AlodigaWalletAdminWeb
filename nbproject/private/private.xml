@@ -7,5 +7,10 @@
             <file>file:/home/jmatapro/Documentos/RepoGitAlodiga/AlodigaWalletAdminWeb/WebContent/TabProduct.zul</file>
             <file>file:/home/jmatapro/Documentos/RepoGitAlodiga/AlodigaWalletAdminWeb/src/com/alodiga/wallet/admin/web/controllers/ListCommissionByProductController.java</file>
         </group>
+        <group>
+            <file>file:/home/ltoro/Documentos/Alodiga/projects/AlodigaWalletAdminWeb/src/com/alodiga/wallet/admin/web/controllers/ListAplicantOFACController.java</file>
+            <file>file:/home/ltoro/Documentos/Alodiga/projects/AlodigaWalletAdminWeb/src/com/alodiga/wallet/admin/web/controllers/ListAuditActionsController.java</file>
+            <file>file:/home/ltoro/Documentos/Alodiga/projects/AlodigaWalletAdminWeb/src/com/alodiga/wallet/admin/web/controllers/AdminCountryController.java</file>
+        </group>
     </open-files>
 </project-private>
