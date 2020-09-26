@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.counties.list')}" />
+                                                <toolbarbutton label="${c:l('sp.crud.report.list')}" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -35,7 +35,7 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.common.alias')}" width="80px" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.crud.report.nameReport')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
@@ -54,7 +54,9 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.name')}" width="730px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.report.nameReport')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.report.type')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.report.enable')}" width="240px" sort="auto"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>

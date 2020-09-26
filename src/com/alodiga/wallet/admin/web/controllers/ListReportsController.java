@@ -50,7 +50,7 @@ public class ListReportsController extends GenericAbstractListController<Report>
     private List<Report> reports = null;
     private User currentUser;
     private Profile currentProfile;
-    private Textbox txtName;
+    private Textbox txtAlias;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -108,6 +108,8 @@ public class ListReportsController extends GenericAbstractListController<Report>
                     item = new Listitem();
                     item.setValue(report);
                     item.appendChild(new Listcell(report.getName()));
+                    item.appendChild(new Listcell(report.getReportTypeId().getName()));
+                    item.appendChild(new Listcell((report.getEnabled()==true? Labels.getLabel("sp.crud.report.yes"):Labels.getLabel("sp.crud.report.no"))));
                     item.appendChild(permissionChangeStatus ? initEnabledButton(report.getEnabled(), item) : new Listcell());
                     item.appendChild(permissionEdit ? new ListcellViewButton(adminPage, report,Permission.EDIT_REPORTS) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellEditButton(adminPage, report,Permission.VIEW_REPORTS) : new Listcell());
@@ -166,12 +168,12 @@ public class ListReportsController extends GenericAbstractListController<Report>
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        txtName.setText("");
+        txtAlias.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-            loadList(getFilteredList(txtName.getText()));
+            loadList(getFilteredList(txtAlias.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -179,12 +181,14 @@ public class ListReportsController extends GenericAbstractListController<Report>
 
     public List<Report> getFilteredList(String filter) {
         List<Report> reportaux = new ArrayList<Report>();
-        for (Iterator<Report> i = reports.iterator(); i.hasNext();) {
-            Report tmp = i.next();
-            String field = tmp.getName();
-            if (field.toLowerCase().indexOf(filter.trim().toLowerCase()) >= 0) {
-                reportaux.add(tmp);
+        try {
+            if (filter != null && !filter.equals("")) {
+                reportaux = reportEJB.searchReport(filter);
+            } else {
+                return reports;
             }
+        } catch (Exception ex) {
+            showError(ex);
         }
         return reportaux;
     }

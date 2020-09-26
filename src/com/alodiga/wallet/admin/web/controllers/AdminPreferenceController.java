@@ -110,9 +110,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-       txtPreference.setDisabled(true);
-       txtCode.setDisabled(true);  
-       txtDescription.setDisabled(true); 
+       txtPreference.setReadonly(true);
+       txtCode.setReadonly(true);
+       txtDescription.setReadonly(true);
        btnSave.setVisible(false);
        rEnabledYes.setDisabled(true);
        rEnabledNo.setDisabled(true);

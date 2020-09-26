@@ -57,7 +57,7 @@
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.transactionType.code')}" width="190px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.transactionType')}" width="300px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.transactionType.description')}" width="280px" sort="auto"/>                                                 
+                                                    <listheader label="${c:l('sp.crud.transactionType.description')}" width="350px" sort="auto"/>                                                 
                                                     <listheader label="-" width="80px"/>
                                                     <listheader label="-" width="80px"/>    
                                                 </listhead>

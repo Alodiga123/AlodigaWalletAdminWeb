@@ -100,9 +100,9 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     }
 
     public void blockFields() {
-        dblValue.setDisabled(true);
-        dtbBeginningDate.setDisabled(true);
-        dtbEndingDate.setDisabled(true);
+        dblValue.setReadonly(true);
+        dtbBeginningDate.setReadonly(true);
+        dtbEndingDate.setReadonly(true);
         cmbProduct.setReadonly(true);
 
         btnSave.setVisible(false);

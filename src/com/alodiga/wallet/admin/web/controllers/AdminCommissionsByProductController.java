@@ -138,11 +138,11 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
     }
 
     public void blockFields() {
-        dtbBeginningDate.setDisabled(true);
-        dtbEndingDate.setDisabled(true);
+        dtbBeginningDate.setReadonly(true);
+        dtbEndingDate.setReadonly(true);
         rPercentCommisionYes.setDisabled(true);
         rPercentCommisionNo.setDisabled(true);
-        dblValue.setDisabled(true);
+        dblValue.setReadonly(true);
         cmbTrasactionType.setReadonly(true);
         btnSave.setVisible(false);
     }

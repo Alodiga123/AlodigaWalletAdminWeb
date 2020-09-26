@@ -102,6 +102,30 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
         }
     }
     
+    public void onClick$imgEye() {
+        if (txtCurrentPassword.getType().equals("password")) {
+            txtCurrentPassword.setType("text");
+        } else {
+            txtCurrentPassword.setType("password");
+        }              
+    }
+    
+    public void onClick$imgEye1() {
+        if (txtNewPassword.getType().equals("password")) {
+            txtNewPassword.setType("text");
+        } else {
+            txtNewPassword.setType("password");
+        }              
+    }
+    
+    public void onClick$imgEye2() {
+        if (txtRepeatNewPassword.getType().equals("password")) {
+            txtRepeatNewPassword.setType("text");
+        } else {
+            txtRepeatNewPassword.setType("password");
+        }              
+    }
+    
     public void UserInformation(){
         lblUser.setValue(user.getFirstName() + " " + user.getLastName());
         lblIdentificationNumber.setValue(user.getIdentificationNumber());
