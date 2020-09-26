@@ -103,8 +103,8 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
     }
 
     public void blockFields() {
-        txtDescription.setDisabled(true);
-        txtMccCode.setDisabled(true);
+        txtDescription.setReadonly(true);
+        txtMccCode.setReadonly(true);
 
         btnSave.setVisible(false);
     }

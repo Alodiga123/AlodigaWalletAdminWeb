@@ -84,8 +84,8 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtCode.setDisabled(true);
-        txtDescription.setDisabled(true);
+        txtCode.setReadonly(true);
+        txtDescription.setReadonly(true);
         btnSave.setVisible(false);
     }
 

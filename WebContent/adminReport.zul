@@ -28,7 +28,7 @@
                                                  |
                                                 <toolbarbutton label="${c:l('sp.crud.report.list')}" onClick='Executions.sendRedirect(&quot;listReports.zul&quot;)'/>
                                                  |
-                                                <toolbarbutton id="tbbCurrentAction" />
+                                                <toolbarbutton id="tbbTitle" label="" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="890px" style="background:#333;" align="left"></div>
@@ -64,12 +64,14 @@
                                                                     <label value="${c:l('sp.common.description')}" sclass="lblbold"/>
                                                                     <hlayout>
                                                                       <textbox id="txtDescription" value="" rows="2" width="600px"/>
+                                                                      <label value="*" sclass="lblreq" />
                                                                     </hlayout>
                                                                 </row>
                                                                 <row>
                                                                     <label value="${c:l('sp.common.query')}" sclass="lblbold"/>
                                                                     <hbox>
                                                                        <textbox id="txtQuery" value="" rows="8" width="600px" />
+                                                                       <label value="*" sclass="lblreq" />
                                                                     </hbox>
                                                                 </row>
                                                                 <row>
@@ -82,12 +84,14 @@
                                                                     <label value="${c:l('sp.common.enabled')}" sclass="lblbold"/>
                                                                     <hbox>
                                                                       <checkbox id="cbxEnabled" checked="true"/>
+                                                                      <label value="*" sclass="lblreq" />
                                                                     </hbox>
                                                                 </row>
                                                                  <row>
                                                                     <label value="${c:l('sp.common.userType')}" sclass="lblbold"/>
                                                                     <hbox>
                                                                       <combobox id="cmbReportType" mold="rounded" readonly="true"/>
+                                                                      <label value="*" sclass="lblreq" />
                                                                     </hbox>
                                                                 </row>
                                                             </rows>
@@ -99,7 +103,7 @@
                                                                 <listhead>
                                                                     <listheader label="" width="60px" />
                                                                     <listheader label="${c:l('sp.common.name')}" width="190px"/>
-                                                                    <listheader label="${c:l('sp.common.type')}"  width="170px"/>
+                                                                    <listheader label="${c:l('sp.crud.report.dataType')}"  width="170px"/>
                                                                     <listheader label="${c:l('sp.common.value')}" width="160px"/>
                                                                     <listheader label="${c:l('sp.common.index')}" width="100px"/>
                                                                     <listheader label="${c:l('sp.common.required')}" width="100px"/>

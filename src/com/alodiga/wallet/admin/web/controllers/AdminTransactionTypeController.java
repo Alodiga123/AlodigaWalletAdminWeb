@@ -101,9 +101,9 @@ public class AdminTransactionTypeController extends GenericAbstractAdminControll
     }
 
     public void blockFields() {
-       txtValue.setDisabled(true);
-       txtCode.setDisabled(true);  
-       txtDescription.setDisabled(true); 
+       txtValue.setReadonly(true);
+       txtCode.setReadonly(true); 
+       txtDescription.setReadonly(true);
        btnSave.setVisible(false);
     }
 

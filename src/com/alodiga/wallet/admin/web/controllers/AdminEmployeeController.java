@@ -116,10 +116,10 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-       indIdentification.setDisabled(true); 
-       txtName.setDisabled(true);
-       txtLastName.setDisabled(true);
-       txtEmail.setDisabled(true);
+       indIdentification.setReadonly(true); 
+       txtName.setReadonly(true);
+       txtLastName.setReadonly(true);
+       txtEmail.setReadonly(true);
        btnSave.setVisible(false);
        cmbCountry.setDisabled(true);
        cmbPositionEnterprise.setDisabled(true);

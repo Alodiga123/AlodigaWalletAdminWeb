@@ -108,11 +108,11 @@ public class AdminCommissionController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        dtbBeginningDate.setDisabled(true);
-        dtbEndingDate.setDisabled(true);
+        dtbBeginningDate.setReadonly(true);
+        dtbEndingDate.setReadonly(true);
         rPercentCommisionYes.setDisabled(true);
         rPercentCommisionNo.setDisabled(true);
-        dblValue.setDisabled(true);
+        dblValue.setReadonly(true);
         cmbProduct.setReadonly(true);
         cmbTrasactionType.setReadonly(true);
 

@@ -190,7 +190,6 @@ public class AdminPersonTypeController extends GenericAbstractAdminController {
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(personTypeParam);
-                txtName.setDisabled(true);
                 blockFields();
                 loadCmbCountry(eventType);
                 loadCmbOriginApplication(eventType);
