@@ -84,17 +84,17 @@ public class ListOfHolidaysController extends GenericAbstractListController<Cale
     }
 
     public List<CalendarDays> getFilteredList(String filter) {
-        List<CalendarDays> list = new ArrayList<CalendarDays>();
-        if (calendarDays != null) {
-            for (Iterator<CalendarDays> i = calendarDays.iterator(); i.hasNext();) {
-                CalendarDays tmp = i.next();
-                String field = tmp.getCountryId().getName().toLowerCase();
-                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                    list.add(tmp);
-                }
+        List<CalendarDays> auxList = new ArrayList<CalendarDays>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                auxList = utilsEJB.searchCalendarDays(filter);
+            } else {
+                return  calendarDays;
             }
+        } catch (Exception ex) {
+            showError(ex);
         }
-        return list;
+        return auxList;
     }
 
     public void onClick$btnAdd() throws InterruptedException {

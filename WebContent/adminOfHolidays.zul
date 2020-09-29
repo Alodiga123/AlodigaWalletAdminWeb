@@ -39,7 +39,7 @@
                                                     <div align="left" width="400px">
                                                         <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
                                                     </div>                                                
-                                                    <div align="right" width="485px">
+                                                    <div align="right" width="585px">
                                                         <hlayout>
                                                             <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
                                                         </hlayout>

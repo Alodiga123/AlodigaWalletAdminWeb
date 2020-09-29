@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.crud.transaction.list')}" />
+                                                <toolbarbutton label="${c:l('sp.crud.transaction.listt')}" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -35,15 +35,18 @@
                                             <grid fixedLayout="true">
                                                 <columns>
                                                     <column label="" width="280px"/>
-                                                    <column label="" width="250px"/>
-                                                    <column label="" width="250px"/>
-                                                    <column label="" width="180x"/>
+                                                    <column label="" width="180px"/>
+                                                    <column label="" width="200px"/>
+                                                    <column label="" width="200px"/>
+                                                    <column label="" width="130px"/>
                                                 </columns>
                                                 <rows>
                                                     <row>
                                                         <label value="${c:l('sp.crud.transaction.search')}" sclass="lblbold"/>
+                                                        <label value="${c:l('sp.transaction.source')}" sclass="lblbold"/>
                                                         <label value="${c:l('sp.crud.transaction.startDate')}" sclass="lblbold"/>
                                                         <label value="${c:l('sp.crud.transaction.endDate')}" sclass="lblbold"/>
+                                                        
                                                     </row>
                                                     <row>
                                                         <hbox>
@@ -57,9 +60,11 @@
                                                                 </rows>
                                                             </grid>
                                                         </hbox>
-                                                        <datebox id="dtbBeginningDate" width="230px"/>
-                                                        <datebox id="dtbEndingDate" width="230px"/>
-                                                        <button id="btnViewTransactions" label="${c:l('sp.crud.actions.viewTransaction')}" width="150px" class="open orange" tooltiptext="${c:l('sp.common.actions.search')}" visible="true"/>
+                                                        
+                                                        <combobox id="cmbTransactionSource" width="160px" mold="rounded" readonly="true" />
+                                                        <datebox id="dtbBeginningDate" width="190px"/>
+                                                        <datebox id="dtbEndingDate" width="190px"/>
+                                                        <button id="btnViewTransactions" label="${c:l('sp.crud.actions.viewTransaction')}" width="115px" class="open orange" tooltiptext="${c:l('sp.common.actions.search')}" visible="true"/>
                                                     </row>
                                                 </rows>   
                                             </grid> 
@@ -67,12 +72,11 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="400px" mold="paging" pageSize="9">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.transaction.product')}" width="175px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.transaction.transactionType')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.transaction.transactionSource')}" width="170px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.transaction.totalAmount')}" width="100px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.transaction.status')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.transaction.transactionDate')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.transaction.product')}" width="209px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.transaction.transactionType')}" width="234px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.transaction.totalAmountt')}" width="134px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.transaction.status')}" width="184px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.transaction.transactionDate')}" width="184px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
                                             </listbox>

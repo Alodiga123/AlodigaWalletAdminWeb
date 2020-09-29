@@ -35,15 +35,6 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="330px"/>
@@ -51,95 +42,56 @@
                                                         <column label="" width="330px"/>
                                                     </columns>
                                                     <rows>
-                                                        <group label="${c:l('sp.common.data.basic')}"/> 
+                                                        <group label="${c:l('sp.crud.transaction.data')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.transaction.product')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.transaction.typeTransaction')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.transaction.transactionSource')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblProduct" value="" width="300px" style="color:#837E76;"/>
+                                                            <label id="lblTransactionType" value="" width="300px" style="color:#837E76;"/>
+                                                            <label id="lblTransactionSource" value="" width="300px" style="color:#837E76;"/>
+                                                        </row>                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.transaction.amountt')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.transaction.amount.comission')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.transaction.transactionDate')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <label id="lblAmount" value="" width="300px" style="color:#837E76;"/>
+                                                            <label id="lblAmountComission" value="" width="300px" style="color:#837E76;"/>
+                                                            <label id="lblTransactionDate" value="" width="300px" style="color:#837E76;"/>
+                                                        </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.transaction.userSource')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.transaction.userDestination')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.product')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.transaction.status')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblUserSource" value="" width="300px" style="color:#837E76;"/>
                                                             <label id="lblUserDestination" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblProduct" value="" width="300px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.transaction.paymentInfo')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.transactionType')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.transactionSource')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblPaymentInfo" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblTransactionType" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblTransactionSource" value="" width="300px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.transaction.transactionDate')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.amount')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.status')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblTransactionDate" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblAmount" value="" width="300px" style="color:#837E76;"/>
                                                             <label id="lblStatus" value="" width="300px" style="color:#837E76;"/>
+                                                        </row>                      
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.transaction.concept')}" sclass="lblbold"/> 
+                                                            <label value="${c:l('sp.crud.transaction.endDate')}" sclass="lblbold"/> 
+                                                            <label value="${c:l('sp.crud.transaction.itsClose')}" sclass="lblbold"/> 
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.transaction.totalTax')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.totalAmount')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.promotionAmount')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblTotalTax" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblTotalAmount" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblPromotionAmount" value="" width="300px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.transaction.totalAlopointsUsed')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.topUpDescription')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.billPaymentDescription')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblTotalAlopointsUsed" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblTopUpDescription" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblBillPaymentDescription" value="" width="300px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.transaction.external')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.additional')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.additional2')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblExternal" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblAdditional" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblAdditional2" value="" width="300px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.transaction.close')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.concept')}" sclass="lblbold"/>                                     
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblClose" value="" width="300px" style="color:#837E76;"/>
                                                             <label id="lblConcept" value="" width="300px" style="color:#837E76;"/>
-                                                        </row>
-                                                    </rows>
-                                                </grid>
-                                                   <grid id="grdCommision" fixedLayout="true" visible="false">
-                                                    <columns>
-                                                        <column label="" width="330px"/>
-                                                        <column label="" width="330px"/>
-                                                        <column label="" width="330px"/>
-                                                    </columns>
-                                                    <rows>
-                                                        <group label="${c:l('sp.crud.transaction.info.comission')}"/> 
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.transaction.amount.comission')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.value.comission')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.percent.comission')}" sclass="lblbold"/>
-                                                        </row>
-                                                       
-                                                        <row>
-                                                            <label id="lblAmountComission" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblComissionValue" value="" width="300px" style="color:#837E76;"/>
-                                                            <checkbox id="chbPercentComission"/>
+                                                            <label id="lblEndDate" value="" width="300px" style="color:#837E76;"/>
+                                                            <hbox>
+                                                                <radiogroup id="isClose" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="rIsCloseYes" label="${c:l('sp.crud.employeePhone.Yes')}" radiogroup="isClose" />
+                                                                            <radio id="rIsCloseNo" label="${c:l('sp.crud.employeePhone.No')} " radiogroup="isClose"/>
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>
                                                         </row>
                                                     </rows>
                                                 </grid>
