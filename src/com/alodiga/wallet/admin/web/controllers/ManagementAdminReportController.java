@@ -59,6 +59,8 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ManagementAdminReportController extends GenericAbstractController {
 
@@ -241,8 +243,15 @@ public class ManagementAdminReportController extends GenericAbstractController {
 
     public void onClick$btnExport() {
         try {
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            String reportName = auxReport.getName();
+            StringBuilder file = new StringBuilder(auxReport.getName());
+            file.append("_");
+            file.append(date);
             auxReport = (Report) Sessions.getCurrent().getAttribute(WebConstants.SESSION_REPORT);
-            exportExcel(lbxReport, auxReport.getName() + ".xls");
+            exportExcel(lbxReport, file.toString() + ".xls");
         } catch (Exception ex) {
             showMessage("sp.error.general", true, ex);
         }

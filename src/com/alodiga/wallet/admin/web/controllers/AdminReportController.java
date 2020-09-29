@@ -43,6 +43,7 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
 
@@ -65,6 +66,8 @@ public class AdminReportController extends GenericAbstractAdminController {
     private Listbox lboxProfile;
     private Checkbox cbxEnabled;
     private Combobox cmbReportType;
+    private Toolbarbutton tbbTitle;
+    private Button btnSave;
 
      @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -76,6 +79,19 @@ public class AdminReportController extends GenericAbstractAdminController {
     @Override
     public void initialize() {
         super.initialize();
+        switch (eventType) {
+            case WebConstants.EVENT_EDIT:
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.report.edit"));
+                break;
+            case WebConstants.EVENT_VIEW:
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.report.view"));
+                break;
+            case WebConstants.EVENT_ADD:
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.report.add"));
+                break;
+            default:
+                break;
+        }
         try {
             reportEJB = (ReportEJB) EJBServiceLocator.getInstance().get(EjbConstants.REPORT_EJB);
             accessControlEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
@@ -169,6 +185,9 @@ public class AdminReportController extends GenericAbstractAdminController {
             e.printStackTrace();
             lblInfo.setValue(Labels.getLabel("sp.error.general"));
         }
+         if (eventType == WebConstants.EVENT_VIEW) {
+                blockFields();
+            }
     }
 
     private void loadcmbReportType() {
@@ -288,6 +307,7 @@ public class AdminReportController extends GenericAbstractAdminController {
         for (Listitem item : list) {
             item.setDisabled(true);
         }
+        btnSave.setVisible(false);
     }
 
     public void onClick$btnAddParam() {

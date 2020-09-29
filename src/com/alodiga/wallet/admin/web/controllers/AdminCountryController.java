@@ -106,12 +106,12 @@ public class AdminCountryController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtName.setDisabled(true);
-        txtShortName.setDisabled(true);
-        txtCode.setDisabled(true);
-        txtAlternativeName1.setDisabled(true);
-        txtAlternativeName2.setDisabled(true);
-        txtAlternativeName3.setDisabled(true);
+        txtName.setReadonly(true);
+        txtShortName.setReadonly(true);
+        txtCode.setReadonly(true);
+        txtAlternativeName1.setReadonly(true);
+        txtAlternativeName2.setReadonly(true);
+        txtAlternativeName3.setReadonly(true);
 
         btnSave.setVisible(false);
     }

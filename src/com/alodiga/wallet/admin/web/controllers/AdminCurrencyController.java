@@ -79,8 +79,8 @@ public class AdminCurrencyController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtNameMoney.setDisabled(true);
-        txtSymbolMoney.setDisabled(true);
+        txtNameMoney.setReadonly(true);
+        txtSymbolMoney.setReadonly(true);
         btnSave.setVisible(false);
     }
 

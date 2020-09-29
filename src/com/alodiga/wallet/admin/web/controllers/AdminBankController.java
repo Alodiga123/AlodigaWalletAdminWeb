@@ -84,11 +84,11 @@ public class AdminBankController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtName.setDisabled(true);
-        txtCodeSwift.setDisabled(true);
-        txtAba.setDisabled(true);
-        cmbCountry.setDisabled(true);
-        cmbEnterprise.setDisabled(true);
+        txtName.setReadonly(true);
+        txtCodeSwift.setReadonly(true);
+        txtAba.setReadonly(true);
+        cmbCountry.setReadonly(true);
+        cmbEnterprise.setReadonly(true);
         
         btnSave.setVisible(false);
     }
