@@ -266,7 +266,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
                 passwordChangeRequestParam = passwordChangeRequest;
 
                 //Actualizar la contraseña del usuario en la BD
-                user.setPassword(Encoder.MD5(txtCurrentPassword.getText()));
+                user.setPassword(txtNewPassword.getText());
                 user = userEJB.saveUser(user);
 
                 rApprovedYes.setVisible(true);

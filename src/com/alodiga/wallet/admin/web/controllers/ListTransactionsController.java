@@ -17,10 +17,12 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.Transaction;
+import com.alodiga.wallet.common.model.TransactionSource;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -28,6 +30,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Radio;
 
@@ -37,6 +41,8 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
     private List<Transaction> transactions = null;
+    private Transaction transactionsParam;
+    private Combobox cmbTransactionSource;
     private Radio rDaysYes;
     private Radio rDaysNo;
     private Datebox dtbBeginningDate;
@@ -78,6 +84,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             btnViewTransactions.setVisible(false);
 //            getData();
 //            loadList(transactions);
+            loadCmbTransactionSource();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -105,7 +112,8 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
 
     public void onClick$btnViewTransactions() throws InterruptedException, RegisterNotFoundException {
         try {
-
+            
+//            (TransactionSource) cmbTransactionSource.getSelectedItem().getValue()).getId();
             if (rDaysYes.isChecked()) {
                 if (dtbBeginningDate.getValue() != null) {
                     loadList(utilsEJB.getTransactionByBeginningDate(dtbBeginningDate.getValue()));
@@ -172,7 +180,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
                     item.setValue(transaction);
                     item.appendChild(new Listcell(transaction.getProductId().getName()));
                     item.appendChild(new Listcell(transaction.getTransactionTypeId().getValue()));
-                    item.appendChild(new Listcell(transaction.getTransactionSourceId().getName()));
                     if (transaction.getTotalAmount() != null) {
                         totalAmount = numberFormat.format(transaction.getTotalAmount());
                         item.appendChild(new Listcell(totalAmount));
@@ -245,5 +252,26 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     @Override
     public void onClick$btnAdd() throws InterruptedException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void loadCmbTransactionSource() {
+        try {
+            
+            cmbTransactionSource.getItems().clear();
+            EJBRequest request = new EJBRequest();
+            List<TransactionSource> transactionSource = utilsEJB.getTransactionSource(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("maw.common.selected"));
+            item.setParent(cmbTransactionSource);
+            cmbTransactionSource.setSelectedItem(item);
+            for (int i = 0; i < transactionSource.size(); i++) {
+                item = new Comboitem();
+                item.setValue(transactionSource.get(i));
+                item.setLabel(transactionSource.get(i).getName());
+                item.setParent(cmbTransactionSource);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
     }
 }
