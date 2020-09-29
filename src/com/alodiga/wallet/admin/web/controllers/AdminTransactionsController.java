@@ -2,8 +2,8 @@ package com.alodiga.wallet.admin.web.controllers;
 
 import java.util.List;
 
-//import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
-//import com.ericsson.alodiga.ws.RespuestaUsuario;
+import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
+import com.ericsson.alodiga.ws.RespuestaUsuario;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
@@ -97,15 +97,11 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
     }
 
     private void loadFields(Transaction transaction) {
-        //APIRegistroUnificadoProxy searchUser = new APIRegistroUnificadoProxy();
-        //RespuestaUsuario responseUser = new RespuestaUsuario();
-        Long userName;
-
         try {
-
-//            responseUser = searchUser.getUsuarioporemail("usuarioWS","passwordWS", "email");
-//            userName = Long.valueOf(responseUser.getDatosRespuesta().getUsuarioID());
-//            searchUser.getUsuarioporId("usuarioWS","passwordWS", transaction.getUserSourceId().toString());
+            APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
+            RespuestaUsuario responseUser = new RespuestaUsuario();
+            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transaction.getUserSourceId()));
+            String userName = responseUser.getDatosRespuesta().getNombre();
             lblUserSource.setValue(transaction.getUserSourceId().toString());
             if (transaction.getUserDestinationId() != null) {
                 lblUserDestination.setValue(transaction.getUserDestinationId().toString());
@@ -202,7 +198,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                     }
                 }
             } catch (Exception e) {
-
+                showError(e);
             }
             btnSave.setVisible(true);
         } catch (Exception ex) {
