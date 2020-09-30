@@ -12,7 +12,7 @@ import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
-
+import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
@@ -86,10 +86,6 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
         }
     }
 
-    public void buscarUsuario() {
-
-    }
-
     private void loadFields(Transaction transaction) {
         try {
             //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
@@ -100,13 +96,11 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
             String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
             
-            if (transaction.getTransactionSourceId().getId() == 1){
+            if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 lblUserSource.setValue(userNameSource);
                 lblUserDestination.setValue(userNameDestination);
-            } else if (transaction.getTransactionSourceId().getId() == 2){
-//                Business
-//                BusinessOrigine
-//                BusinessDestination
+            } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
+                //Se obtienen de BusinessEJB los negocios
             }    
             if (transaction.getProductId().getName() != null) {
                 lblProduct.setValue(transaction.getProductId().getName());
