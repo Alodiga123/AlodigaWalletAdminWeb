@@ -69,7 +69,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     @Override
@@ -82,8 +81,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             checkPermissions();
             adminPage = "adminTransactions.zul";
             btnViewTransactions.setVisible(false);
-//            getData();
-//            loadList(transactions);
             loadCmbTransactionSource();
         } catch (Exception ex) {
             showError(ex);
@@ -93,13 +90,11 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     public void onClick$rDaysYes() {
         dtbEndingDate.setDisabled(true);
         btnViewTransactions.setVisible(true);
-//        btnViewTransactions.setDisabled(false);
     }
 
     public void onClick$rDaysNo() {
         dtbEndingDate.setDisabled(false);
         btnViewTransactions.setVisible(true);
-//        btnViewTransactions.setDisabled(false);
     }
 
     public void onChange$dtbBeginningDate() {
@@ -111,9 +106,8 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     }
 
     public void onClick$btnViewTransactions() throws InterruptedException, RegisterNotFoundException {
-        try {
-            
-//            (TransactionSource) cmbTransactionSource.getSelectedItem().getValue()).getId();
+        try {            
+            TransactionSource transactionSource = (TransactionSource) cmbTransactionSource.getSelectedItem().getValue();
             if (rDaysYes.isChecked()) {
                 if (dtbBeginningDate.getValue() != null) {
                     loadList(utilsEJB.getTransactionByBeginningDate(dtbBeginningDate.getValue()));
@@ -124,9 +118,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             
             if (rDaysNo.isChecked()) {
                 if ((dtbEndingDate.getValue() != null) && (dtbEndingDate.getValue() != null)) {
-//                    if (dtbBeginningDate.getValue().getTime() > dtbEndingDate.getValue().getTime()) {
-                        loadList(utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
-//                    }
+                    loadList(utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
                 } else {
                     this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
                 }
