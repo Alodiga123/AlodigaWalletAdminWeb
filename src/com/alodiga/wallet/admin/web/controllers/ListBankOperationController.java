@@ -111,8 +111,8 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadOperationTypes() {
 
         try {
-        	cmbOperationType.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbOperationType.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<BankOperationType> operationTypes = utilsEJB.getBankOperationTypes(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -133,8 +133,8 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadOperationModes() {
 
         try {
-        	cmbOperationMode.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbOperationMode.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<BankOperationMode> operationModes = utilsEJB.getBankOperationModes(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -155,8 +155,8 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadProducts() {
 
         try {
-        	cmbProduct.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbProduct.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -177,7 +177,7 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadBanks(Bank bank) {
 
         try {
-        	cmbBank.getItems().clear();
+            cmbBank.getItems().clear();
             Comboitem item = new Comboitem();
             item.setValue(bank.getId());
             item.setLabel(bank.getName());
@@ -198,7 +198,7 @@ public class ListBankOperationController extends GenericAbstractListController<B
     public void onClick$btnSearch()  {
         try {
 
-        	  clearFields();
+              clearFields();
               clearMessage();
               EJBRequest _request = new EJBRequest();
               Map<String, Object> params = new HashMap<String, Object>();
