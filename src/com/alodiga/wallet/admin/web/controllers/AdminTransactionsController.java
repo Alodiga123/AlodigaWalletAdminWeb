@@ -15,12 +15,14 @@ import org.zkoss.zul.Toolbarbutton;
 import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.model.CommissionItem;
 import com.alodiga.wallet.common.model.Transaction;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.rmi.RemoteException;
+import com.portal.business.commons.models.Business;
 import org.zkoss.zul.Radio;
 
 public class AdminTransactionsController extends GenericAbstractAdminController {
@@ -47,6 +49,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
     private Transaction transactionParam;
     private Integer eventType;
     private UtilsEJB utilsEJB = null;
+    private BusinessEJB businessEJB = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -80,6 +83,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
         }
         try {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            businessEJB = (BusinessEJB) EJBServiceLocator.getInstance().get(EjbConstants.BUSINESS_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
@@ -88,19 +92,22 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
 
     private void loadFields(Transaction transaction) {
         try {
-            //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
-            APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
-            RespuestaUsuario responseUser = new RespuestaUsuario();
-            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transaction.getUserSourceId()));
-            String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
-            String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-            
             if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
+                //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
+                APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
+                RespuestaUsuario responseUser = new RespuestaUsuario();
+                responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transaction.getUserSourceId()));
+                String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
+                responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
+                String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
                 lblUserSource.setValue(userNameSource);
                 lblUserDestination.setValue(userNameDestination);
             } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
-                //Se obtienen de BusinessEJB los negocios
+                //Obtiene los usuarios de Origen y Destino de BusinessPortal relacionados con la Transacción
+                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId());
+                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId());
+                lblUserSource.setValue(businessSource.getDisplayName());
+                lblUserDestination.setValue(businessDestination.getDisplayName());
             }    
             if (transaction.getProductId().getName() != null) {
                 lblProduct.setValue(transaction.getProductId().getName());
