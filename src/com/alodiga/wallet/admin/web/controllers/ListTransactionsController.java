@@ -26,6 +26,7 @@ import com.alodiga.wallet.common.model.TransactionSource;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -108,21 +109,23 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     public void onClick$btnViewTransactions() throws InterruptedException, RegisterNotFoundException {
         try {            
             TransactionSource transactionSource = (TransactionSource) cmbTransactionSource.getSelectedItem().getValue();
-            if (rDaysYes.isChecked()) {
-                if (dtbBeginningDate.getValue() != null) {
-                    loadList(utilsEJB.getTransactionByBeginningDate(dtbBeginningDate.getValue()));
-                } else {
-                    this.showMessage("sp.error.date.notSelected", true, null);
+            
+            if ((rDaysYes.isChecked()) && (cmbTransactionSource.getSelectedItem()  != null)){
+               if ((dtbBeginningDate.getValue() != null) && (cmbTransactionSource.getSelectedItem()  != null)){
+                   loadList(utilsEJB.getTransactionByBeginningDateAndOrigin(dtbBeginningDate.getValue(), transactionSource.getId()));
+               }else {
+                    this.showMessage("error.crud.transaction.filterDay", true, null);
                 }
             }
             
-            if (rDaysNo.isChecked()) {
-                if ((dtbEndingDate.getValue() != null) && (dtbEndingDate.getValue() != null)) {
-                    loadList(utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
+            if ((rDaysNo.isChecked()) && (cmbTransactionSource.getSelectedItem()  != null)){
+                if ((dtbBeginningDate.getValue() != null) && (dtbEndingDate.getValue() != null) && (cmbTransactionSource.getSelectedItem()  != null)) {
+                    loadList(utilsEJB.getTransactionByDatesAndOrigin(dtbBeginningDate.getValue(), dtbEndingDate.getValue(), transactionSource.getId()));
                 } else {
-                    this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
+                    this.showMessage("error.crud.transaction.filter.startAndEndDate", true, null);
                 }
             }
+            
         } catch (EmptyListException ex) {
             showEmptyList();
         } catch (Exception ex) {
