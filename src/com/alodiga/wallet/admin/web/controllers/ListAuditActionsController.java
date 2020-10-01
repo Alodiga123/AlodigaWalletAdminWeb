@@ -78,9 +78,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
             getData();
-//            loadList(auditActions);
             loadPermisssions();
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -139,25 +137,30 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         }
     }
     
-//    public void onChange$txtLogin() {
-//    String login = txtLogin.getValue();
-//    List<User> userList = new ArrayList<User>();
-//    User userNames = null;
-//        try{
-//            EJBRequest request = new EJBRequest();
-//            HashMap params = new HashMap();
-//            params.put(Constants.PARAM_LOGIN, login);
-//            request.setParams(params);
-//            userList = userEJB.getUserByLogin(request);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//        for (User userName : userList) {
-//                    userNames = userName;
-//                }
-//        txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());
-//        
-//    }
+    public void onChange$txtLogin() {
+    String login = txtLogin.getValue();
+    List<User> userList = new ArrayList<User>();
+    User userNames = null;
+        try{
+            EJBRequest request = new EJBRequest();
+            HashMap params = new HashMap();
+            params.put(Constants.PARAM_LOGIN, login);
+            request.setParams(params);
+            userList = userEJB.getUserByLogin(request);
+        } catch (Exception ex) {
+        } finally {
+            if(userList  != null){
+            for (User userName : userList) {
+                    userNames = userName;
+                }
+          txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());  
+        } else {
+            this.showMessage("sp.error.field.loginExistInBD", true, null);
+            txtLogin.setFocus(true);
+        }
+        } 
+    }
+    
     public void onClick$btnDownload() throws InterruptedException {
         try {
             String pattern = "dd-MM-yyyy";
@@ -173,7 +176,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         }
     }
     
-
     public void onClick$btnClear() throws InterruptedException {
         txtName.setText("");
         txtLogin.setText("");
@@ -207,11 +209,8 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             }else if (dtbBeginningDate.getValue().getTime() > dtbEndingDate.getValue().getTime()) {
                 this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
             }
-//            String login = !txtLogin.getText().isEmpty() ? txtLogin.getText() : null;
-//            String fullName = !txtName.getText().isEmpty() ? txtName.getText() : null;
             Long permissionId = cmbPermissions.getSelectedIndex() > 0 ? ((Permission) cmbPermissions.getSelectedItem().getValue()).getId() : null;
             loadList(auditoryEJB.searchAuditActionTest(userId, permissionId , dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
-//            loadList(auditoryEJB.searchAuditAction(login, fullName, permissionId, dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
 
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
@@ -224,7 +223,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
     private void loadPermisssions() {
         List<Permission> permissions = null;
         try {
-
             cmbPermissions.getItems().clear();
             permissions = accessControlEJB.getPermissions(new EJBRequest());
             Comboitem cmbItem = new Comboitem();
