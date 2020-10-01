@@ -34,13 +34,13 @@
                                         <div>
                                            <!--Filters for Searching-->
                                             <vlayout>
-                                                  <hlayout id="hParams2" style="text-align:right">
+                                                  <hlayout id="hParams2" style="text-align:left">
                                                     <label value="${c:l('sp.crud.manual.recharge.status')}" sclass="lblbold"/>
-                                                    <combobox id="cmbStatus" width="140px" mold="rounded" readonly="true"/>
+                                                    <combobox id="cmbStatus" width="100px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
-                                                    <combobox id="cmbProduct" width="140px" mold="rounded" readonly="true"/>
+                                                    <combobox id="cmbProduct" width="120px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('sp.crud.manual.recharge.transaction')}" sclass="lblbold"/>
-                                                   <textbox id="txtRequestNumber" width="200px" maxlength="60"/>
+                                                   <textbox id="txtRequestNumber" width="150px" maxlength="60"/>
                                                 </hlayout>
                                                   <hlayout id="hParams" style="text-align:right">            
                                                     <label value="${c:l('sp.common.beginningDate')}"  sclass="lblbold"/>
