@@ -245,7 +245,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 }
             }
 
-            manualWithdrawalApproval.setUnifiedRegistryUserId(Long.parseLong(bankOperation.getUserSourceId().toString()));
+            manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
             manualWithdrawalApproval.setStatusTransactionApproveRequestId(status);
             manualWithdrawalApproval.setUpdateDate(new Timestamp(new Date().getTime()));
             manualWithdrawalApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());

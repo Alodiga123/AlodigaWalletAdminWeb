@@ -11,9 +11,6 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
-//import com.alodiga.businessportal.ws.BPBusinessWSProxy;
-//import com.alodiga.businessportal.ws.BpBusiness;
-//import com.alodiga.businessportal.ws.BusinessSearchType;
 import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
@@ -21,6 +18,7 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.model.TransactionApproveRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -78,7 +76,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
 			loadData();
 		} catch (Exception e) {
 
-		}
+        }
 
     }
 
@@ -134,11 +132,12 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
          rIsApprovedYes.setDisabled(true);
          rIsApprovedNo.setDisabled(true);
          txtObservation.setReadonly(true);
+        chbApprovalIndicator.setDisabled(true);
     }
 
     public void onClick$btnCancel() {
         clearFields();
-    }
+    }   
 
     public void loadData() {
         switch (eventType) {
@@ -156,14 +155,14 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     }
     
     public void onClick$btnSave() {
-			switch (eventType) {
-			case WebConstants.EVENT_EDIT:
-				saveTransactionApproveRequest(transactionApproveRequest);
-				break;
-			default:
-				break;
-			}
-	}
+        switch (eventType) {
+        case WebConstants.EVENT_EDIT:
+            saveTransactionApproveRequest(transactionApproveRequest);
+        break;
+        default:
+            break;
+        }
+    }
 
    private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {
             

@@ -21,10 +21,8 @@ import com.alodiga.wallet.common.model.CommissionItem;
 import com.alodiga.wallet.common.model.Transaction;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
-import java.rmi.RemoteException;
 import com.portal.business.commons.models.Business;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.zkoss.zul.Radio;
 
 public class AdminTransactionsController extends GenericAbstractAdminController {
@@ -148,8 +146,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 rIsCloseYes.setChecked(true);
             } else {
                 rIsCloseNo.setChecked(true);
-            } 
-            
+            }             
             //Se obtiene la comisión de la transacción                    
             List<CommissionItem> items = utilsEJB.getCommissionItems(transaction.getId());
             if (!items.isEmpty()) {
@@ -199,5 +196,5 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             default:
                 break;
         }
-    }
+        }
 }
