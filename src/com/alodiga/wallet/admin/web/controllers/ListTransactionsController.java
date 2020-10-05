@@ -109,24 +109,22 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     public void onClick$btnViewTransactions() throws InterruptedException, RegisterNotFoundException {
         try {            
             TransactionSource transactionSource = (TransactionSource) cmbTransactionSource.getSelectedItem().getValue();
-            
             if ((rDaysYes.isChecked()) && (cmbTransactionSource.getSelectedItem()  != null)){
                if ((dtbBeginningDate.getValue() != null) && (cmbTransactionSource.getSelectedItem()  != null)){
                    loadList(utilsEJB.getTransactionByBeginningDateAndOrigin(dtbBeginningDate.getValue(), transactionSource.getId()));
                }else {
                     this.showMessage("error.crud.transaction.filterDay", true, null);
                 }
-            }
-            
+            }            
             if ((rDaysNo.isChecked()) && (cmbTransactionSource.getSelectedItem()  != null)){
                 if ((dtbBeginningDate.getValue() != null) && (dtbEndingDate.getValue() != null) && (cmbTransactionSource.getSelectedItem()  != null)) {
                     loadList(utilsEJB.getTransactionByDatesAndOrigin(dtbBeginningDate.getValue(), dtbEndingDate.getValue(), transactionSource.getId()));
                 } else {
                     this.showMessage("error.crud.transaction.filter.startAndEndDate", true, null);
                 }
-            }
-            
+            }            
         } catch (EmptyListException ex) {
+            lbxRecords.getItems().clear();
             showEmptyList();
         } catch (Exception ex) {
             showError(ex);
