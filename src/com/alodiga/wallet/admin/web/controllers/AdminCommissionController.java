@@ -16,18 +16,24 @@ import com.alodiga.wallet.common.model.Commission;
 import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.TransactionType;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Doublebox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminCommissionController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
+    private Label testPorcent;
     private Combobox cmbProduct;
     private Combobox cmbTrasactionType;
     private Radio rPercentCommisionYes;
@@ -43,6 +49,7 @@ public class AdminCommissionController extends GenericAbstractAdminController {
     private ExchangeRate exchangeRateParam;
     private Commission commissionParam;
     private Integer eventType;
+    List<Commission> comissionList = new ArrayList<Commission>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -87,6 +94,18 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         dblValue.setRawValue(null);
         dtbBeginningDate.setRawValue(null);
         dtbEndingDate.setRawValue(null);
+    }
+    
+    public void onClick$rPercentCommisionYes(){
+         if (rPercentCommisionYes.isChecked()) {
+            testPorcent.setValue(Labels.getLabel("sp.tab.comission.porcentcomission"));  
+        } 
+    }
+    
+    public void onClick$rPercentCommisionNo(){
+        if(rPercentCommisionNo.isChecked()) {
+            testPorcent.setValue(Labels.getLabel("sp.crud.commission.value")); 
+         }
     }
 
     private void loadFields(Commission commission) {
@@ -139,6 +158,29 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         }
         return false;
     }
+    
+    public boolean validateComissionByProduct(){
+        comissionList.clear();
+        TransactionType transactionTypee =(TransactionType) cmbTrasactionType.getSelectedItem().getValue();
+        Product product = (Product) cmbProduct.getSelectedItem().getValue();
+        
+        try {
+            //Valida que la comision del producto no exista
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PRODUCT_KEY, product.getId());
+            params.put(Constants.TRANSACTION_TYPE_KEY, transactionTypee.getId());
+            request1.setParams(params);
+            comissionList = utilsEJB.getCommissionByProductAndTranssactionType(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        } if (comissionList.size() > 0) {
+                this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
+                dblValue.setFocus(true);
+                return false;
+            }
+        return true;
+    }
 
     private void saveBank(Commission _commission) {
         try {
@@ -185,7 +227,9 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBank(commissionParam);
+                    if(validateComissionByProduct()){
+                        saveBank(commissionParam);
+                    }              
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBank(commissionParam);

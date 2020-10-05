@@ -63,7 +63,7 @@
                                             </listbox>
                                         </div>
                                         <!--Download button-->
-                                        <div align="right">
+                                        <div align="right"  width="990px">
                                             <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>
