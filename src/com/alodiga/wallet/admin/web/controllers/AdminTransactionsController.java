@@ -97,15 +97,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             //Formato de fecha
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            
-            //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
-            APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
-            RespuestaUsuario responseUser = new RespuestaUsuario();
-            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transaction.getUserSourceId()));
-            String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
-            String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-            
+
             if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
@@ -118,6 +110,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 lblUserDestination.setValue(userNameDestination);
             } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de BusinessPortal relacionados con la Transacción
+                List<Business> businessList = businessEJB.getAll();
                 Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId());
                 Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId());
                 lblUserSource.setValue(businessSource.getDisplayName());
@@ -172,6 +165,8 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
 
     public void blockFields() {
         btnSave.setVisible(false);
+        rIsCloseYes.setDisabled(true);
+        rIsCloseNo.setDisabled(true);
     }
 
     public void onClick$btnCancel() {

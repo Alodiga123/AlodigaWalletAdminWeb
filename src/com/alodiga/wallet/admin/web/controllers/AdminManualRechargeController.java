@@ -28,6 +28,8 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
 import com.ericsson.alodiga.ws.RespuestaUsuario;
 import com.portal.business.commons.models.Business;
+import java.text.SimpleDateFormat;
+import org.zkoss.zul.Radio;
 
 public class AdminManualRechargeController extends GenericAbstractAdminController {
 
@@ -48,7 +50,8 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     private Label lblUserName;
     private Label lblTelephone;
     private Label lblEmail;
-    private Checkbox chbApprovalIndicator;
+    private Radio rIsApprovedYes;
+    private Radio rIsApprovedNo;
     private TransactionApproveRequest transactionApproveRequest;
     private User user=null;
     private Textbox txtObservation;
@@ -80,13 +83,13 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     }
 
     public void clearFields() {
-    	chbApprovalIndicator.setDisabled(true);
     	txtObservation.setReadonly(true);
     }
 
     private void loadFields(TransactionApproveRequest transactionApproveRequest) {
         try {
-            
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             
             if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
@@ -100,21 +103,27 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId());
                 lblUserName.setValue(businessSource.getDisplayName());
             }
+            
             lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
-            lblRequestDate.setValue(transactionApproveRequest.getCreateDate().toString());
+            lblRequestDate.setValue(simpleDateFormat.format(transactionApproveRequest.getCreateDate()));
             lblRequestStatus.setValue(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription());
             lblProduct.setValue(transactionApproveRequest.getTransactionId().getProductId().getName());
             lblConcept.setValue(transactionApproveRequest.getTransactionId().getConcept());
             lblTransactionNumber.setValue(transactionApproveRequest.getTransactionId().getTransactionNumber());
-            lblTransactionDate.setValue(transactionApproveRequest.getTransactionId().getCreationDate().toString());
+            lblTransactionDate.setValue(simpleDateFormat.format(transactionApproveRequest.getTransactionId().getCreationDate()));
             lblAmount.setValue(String.valueOf(transactionApproveRequest.getTransactionId().getAmount()));
             lblBank.setValue(transactionApproveRequest.getBankOperationId().getBankId().getName());
             lblBankOperationNumber.setValue(transactionApproveRequest.getBankOperationId().getBankOperationNumber());
-            lblBankOperationDate.setValue(transactionApproveRequest.getBankOperationId().getBankOperationDate().toString());
+            lblBankOperationDate.setValue(simpleDateFormat.format(transactionApproveRequest.getBankOperationId().getBankOperationDate()));
             lblApprovalUser.setValue(user.getFirstName()+" "+user.getLastName());
             dtbApprovedRequestDate.setValue(new Timestamp(new java.util.Date().getTime()));
-            chbApprovalIndicator.setChecked(transactionApproveRequest.getIndApproveRequest());
+            if (transactionApproveRequest.getIndApproveRequest() == true) {
+                rIsApprovedYes.setChecked(true);
+            } else {
+                rIsApprovedNo.setChecked(true);
+            }
             txtObservation.setValue(transactionApproveRequest.getObservations());
+            
         } catch (Exception ex) {
             showError(ex);
         }
@@ -122,9 +131,9 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     
     public void blockFields() {
     	 dtbApprovedRequestDate.setDisabled(true);
-         chbApprovalIndicator.setDisabled(true);
+         rIsApprovedYes.setDisabled(true);
+         rIsApprovedNo.setDisabled(true);
          txtObservation.setReadonly(true);
-    	
     }
 
     public void onClick$btnCancel() {
@@ -139,6 +148,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 break;  
             case WebConstants.EVENT_EDIT:
                 loadFields(transactionApproveRequest);
+                dtbApprovedRequestDate.setDisabled(true);
                 break;  
             default:
                 break;
@@ -156,9 +166,17 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
 	}
 
    private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {
-	   manualRechargeApproval.setUpdateDate(new Date());
+            
+            boolean indApproved  = true;
+            if (rIsApprovedYes.isChecked()) {
+                indApproved = true;
+            } else {
+                indApproved = false;
+            }
+
+           manualRechargeApproval.setUpdateDate(new Date());
 	   manualRechargeApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
-	   manualRechargeApproval.setIndApproveRequest(chbApprovalIndicator.isChecked());
+	   manualRechargeApproval.setIndApproveRequest(indApproved);
 	   manualRechargeApproval.setObservations(txtObservation.getText());
 	   manualRechargeApproval.setUserApprovedRequestId(user);
 	   try {
