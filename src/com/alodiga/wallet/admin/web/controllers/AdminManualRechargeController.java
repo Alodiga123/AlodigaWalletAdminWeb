@@ -11,10 +11,11 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
-import com.alodiga.wallet.common.ejb.BusinessEJB;
+import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
@@ -22,6 +23,9 @@ import com.alodiga.wallet.common.model.TransactionApproveRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
+import com.ericsson.alodiga.ws.RespuestaUsuario;
+import com.portal.business.commons.models.Business;
 
 public class AdminManualRechargeController extends GenericAbstractAdminController {
 
@@ -47,6 +51,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     private User user=null;
     private Textbox txtObservation;
     private ProductEJB productEJB = null;
+    private BusinessEJB businessEJB = null;
     private Button btnSave;
 
     @Override
@@ -62,10 +67,11 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     public void initialize() {
         super.initialize();
         try {
-            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
-                    user = AccessControl.loadCurrentUser();
-                    loadData();
-        } catch (Exception e) {
+        	productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+                businessEJB = (BusinessEJB) EJBServiceLocator.getInstance().get(EjbConstants.BUSINESS_EJB);
+		user = AccessControl.loadCurrentUser();
+			loadData();
+		} catch (Exception e) {
 
         }
 
@@ -78,6 +84,20 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
 
     private void loadFields(TransactionApproveRequest transactionApproveRequest) {
         try {
+            
+            
+            if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
+                //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
+                APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
+                RespuestaUsuario responseUser = new RespuestaUsuario();
+                responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
+                String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
+                lblUserName.setValue(userNameSource);
+            } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
+                //Obtiene los usuarios de Origen de BusinessPortal relacionados con la Transacción
+                Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId());
+                lblUserName.setValue(businessSource.getDisplayName());
+            }
             lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
             lblRequestDate.setValue(transactionApproveRequest.getCreateDate().toString());
             lblRequestStatus.setValue(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription());
@@ -93,20 +113,11 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             dtbApprovedRequestDate.setValue(new Timestamp(new java.util.Date().getTime()));
             chbApprovalIndicator.setChecked(transactionApproveRequest.getIndApproveRequest());
             txtObservation.setValue(transactionApproveRequest.getObservations());
-//            BPBusinessWSProxy proxy = new BPBusinessWSProxy();
-//            try {
-//            	BpBusiness bpBussiness = proxy.getBusiness(BusinessSearchType.ID, String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
-//            	lblUserName.setValue(bpBussiness.getName()); 
-//            	lblTelephone.setValue(bpBussiness.getPhoneNumber()); 
-//            	lblEmail.setValue(bpBussiness.getEmail()); 
-//            } catch (Exception e) {
-//            	this.showMessage("sp.specific.preference.error.search", true, null);  
-//            }
         } catch (Exception ex) {
             showError(ex);
         }
     }
-
+    
     public void blockFields() {
         dtbApprovedRequestDate.setDisabled(true);
         chbApprovalIndicator.setDisabled(true);
