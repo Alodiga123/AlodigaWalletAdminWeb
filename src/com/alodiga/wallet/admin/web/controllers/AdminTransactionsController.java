@@ -21,10 +21,8 @@ import com.alodiga.wallet.common.model.CommissionItem;
 import com.alodiga.wallet.common.model.Transaction;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
-import java.rmi.RemoteException;
 import com.portal.business.commons.models.Business;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.zkoss.zul.Radio;
 
 public class AdminTransactionsController extends GenericAbstractAdminController {
@@ -96,16 +94,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
         try {
             //Formato de fecha
             String pattern = "dd-MM-yyyy";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            
-            //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
-            APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
-            RespuestaUsuario responseUser = new RespuestaUsuario();
-            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transaction.getUserSourceId()));
-            String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-            responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
-            String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-            
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);            
             if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
@@ -118,8 +107,9 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 lblUserDestination.setValue(userNameDestination);
             } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de BusinessPortal relacionados con la Transacción
-                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId());
-                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId());
+                List<Business> businessList = businessEJB.getAll();
+                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId().longValue());
+                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblUserDestination.setValue(businessDestination.getDisplayName());
             }    
@@ -155,8 +145,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 rIsCloseYes.setChecked(true);
             } else {
                 rIsCloseNo.setChecked(true);
-            } 
-            
+            }             
             //Se obtiene la comisión de la transacción                    
             List<CommissionItem> items = utilsEJB.getCommissionItems(transaction.getId());
             if (!items.isEmpty()) {
@@ -204,5 +193,5 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             default:
                 break;
         }
-    }
+        }
 }

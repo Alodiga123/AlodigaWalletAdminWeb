@@ -11,14 +11,13 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
-//import com.alodiga.businessportal.ws.BPBusinessWSProxy;
-//import com.alodiga.businessportal.ws.BpBusiness;
-//import com.alodiga.businessportal.ws.BusinessSearchType;
+import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.model.TransactionApproveRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -63,12 +62,12 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     public void initialize() {
         super.initialize();
         try {
-        	productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
-			user = AccessControl.loadCurrentUser();
-			loadData();
-		} catch (Exception e) {
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+                    user = AccessControl.loadCurrentUser();
+                    loadData();
+        } catch (Exception e) {
 
-		}
+        }
 
     }
 
@@ -79,13 +78,13 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
 
     private void loadFields(TransactionApproveRequest transactionApproveRequest) {
         try {
-        	lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
-        	lblRequestDate.setValue(transactionApproveRequest.getCreateDate().toString());
-        	lblRequestStatus.setValue(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription());
-        	lblProduct.setValue(transactionApproveRequest.getTransactionId().getProductId().getName());
-        	lblConcept.setValue(transactionApproveRequest.getTransactionId().getConcept());
-        	lblTransactionNumber.setValue(transactionApproveRequest.getTransactionId().getTransactionNumber());
-        	lblTransactionDate.setValue(transactionApproveRequest.getTransactionId().getCreationDate().toString());
+            lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
+            lblRequestDate.setValue(transactionApproveRequest.getCreateDate().toString());
+            lblRequestStatus.setValue(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription());
+            lblProduct.setValue(transactionApproveRequest.getTransactionId().getProductId().getName());
+            lblConcept.setValue(transactionApproveRequest.getTransactionId().getConcept());
+            lblTransactionNumber.setValue(transactionApproveRequest.getTransactionId().getTransactionNumber());
+            lblTransactionDate.setValue(transactionApproveRequest.getTransactionId().getCreationDate().toString());
             lblAmount.setValue(String.valueOf(transactionApproveRequest.getTransactionId().getAmount()));
             lblBank.setValue(transactionApproveRequest.getBankOperationId().getBankId().getName());
             lblBankOperationNumber.setValue(transactionApproveRequest.getBankOperationId().getBankOperationNumber());
@@ -107,22 +106,17 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             showError(ex);
         }
     }
-    
-    
-  
 
     public void blockFields() {
-    	 dtbApprovedRequestDate.setDisabled(true);
-         chbApprovalIndicator.setDisabled(true);
-         txtObservation.setReadonly(true);
+        dtbApprovedRequestDate.setDisabled(true);
+        chbApprovalIndicator.setDisabled(true);
+        txtObservation.setReadonly(true);
     	
     }
 
     public void onClick$btnCancel() {
         clearFields();
-    }
-
-   
+    }   
 
     public void loadData() {
         switch (eventType) {
@@ -139,23 +133,23 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     }
     
     public void onClick$btnSave() {
-			switch (eventType) {
-			case WebConstants.EVENT_EDIT:
-				saveTransactionApproveRequest(transactionApproveRequest);
-				break;
-			default:
-				break;
-			}
-	}
+        switch (eventType) {
+        case WebConstants.EVENT_EDIT:
+            saveTransactionApproveRequest(transactionApproveRequest);
+        break;
+        default:
+            break;
+        }
+    }
 
    private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {
-	   manualRechargeApproval.setUpdateDate(new Date());
-	   manualRechargeApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
-	   manualRechargeApproval.setIndApproveRequest(chbApprovalIndicator.isChecked());
-	   manualRechargeApproval.setObservations(txtObservation.getText());
-	   manualRechargeApproval.setUserApprovedRequestId(user);
-	   try {
-		   manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+       manualRechargeApproval.setUpdateDate(new Date());
+       manualRechargeApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
+       manualRechargeApproval.setIndApproveRequest(chbApprovalIndicator.isChecked());
+       manualRechargeApproval.setObservations(txtObservation.getText());
+       manualRechargeApproval.setUserApprovedRequestId(user);
+       try {
+           manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
            this.showMessage("sp.common.save.success", false, null);
            btnSave.setVisible(false);
        } catch (Exception ex) {
