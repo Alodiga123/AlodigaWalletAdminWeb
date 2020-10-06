@@ -83,10 +83,8 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     }
 
     private void loadFields(TransactionApproveRequest transactionApproveRequest) {
-        try {
-            
-            
-            if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
+        try {          
+             if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
                 RespuestaUsuario responseUser = new RespuestaUsuario();
@@ -95,7 +93,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 lblUserName.setValue(userNameSource);
             } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen de BusinessPortal relacionados con la Transacción
-                Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId());
+                Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
                 lblUserName.setValue(businessSource.getDisplayName());
             }
             lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
