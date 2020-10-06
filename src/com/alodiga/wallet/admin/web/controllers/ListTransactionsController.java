@@ -26,10 +26,13 @@ import com.alodiga.wallet.common.model.TransactionSource;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
@@ -105,28 +108,38 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     public void onChange$dtbEndingDate() {
         this.clearMessage();
     }
+    
 
     public void onClick$btnViewTransactions() throws InterruptedException, RegisterNotFoundException {
         try {            
-            TransactionSource transactionSource = (TransactionSource) cmbTransactionSource.getSelectedItem().getValue();
-            
-            if ((rDaysYes.isChecked()) && (cmbTransactionSource.getSelectedItem()  != null)){
-               if ((dtbBeginningDate.getValue() != null) && (cmbTransactionSource.getSelectedItem()  != null)){
-                   loadList(utilsEJB.getTransactionByBeginningDateAndOrigin(dtbBeginningDate.getValue(), transactionSource.getId()));
-               }else {
-                    this.showMessage("error.crud.transaction.filterDay", true, null);
-                }
+              clearMessage();
+            if (rDaysYes.isChecked()){
+                  EJBRequest _request = new EJBRequest();
+                  Map<String, Object> params = new HashMap<String, Object>();
+                  params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+              if (cmbTransactionSource.getSelectedItem() != null && cmbTransactionSource.getSelectedIndex() != 0) {
+                  params.put(QueryConstants.PARAM_STATUS_SOURCE_ID, ((TransactionSource) cmbTransactionSource.getSelectedItem().getValue()).getId());
+              } 
+              _request.setParams(params);
+              loadList(utilsEJB.getTransactionByBeginningDateAndOriginTransaccion(_request));   
             }
-            
-            if ((rDaysNo.isChecked()) && (cmbTransactionSource.getSelectedItem()  != null)){
-                if ((dtbBeginningDate.getValue() != null) && (dtbEndingDate.getValue() != null) && (cmbTransactionSource.getSelectedItem()  != null)) {
-                    loadList(utilsEJB.getTransactionByDatesAndOrigin(dtbBeginningDate.getValue(), dtbEndingDate.getValue(), transactionSource.getId()));
-                } else {
-                    this.showMessage("error.crud.transaction.filter.startAndEndDate", true, null);
+
+            if (rDaysNo.isChecked()){
+                if ((dtbBeginningDate.getValue() != null) && (dtbEndingDate.getValue() != null)) {
+                    EJBRequest _request = new EJBRequest();
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+                    params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
+                    if (cmbTransactionSource.getSelectedItem() != null && cmbTransactionSource.getSelectedIndex() != 0) {
+                        params.put(QueryConstants.PARAM_STATUS_SOURCE_ID, ((TransactionSource) cmbTransactionSource.getSelectedItem().getValue()).getId());
+                    }   
+                    _request.setParams(params);
+                    loadList(utilsEJB.getTransactionByDatesAndOrigin(_request));
                 }
-            }
+            }  
             
         } catch (EmptyListException ex) {
+            lbxRecords.getItems().clear();
             showEmptyList();
         } catch (Exception ex) {
             showError(ex);
@@ -251,12 +264,11 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     
     private void loadCmbTransactionSource() {
         try {
-            
             cmbTransactionSource.getItems().clear();
             EJBRequest request = new EJBRequest();
             List<TransactionSource> transactionSource = utilsEJB.getTransactionSource(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("maw.common.selected"));
+            item.setLabel(Labels.getLabel("sp.common.all"));
             item.setParent(cmbTransactionSource);
             cmbTransactionSource.setSelectedItem(item);
             for (int i = 0; i < transactionSource.size(); i++) {
