@@ -94,7 +94,8 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
         try {
             //Formato de fecha
             String pattern = "dd-MM-yyyy";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);            
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
             if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
@@ -108,8 +109,8 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de BusinessPortal relacionados con la Transacción
                 List<Business> businessList = businessEJB.getAll();
-                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId().longValue());
-                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId().longValue());
+                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId());
+                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId());
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblUserDestination.setValue(businessDestination.getDisplayName());
             }    
@@ -161,6 +162,8 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
 
     public void blockFields() {
         btnSave.setVisible(false);
+        rIsCloseYes.setDisabled(true);
+        rIsCloseNo.setDisabled(true);
     }
 
     public void onClick$btnCancel() {

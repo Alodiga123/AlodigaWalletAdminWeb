@@ -20,7 +20,7 @@
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="900px">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -40,13 +40,13 @@
                                                     <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
                                                     <combobox id="cmbProduct" width="120px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('sp.crud.manual.recharge.transaction')}" sclass="lblbold"/>
-                                                   <textbox id="txtRequestNumber" width="150px" maxlength="60"/>
-                                                </hlayout>
-                                                  <hlayout id="hParams" style="text-align:right">            
-                                                    <label value="${c:l('sp.common.beginningDate')}"  sclass="lblbold"/>
+                                                   <textbox id="txtRequestNumber" width="100px" maxlength="60"/>
+                                                   <label value="${c:l('sp.common.beginningDate')}"  sclass="lblbold"/>
                                                     <datebox id="dtbBeginningDate"  format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <label value="${c:l('sp.common.endingDate')}" sclass="lblbold"/>
                                                     <datebox id="dtbEndingDate" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                </hlayout>
+                                                  <hlayout id="hParams" style="text-align:right">            
                                                     <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                     <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                 </hlayout>								
@@ -56,7 +56,7 @@
                                         <!--Download button-->
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="890px" height="450px" mold="paging" pageSize="15">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="450px" mold="paging" pageSize="15">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.request.number')}" width="190px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.date')}" width="170px" sort="auto"/>
