@@ -72,6 +72,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             passwordChangeRequestParam = (PasswordChangeRequest) Sessions.getCurrent().getAttribute("object");
         }
         initialize();
+        UserInformation();
         initView(eventType, "crud.passwordChangeRequest");
     }
 
@@ -100,7 +101,37 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             showError(ex);
         }
     }
-
+    
+    public void onClick$imgEye() {
+        if (txtCurrentPassword.getType().equals("password")) {
+            txtCurrentPassword.setType("text");
+        } else {
+            txtCurrentPassword.setType("password");
+        }              
+    }
+    
+    public void onClick$imgEye1() {
+        if (txtNewPassword.getType().equals("password")) {
+            txtNewPassword.setType("text");
+        } else {
+            txtNewPassword.setType("password");
+        }              
+    }
+    
+    public void onClick$imgEye2() {
+        if (txtRepeatNewPassword.getType().equals("password")) {
+            txtRepeatNewPassword.setType("text");
+        } else {
+            txtRepeatNewPassword.setType("password");
+        }              
+    }
+    
+    public void UserInformation(){
+        lblUser.setValue(user.getFirstName() + " " + user.getLastName());
+        lblIdentificationNumber.setValue(user.getIdentificationNumber());
+        lblComercialAgency.setValue(user.getEmployeeId().getComercialAgencyId().getName());
+    }
+    
     public void onChange$txtRepeatNewPassword() {
         this.clearMessage();
         if (!txtRepeatNewPassword.getValue().equals(txtNewPassword.getValue())) {
@@ -235,7 +266,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
                 passwordChangeRequestParam = passwordChangeRequest;
 
                 //Actualizar la contraseña del usuario en la BD
-                user.setPassword(Encoder.MD5(txtCurrentPassword.getText()));
+                user.setPassword(txtNewPassword.getText());
                 user = userEJB.saveUser(user);
 
                 rApprovedYes.setVisible(true);

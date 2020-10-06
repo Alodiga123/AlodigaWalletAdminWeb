@@ -97,8 +97,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
                         case 2://Secutiry Management
                             loadSecurityManagementGroup(pg);
                             break;
-                        case 3://Configurations Management
-                            loadConfigurationsManagementGroup(pg);
+                        case 4://Configurations Reports
+                            loadReportsManagementGroup(pg);
                             break;
                         case 5://Configurations Management
                             loadTransactionalManagementGroup(pg);
@@ -118,8 +118,8 @@ public class AdminMainMenuController extends GenericForwardComposer {
     }
 
     private boolean existPermissionInGroup(List<Permission> ps, Long permissionGroupId) {
-        for (Permission p : ps) {
-            if (p.getPermissionGroup().getId().equals(permissionGroupId)) {
+            for (Permission p : ps) {
+                if (p.getPermissionGroup().getId().equals(permissionGroupId)) {
                 return true;
             }
         }
@@ -166,32 +166,22 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_COUNTRIES, "listCountries.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_CURRENCIES, "listCurrency.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PRODUCTS, "listProducts.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
-        createCell(Permission.REPORT_EXECUTE, "managementReport.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BANK, "listBank.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EXCHANGE_RATE, "listExchangeRate.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_CATEGORY, "listBusinnesCategory.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_COLLECTIONS_REQUEST, "listCollectionsRequest.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_TYPE, "listBusinessType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_SERVICE_TYPE, "listBusinessServiceType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_STATUS_CARD, "listStatusCard.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PERSON_TYPE, "listPersonType.zul", permissionGroup, listgroup);
     }
 
     private void loadSecurityManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
-//        createCell(Permission.AUDIT_ACTIONS, "listAuditActions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_AUDI, "listAuditActions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PROFILES, "listProfiles.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_USERS, "listUsers.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_EMPLOYEE, "listEmployee.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PASSWORD_CHANGE_REQUEST, "listPasswordChangeRequest.zul", permissionGroup, listgroup);
-    }
-
-    private void loadConfigurationsManagementGroup(PermissionGroup permissionGroup) {
-        Listgroup listgroup = createListGroup(permissionGroup);
-        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
-        createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
-        createCell(Permission.BALANCE_ADJUSMENT, "balanceAdjusmentView.zul", permissionGroup, listgroup);
     }
 
     private void loadTransactionalManagementGroup(PermissionGroup permissionGroup) {
@@ -201,17 +191,30 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "listManualRecharge.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "listManualWithdrawalApproval.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
+        createCell(Permission.AUTOMATIC_SERVICES, "automaticServices.zul", permissionGroup, listgroup);
     }
 
     private void loadManageMembershipRequestGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_DOCUMENTS_PERSON_TYPE, "listDocumentsPersonType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_COLLECTIONS_TYPE, "listCollectionTypes.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_COLLECTIONS_REQUEST, "listCollectionsRequest.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
+        createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
     }
-    
+    private void loadReportsManagementGroup(PermissionGroup permissionGroup) {
+        Listgroup listgroup = createListGroup(permissionGroup);
+        createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
+        createCell(Permission.MANAGEMENT_REPORT, "managementReport.zul", permissionGroup, listgroup);
+        
+    }
+
     private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {
         Permission permission = loadPermission(permissionId);
         if (permission != null) {

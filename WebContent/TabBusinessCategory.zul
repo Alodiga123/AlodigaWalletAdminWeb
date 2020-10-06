@@ -36,16 +36,16 @@
                                         <div>
                                             <vlayout>
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
-                                                    <tabs>
-                                                        <tab id="tabSubBusinnesCategory" label="${c:l('sp.tab.businnesSubCategory')}"/>
+                                                    <tabs>                                                        
                                                         <tab id="tabBusinnesCategory" label="${c:l('sp.tab.businnesCategory')}" />
+                                                        <tab id="tabSubBusinnesCategory" label="${c:l('sp.tab.businnesSubCategory')}"/>
                                                     </tabs>
                                                     <tabpanels>
                                                         <tabpanel>
-                                                            <include src="listBusinnesSubCategory.zul"/>
+                                                            <include src="adminBusinnessCategory.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="adminBusinnessCategory.zul"/>
+                                                            <include src="listBusinnesSubCategory.zul"/>
                                                         </tabpanel>
                                                     </tabpanels>
                                                 </tabbox>

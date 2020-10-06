@@ -38,6 +38,8 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Intbox;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
@@ -46,10 +48,10 @@ import org.zkoss.zul.Window;
 public class AdminEmployeePhoneController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    private Textbox txtPhone;
-    private Textbox txtCodeCountry;
-    private Textbox txtAreaCode;
-    private Textbox txtPhoneExtension;
+    private Intbox txtPhone;
+    private Label txtCodeCountry;
+    private Intbox txtAreaCode;
+    private Intbox txtPhoneExtension;
     private Combobox cmbCountry; 
     private Combobox cmbPhoneType;
     private Radio rIsPrincipalNumberYes;
@@ -74,7 +76,6 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
         } else {
             phonePersonParam = (Sessions.getCurrent().getAttribute("object") != null) ? (PhonePerson) Sessions.getCurrent().getAttribute("object") : null;
         }
-
         initialize();
     }
 
@@ -86,6 +87,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
+            showError(ex);
         }
     }
     
@@ -104,7 +106,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     
     private void loadFields(PhonePerson phonePerson) {
             txtPhone.setText(phonePerson.getNumberPhone());
-            txtCodeCountry.setText(phonePerson.getCountryCode());
+            txtCodeCountry.setValue(phonePerson.getCountryCode());
             txtAreaCode.setText(phonePerson.getAreaCode());
             txtPhoneExtension.setText(phonePerson.getExtensionPhoneNumber()); 
             if (phonePerson.getIndMainPhone() == true) {
@@ -116,10 +118,11 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     }
 
     public void blockFields() {;
-        txtCodeCountry.setReadonly(true);
         txtPhone.setReadonly(true);
         txtAreaCode.setReadonly(true);
         txtPhoneExtension.setReadonly(true);
+        rIsPrincipalNumberYes.setDisabled(true);
+        rIsPrincipalNumberNo.setDisabled(true);
         btnSave.setVisible(false);
     }
 
@@ -127,18 +130,12 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
         if (cmbCountry.getSelectedItem()  == null) {
             cmbCountry.setFocus(true);
             this.showMessage("sp.error.countryNotSelected", true, null);     
-        } else if (txtCodeCountry.getText().isEmpty()) {
-            txtCodeCountry.setFocus(true);
-            this.showMessage("sp.error.employee.areaCountry", true, null);
         } else if (txtAreaCode.getText().isEmpty()) {
             txtAreaCode.setFocus(true);
             this.showMessage("sp.error.employee.areaCode", true, null);
         } else if (txtPhone.getText().isEmpty()) {
             txtPhone.setFocus(true);
             this.showMessage("sp.error.field.phoneNumber", true, null);
-        } else if (txtPhoneExtension.getText().isEmpty()) {
-            txtPhoneExtension.setFocus(true);
-            this.showMessage("sp.error.employee.extensionPhone", true, null);
         } else if (cmbPhoneType.getSelectedItem() == null) {
             cmbPhoneType.setFocus(true);
             this.showMessage("sp.error.phoneType.notSelected", true, null);
@@ -151,6 +148,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     
     public boolean validatePhone() {
         Employee employee = null;
+        phonePersonList.clear();
         try {    
             //Empleado Principal
             AdminEmployeeController adminEmployee = new AdminEmployeeController();
@@ -180,8 +178,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             PhonePerson phonePerson = null;
 
             if (_phonePerson != null) {
-
-           phonePerson = _phonePerson;
+                phonePerson = _phonePerson;
             } else {
                 phonePerson = new PhonePerson();
             }
@@ -200,15 +197,21 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             //Guardar telefono
             phonePerson.setPersonId(employee.getPersonId());
             phonePerson.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
-            phonePerson.setCountryCode(txtCodeCountry.getText());
+            phonePerson.setCountryCode(txtCodeCountry.getValue());
             phonePerson.setAreaCode(txtAreaCode.getText());
             phonePerson.setNumberPhone(txtPhone.getText());
-            phonePerson.setExtensionPhoneNumber(txtPhoneExtension.getText());
+            phonePerson.setExtensionPhoneNumber(txtPhoneExtension.getText());  
             phonePerson.setIndMainPhone(indPrincipalPhone);
             phonePerson.setPhoneTypeId((PhoneType) cmbPhoneType.getSelectedItem().getValue());
-            phonePerson.setCreateDate(new Timestamp(new Date().getTime()));
+            if (eventType == WebConstants.EVENT_ADD) {
+                phonePerson.setCreateDate(new Timestamp(new Date().getTime()));
+            } else {
+                phonePerson.setUpdateDate(new Timestamp(new Date().getTime()));
+            }
+ 
             phonePerson = personEJB.savePhonePerson(phonePerson);
             this.showMessage("sp.common.save.success", false, null);
+            EventQueues.lookup("updatePhonePerson", EventQueues.APPLICATION, true).publish(new Event(""));
             btnSave.setVisible(false);
             
             } catch (Exception ex) {
@@ -221,6 +224,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     }
 
     public void onClick$btnSave() {
+        this.clearMessage();
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
@@ -247,7 +251,6 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
                 loadFields(phonePersonParam);
                 loadcmbPhoneType(eventType);
                 loadCmbCountry(eventType);
-                txtCodeCountry.setReadonly(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(phonePersonParam);
@@ -260,7 +263,6 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
                 loadcmbPhoneType(eventType);
                 loadCmbCountry(eventType);
                 onChange$cmbCountry();
-                txtCodeCountry.setReadonly(true);
                 break;
             default:
                 break;
@@ -291,7 +293,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
         List<Country> countryList;
         try {
             countryList = utilsEJB.getCountries(request1);
-            loadGenericCombobox(countryList, cmbCountry, "name", evenInteger, Long.valueOf(phonePersonParam != null ? phonePersonParam.getPersonId().getCountryId().getId() : 0));
+            loadGenericCombobox(countryList, cmbCountry, "name", evenInteger, Long.valueOf(phonePersonParam != null ? phonePersonParam.getCountryId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
         } catch (GeneralException ex) {

@@ -30,6 +30,9 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.zul.ListModel;
 
 public class AdminBusinessTypeController extends GenericAbstractAdminController {
@@ -45,12 +48,18 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     private Button btnSave;
     private AuditoryEJB auditoryEJB;
     private String ipAddress;
-    List<BusinessServiceType> businessServiceList = new ArrayList<BusinessServiceType>(); 
+    List<BusinessServiceType> businessServiceList = new ArrayList<BusinessServiceType>();
+    List<BusinessServiceType> businessServiceTypeByBusinessTypeList = new ArrayList<BusinessServiceType>(); 
+    Integer businessTypeId;
+    
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         businessTypeParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessType) Sessions.getCurrent().getAttribute("object") : null;
+        if (businessTypeParam != null) {
+            businessTypeId = businessTypeParam.getId();
+        }        
         user = AccessControl.loadCurrentUser();
         initialize();
         initView(eventType, "sp.crud.businesstype");
@@ -105,11 +114,10 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     }
 
     private void loadBussinessService() {
-        List<BusinessServiceType> businessService = new ArrayList<BusinessServiceType>();
         Listcell tmpCell = new Listcell();
         try {
             request.setFirst(0);
-            request.setFirst(null);
+            request.setFirst(null);            
             businessServiceList = utilsEJB.getBusinessServiceType(request);
             lbxRecords.getItems().clear();
             if (businessServiceList != null && !businessServiceList.isEmpty()) {
@@ -119,12 +127,16 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
                         tmpCell = new Listcell();
                         Checkbox chkRequired = new Checkbox();
                         chkRequired.setParent(tmpCell);
-                        if ((businessServices.getBusinessTypeId() != null) && (eventType != WebConstants.EVENT_ADD)) {
-                            chkRequired.setChecked(true);
-                            item.appendChild(tmpCell);
+                        if (eventType != WebConstants.EVENT_ADD && businessServices.getBusinessTypeId() != null) {
+                            if (businessServices.getBusinessTypeId().getId().intValue() == businessTypeId.intValue()) {
+                                chkRequired.setChecked(true);
+                                item.appendChild(tmpCell);
+                            } else {
+                                item.appendChild(tmpCell);
+                            }
                         } else {
                             item.appendChild(tmpCell);
-                        }
+                        }                       
                         if (eventType == WebConstants.EVENT_ADD) {
                             item.appendChild(tmpCell);
                         }
@@ -133,7 +145,6 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
                         item.setParent(lbxRecords);
                 }
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -167,16 +178,16 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
                                 BusinessServiceType businessServiceType = new BusinessServiceType();
                                 businessServiceType = (BusinessServiceType) ((Listitem) lbxRecords.getItems().get(i)).getValue();
                                 businessServiceType.setBusinessTypeId(businessType);
+                                if (businessServiceType.getBusinessTypeId() == null) {
+                                    businessServiceType.setBusinessTypeId(businessType);
+                                }
                                 businessServiceType = utilsEJB.saveBusinessServiceType(businessServiceType);
                             }
                         }
                     }
-                }                
+                }
             }
-            this.showMessage("sp.common.save.success", false, null); 
-
-
-        
+            this.showMessage("sp.common.save.success", false, null);        
         } catch (Exception ex) {
             showError(ex);
         }

@@ -35,16 +35,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout> 
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
@@ -56,49 +56,44 @@
                                                             <label value="${c:l('sp.crud.commission.product')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbProduct" width="270px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.commission.transactionType')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbTrasactionType" width="270px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.commission.percentCommision')}" sclass="lblbold"/>
-                                                            <hbox>
+                                                            <hbox width="270px">
                                                                 <radiogroup id="percentCommision" onCheck="choice1.value = self.selectedItem.label" />
                                                                 <grid>
                                                                     <rows>
                                                                         <row>
                                                                             <radio id="rPercentCommisionYes" label="${c:l('sp.common.yes')}" radiogroup="percentCommision" />
-                                                                            <radio id="rPercentCommisionNo" label="${c:l('sp.common.no')}" radiogroup="percentCommision" />
+                                                                            <radio id="rPercentCommisionNo" label="${c:l('sp.common.no')}" radiogroup="percentCommision" checked="true" />
                                                                         </row>
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.commission.value')}" sclass="lblbold"/>
+                                                            <label id="testPorcent" value="${c:l('sp.crud.commission.value')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <doublebox id="dblValue" width="270px" constraint="no negative" format="#,###.##" maxlength="20"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <doublebox id="dblValue" width="265px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.exchangeRate.beginningDate')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <datebox id="dtbBeginningDate" width="270px"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.exchangeRate.endingDate')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <datebox id="dtbEndingDate" width="270px"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                     </rows>

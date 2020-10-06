@@ -35,6 +35,8 @@ import com.alodiga.wallet.common.model.Employee;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PhonePerson;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -44,6 +46,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Window;
 
 public class ListEmployeePhoneController extends GenericAbstractListController<PhonePerson> {
@@ -56,6 +59,7 @@ public class ListEmployeePhoneController extends GenericAbstractListController<P
     private Profile currentProfile;
     private List<PhonePerson> phonePersonList = null;
     private Person person = null;
+    private Tab tabEmployeePhone;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -73,9 +77,9 @@ public class ListEmployeePhoneController extends GenericAbstractListController<P
             showError(ex);
         }
     }
-
+    
     public void startListener() {
-        EventQueue que = EventQueues.lookup("updateEmployeePhone", EventQueues.APPLICATION, true);
+        EventQueue que = EventQueues.lookup("updatePhonePerson", EventQueues.APPLICATION, true);
         que.subscribe(new EventListener() {
 
             public void onEvent(Event evt) {
@@ -97,7 +101,9 @@ public class ListEmployeePhoneController extends GenericAbstractListController<P
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             startListener();
             getData();
-            loadList(phonePersonList);
+            if(phonePersonList != null){
+              loadList(phonePersonList);  
+            }
         } catch (Exception ex) {
             showError(ex);
         }
@@ -255,8 +261,14 @@ public class ListEmployeePhoneController extends GenericAbstractListController<P
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.commissions.list"));
-            AccessControl.saveAction(Permission.LIST_STATUS_CARD_FINAL, "Se descargo listado de comisiones en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.employeePhone.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_EMPLOYEE, "Se descargo listado de telefonos de empleado en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }

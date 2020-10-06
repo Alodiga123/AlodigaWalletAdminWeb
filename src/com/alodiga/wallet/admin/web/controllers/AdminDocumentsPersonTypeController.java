@@ -104,8 +104,8 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
     }
 
     public void blockFields() {
-        txtDocumentPerson.setDisabled(true);
-        txtIdentityCode.setDisabled(true);
+        txtDocumentPerson.setReadonly(true);
+        txtIdentityCode.setReadonly(true);
         
         btnSave.setVisible(false);
     }

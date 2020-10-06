@@ -5,13 +5,19 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
-//import com.alodiga.wallet.common.ejb.AccessControlEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessCategory;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminBusinnessCategoryController extends GenericAbstractAdminController {
@@ -20,12 +26,13 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
     private Textbox txtDescription;
     private Textbox txtMccCode;
     private UtilsEJB utilsEJB = null;
-//    private AccessControlEJB accessEJB = null;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private BusinessCategory businessCategoryParam;
     public static BusinessCategory businessCategoryParent = null;
     private Integer eventType;
+    private Tab tabSubBusinnesCategory;
+    List<BusinessCategory> businessCategoryList = new ArrayList<BusinessCategory>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -37,9 +44,7 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
             businessCategoryParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessCategory) Sessions.getCurrent().getAttribute("object") : null;
             businessCategoryParent = businessCategoryParam;
         }
-
         initialize();
-        initView(eventType, "crud.businessCategory");
     }
 
     @Override
@@ -114,7 +119,24 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
         }
         return false;
     }
-
+    
+    public boolean validateCodeMMC(){
+        try{
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PARAM_MCC_CODE, txtMccCode.getValue());
+            request1.setParams(params);
+            businessCategoryList = utilsEJB.getValidateCodeMCC(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        }   if (businessCategoryList.size() > 0) {
+                this.showMessage("sp.crud.businnesCategory.code.existBD", true, null);
+                txtMccCode.setFocus(true);
+                return false;
+            }
+         return true;   
+    }
+    
     private void saveBusinessCategory(BusinessCategory _businessCategory) {
         try {
             BusinessCategory businessCategory = null;
@@ -151,7 +173,9 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
+                    if(validateCodeMMC()){
                     saveBusinessCategory(businessCategoryParam);
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBusinessCategory(businessCategoryParam);

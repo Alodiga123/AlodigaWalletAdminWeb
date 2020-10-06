@@ -26,11 +26,13 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.SimpleDateFormat;
+import org.zkoss.zul.Textbox;
 
 public class ListPasswordChangeRequestController extends GenericAbstractListController<PasswordChangeRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
+    private Textbox txtRequestNumber;
     private PersonEJB personEJB = null;
     private List<User> userList = null;
     private List<PasswordChangeRequest> passwordChangeRequestList = null;
@@ -147,17 +149,31 @@ public class ListPasswordChangeRequestController extends GenericAbstractListCont
 
     @Override
     public List<PasswordChangeRequest> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<PasswordChangeRequest> passwordChangeaux = new ArrayList<PasswordChangeRequest>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                passwordChangeaux = personEJB.getSearchPasswordChangeRequest(filter);
+            } else {
+                return passwordChangeRequestList;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return passwordChangeaux;
     }
 
     @Override
     public void onClick$btnClear() throws InterruptedException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        txtRequestNumber.setText("");
     }
 
     @Override
     public void onClick$btnSearch() throws InterruptedException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         try {
+            loadList(getFilteredList(txtRequestNumber.getText()));
+        } catch (Exception ex) {
+            showError(ex);
+        }
     }
 
 }

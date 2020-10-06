@@ -28,6 +28,8 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.zk.ui.event.Event;
@@ -157,8 +159,9 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
                 for (BusinessSubCategory businessSubCategory : list) {
                     item = new Listitem();
                     item.setValue(businessSubCategoryList);
-                    item.appendChild(new Listcell(businessSubCategory.getBusinessCategoryId().getDescription()));
+                    item.appendChild(new Listcell(businessSubCategory.getMccCode()));
                     item.appendChild(new Listcell(businessSubCategory.getDescription()));
+                    item.appendChild(new Listcell(businessSubCategory.getBusinessCategoryId().getDescription()));
                     item.appendChild(createButtonEditModal(businessSubCategory));
                     item.appendChild(createButtonViewModal(businessSubCategory));
                     item.setParent(lbxRecords);
@@ -232,8 +235,14 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.businnesSubCategory.list"));
-            AccessControl.saveAction(Permission.LIST_BUSINESS_SUB_CATEGORY, "Se descargo Sub Categoria de Comercios en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.businnesSubCategory.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_BUSINESS_SUB_CATEGORY, "Se descargo listado de sub categorías de comercio en formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
@@ -245,7 +254,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-//            loadDataList(getFilterList(txtName.getText()));
+            loadDataList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -253,7 +262,17 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
 
     @Override
     public List<BusinessSubCategory> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<BusinessSubCategory> businessSubCategoriesaux = new ArrayList<BusinessSubCategory>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                businessSubCategoriesaux = utilsEJB.getSearchBusinessSubCategory(filter);
+            } else {
+                return businessSubCategoryList;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return businessSubCategoriesaux;
     }
 
     @Override

@@ -19,7 +19,9 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.zkoss.util.resource.Labels;
@@ -76,17 +78,17 @@ public class ListEmployeeController extends GenericAbstractListController<Employ
     }
 
     public List<Employee> getFilteredList(String filter) {
-        List<Employee> list = new ArrayList<Employee>();
-        if (employee != null) {
-            for (Iterator<Employee> i = employee.iterator(); i.hasNext();) {
-                Employee tmp = i.next();
-                String field = tmp.getLastNames().toLowerCase();
-                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                    list.add(tmp);
-                }
+        List<Employee> employeesaux = new ArrayList<Employee>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                employeesaux = personEJB.searchEmployee(filter);
+            } else {
+                return employee;
             }
+        } catch (Exception ex) {
+            showError(ex);
         }
-        return list;
+        return employeesaux;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
@@ -174,19 +176,26 @@ public class ListEmployeeController extends GenericAbstractListController<Employ
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.employee.list"));
-            AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Empleados en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.employee.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_EMPLOYEE, "Se descargo listado de empleados en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }

@@ -35,16 +35,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout> 
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
@@ -55,30 +55,24 @@
                                                             <label value="${c:l('sp.crud.country.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.documentPersonType.personType')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbPersonType" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.documentPersonType.document')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtDocumentPerson" maxlength="50" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max50')}" sclass="lblexample"/>
+                                                                <textbox id="txtDocumentPerson" maxlength="50" width="245px"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.documentPersonType.identityCode')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtIdentityCode" maxlength="10" width="250px"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                                <label value="${c:l('sp.common.max10')}" sclass="lblexample"/>
+                                                                <textbox id="txtIdentityCode" maxlength="10" width="245px"/>
                                                             </hlayout>
                                                         </row>
                                                     </rows>

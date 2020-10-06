@@ -35,16 +35,16 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.crud.collectionsRequest')}" sclass="lblbold"/>
+                                                <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.crud.collectionsRequest')}" sclass="lblbold"/>
+                                                    </div>                                                
+                                                    <div align="right" width="485px">
+                                                        <hlayout>
+                                                            <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
+                                                        </hlayout>
+                                                    </div>
+                                                </hlayout> 
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column label="" width="300px"/>
@@ -55,23 +55,26 @@
                                                             <label value="${c:l('sp.crud.country.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.requestCollection.collectionTypes')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.country.origin.aplication')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbCollectionType" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
+                                                                <combobox id="cmbOriginAplication" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.requestCollection.personType')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbPersonType" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.requestCollection.collectionTypes')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbCollectionType" width="250px" mold="rounded" readonly="true"/>
+                                                            </hlayout>
+                                                        </row>                                                        
                                                     </rows>
                                                 </grid>
                                             </vlayout>

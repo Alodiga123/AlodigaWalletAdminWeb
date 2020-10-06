@@ -65,12 +65,15 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private Combobox cmbBank;
     private Bank bankParam;
     private Label lblInfo;
+    private Label lblBankName;
+    private Bank bank;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         bankParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Bank) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
+        getBank();
     }
 
     @Override
@@ -108,8 +111,8 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadOperationTypes() {
 
         try {
-        	cmbOperationType.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbOperationType.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<BankOperationType> operationTypes = utilsEJB.getBankOperationTypes(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -130,8 +133,8 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadOperationModes() {
 
         try {
-        	cmbOperationMode.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbOperationMode.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<BankOperationMode> operationModes = utilsEJB.getBankOperationModes(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -152,8 +155,8 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadProducts() {
 
         try {
-        	cmbProduct.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbProduct.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -174,7 +177,7 @@ public class ListBankOperationController extends GenericAbstractListController<B
     private void loadBanks(Bank bank) {
 
         try {
-        	cmbBank.getItems().clear();
+            cmbBank.getItems().clear();
             Comboitem item = new Comboitem();
             item.setValue(bank.getId());
             item.setLabel(bank.getName());
@@ -195,7 +198,7 @@ public class ListBankOperationController extends GenericAbstractListController<B
     public void onClick$btnSearch()  {
         try {
 
-        	  clearFields();
+              clearFields();
               clearMessage();
               EJBRequest _request = new EJBRequest();
               Map<String, Object> params = new HashMap<String, Object>();
@@ -254,12 +257,12 @@ public class ListBankOperationController extends GenericAbstractListController<B
                     item = new Listitem();
                     item.setValue(bankOperation);
                     item.appendChild(new Listcell(bankOperation.getBankOperationNumber()));
-                    item.appendChild(new Listcell(bankOperation.getBankId().getName()));
-                    item.appendChild(new Listcell(bankOperation.getBankOperationTypeId().getName()));
-                    item.appendChild(new Listcell(bankOperation.getBankOperationModeId().getName()));
-                    item.appendChild(new Listcell(bankOperation.getProductId().getName()));
                     item.appendChild(new Listcell(simpleDateFormat.format(bankOperation.getTransactionId().getCreationDate())));
-                    item.appendChild(new Listcell(bankOperation.getTransactionId().getTransactionStatus()));
+                    item.appendChild(new Listcell(bankOperation.getBankOperationTypeId().getName()));
+                    item.appendChild(new Listcell(bankOperation.getProductId().getName()));
+                    item.appendChild(new Listcell(String.valueOf(bankOperation.getBankOperationAmount())));
+                    item.appendChild(new Listcell(String.valueOf(bankOperation.getCommisionId().getValue())));
+                    item.appendChild(new Listcell(bankOperation.getBankOperationModeId().getName()));
                     item.appendChild(createButtonViewModal(bankOperation));
                     item.setParent(lbxRecords);
                 }
@@ -318,6 +321,14 @@ public class ListBankOperationController extends GenericAbstractListController<B
         item.appendChild(new Listcell());
         item.setParent(lbxRecords);
     }
+    
+    public void getBank(){
+        AdminBankController adminBank = new AdminBankController();
+        if(adminBank.getBankParent().getId() != null){
+            bank = adminBank.getBankParent();
+            lblBankName.setValue(bank.getName()); 
+        }
+    }
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
@@ -361,7 +372,6 @@ public class ListBankOperationController extends GenericAbstractListController<B
                     final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
                     window.doModal();
                 }
-
             });
             button.setParent(listcellViewModal);
         } catch (Exception ex) {

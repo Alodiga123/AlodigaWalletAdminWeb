@@ -27,7 +27,7 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                    <toolbarbutton label="${c:l('sp.crud.status.card.list')}" onClick='Executions.sendRedirect(&quot;listStatusCard.zul&quot;)'/>
+                                                <toolbarbutton label="${c:l('sp.crud.status.card.list')}" onClick='Executions.sendRedirect(&quot;listStatusCard.zul&quot;)'/>
                                                 |
                                                 <toolbarbutton id="tbbTitle" label=""/>
                                             </hlayout>
@@ -36,7 +36,7 @@
                                         <div>
                                             <vlayout>
                                                 <tabbox id="tbxPurchaseTabs" width="970px" height="700px">
-                                                    <tabs>
+                                                    <tabs>                                                        
                                                         <tab id="tabStatusCard" label="${c:l('sp.crud.status.card')}" />
                                                         <tab id="tabStatusCardFinal" label="${c:l('sp.crud.status.card.hasFinal.state')}"/>
                                                     </tabs>

@@ -5,9 +5,15 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BusinessServiceType;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Textbox;
@@ -23,6 +29,7 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
     private Toolbarbutton tbbTitle;
     private BusinessServiceType businessServiceParam;
     private Integer eventType;
+    List<BusinessServiceType> businessServiceTypeList = new ArrayList<BusinessServiceType>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -79,8 +86,8 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
     }
 
     public void blockFields() {
-        txtCode.setDisabled(true);
-        txtDescription.setDisabled(true);
+        txtCode.setReadonly(true);
+        txtDescription.setReadonly(true);
         btnSave.setVisible(false);
     }
 
@@ -95,6 +102,24 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
             return true;
         }
         return false;
+    }
+    
+    public boolean validateCodeBusiness(){
+        businessServiceTypeList.clear();
+        try{
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PARAM_CODE, txtCode.getValue());
+            request1.setParams(params);
+            businessServiceTypeList = utilsEJB.getBusinessServiceTypeValidateCode(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        } if(businessServiceTypeList.size() > 0){
+                this.showMessage("sp.crud.businnesCategory.code.existBD", true, null);
+                txtCode.setFocus(true);
+                return false;
+            }
+        return true;
     }
 
     private void saveBusinessService(BusinessServiceType _businessServiceType) {
@@ -131,7 +156,9 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBusinessService(businessServiceParam);
+                    if(validateCodeBusiness()){
+                       saveBusinessService(businessServiceParam); 
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBusinessService(businessServiceParam);

@@ -14,9 +14,13 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.Product;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
@@ -36,6 +40,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     private Toolbarbutton tbbTitle;
     private ExchangeRate exchangeRateParam;
     private Integer eventType;
+    List <ExchangeRate> exchangeList = new ArrayList<ExchangeRate>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -95,9 +100,9 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     }
 
     public void blockFields() {
-        dblValue.setDisabled(true);
-        dtbBeginningDate.setDisabled(true);
-        dtbEndingDate.setDisabled(true);
+        dblValue.setReadonly(true);
+        dtbBeginningDate.setReadonly(true);
+        dtbEndingDate.setReadonly(true);
         cmbProduct.setReadonly(true);
 
         btnSave.setVisible(false);
@@ -119,9 +124,26 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
             return true;
         }
         return false;
-
     }
 
+    public boolean validateExchangeRateByProduct(){
+        Product product = (Product) cmbProduct.getSelectedItem().getValue();
+        try{
+           EJBRequest request1 = new EJBRequest();
+           Map params = new HashMap();
+           params.put(Constants.PRODUCT_KEY, product.getId()); 
+           request1.setParams(params);
+           exchangeList = utilsEJB.getExchangeRateByProductAndEndingDate(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        }   if (exchangeList.size() > 0) {
+                this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
+                cmbProduct.setFocus(true);
+                return false;
+            }
+        return true;
+    }
+    
     private void saveBank(ExchangeRate _exchangeRate) {
         try {
             ExchangeRate exchangeRate = null;
@@ -161,7 +183,9 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveBank(exchangeRateParam);
+                    if(validateExchangeRateByProduct()){
+                      saveBank(exchangeRateParam);  
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveBank(exchangeRateParam);
@@ -177,6 +201,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
             case WebConstants.EVENT_EDIT:
                 loadFields(exchangeRateParam);
                 loadCmbProduct(eventType);
+                cmbProduct.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(exchangeRateParam);
