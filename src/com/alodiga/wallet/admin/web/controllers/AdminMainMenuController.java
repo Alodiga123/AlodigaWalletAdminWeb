@@ -194,6 +194,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
+        createCell(Permission.AUTOMATIC_SERVICES, "automaticServices.zul", permissionGroup, listgroup);
     }
 
     private void loadManageMembershipRequestGroup(PermissionGroup permissionGroup) {

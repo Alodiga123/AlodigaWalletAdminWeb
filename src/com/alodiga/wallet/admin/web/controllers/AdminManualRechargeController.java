@@ -88,7 +88,6 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
         try {
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            
             if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
@@ -98,7 +97,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 lblUserName.setValue(userNameSource);
             } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen de BusinessPortal relacionados con la Transacción
-                Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId());
+                Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
                 lblUserName.setValue(businessSource.getDisplayName());
             }
             
