@@ -2,7 +2,6 @@ package com.alodiga.wallet.admin.web.controllers;
 
 import java.sql.Timestamp;
 import java.util.Date;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Button;
@@ -10,7 +9,6 @@ import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
-
 import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
@@ -75,9 +73,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
 		user = AccessControl.loadCurrentUser();
 			loadData();
 		} catch (Exception e) {
-
         }
-
     }
 
     public void clearFields() {
@@ -100,7 +96,6 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
                 lblUserName.setValue(businessSource.getDisplayName());
             }
-            
             lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
             lblRequestDate.setValue(simpleDateFormat.format(transactionApproveRequest.getCreateDate()));
             lblRequestStatus.setValue(transactionApproveRequest.getStatusTransactionApproveRequestId().getDescription());
@@ -110,8 +105,12 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             lblTransactionDate.setValue(simpleDateFormat.format(transactionApproveRequest.getTransactionId().getCreationDate()));
             lblAmount.setValue(String.valueOf(transactionApproveRequest.getTransactionId().getAmount()));
             lblBank.setValue(transactionApproveRequest.getBankOperationId().getBankId().getName());
-            lblBankOperationNumber.setValue(transactionApproveRequest.getBankOperationId().getBankOperationNumber());
-            lblBankOperationDate.setValue(simpleDateFormat.format(transactionApproveRequest.getBankOperationId().getBankOperationDate()));
+            if (transactionApproveRequest.getBankOperationId().getBankOperationNumber() != null) {
+                lblBankOperationNumber.setValue(transactionApproveRequest.getBankOperationId().getBankOperationNumber());
+            }
+            if (transactionApproveRequest.getBankOperationId().getBankOperationDate() != null) {
+                lblBankOperationDate.setValue(simpleDateFormat.format(transactionApproveRequest.getBankOperationId().getBankOperationDate()));
+            }            
             lblApprovalUser.setValue(user.getFirstName()+" "+user.getLastName());
             dtbApprovedRequestDate.setValue(new Timestamp(new java.util.Date().getTime()));
             if (transactionApproveRequest.getIndApproveRequest() == true) {
@@ -131,7 +130,6 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
          rIsApprovedYes.setDisabled(true);
          rIsApprovedNo.setDisabled(true);
          txtObservation.setReadonly(true);
-        chbApprovalIndicator.setDisabled(true);
     }
 
     public void onClick$btnCancel() {
@@ -146,7 +144,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 break;  
             case WebConstants.EVENT_EDIT:
                 loadFields(transactionApproveRequest);
-                dtbApprovedRequestDate.setDisabled(true);
+                dtbApprovedRequestDate.setReadonly(true);
                 break;  
             default:
                 break;
@@ -163,24 +161,22 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
         }
     }
 
-   private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {
-            
-            boolean indApproved  = true;
-            if (rIsApprovedYes.isChecked()) {
-                indApproved = true;
-            } else {
-                indApproved = false;
-            }
-
-           manualRechargeApproval.setUpdateDate(new Date());
-	   manualRechargeApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
-	   manualRechargeApproval.setIndApproveRequest(indApproved);
-	   manualRechargeApproval.setObservations(txtObservation.getText());
-	   manualRechargeApproval.setUserApprovedRequestId(user);
-	   try {
-		   manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
-           this.showMessage("sp.common.save.success", false, null);
-           btnSave.setVisible(false);
+   private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {       
+        boolean indApproved  = true;
+        if (rIsApprovedYes.isChecked()) {
+            indApproved = true;
+        } else {
+            indApproved = false;
+        }
+        manualRechargeApproval.setUpdateDate(new Date());
+        manualRechargeApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
+        manualRechargeApproval.setIndApproveRequest(indApproved);
+        manualRechargeApproval.setObservations(txtObservation.getText());
+        manualRechargeApproval.setUserApprovedRequestId(user);
+        try {
+            manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+            this.showMessage("sp.common.save.success", false, null);
+            btnSave.setVisible(false);
        } catch (Exception ex) {
            this.showMessage("sp.msj.errorSave", true, null);
        }
