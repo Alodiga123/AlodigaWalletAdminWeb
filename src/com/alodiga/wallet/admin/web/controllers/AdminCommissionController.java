@@ -38,6 +38,8 @@ public class AdminCommissionController extends GenericAbstractAdminController {
     private Combobox cmbTrasactionType;
     private Radio rPercentCommisionYes;
     private Radio rPercentCommisionNo;
+    private Radio rIsApplicationYes;
+    private Radio rIsApplicationNo;
     private Doublebox dblValue;
     public Short percentCommision = 0;
     private Datebox dtbBeginningDate;
@@ -119,6 +121,12 @@ public class AdminCommissionController extends GenericAbstractAdminController {
             } else {
                 rPercentCommisionNo.setChecked(true);
             }
+            
+            if (commission.getIndApplicationCommission() == 1) {
+                rIsApplicationYes.setChecked(true);
+            } else {
+                rIsApplicationNo.setChecked(true);
+            }
 
             btnSave.setVisible(true);
         } catch (Exception ex) {
@@ -163,6 +171,13 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         comissionList.clear();
         TransactionType transactionTypee =(TransactionType) cmbTrasactionType.getSelectedItem().getValue();
         Product product = (Product) cmbProduct.getSelectedItem().getValue();
+        Integer application;
+        
+        if (rIsApplicationYes.isChecked()) {
+                application = 1;
+        } else {
+                application = 2;
+        }
         
         try {
             //Valida que la comision del producto no exista
@@ -170,6 +185,7 @@ public class AdminCommissionController extends GenericAbstractAdminController {
             Map params = new HashMap();
             params.put(Constants.PRODUCT_KEY, product.getId());
             params.put(Constants.TRANSACTION_TYPE_KEY, transactionTypee.getId());
+            params.put(Constants.APPLICATION_COMISSION, application);
             request1.setParams(params);
             comissionList = utilsEJB.getCommissionByProductAndTranssactionType(request1);
         } catch (Exception ex) {
@@ -185,7 +201,7 @@ public class AdminCommissionController extends GenericAbstractAdminController {
     private void saveBank(Commission _commission) {
         try {
             Commission commission = null;
-
+            Integer application;
             if (_commission != null) {
                 commission = _commission;
             } else {//New country
@@ -197,9 +213,16 @@ public class AdminCommissionController extends GenericAbstractAdminController {
             } else {
                 percentCommision = 0;
             }
+            
+            if (rIsApplicationYes.isChecked()) {
+                application = 1;
+            } else {
+                application = 2;
+            }
 
             commission.setProductId((Product) cmbProduct.getSelectedItem().getValue());
             commission.setTransactionTypeId((TransactionType) cmbTrasactionType.getSelectedItem().getValue());
+            commission.setIndApplicationCommission(application);
             commission.setIsPercentCommision(percentCommision);
             commission.setValue(dblValue.getValue().floatValue());
             commission.setBeginningDate(dtbBeginningDate.getValue());
