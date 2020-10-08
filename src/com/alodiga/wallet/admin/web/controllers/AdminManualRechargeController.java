@@ -131,7 +131,6 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
          rIsApprovedYes.setDisabled(true);
          rIsApprovedNo.setDisabled(true);
          txtObservation.setReadonly(true);
-        chbApprovalIndicator.setDisabled(true);
     }
 
     public void onClick$btnCancel() {
