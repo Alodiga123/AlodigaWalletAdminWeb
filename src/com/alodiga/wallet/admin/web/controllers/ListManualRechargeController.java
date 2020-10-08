@@ -27,6 +27,7 @@ import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusTransactionApproveRequestE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
@@ -214,7 +215,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
                     	item.appendChild(new Listcell(approveRequest.getProductId().getName()));
                     	item.appendChild(new Listcell(String.valueOf(approveRequest.getTransactionId().getAmount())));
                     	item.appendChild(new Listcell(approveRequest.getStatusTransactionApproveRequestId().getDescription()));
-                    	if(approveRequest.getStatusTransactionApproveRequestId().getCode().equals(Constants.STATUS_TRANSACTIONS_CODE))
+                    	if(approveRequest.getStatusTransactionApproveRequestId().getCode().equals(StatusTransactionApproveRequestE.PENDIEN.getStatusTransactionApproveRequestCode()))
                     		item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, approveRequest,Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
                     	else
                     		item.appendChild(new Listcell());
@@ -280,9 +281,16 @@ public class ListManualRechargeController extends GenericAbstractListController<
     }
 
     public void onClick$btnDownload() throws InterruptedException {
-        try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.manual.recharge.list"));
+        try {            
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.manual.recharge.list"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
             AccessControl.saveAction(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "Se descargo listado de Solicitudes de Recarga Manual en formato excel");
+        
         } catch (Exception ex) {
             showError(ex);
         }

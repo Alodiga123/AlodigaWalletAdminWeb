@@ -109,8 +109,8 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene los usuarios de Origen y Destino de BusinessPortal relacionados con la Transacción
                 List<Business> businessList = businessEJB.getAll();
-                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId());
-                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId());
+                Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId().intValue());
+                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId().intValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblUserDestination.setValue(businessDestination.getDisplayName());
             }    

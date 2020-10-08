@@ -12,6 +12,7 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
 import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
+import com.alodiga.wallet.common.enumeraciones.StatusTransactionApproveRequestE;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
@@ -19,14 +20,19 @@ import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.model.StatusTransactionApproveRequest;
 import com.alodiga.wallet.common.model.TransactionApproveRequest;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
 import com.ericsson.alodiga.ws.RespuestaUsuario;
 import com.portal.business.commons.models.Business;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.zul.Radio;
 
 public class AdminManualRechargeController extends GenericAbstractAdminController {
@@ -131,7 +137,6 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
          rIsApprovedYes.setDisabled(true);
          rIsApprovedNo.setDisabled(true);
          txtObservation.setReadonly(true);
-        chbApprovalIndicator.setDisabled(true);
     }
 
     public void onClick$btnCancel() {
@@ -163,7 +168,8 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
         }
     }
 
-   private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {
+   private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {    
+        try{
             
             boolean indApproved  = true;
             if (rIsApprovedYes.isChecked()) {
@@ -172,14 +178,39 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 indApproved = false;
             }
 
-           manualRechargeApproval.setUpdateDate(new Date());
-	   manualRechargeApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
+           
 	   manualRechargeApproval.setIndApproveRequest(indApproved);
 	   manualRechargeApproval.setObservations(txtObservation.getText());
+           
+           if(indApproved == true){
+               //Obtener Status Transaction Aprovada Request
+               EJBRequest request = new EJBRequest();
+               HashMap params = new HashMap();
+               params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.APROBA.getStatusTransactionApproveRequestCode() );
+               request.setParams(params);
+               StatusTransactionApproveRequest statusAproba = productEJB.loadStatusTransactionApproveRequestbyCode(request);
+               manualRechargeApproval.setStatusTransactionApproveRequestId(statusAproba);
+               manualRechargeApproval.setUpdateDate(new Date());
+               manualRechargeApproval.setApprovedRequestDate(new Date());
+           } else {
+               //Obtener Status Transaction Rechazada Request
+               EJBRequest request1 = new EJBRequest();
+               HashMap params = new HashMap();
+               params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.RECHAZ.getStatusTransactionApproveRequestCode());
+               request1.setParams(params);
+               StatusTransactionApproveRequest statusRechaz = productEJB.loadStatusTransactionApproveRequestbyCode(request1);
+               manualRechargeApproval.setStatusTransactionApproveRequestId(statusRechaz);
+               manualRechargeApproval.setUpdateDate(new Date());
+           } 
 	   manualRechargeApproval.setUserApprovedRequestId(user);
-	   try {
-		   manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
-           this.showMessage("sp.common.save.success", false, null);
+           manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+           
+           if(indApproved == true){
+             this.showMessage("sp.crud.manual.recharge.saveApproved", false, null);  
+           } else {
+             this.showMessage("sp.crud.manual.recharge.saveRejected", false, null);  
+           }
+           
            btnSave.setVisible(false);
        } catch (Exception ex) {
            this.showMessage("sp.msj.errorSave", true, null);
