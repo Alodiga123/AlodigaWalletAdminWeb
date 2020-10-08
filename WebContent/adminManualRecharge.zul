@@ -56,22 +56,22 @@
                                                         </row>
                                                       <group label="${c:l('sp.crud.manualWithdrawalApproval.transaction')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.concept')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblProduct" value="" width="270px" style="color:#837E76;"/>
-                                                            <label id="lblConcept" value="" width="270px" style="color:#837E76;"/>
-                                                            <label id="lblTransactionNumber" value="" width="270px" style="color:#837E76;"/>
-                                                        </row>
-                                                         <row>
                                                             <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.amount')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
+                                                            <label id="lblTransactionNumber" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblTransactionDate" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblProduct" value="" width="270px" style="color:#837E76;"/>   
+                                                        </row>
+                                                         <row>                         
+                                                            <label value="${c:l('sp.crud.manual.recharge.amount')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.concept')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
                                                             <label id="lblAmount" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblConcept" value="" width="270px" style="color:#837E76;"/>
                                                         </row>
                                                          <group label="${c:l('sp.common.user')}"/> 
                                                         <row>

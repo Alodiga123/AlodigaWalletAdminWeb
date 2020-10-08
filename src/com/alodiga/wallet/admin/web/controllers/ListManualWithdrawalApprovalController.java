@@ -13,6 +13,7 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListContr
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusTransactionApproveRequestE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
@@ -28,6 +29,7 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.zul.Textbox;
@@ -75,29 +77,13 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
         }
     }
 
-    public void getData() {
-        List<StatusTransactionApproveRequest> statusPending;
-        statusPending = new ArrayList<StatusTransactionApproveRequest>();
-        StatusTransactionApproveRequest statusP = null;
-
+    public void getData() { 
         manualWithdrawalApproval = new ArrayList<TransactionApproveRequest>();
         try {
-            EJBRequest code = new EJBRequest();
+
+            EJBRequest status = new EJBRequest();
             Map params = new HashMap();
             params = new HashMap();
-            params.put(QueryConstants.PARAM_CODE, Constants.STATUS_TRANSACTIONS_CODE);
-            code.setParams(params);
-            statusPending = utilsEJB.getStatusTransactionApproveRequestPending(code);
-
-            if (statusPending != null) {
-                for (StatusTransactionApproveRequest s : statusPending) {
-                    statusP = s;
-                }
-            }
-            EJBRequest status = new EJBRequest();
-            params = new HashMap();
-            params = new HashMap();
-            params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPROVE_REQUEST_ID, statusP.getId());
             params.put(QueryConstants.PARAM_REQUEST_NUMBER, Constants.REQUEST_NUMBER_MANUAL_WITHDRAWAL);
             status.setParams(params);
             manualWithdrawalApproval = utilsEJB.getTransactionApproveRequestByStatus(status);
@@ -158,9 +144,16 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
     }
 
     public void onClick$btnDownload() throws InterruptedException {
-        try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.manualWithdrawalApproval.list"));
+        try {        
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.manual.recharge.list.download"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
             AccessControl.saveAction(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "Se descargo listado de Retiro Manual en formato excel");
+
         } catch (Exception ex) {
             showError(ex);
         }
