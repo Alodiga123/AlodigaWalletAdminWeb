@@ -190,13 +190,12 @@ public class AdminMainMenuController extends GenericForwardComposer {
     private void loadTransactionalManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_COMMISSION, "listCommission.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "listManualRecharge.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "listManualWithdrawalApproval.zul", permissionGroup, listgroup);
-        
-        createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
         createCell(Permission.AUTOMATIC_SERVICES, "automaticServices.zul", permissionGroup, listgroup);
     }
 
@@ -214,18 +213,15 @@ public class AdminMainMenuController extends GenericForwardComposer {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
         createCell(Permission.MANAGEMENT_REPORT, "managementReport.zul", permissionGroup, listgroup);
-        
     }
     
     private void loadConfigurationPreferencesGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
+        createCell(Permission.LIST_PREFERENCE_TYPE, "listPreferenceType.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BASIC_PREFERENCE, "listPreferenceBasic.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
         createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_PREFERENCE_TYPE, "listPreferenceType.zul", permissionGroup, listgroup);
-        
-        
+        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
     }
 
     private void createCell(Long permissionId, String view, PermissionGroup permissionGroup, Listgroup listgroup) {

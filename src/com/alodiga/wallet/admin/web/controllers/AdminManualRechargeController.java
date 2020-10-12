@@ -91,14 +91,14 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
-                //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
+                //Obtiene el usuario de origen de Registro Unificado relacionado con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
                 RespuestaUsuario responseUser = new RespuestaUsuario();
                 responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
                 String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
                 lblUserName.setValue(userNameSource);
             } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
-                //Obtiene los usuarios de Origen de BusinessPortal relacionados con la Transacción
+                //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                 Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
                 lblUserName.setValue(businessSource.getDisplayName());
             }
@@ -167,53 +167,45 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
         }
     }
 
-   private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {    
-        try{
-            
-            boolean indApproved  = true;
+    private void saveTransactionApproveRequest(TransactionApproveRequest manualRechargeApproval) {
+        boolean indApproved  = true;
+        StatusTransactionApproveRequest statusTransactionApproveRequest;
+        EJBRequest request = new EJBRequest();
+        HashMap params = new HashMap();
+        
+        try{              
             if (rIsApprovedYes.isChecked()) {
-                indApproved = true;
+                indApproved = true;              
+                params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.APROBA.getStatusTransactionApproveRequestCode() );
+                request.setParams(params);
+                //Obtener el estatus "Transacción Aprobada"
+                statusTransactionApproveRequest = productEJB.loadStatusTransactionApproveRequestbyCode(request); 
             } else {
                 indApproved = false;
-            }
+                params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.RECHAZ.getStatusTransactionApproveRequestCode());
+                request.setParams(params);
+                //Obtener el estatus "Transacción Rechazada"
+                statusTransactionApproveRequest = productEJB.loadStatusTransactionApproveRequestbyCode(request);               
+            }      
 
-           
-	   manualRechargeApproval.setIndApproveRequest(indApproved);
-	   manualRechargeApproval.setObservations(txtObservation.getText());
-           
-           if(indApproved == true){
-               //Obtener Status Transaction Aprovada Request
-               EJBRequest request = new EJBRequest();
-               HashMap params = new HashMap();
-               params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.APROBA.getStatusTransactionApproveRequestCode() );
-               request.setParams(params);
-               StatusTransactionApproveRequest statusAproba = productEJB.loadStatusTransactionApproveRequestbyCode(request);
-               manualRechargeApproval.setStatusTransactionApproveRequestId(statusAproba);
-               manualRechargeApproval.setUpdateDate(new Date());
-               manualRechargeApproval.setApprovedRequestDate(new Date());
-           } else {
-               //Obtener Status Transaction Rechazada Request
-               EJBRequest request1 = new EJBRequest();
-               HashMap params = new HashMap();
-               params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.RECHAZ.getStatusTransactionApproveRequestCode());
-               request1.setParams(params);
-               StatusTransactionApproveRequest statusRechaz = productEJB.loadStatusTransactionApproveRequestbyCode(request1);
-               manualRechargeApproval.setStatusTransactionApproveRequestId(statusRechaz);
-               manualRechargeApproval.setUpdateDate(new Date());
-           } 
-	   manualRechargeApproval.setUserApprovedRequestId(user);
-           manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
-           
-           if(indApproved == true){
-             this.showMessage("sp.crud.manual.recharge.saveApproved", false, null);  
-           } else {
-             this.showMessage("sp.crud.manual.recharge.saveRejected", false, null);  
-           }
-           
-           btnSave.setVisible(false);
-       } catch (Exception ex) {
-           this.showMessage("sp.msj.errorSave", true, null);
-       }
-   }
+            //Se crea el objeto manualRechargeApproval
+            manualRechargeApproval.setStatusTransactionApproveRequestId(statusTransactionApproveRequest);
+            manualRechargeApproval.setUpdateDate(new Date());
+            manualRechargeApproval.setApprovedRequestDate(new Date());
+            manualRechargeApproval.setUserApprovedRequestId(user);
+            manualRechargeApproval.setIndApproveRequest(indApproved);
+            manualRechargeApproval.setObservations(txtObservation.getText());
+            manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+
+            if(indApproved == true){
+              this.showMessage("sp.crud.manual.recharge.saveApproved", false, null);  
+            } else {
+              this.showMessage("sp.crud.manual.recharge.saveRejected", false, null);  
+            }
+            btnSave.setVisible(false);
+        } catch (Exception ex) {
+            this.showMessage("sp.msj.errorSave", true, null);
+        }
+    }
  
 }
