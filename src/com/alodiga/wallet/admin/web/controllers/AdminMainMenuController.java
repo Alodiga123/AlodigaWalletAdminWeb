@@ -106,6 +106,9 @@ public class AdminMainMenuController extends GenericForwardComposer {
                         case 6://Manage Membership Requests
                             loadManageMembershipRequestGroup(pg);
                             break;
+                        case 7://Configurations Preferences
+                            loadConfigurationPreferencesGroup(pg);
+                            break;     
                         default:
                             break;
                     }
@@ -205,13 +208,23 @@ public class AdminMainMenuController extends GenericForwardComposer {
         createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "listStatusBusinessAffiliation.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
-        createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
+        
     }
     private void loadReportsManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_REPORTS, "listReports.zul", permissionGroup, listgroup);
         createCell(Permission.MANAGEMENT_REPORT, "managementReport.zul", permissionGroup, listgroup);
+        
+    }
+    
+    private void loadConfigurationPreferencesGroup(PermissionGroup permissionGroup) {
+        Listgroup listgroup = createListGroup(permissionGroup);
+        createCell(Permission.LIST_BASIC_PREFERENCE, "listPreferenceBasic.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCES, "listSpecificsSetting.zul", permissionGroup, listgroup);
+        createCell(Permission.ADMIN_SETTINGS, "adminSettings.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCE_TYPE, "listPreferenceType.zul", permissionGroup, listgroup);
+        
         
     }
 
