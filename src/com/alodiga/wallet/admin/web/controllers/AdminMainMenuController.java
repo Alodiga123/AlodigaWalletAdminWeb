@@ -187,13 +187,13 @@ public class AdminMainMenuController extends GenericForwardComposer {
     private void loadTransactionalManagementGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
         createCell(Permission.LIST_COMMISSION, "listCommission.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
+        createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_TRANSACTION, "listTransactions.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_OPERATION_BANK, "listBankingOperations.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_RECHARGUES_APPROVAL, "listManualRecharge.zul", permissionGroup, listgroup);
         createCell(Permission.LIST_MANUAL_WITHDRAWAL_APPROVAL, "listManualWithdrawalApproval.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_PREFERENCE, "listPreference.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_TRANSACTION_TYPE, "listTransactionType.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_OF_HOLIDAYS, "listOfHolidays.zul", permissionGroup, listgroup);
         createCell(Permission.AUTOMATIC_SERVICES, "automaticServices.zul", permissionGroup, listgroup);
     }
 
