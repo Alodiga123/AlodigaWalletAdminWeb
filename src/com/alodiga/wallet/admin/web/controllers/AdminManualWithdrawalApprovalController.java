@@ -124,22 +124,16 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
-               //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
+               //Obtiene el usuario de origen de Registro Unificado relacionado con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
                 RespuestaUsuario responseUser = new RespuestaUsuario();
-                //Usuario
                 responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(manualWithdrawalApproval.getUnifiedRegistryUserId()));
                 String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
                 lblUserSource.setValue(userNameSource);
-                //Telefono
-                responseUser = apiRegistroUnificado.getUsuariopormovil("usuarioWS","passwordWS",String.valueOf(manualWithdrawalApproval.getUnifiedRegistryUserId()));
-                String phoneUser = responseUser.getDatosRespuesta().getMovil();
-                lblTelephone.setValue(phoneUser);
-                //Email
-                responseUser = apiRegistroUnificado.getUsuarioporemail("usuarioWS","passwordWS",String.valueOf(manualWithdrawalApproval.getUnifiedRegistryUserId()));
-                String emailUser = responseUser.getDatosRespuesta().getEmail();
-                lblEmail.setValue(emailUser );
+                lblTelephone.setValue(responseUser.getDatosRespuesta().getTelefonoResidencial());
+                lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
             } else if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())) {
+                //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                 Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
             }
