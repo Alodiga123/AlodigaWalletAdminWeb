@@ -53,7 +53,7 @@
                                                     <rows>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.preference.name')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtPreference" constraint="no empty" maxlength="80" width="196px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
                                                             </hlayout>
@@ -81,14 +81,14 @@
                                                         </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.crud.preferences.DataType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.preferences.dataType')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbTypeData" width="200px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                         </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.common.enabled')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.preference.value.active')}" sclass="lblbold"/>
                                                             <hbox width="200px">
                                                                 <radiogroup id="EnabledActive" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
