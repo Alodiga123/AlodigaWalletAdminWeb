@@ -57,6 +57,14 @@
                                                                 <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
                                                         </row>
+                                                       
+                                                        <row>
+                                                            <label value="${c:l('sp.common.origin.aplication')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbOriginApplication" width="250px" mold="rounded" readonly="true" />
+                                                            </hlayout>
+                                                        </row>
+
                                                         <row>
                                                             <label value="${c:l('sp.crud.documentPersonType.personType')}" sclass="lblbold"/>
                                                             <hlayout>

@@ -53,12 +53,12 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                             <listbox id="lbxRecords" fixedLayout="true" width="1000px" height="500px" mold="paging" pageSize="12">
+                                             <listbox id="lbxRecords" fixedLayout="true" width="1000px" height="500px" mold="paging" pageSize="10">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.preference.name')}" width="320px" sort="auto"/>
                                                     <listheader label="${c:l('sp.preference.value.type')}" width="190px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.preferences.DataType')}" width="210px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enabled')}" width="120px" sort="auto"/>                                                  
+                                                    <listheader label="${c:l('sp.crud.preferences.dataType')}" width="210px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.preference.value.active')}" width="120px" sort="auto"/>                                                  
                                                     <listheader label="-" width="80px"/>
                                                     <listheader label="-" width="80px"/>    
                                                 </listhead>
