@@ -88,11 +88,11 @@ public class AdminSettingsController extends GenericAbstractController implement
     @Override
     public void initialize() {
         try {
-        	preferencesEJB = (PreferencesEJB) EJBServiceLocator.getInstance().get(EjbConstants.PREFERENCES_EJB);
-        	productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
-        	languageId = AccessControl.getLanguage();
-        	user = AccessControl.loadCurrentUser();
-        	loadPreferenceClassifications();
+            preferencesEJB = (PreferencesEJB) EJBServiceLocator.getInstance().get(EjbConstants.PREFERENCES_EJB);
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+            languageId = AccessControl.getLanguage();
+            user = AccessControl.loadCurrentUser();
+            loadPreferenceClassifications();
             onChange$cmbClassification();
             if (eventType != null && eventType == WebConstants.EVENT_VIEW) {
                 blockFields();
