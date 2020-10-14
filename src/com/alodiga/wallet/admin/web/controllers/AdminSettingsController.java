@@ -10,7 +10,10 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Row;
+import org.zkoss.zul.Rows;
 import org.zkoss.zul.Textbox;
 
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractController;
@@ -20,11 +23,11 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.manager.PreferenceManager;
 import com.alodiga.wallet.common.model.PreferenceClassification;
 import com.alodiga.wallet.common.model.PreferenceControl;
 import com.alodiga.wallet.common.model.PreferenceField;
 import com.alodiga.wallet.common.model.PreferenceFieldEnum;
+import com.alodiga.wallet.common.model.PreferenceTypeValuesEnum;
 import com.alodiga.wallet.common.model.PreferenceValue;
 import com.alodiga.wallet.common.model.Provider;
 import com.alodiga.wallet.common.model.User;
@@ -43,22 +46,11 @@ public class AdminSettingsController extends GenericAbstractController implement
     private Textbox txtMaxTransactionQuantityDailyLimit;
     private Textbox txtMaxTransactionQuantityMonthLimit;
     private Textbox txtMaxTransactionQuantityYearLimit;
-    private Label lblTimeoutInactiveSession;
-    private Label lblMaxWrongNumberIntentLogin;
-    private Label lblEnabledTransaction;
-    private Label lblMaxTransactionAmountLimit;
-    private Label lblMaxTransactionAmountDailyLimit;
-    private Label lblMaxTransactionAmountMonthLimit;
-    private Label lblMaxTransactionAmountYearLimit;
-    private Label lblMaxTransactionQuantityDailyLimit;
-    private Label lblMaxTransactionQuantityMonthLimit;
-    private Label lblMaxTransactionQuantityYearLimit;
     private Label lblDefaultSMSProvider;
     private Long languageId;
     
     private Button btnSave;
     private Combobox cmbClassification;
-    private Combobox cmbDefaultSMSProvider;
     private Checkbox chbEnableTransaction;
     private Long TIMEOUT_INACTIVE_SESSION_ID;
     private Long MAX_TRANSACTION_AMOUNT_LIMIT_ID;
@@ -76,6 +68,9 @@ public class AdminSettingsController extends GenericAbstractController implement
     private ProductEJB productEJB = null;
     List<PreferenceValue> preferenceValues = null;
     private User user=null;
+    private Grid gridData;
+    private Rows rowsGrid;
+    private Checkbox cbxDefaultSMSProvider;
 
 
     @Override
@@ -109,7 +104,7 @@ public class AdminSettingsController extends GenericAbstractController implement
         txtMaxTransactionAmountDailyLimit.setReadonly(true);
         txtMaxTransactionAmountMonthLimit.setReadonly(true);
         txtMaxTransactionAmountYearLimit.setReadonly(true);
-        cmbDefaultSMSProvider.setReadonly(true);
+//        cmbDefaultSMSProvider.setReadonly(true);
         txtMaxTransactionQuantityDailyLimit.setReadonly(true);
         txtMaxTransactionQuantityMonthLimit.setReadonly(true);
         txtMaxTransactionQuantityYearLimit.setReadonly(true);
@@ -135,7 +130,7 @@ public class AdminSettingsController extends GenericAbstractController implement
 
     }
 
-	private void loadProviders(Long providerId) {
+	private void loadProviders(Long providerId,Combobox cmbDefaultSMSProvider) {
 		try {
 			List<Provider> providers = new ArrayList<Provider>();
 			EJBRequest r = new EJBRequest();
@@ -185,9 +180,9 @@ public class AdminSettingsController extends GenericAbstractController implement
         } else if (txtMaxTransactionQuantityYearLimit.getText().isEmpty()) {
         	txtMaxTransactionQuantityYearLimit.setFocus(true);
             this.showMessage("sp.error.field.cannotNull", true, null);
-        }else if (cmbDefaultSMSProvider.getSelectedIndex() == -1) {
-            cmbDefaultSMSProvider.setFocus(true);
-            this.showMessage("sp.error.smsprovider.notSelected", true, null);
+//        }else if (cmbDefaultSMSProvider.getSelectedIndex() == -1) {
+//            cmbDefaultSMSProvider.setFocus(true);
+//            this.showMessage("sp.error.smsprovider.notSelected", true, null);
         } else {
             return true;
         }
@@ -206,70 +201,46 @@ public class AdminSettingsController extends GenericAbstractController implement
 
     private void loadPreferences(Long classificationId) {
         try {
-            setData();
-
+//            setData();
+        	rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
                 
                 PreferenceValue pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId, field.getId());
-
-                if (field.getId().equals(MAX_WRONG_NUMBER_INTENT_LOGIN_ID)) {
-                	lblMaxWrongNumberIntentLogin.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                    txtMaxWrongNumberIntentLogin.setText(pValue.getValue());
-                    preferenceValues.add(pValue);
-                }
-                if (field.getId().equals(TIMEOUT_INACTIVE_SESSION_ID)) {
-                	lblTimeoutInactiveSession.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                    txtTimeoutInactiveSession.setText(pValue.getValue());
-                    preferenceValues.add(pValue);
-                }
-                if (field.getId().equals(MAX_TRANSACTION_AMOUNT_LIMIT_ID)) {
-                	lblMaxTransactionAmountLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                	txtMaxTransactionAmountLimit.setText(pValue.getValue());
-                	preferenceValues.add(pValue);
-                }
-                if (field.getId().equals(MAX_TRANSACTION_AMOUNT_DAILY_LIMIT_ID)) {
-                	lblMaxTransactionAmountDailyLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                	txtMaxTransactionAmountDailyLimit.setText(pValue.getValue());
-                }
-                if (field.getId().equals(MAX_TRANSACTION_AMOUNT_MONTH_LIMIT_ID)) {
-                	lblMaxTransactionAmountMonthLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                	txtMaxTransactionAmountMonthLimit.setText(pValue.getValue());
-                	preferenceValues.add(pValue);
-                }
-
-                if (field.getId().equals(MAX_TRANSACTION_AMOUNT_YEAR_LIMIT_ID)) {
-                	lblMaxTransactionAmountYearLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                	txtMaxTransactionAmountYearLimit.setText(pValue.getValue());
-                	preferenceValues.add(pValue);
-                }
-                if (field.getId().equals(DISABLED_TRANSACTION_ID)) {
-                	lblEnabledTransaction.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                	boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
-                	chbEnableTransaction.setChecked(checked);
-                	preferenceValues.add(pValue);
-                }
+                Row row = new Row();
+                Label label = new Label();
+                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                label.setParent(row);
                 if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
                 	lblDefaultSMSProvider.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                    loadProviders(Long.parseLong(pValue.getValue()));
-                    preferenceValues.add(pValue);
-                }
-                if (field.getId().equals(MAX_TRANSACTION_QUANTITY_DAILY_LIMIT_ID)) {
-                	lblMaxTransactionQuantityDailyLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                	txtMaxTransactionQuantityDailyLimit.setText(pValue.getValue());
+                	Combobox cmbbox = new Combobox();
+                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
+                	cmbbox.setParent(row);
+                	Checkbox chb = new Checkbox();
+                	chb.setChecked(pValue.isEnabled());
+                	chb.setParent(row);
+                	preferenceValues.add(pValue);
+                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
+                	Checkbox chbValue = new Checkbox();
+                	boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+                	chbValue.setChecked(checked);
+                	chbValue.setParent(row);
+                	Checkbox chb = new Checkbox();
+                	chb.setChecked(pValue.isEnabled());
+                	chb.setParent(row);
+                	preferenceValues.add(pValue);
+                }  else {
+                	Textbox txtValue = new Textbox();
+                	txtValue.setText(pValue.getValue());
+                	txtValue.setParent(row);
+                	Checkbox chb = new Checkbox();
+                	chb.setChecked(pValue.isEnabled());
+                	chb.setParent(row);
                 	preferenceValues.add(pValue);
                 }
-                if (field.getId().equals(MAX_TRANSACTION_QUANTITY_MONTH_LIMIT_ID)) {
-                	lblMaxTransactionQuantityMonthLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                    txtMaxTransactionQuantityMonthLimit.setText(pValue.getValue());
-                    preferenceValues.add(pValue);
-                }
-                if (field.getId().equals(MAX_TRANSACTION_QUANTITY_YEAR_LIMIT_ID)) {
-                	lblMaxTransactionQuantityYearLimit.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                    txtMaxTransactionQuantityYearLimit.setText(pValue.getValue());
-                    preferenceValues.add(pValue);
-                }
+                row.setParent(rowsGrid);               	
+//          
             }
         } catch (Exception ex) {
             showError(ex);
@@ -337,11 +308,11 @@ public class AdminSettingsController extends GenericAbstractController implement
             		preferenceControls.add(createPreferencenControl(pvalue));
                 	preferenceValueSave.add(updatePreferencenValue(pvalue,txtMaxTransactionQuantityYearLimit.getText()));
             	}
-            	Provider provider = (Provider) cmbDefaultSMSProvider.getSelectedItem().getValue();
-            	if (pvalue.getPreferenceFieldId().getId().equals(DEFAULT_SMS_PROVIDER_ID) && !pvalue.getValue().equals(provider.getId().toString())) {
-            		preferenceControls.add(createPreferencenControl(pvalue));
-                	preferenceValueSave.add(updatePreferencenValue(pvalue,provider.getId().toString()));
-            	}    
+//            	Provider provider = (Provider) cmbDefaultSMSProvider.getSelectedItem().getValue();
+//            	if (pvalue.getPreferenceFieldId().getId().equals(DEFAULT_SMS_PROVIDER_ID) && !pvalue.getValue().equals(provider.getId().toString())) {
+//            		preferenceControls.add(createPreferencenControl(pvalue));
+//                	preferenceValueSave.add(updatePreferencenValue(pvalue,provider.getId().toString()));
+//            	}    
           
             }
             preferencesEJB.savePreferenceValues(preferenceValueSave,preferenceControls);

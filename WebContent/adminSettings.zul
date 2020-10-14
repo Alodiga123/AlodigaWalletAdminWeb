@@ -34,14 +34,9 @@
                                             <vlayout>
                                                 <div align="right">
                                                     <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
+                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
                                                     </hlayout>
                                                 </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
 
                                                 <grid fixedLayout="true">
                                                     <columns>
@@ -60,88 +55,14 @@
                                                 </grid>
 
 
-                                                <grid fixedLayout="true">
+                                                <grid id="gridData" fixedLayout="true">
                                                     <columns>
-                                                        <column width="400px"/>
-                                                        <column width="490px"/>
+                                                        <column width="350px"/>
+                                                        <column width="340px"/>
+                                                        <column width="200px"/>
                                                     </columns>
-                                                    <rows>
-
-                                                        <row>
-                                                            <label id="lblTimeoutInactiveSession" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtTimeoutInactiveSession" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="5"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxWrongNumberIntentLogin" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxWrongNumberIntentLogin" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="5"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblEnabledTransaction" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <checkbox id="chbEnableTransaction"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxTransactionAmountLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxTransactionAmountDailyLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountDailyLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxTransactionAmountMonthLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountMonthLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxTransactionAmountYearLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionAmountYearLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                         <row>
-                                                            <label id="lblMaxTransactionQuantityDailyLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionQuantityDailyLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxTransactionQuantityMonthLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionQuantityMonthLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblMaxTransactionQuantityYearLimit" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <textbox id="txtMaxTransactionQuantityYearLimit" width="250px" constraint="no empty: ${c:l('error.field.required')}" maxlength="8"/>
-                                                                <label value="*" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label id="lblDefaultSMSProvider" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <combobox id="cmbDefaultSMSProvider" width="250px" mold="rounded" readonly="true"/>
-                                                            </hlayout>
-                                                        </row>
+                                                       <rows id = "rowsGrid">
+                                                                      
                                                     
                                                      </rows>
                                                 </grid>
