@@ -75,19 +75,6 @@ public class ListCommissionController extends GenericAbstractListController<Comm
         }
     }
 
-//    public List<Commission> getFilteredList(String Commission) {
-//        List<Commission> list = new ArrayList<ExchangeRate>();
-//        if (commissions != null) {
-//            for (Iterator<Commission> i = commissions.iterator(); i.hasNext();) {
-//                Commission tmp = i.next();
-//                String field = tmp.getProductId().getName().toLowerCase();
-//                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-//                    list.add(tmp);
-//                }
-//            }
-//        }
-//        return list;
-//    }
     public void onClick$btnAdd() throws InterruptedException {
         Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
         Sessions.getCurrent().removeAttribute("object");
