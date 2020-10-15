@@ -4,7 +4,7 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminCommissionByProduct" title="${c:l('sp.tab.commission.commissionByProduct')}" width="950px" height="350px" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionsByProductController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winAdminCommissionByProduct" title="${c:l('sp.common.rates')}" width="950px" height="350px" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionsByProductController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
@@ -34,13 +34,27 @@
                                                         <row>
                                                             <label value="${c:l('sp.crud.commission.transactionType')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbTrasactionType" width="250px" mold="rounded" readonly="true"/>
+                                                                <combobox id="cmbTrasactionType" width="260px" mold="rounded" readonly="true"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
+                                                        <row>
+                                                          <label value="${c:l('sp.common.application')}" sclass="lblbold"/>
+                                                          <hbox width="260px">
+                                                                <radiogroup id="isApplication" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="rIsApplicationYes" label="${c:l('sp.crud.commission.discount.amount')}" radiogroup="isApplication" />
+                                                                            <radio id="rIsApplicationNo" label="${c:l('sp.crud.commission.additional.charge')} " radiogroup="isApplication"/>
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>  
+                                                        </row>
                                                         <row> 
                                                             <label value="${c:l('sp.crud.commission.percentCommision')}" sclass="lblbold"/>
-                                                            <hbox width="250px">
+                                                            <hbox width="260px">
                                                                 <radiogroup id="percentCommision" onCheck="choice1.value = self.selectedItem.label" />
                                                                 <grid>
                                                                     <rows>
@@ -55,21 +69,21 @@
                                                         <row>
                                                             <label id="testPorcent" value=" " sclass="lblbold"/>
                                                             <hlayout>
-                                                                <doublebox id="dblValue" width="245px" constraint="no negative" format="#,###.##" maxlength="20"/>
+                                                                <doublebox id="dblValue" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.tab.commission.exchangeRate.beginningDate')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <datebox id="dtbBeginningDate" width="250px"/>
+                                                                <datebox id="dtbBeginningDate" width="260px"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.tab.commission.exchangeRate.endingDate')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <datebox id="dtbEndingDate" width="250px"/>
+                                                                <datebox id="dtbEndingDate" width="260px"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>

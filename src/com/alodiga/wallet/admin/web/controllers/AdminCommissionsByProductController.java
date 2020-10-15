@@ -16,7 +16,10 @@ import com.alodiga.wallet.common.model.Commission;
 import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.TransactionType;
 import com.alodiga.wallet.common.utils.Constants;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.util.resource.Labels;
@@ -41,6 +44,8 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
     private Combobox cmbTrasactionType;
     private Radio rPercentCommisionYes;
     private Radio rPercentCommisionNo;
+    private Radio rIsApplicationYes;
+    private Radio rIsApplicationNo;
     private Doublebox dblValue;
     public Short percentCommision = 0;
     private Datebox dtbBeginningDate;
@@ -130,6 +135,12 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
             } else {
                 rPercentCommisionNo.setChecked(true);
             }
+            
+            if (commission.getIndApplicationCommission() == 1) {
+                rIsApplicationYes.setChecked(true);
+            } else {
+                rIsApplicationNo.setChecked(true);
+            }
 
             btnSave.setVisible(true);
         } catch (Exception ex) {
@@ -142,6 +153,8 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         dtbEndingDate.setReadonly(true);
         rPercentCommisionYes.setDisabled(true);
         rPercentCommisionNo.setDisabled(true);
+        rIsApplicationYes.setDisabled(true);
+        rIsApplicationNo.setDisabled(true);
         dblValue.setReadonly(true);
         cmbTrasactionType.setReadonly(true);
         btnSave.setVisible(false);
@@ -159,10 +172,8 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
             this.showMessage("sp.error.date.beginningDate", true, null);
-        } else if(!dtbBeginningDate.getValue().before(dtbEndingDate.getValue())){
-            this.showMessage("sp.tab.commission.error.beginningDate", true, null);
-        } else if(!dtbEndingDate.getValue().after(dtbBeginningDate.getValue())){
-            this.showMessage("sp.tab.commission.error.endingDate", true, null);  
+        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
+            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
         } else {
             return true;
         }
@@ -170,13 +181,23 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
     }
     
     public boolean validateComissionByProduct(){
+        comissionList.clear();
         TransactionType transactionTypee =(TransactionType) cmbTrasactionType.getSelectedItem().getValue();
+        Integer application;
+        
+        if (rIsApplicationYes.isChecked()) {
+                application = 1;
+        } else {
+                application = 2;
+        }
+        
         try {
             //Valida que la comision del producto no exista
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
             params.put(Constants.PRODUCT_KEY, product.getId());
             params.put(Constants.TRANSACTION_TYPE_KEY, transactionTypee.getId());
+            params.put(Constants.APPLICATION_COMISSION, application);
             request1.setParams(params);
             comissionList = utilsEJB.getCommissionByProductAndTranssactionType(request1);
         } catch (Exception ex) {
@@ -191,6 +212,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
 
     private void saveBank(Commission _commission) {
         Commission commission = null;
+        Integer application;
         
         try {
 
@@ -206,12 +228,21 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
                 percentCommision = 0;
             }
             
+            if (rIsApplicationYes.isChecked()) {
+                application = 1;
+            } else {
+                application = 2;
+            }
+            
             commission.setProductId(product);
             commission.setTransactionTypeId((TransactionType) cmbTrasactionType.getSelectedItem().getValue());
+            commission.setIndApplicationCommission(application);
             commission.setIsPercentCommision(percentCommision);
             commission.setValue(dblValue.getValue().floatValue());
             commission.setBeginningDate(dtbBeginningDate.getValue());
-            commission.setEndingDate(dtbEndingDate.getValue());
+            if(!dtbEndingDate.getText().isEmpty()){
+              commission.setEndingDate(dtbEndingDate.getValue());  
+            }
             commission = utilsEJB.saveCommission(commission);
             commissionParam = commission;
             eventType = WebConstants.EVENT_EDIT;
@@ -269,6 +300,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
                 onClick$rPercentCommisionYes();
                 onClick$rPercentCommisionNo();
                 loadCmbTrasactionType(eventType);
+                dtbEndingDate.setDisabled(true);
                 break;
             default:
                 break;
