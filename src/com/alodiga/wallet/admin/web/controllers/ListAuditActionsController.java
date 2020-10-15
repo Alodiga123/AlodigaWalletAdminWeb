@@ -32,10 +32,12 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -204,14 +206,23 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                             userId = userName.getId();
                 }
         
-            if (dtbBeginningDate.getValue()==null || dtbBeginningDate.getValue()==null) {
-                this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
-            }else if (dtbBeginningDate.getValue().getTime() > dtbEndingDate.getValue().getTime()) {
-                this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
-            }
-            Long permissionId = cmbPermissions.getSelectedIndex() > 0 ? ((Permission) cmbPermissions.getSelectedItem().getValue()).getId() : null;
-            loadList(auditoryEJB.searchAuditActionTest(userId, permissionId , dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
-
+            EJBRequest _request = new EJBRequest();
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+            params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
+            params.put(QueryConstants.PARAM_USER_ID, userId);
+            
+            if (dtbEndingDate.getValue().getTime() >= dtbBeginningDate.getValue().getTime()) {
+                if (cmbPermissions.getSelectedItem() != null && cmbPermissions.getSelectedIndex() != 0) {
+                      params.put(QueryConstants.PARAM_PERMISSION_ID, ((Permission) cmbPermissions.getSelectedItem().getValue()).getId());
+                  }  
+                _request.setParams(params);
+                _request.setParam(true);
+                loadList(auditoryEJB.searchAuditActions(_request));
+            }   else  {
+                  this.showMessage("sp.error.date.invalid", true, null);
+            } 
+            
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
         	lblInfo.setValue(Labels.getLabel("sp.error.empty.list"));

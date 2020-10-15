@@ -99,8 +99,8 @@ public class ListManualRechargeController extends GenericAbstractListController<
     private void loadStatus() {
 
         try {
-        	cmbStatus.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbStatus.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<StatusTransactionApproveRequest> transactionApproveRequests = productEJB.getStatusTransactionApproveRequests(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -151,8 +151,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
 
     public void onClick$btnSearch()  {
         try {
-
-        	  clearFields();
+              clearFields();
               clearMessage();
               EJBRequest _request = new EJBRequest();
               Map<String, Object> params = new HashMap<String, Object>();
@@ -242,21 +241,21 @@ public class ListManualRechargeController extends GenericAbstractListController<
     }
 
     public void getData() {
-		dtbBeginningDate.setFormat("yyyy/MM/dd");
-		dtbBeginningDate.setValue(new Timestamp(new java.util.Date().getTime()));
-	    dtbEndingDate.setFormat("yyyy/MM/dd");
-	    dtbEndingDate.setValue(new Timestamp(new java.util.Date().getTime()));
-	    loadStatus();
-		loadProducts();
-		approveRequests = new ArrayList<TransactionApproveRequest>();
-		try {
-			 EJBRequest _request = new EJBRequest();
-             Map<String, Object> params = new HashMap<String, Object>();
-             params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
-             params.put(QueryConstants.PARAM_ENDING_DATE, dtbBeginningDate.getValue()); 
-             _request.setParams(params);
-             _request.setParam(true);
-             approveRequests = productEJB.getTransactionApproveRequestByParams(_request);
+        dtbBeginningDate.setFormat("yyyy/MM/dd");
+        dtbBeginningDate.setValue(new Timestamp(new java.util.Date().getTime()));
+        dtbEndingDate.setFormat("yyyy/MM/dd");
+        dtbEndingDate.setValue(new Timestamp(new java.util.Date().getTime()));
+        loadStatus();
+        loadProducts();
+        approveRequests = new ArrayList<TransactionApproveRequest>();
+        try {
+            EJBRequest _request = new EJBRequest();
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+            params.put(QueryConstants.PARAM_ENDING_DATE, dtbBeginningDate.getValue()); 
+            _request.setParams(params);
+            _request.setParam(true);
+            approveRequests = productEJB.getTransactionApproveRequestByParams(_request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

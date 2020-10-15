@@ -139,6 +139,8 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         dtbEndingDate.setReadonly(true);
         rPercentCommisionYes.setDisabled(true);
         rPercentCommisionNo.setDisabled(true);
+        rIsApplicationYes.setDisabled(true);
+        rIsApplicationNo.setDisabled(true);
         dblValue.setReadonly(true);
         cmbProduct.setReadonly(true);
         cmbTrasactionType.setReadonly(true);

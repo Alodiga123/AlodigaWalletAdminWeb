@@ -119,7 +119,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
                 
                 EventQueues.lookup("updateProductHasBank", EventQueues.APPLICATION, true).publish(new Event(""));
             } else {
-                this.showMessage("sp.crud.product.hasBank.existt", true, null);
+                this.showMessage("sp.crud.product.hasBank.exist", true, null);
             }
         } catch (NullParameterException ex) {
             showError(ex);

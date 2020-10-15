@@ -12,6 +12,7 @@ import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
+import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.enumeraciones.StatusTransactionApproveRequestE;
 import com.alodiga.wallet.common.exception.EmptyListException;
@@ -20,6 +21,7 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Permission;
+import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.StatusTransactionApproveRequest;
 import com.alodiga.wallet.common.model.TransactionApproveRequest;
@@ -32,14 +34,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Textbox;
 
 public class ListManualWithdrawalApprovalController extends GenericAbstractListController<TransactionApproveRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
+    private Datebox dtbBeginningDate;
+    private Datebox dtbEndingDate;
+    private Textbox txtRequestNumber;
+    private Combobox cmbStatus; 
+    private Combobox cmbProduct; 
     private Listbox lbxRecords;
     private Textbox txtName;
     private UtilsEJB utilsEJB = null;
+    private ProductEJB productEJB = null;
     private List<TransactionApproveRequest> manualWithdrawalApproval = null;
     private User currentUser;
     private Profile currentProfile;
@@ -67,6 +78,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
         try {
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             checkPermissions();
             adminPage = "adminManualWithdrawalApproval.zul";
@@ -79,6 +91,8 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
 
     public void getData() { 
         manualWithdrawalApproval = new ArrayList<TransactionApproveRequest>();
+        loadStatus();
+	loadProducts();
         try {
 
             EJBRequest status = new EJBRequest();
@@ -160,12 +174,40 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        txtName.setText("");
+        cmbStatus.setSelectedIndex(0);
+        cmbProduct.setSelectedIndex(0);
+        txtRequestNumber.setText("");;
+        Date date = new Date();
+        dtbBeginningDate.setValue(date);
+        dtbEndingDate.setValue(date);
     }
 
-    public void onClick$btnSearch() throws InterruptedException {
+   
+    public void onClick$btnSearchh() throws InterruptedException {
         try {
-//            loadDataList(getFilterList(txtName.getText()));
+              clearMessage();
+              EJBRequest _request = new EJBRequest();
+              Map<String, Object> params = new HashMap<String, Object>();
+              params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+              params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
+              if (dtbEndingDate.getValue().getTime() >= dtbBeginningDate.getValue().getTime()) {
+                  if (cmbStatus.getSelectedItem() != null && cmbStatus.getSelectedIndex() != 0) {
+                      params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPROVE_REQUEST_ID, ((StatusTransactionApproveRequest) cmbStatus.getSelectedItem().getValue()).getId());
+                  }               
+                  if (cmbProduct.getSelectedItem() != null && cmbProduct.getSelectedIndex() != 0) {
+                      params.put(QueryConstants.PARAM_PRODUCT_ID, ((Product) cmbProduct.getSelectedItem().getValue()).getId());
+                  }
+                  if (!txtRequestNumber.getText().equals("")) {
+                      params.put(QueryConstants.PARAM_REQUEST_NUMBER, txtRequestNumber.getText());
+                  }
+                  _request.setParams(params);
+                  _request.setParam(true);
+                  loadList(productEJB.searchTransactionApproveRequestByParamsMWAR(_request));
+              } else  {
+                  this.showMessage("sp.error.date.invalid", true, null);
+              }         
+        } catch (EmptyListException ex) {
+            showEmptyList();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -179,5 +221,80 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
     @Override
     public void onClick$btnAdd() throws InterruptedException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void loadStatus() {
+
+        try {
+            cmbStatus.getItems().clear();
+            EJBRequest request = new EJBRequest();
+            List<StatusTransactionApproveRequest> transactionApproveRequests = productEJB.getStatusTransactionApproveRequests(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setParent(cmbStatus);
+            cmbStatus.setSelectedItem(item);
+            for (int i = 0; i < transactionApproveRequests.size(); i++) {
+                item = new Comboitem();
+                item.setValue(transactionApproveRequests.get(i));
+                item.setLabel(transactionApproveRequests.get(i).getDescription());
+                item.setParent(cmbStatus);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
+
+    }
+    
+    
+    private void loadProducts() {
+
+        try {
+        	cmbProduct.getItems().clear();
+        	EJBRequest request = new EJBRequest();
+            List<Product> products = productEJB.getProducts(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setParent(cmbProduct);
+            cmbProduct.setSelectedItem(item);
+            for (int i = 0; i < products.size(); i++) {
+                item = new Comboitem();
+                item.setValue(products.get(i));
+                item.setLabel(products.get(i).getName());
+                item.setParent(cmbProduct);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
+
+    }
+
+    @Override
+    public void onClick$btnSearch() throws InterruptedException {
+        try {
+              EJBRequest _request = new EJBRequest();
+              Map<String, Object> params = new HashMap<String, Object>();
+              params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+              params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
+              if (dtbEndingDate.getValue().getTime() >= dtbBeginningDate.getValue().getTime()) {
+                  if (cmbStatus.getSelectedItem() != null && cmbStatus.getSelectedIndex() != 0) {
+                      params.put(QueryConstants.PARAM_STATUS_TRANSACTION_APPROVE_REQUEST_ID, ((StatusTransactionApproveRequest) cmbStatus.getSelectedItem().getValue()).getId());
+                  }               
+                  if (cmbProduct.getSelectedItem() != null && cmbProduct.getSelectedIndex() != 0) {
+                      params.put(QueryConstants.PARAM_PRODUCT_ID, ((Product) cmbProduct.getSelectedItem().getValue()).getId());
+                  }
+                  if (!txtRequestNumber.getText().equals("")) {
+                      params.put(QueryConstants.PARAM_REQUEST_NUMBER, txtRequestNumber.getText());
+                  }
+                  _request.setParams(params);
+                  _request.setParam(true);
+                  loadList(productEJB.searchTransactionApproveRequestByParamsMWAR(_request));
+              } else  {
+                  this.showMessage("sp.error.date.invalid", true, null);
+              }         
+        } catch (EmptyListException ex) {
+            showEmptyList();
+        } catch (Exception ex) {
+            showError(ex);
+        }
     }
 }
