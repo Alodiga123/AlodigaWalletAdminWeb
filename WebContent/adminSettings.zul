@@ -41,7 +41,7 @@
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column width="400px"/>
-                                                        <column width="490px"/>
+                                                        <column width="497px"/>
                                                     </columns>
                                                     <rows>
 
@@ -57,9 +57,10 @@
 
                                                 <grid id="gridData" fixedLayout="true">
                                                     <columns>
-                                                        <column width="350px"/>
-                                                        <column width="340px"/>
-                                                        <column width="200px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.description')}" width="300px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.value')}" width="300px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.type')}" width="197px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.enabled')}" width="100px"/>
                                                     </columns>
                                                        <rows id = "rowsGrid">
                                                                       
