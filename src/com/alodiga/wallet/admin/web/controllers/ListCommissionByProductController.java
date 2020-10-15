@@ -234,15 +234,13 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         Product product = null;
         commissions = new ArrayList<Commission>();
         try {
-            if (eventType != WebConstants.EVENT_ADD) {
-                EJBRequest request1 = new EJBRequest();
-                Map params = new HashMap();
-                params.put(Constants.PRODUCT_KEY, productParam.getId());
-                request1.setParams(params);
-                commissions = utilsEJB.getCommissionByProduct(request1);
-            } else {
-                commissions = null;
-            }          
+            
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PRODUCT_KEY, productParam.getId());
+            request1.setParams(params);
+            commissions = utilsEJB.getCommissionByProduct(request1);
+                      
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

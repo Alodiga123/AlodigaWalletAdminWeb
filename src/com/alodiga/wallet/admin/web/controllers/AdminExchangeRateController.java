@@ -17,6 +17,7 @@ import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -110,7 +111,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
 
     public boolean validateEmpty() {
         Date today = new Date();
-
+        exchangeList.clear();
         if (cmbProduct.getSelectedItem() == null) {
             cmbProduct.setFocus(true);
             this.showMessage("sp.error.products.notSelected", true, null);
@@ -120,6 +121,8 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
             this.showMessage("sp.error.date.beginningDate", true, null);
+        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
+            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
         } else {
             return true;
         }
@@ -127,6 +130,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     }
 
     public boolean validateExchangeRateByProduct(){
+        exchangeList.clear();
         Product product = (Product) cmbProduct.getSelectedItem().getValue();
         try{
            EJBRequest request1 = new EJBRequest();

@@ -27,12 +27,12 @@
                                                     <rows>
                                                         <row>
                                                             <label value="${c:l('sp.crud.product')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.bank')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
                                                             <hlayout>
                                                             <label id="lblProduct" width="250px"/>                                                                
                                                             </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.product.bank')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbBank" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
