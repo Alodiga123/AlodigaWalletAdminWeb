@@ -97,7 +97,9 @@ public class AdminAddressController extends GenericAbstractAdminController {
         try {
             
             lblCountry.setValue(personHasAddress.getAddressId().getCountryId().getName());
-            lblCounty.setValue(personHasAddress.getAddressId().getCountyId().getName());
+            if (personHasAddress.getAddressId().getCountyId() != null) {
+                lblCounty.setValue(personHasAddress.getAddressId().getCountyId().getName());
+            }            
             lblCity.setValue(personHasAddress.getAddressId().getCityId().getName());
             
             if (personHasAddress.getAddressId().getUrbanization() != null) {
