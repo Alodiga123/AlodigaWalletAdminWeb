@@ -62,7 +62,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         initialize();
     }
 
-
     public void startListener() {
     }
 
@@ -93,7 +92,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
                 for (AuditAction auditAction : list) {
-
                     item = new Listitem();
                     item.setValue(auditAction);
                     item.appendChild(new Listcell(auditAction.getUser().getLogin()));
@@ -104,7 +102,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                     	 item.appendChild(new Listcell());
                     }
                     item.appendChild(new Listcell(GeneralUtils.date2String(auditAction.getDate(), GeneralUtils.FORMAT_DATE_USA)));
-//                    item.appendChild(new Listcell(auditAction.getHost()));
                     item.appendChild(new Listcell(auditAction.getInfo()));
                     item.setParent(lbxRecords);
                 }
@@ -119,7 +116,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                 item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -217,15 +213,14 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                       params.put(QueryConstants.PARAM_PERMISSION_ID, ((Permission) cmbPermissions.getSelectedItem().getValue()).getId());
                   }  
                 _request.setParams(params);
-                _request.setParam(true);
                 loadList(auditoryEJB.searchAuditActions(_request));
             }   else  {
                   this.showMessage("sp.error.date.invalid", true, null);
-            } 
-            
+            }             
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
         	lblInfo.setValue(Labels.getLabel("sp.error.empty.list"));
+                onClick$btnClear();
         } catch (Exception ex) {
             showError(ex);
         }
