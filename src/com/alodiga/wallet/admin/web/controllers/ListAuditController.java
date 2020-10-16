@@ -85,8 +85,7 @@ public class ListAuditController extends GenericAbstractAdminController {
             Comboitem cmbItem = new Comboitem();
             cmbItem.setLabel(Labels.getLabel("ac.common.field.select"));
             cmbItem.setValue(null);
-            cmbItem.setParent(cmbUser);
-    
+            cmbItem.setParent(cmbUser);    
             for (User cc : users) {             
                 cmbItem = new Comboitem();
                 cmbItem.setLabel(cc.getLogin());
@@ -97,59 +96,54 @@ public class ListAuditController extends GenericAbstractAdminController {
         }
     }
     
-	public void loadDataAudit(boolean filter) {
-
-		List<Audit> audits = new ArrayList<Audit>();
-		try {
-			Date startDate = datefrom.getValue();
-			Date endDate = dateuntil.getValue();
-			params = new HashMap<String, Object>();
-			params.put(QueryConstants.PARAM_FILTER, filter);
-			params.put(QueryConstants.PARAM_BEGINNING_DATE, startDate);
-			params.put(QueryConstants.PARAM_ENDING_DATE, endDate);
-			if (dateuntil.getValue().getTime() >= datefrom.getValue().getTime()) {
-
-				if (cmbUser.getSelectedItem() != null && cmbUser.getSelectedIndex() != 0) {
-					params.put(QueryConstants.PARAM_USER_ID, ((User) cmbUser.getSelectedItem().getValue()).getId());
-				}
-				request.setParams(params);
-				audits = auditoryEJB.searchAudit(request);
-			} else {
-				this.showMessage("sp.error.date.invalid", true, null);
-			}
-
-		} catch (NullParameterException ex) {
-			ex.printStackTrace();
-		} catch (EmptyListException ex) {
-		} catch (GeneralException ex) {
-		}
-		listAudits.getItems().clear();
-		Listitem item = null;
-		if (audits != null && !audits.isEmpty()) {
-			for (Audit au : audits) {
-
-				item = new Listitem();
-				item.setValue(au);
-				item.appendChild(new Listcell(au.getUser().getLogin()));
-				item.appendChild(new Listcell(au.getUser().getFirstName() + " " + au.getUser().getLastName()));
-				item.appendChild(new Listcell(au.getPermission().getName().toString()));
-				item.appendChild(new Listcell(au.getCreationDate().toString()));
-				item.appendChild(new Listcell(au.getOriginalValues()));
-				item.appendChild(new Listcell(au.getNewValues()));
-				item.setParent(listAudits);
-			}
-		} else {
-			item = new Listitem();
-			item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
-			item.appendChild(new Listcell());
-			item.appendChild(new Listcell());
-			item.appendChild(new Listcell());
-			item.appendChild(new Listcell());
-			item.appendChild(new Listcell());
-			item.setParent(listAudits);
-		}
-
-	}
+    public void loadDataAudit(boolean filter) {
+        List<Audit> audits = new ArrayList<Audit>();
+        try {
+            Date startDate = datefrom.getValue();
+            Date endDate = dateuntil.getValue();
+            params = new HashMap<String, Object>();
+            params.put(QueryConstants.PARAM_FILTER, filter);
+            params.put(QueryConstants.PARAM_BEGINNING_DATE, startDate);
+            params.put(QueryConstants.PARAM_ENDING_DATE, endDate);
+            if (dateuntil.getValue().getTime() >= datefrom.getValue().getTime()) {
+                if (cmbUser.getSelectedItem() != null && cmbUser.getSelectedIndex() != 0) {
+                        params.put(QueryConstants.PARAM_USER_ID, ((User) cmbUser.getSelectedItem().getValue()).getId());
+                }
+                request.setParams(params);
+                audits = auditoryEJB.searchAudit(request);
+            } else {
+                this.showMessage("sp.error.date.invalid", true, null);
+            }
+        } catch (NullParameterException ex) {
+            ex.printStackTrace();
+        } catch (EmptyListException ex) {
+        } catch (GeneralException ex) {
+        }
+        listAudits.getItems().clear();
+        Listitem item = null;
+        if (audits != null && !audits.isEmpty()) {
+            for (Audit au : audits) {
+                item = new Listitem();
+                item.setValue(au);
+                item.appendChild(new Listcell(au.getUser().getLogin()));
+                item.appendChild(new Listcell(au.getUser().getFirstName() + " " + au.getUser().getLastName()));
+                item.appendChild(new Listcell(au.getPermission().getName().toString()));
+                item.appendChild(new Listcell(au.getCreationDate().toString()));
+                item.appendChild(new Listcell(au.getOriginalValues()));
+                item.appendChild(new Listcell(au.getNewValues()));
+                item.setParent(listAudits);
+            }
+        } else {
+                item = new Listitem();
+                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell());
+                item.appendChild(new Listcell());
+                item.appendChild(new Listcell());
+                item.appendChild(new Listcell());
+                item.appendChild(new Listcell());
+                item.setParent(listAudits);
+        }
+    }
 
     public void onClick$btnSearch(){                          
             loadDataAudit(f1);    

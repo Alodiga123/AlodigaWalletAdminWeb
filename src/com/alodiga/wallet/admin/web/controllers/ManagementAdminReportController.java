@@ -456,19 +456,6 @@ public class ManagementAdminReportController extends GenericAbstractController {
         return item;
     }
 
-//    private String countList(List<?> evaluateList) {
-//        String value = null;
-//        for (int i = 0; i < evaluateList.size(); i++) {
-//            AbstractSPEntity abstractMLCEntity = (AbstractSPEntity) evaluateList.get(i);
-//            if (i < evaluateList.size() - 1) {
-//                value = (value != null ? value : "") + abstractMLCEntity.getPk().toString() + ",";
-//            } else {
-//                value = (value != null ? value : "") + abstractMLCEntity.getPk().toString();
-//            }
-//        }
-//        return value;
-//    }
-
     public void exportExcel(Listbox box, String nomeFile) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
 

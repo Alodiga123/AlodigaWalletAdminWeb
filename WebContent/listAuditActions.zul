@@ -60,11 +60,11 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="1080px" height="530px" mold="paging" pageSize="18">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.permission')}" width="216px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.date')}" width="216px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.info')}" width="216px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="120px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="140px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.permission')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.date')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.info')}" width="300px" sort="auto"/>
                                                 </listhead>
                                             </listbox>
                                         </div>
