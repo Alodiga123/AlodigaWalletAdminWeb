@@ -39,48 +39,43 @@
                                                         <group label="${c:l('sp.crud.address.main')}"/>
                                                         <row>
                                                             <label value="${c:l('sp.crud.address.country')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.county')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.address.city')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.address.urbanitation')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblCountry" value="" width="200px" style="color:#837E76;"/>
-                                                            <label id="lblCounty" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblCity" value="" width="200px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.address.urbanitation')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.streetType')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.street')}" sclass="lblbold"/>                                                            
-                                                        </row>
-                                                        <row>
                                                             <label id="lblUbanization" value="" width="200px" style="color:#837E76;"/>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.address.streetType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.address.street')}" sclass="lblbold"/>  
+                                                            <label value="${c:l('sp.crud.address.edificationType')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
                                                             <label id="lblStreetType" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblNameStreet" value="" width="200px" style="color:#837E76;"/>
+                                                            <label id="lblEdificationType" value="" width="200px" style="color:#837E76;"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.address.edificationType')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.address.nameEdification')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.address.tower')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.address.floor')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <label id="lblEdificationType" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblNameEdification" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblTower" value="" width="200px" style="color:#837E76;"/>
+                                                            <label id="lblFloor" value="" width="200px" style="color:#837E76;"/>
                                                         </row>
                                                         <row> 
-                                                            <label value="${c:l('sp.crud.address.floor')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.address.zipZone')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.address.addressTypes')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.address.mainAddress')}" sclass="lblbold"/>
+                                                            
                                                         </row>
                                                         <row>
-                                                            <label id="lblFloor" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblZipCode" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblAddressTypes" value="" width="200px" style="color:#837E76;"/>
-                                                        </row>
-                                                        <row> 
-                                                            <label value="${c:l('sp.crud.address.mainAddress')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row> 
                                                             <hbox>
                                                                 <radiogroup id="mainAddress" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>

@@ -19,7 +19,9 @@ import com.alodiga.wallet.common.model.TransactionType;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.util.resource.Labels;
@@ -163,6 +165,8 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
             this.showMessage("sp.error.date.beginningDate", true, null);
+        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
+            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
         } else {
             return true;
         }

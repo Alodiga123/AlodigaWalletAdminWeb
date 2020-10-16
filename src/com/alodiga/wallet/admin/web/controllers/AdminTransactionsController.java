@@ -120,7 +120,7 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
                 lblProduct.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getTransactionTypeId() != null) {
-                lblTransactionType.setValue(transaction.getTransactionTypeId().getDescription());
+                lblTransactionType.setValue(transaction.getTransactionTypeId().getValue());
             } else {
                 lblTransactionType.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }

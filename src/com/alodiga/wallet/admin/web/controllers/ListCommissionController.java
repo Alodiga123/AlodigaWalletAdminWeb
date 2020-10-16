@@ -28,11 +28,13 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.NumberFormat;
 import java.util.Locale;
+import org.zkoss.zul.Textbox;
 
 public class ListCommissionController extends GenericAbstractListController<Commission> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
+    private Textbox txtName;
     private UtilsEJB utilsEJB = null;
     private List<Commission> commissions = null;
     private User currentUser;
@@ -75,6 +77,20 @@ public class ListCommissionController extends GenericAbstractListController<Comm
         }
     }
 
+    public List<Commission> getFilteredList(String filter) {
+        List<Commission> commissionsaux = new ArrayList<Commission>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                commissionsaux = utilsEJB.searchCommissionByProduct(filter);
+            } else {
+                return commissions;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return commissionsaux;
+    }
+    
     public void onClick$btnAdd() throws InterruptedException {
         Sessions.getCurrent().setAttribute("eventType", WebConstants.EVENT_ADD);
         Sessions.getCurrent().removeAttribute("object");
@@ -161,18 +177,15 @@ public class ListCommissionController extends GenericAbstractListController<Comm
     }
 
     public void onClick$btnClear() throws InterruptedException {
-
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    @Override
-    public List<Commission> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
