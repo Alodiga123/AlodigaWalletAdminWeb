@@ -108,8 +108,6 @@
                                                     <listhead>
                                                         <listheader label="" width="30px"/>
                                                         <listheader label="${c:l('sp.crud.profile.functions.system')}" width="345px"/>
-                                                        <listheader label="${c:l('sp.crud.profile.permission.screen')}" width="250px"/>
-                                                        <listheader label="${c:l('sp.crud.profile.permission.entityDB')}" width="250px"/>
                                                     </listhead>
                                                 </listbox>
                                             </vlayout>

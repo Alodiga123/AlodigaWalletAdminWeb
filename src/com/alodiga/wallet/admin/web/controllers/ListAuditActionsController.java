@@ -150,17 +150,16 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             request.setParams(params);
             userList = userEJB.getUserByLogin(request);
         } catch (Exception ex) {
-        } finally {
-            if(userList  != null){
+        } 
+        if(userList.size() > 0){
             for (User userName : userList) {
                     userNames = userName;
                 }
           txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());  
         } else {
-            this.showMessage("sp.error.field.loginExistInBD", true, null);
-            txtLogin.setFocus(true);
+          txtName.setValue(Labels.getLabel("sp.error.field.userNoExistBD"));
         }
-        } 
+        
     }
     
     public void onClick$btnDownload() throws InterruptedException {
