@@ -20,7 +20,6 @@ public class AdminAddressController extends GenericAbstractAdminController {
     private Label lblRequestDate;
     private Label lblStatusRequest;
     private Label lblCountry;
-    private Label lblCounty;
     private Label lblCity;
     private Label lblUbanization;
     private Label lblStreetType;
@@ -102,6 +101,10 @@ public class AdminAddressController extends GenericAbstractAdminController {
             }            
             lblCity.setValue(personHasAddress.getAddressId().getCityId().getName());
             
+            if (personHasAddress.getAddressId().getCityId() != null){
+               lblCity.setValue(personHasAddress.getAddressId().getCityId().getName()); 
+            }
+            
             if (personHasAddress.getAddressId().getUrbanization() != null) {
                 lblUbanization.setValue(personHasAddress.getAddressId().getUrbanization());
             }
@@ -109,7 +112,11 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (personHasAddress.getAddressId().getNameStreet() != null) {
                 lblNameStreet.setValue(personHasAddress.getAddressId().getNameStreet());
             }
-            lblEdificationType.setValue(personHasAddress.getAddressId().getEdificationTypeId().getDescription());
+            
+            if(personHasAddress.getAddressId().getEdificationTypeId() != null){
+              lblEdificationType.setValue(personHasAddress.getAddressId().getEdificationTypeId().getDescription());  
+            }
+            
             if (personHasAddress.getAddressId().getNameEdification() != null) {
                 lblNameEdification.setValue(personHasAddress.getAddressId().getNameEdification());
             }
@@ -119,8 +126,15 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (personHasAddress.getAddressId().getFloor() != null) {
                 lblFloor.setValue(personHasAddress.getAddressId().getFloor().toString());
             }
-            lblZipCode.setValue(personHasAddress.getAddressId().getZipCode());
-            lblAddressTypes.setValue(personHasAddress.getAddressId().getAddressTypeId().getDescription());
+            
+            if(personHasAddress.getAddressId() != null){
+              lblZipCode.setValue(personHasAddress.getAddressId().getZipCode());  
+            }
+            
+            if(personHasAddress.getAddressId().getAddressTypeId() != null){
+              lblAddressTypes.setValue(personHasAddress.getAddressId().getAddressTypeId().getDescription());  
+            }
+
             if (personHasAddress.getAddressId().getIndMainAddress() == true) {
                 rMainAddressYes.setChecked(true);
             } else {

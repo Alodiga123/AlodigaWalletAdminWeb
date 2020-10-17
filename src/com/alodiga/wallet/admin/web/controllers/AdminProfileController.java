@@ -148,8 +148,6 @@ public class AdminProfileController extends GenericAbstractAdminController {
                         item.setValue(permission);
                         item.appendChild(new Listcell());
                         item.appendChild(new Listcell(permission.getPermissionDataByLanguageId(languageId) != null ? permission.getPermissionDataByLanguageId(languageId).getAlias() : permission.getName()));
-                        item.appendChild(new Listcell(permission.getAction()));
-                        item.appendChild(new Listcell(permission.getEntity()));
                         item.setParent(lbxPermissions);
                     }
 

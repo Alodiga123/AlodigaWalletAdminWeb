@@ -20,7 +20,7 @@
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="1000px">
+                                <div width="990px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -34,7 +34,7 @@
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
-                                                <hlayout style="text-align:right">
+                                                <hlayout style="text-align:right" width="990px">
                                                     <label value="${c:l('sp.crud.country.name')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
