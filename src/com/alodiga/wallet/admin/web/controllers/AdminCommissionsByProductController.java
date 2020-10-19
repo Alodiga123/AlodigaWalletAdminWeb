@@ -211,7 +211,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         return true;
     }
 
-    private void saveBank(Commission _commission) {
+    private void saveCommission(Commission _commission) {
         Commission commission = null;
         Integer application;
         
@@ -265,11 +265,11 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
                     if(validateComissionByProduct()){
-                         saveBank(commissionParam);
+                         saveCommission(commissionParam);
                     }
                     break;
                 case WebConstants.EVENT_EDIT:
-                    saveBank(commissionParam);
+                    saveCommission(commissionParam);
                     break;
                 default:
                     break;
