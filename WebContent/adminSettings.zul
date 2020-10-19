@@ -37,14 +37,12 @@
                                                         <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
                                                     </hlayout>
                                                 </div>
-
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column width="400px"/>
                                                         <column width="497px"/>
                                                     </columns>
                                                     <rows>
-
                                                         <row>
                                                             <label value="${c:l('sp.preference.classification')}" sclass="lblbold"/>
                                                             <hlayout>
@@ -53,19 +51,16 @@
                                                         </row>
                                                     </rows>
                                                 </grid>
-
-
-                                                <grid id="gridData" fixedLayout="true">
+                                                <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
                                                         <column label="${c:l('sp.crud.settings.main.description')}" width="300px"/>
                                                         <column label="${c:l('sp.crud.settings.main.value')}" width="300px"/>
                                                         <column label="${c:l('sp.crud.settings.main.type')}" width="197px"/>
                                                         <column label="${c:l('sp.crud.settings.main.enabled')}" width="100px"/>
                                                     </columns>
-                                                       <rows id = "rowsGrid">
-                                                                      
+                                                       <rows id = "rowsGrid">                                                                     
                                                     
-                                                     </rows>
+                                                       </rows>
                                                 </grid>
                                             </vlayout>
                                         </div>
