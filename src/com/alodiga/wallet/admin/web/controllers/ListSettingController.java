@@ -1,6 +1,7 @@
 package com.alodiga.wallet.admin.web.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,14 +16,13 @@ import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Textbox;
-
 import com.alodiga.wallet.admin.web.components.ListcellEditButton;
 import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
@@ -31,9 +31,6 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.Bank;
-import com.alodiga.wallet.common.model.BankOperationMode;
-import com.alodiga.wallet.common.model.BankOperationType;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.PreferenceValue;
 import com.alodiga.wallet.common.model.Product;
@@ -42,14 +39,17 @@ import com.alodiga.wallet.common.model.TransactionType;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.EjbUtils;
 import com.alodiga.wallet.common.utils.QueryConstants;
+import com.portal.business.commons.models.Business;
 
 public class ListSettingController extends GenericAbstractListController<PreferenceValue> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
-    private Textbox txtBussinessId;
+    private Combobox cmbBusiness;
     private PreferencesEJB preferencesEJB = null;
+    private BusinessEJB businessEJB;
     private ProductEJB productEJB = null;
     private UtilsEJB utilsEJB = null;
     private List<PreferenceValue> preferenceValues = null;
@@ -88,11 +88,12 @@ public class ListSettingController extends GenericAbstractListController<Prefere
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             preferencesEJB = (PreferencesEJB) EJBServiceLocator.getInstance().get(EjbConstants.PREFERENCES_EJB);
+            businessEJB = (BusinessEJB) EJBServiceLocator.getInstance().get(EjbConstants.BUSINESS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminSpecificsSettings.zul";
             getData();
-            loadList(preferenceValues);
+//            loadList(preferenceValues);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -131,10 +132,10 @@ public class ListSettingController extends GenericAbstractListController<Prefere
                 for (PreferenceValue preferenceValue : list) {
                     item = new Listitem();
                     item.setValue(preferenceValue);
-                    item.appendChild(new Listcell(preferenceValue.getPreferenceClassficationId().getName()));
                     item.appendChild(new Listcell(preferenceValue.getProductId().getName()));
                     item.appendChild(new Listcell(preferenceValue.getTransactionTypeId().getValue()));
-                    item.appendChild(new Listcell(preferenceValue.getBussinessId().toString()));
+                    
+                    item.appendChild(new Listcell(((Business) cmbBusiness.getSelectedItem().getValue()).getName()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, preferenceValue, Permission.EDIT_PREFERENCES) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, preferenceValue, Permission.VIEW_PREFERENCES) : new Listcell());
                     item.setParent(lbxRecords);
@@ -157,6 +158,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
     public void getData() {
     	loadProducts();
     	loadTransactionType();
+    	loadBusiness();
     	preferenceValues = new ArrayList<PreferenceValue>();
         try {
 
@@ -173,6 +175,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
     }
 
     private void showEmptyList() {
+    	lbxRecords.getItems().clear();
         Listitem item = new Listitem();
         item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
         item.appendChild(new Listcell());
@@ -185,7 +188,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.specific.preference.list"));
+            Utils.exportExcel(lbxRecords, "Listado de Preferencias Especificas_"+EjbUtils.getFormatedDate(new Date(),"dd/MM/yyyy"));
             AccessControl.saveAction(Permission.LIST_PREFERENCES, "Se descargo listado de preferencias especificas en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -206,8 +209,8 @@ public class ListSettingController extends GenericAbstractListController<Prefere
               if (cmbProduct.getSelectedItem() != null && cmbProduct.getSelectedIndex() != 0) {
                   params.put(QueryConstants.PARAM_PRODUCT_ID, ((Product) cmbProduct.getSelectedItem().getValue()).getId());
               }
-              if(txtBussinessId.getText() == null || !txtBussinessId.getText().equals("")) {
-            	  params.put(QueryConstants.PARAM_BUSSINESS_ID, txtBussinessId.getText());
+              if(cmbBusiness.getSelectedItem() != null) {
+            	  params.put(QueryConstants.PARAM_BUSSINESS_ID, ((Business) cmbBusiness.getSelectedItem().getValue()).getId());
               }
               _request.setParams(params);
               loadList(preferenceValues = preferencesEJB.getPreferenceValuesGroupByBussinessId(_request));        
@@ -255,6 +258,23 @@ public class ListSettingController extends GenericAbstractListController<Prefere
                 item.setValue(transactionTypes.get(i));
                 item.setLabel(transactionTypes.get(i).getValue());
                 item.setParent(cmbTransactionType);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
+
+    }
+    
+    private void loadBusiness() {
+
+        try {
+        	cmbBusiness.getItems().clear();
+            List<Business> businesses = businessEJB.getAll();
+            for (int i = 0; i < businesses.size(); i++) {
+            	Comboitem item = new Comboitem();
+                item.setValue(businesses.get(i));
+                item.setLabel(businesses.get(i).getName());
+                item.setParent(cmbBusiness);
             }
         } catch (Exception ex) {
             this.showError(ex);

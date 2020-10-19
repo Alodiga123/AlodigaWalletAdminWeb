@@ -24,20 +24,26 @@
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
                                             <hlayout>
-                                                <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
-                                                 |
-                                                <toolbarbutton id="tbbCurrentAction" label="${c:l('sp.crud.settings.admin')}"/>
+                                               <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
+                                               |
+                                               <toolbarbutton label="${c:l('sp.specific.preference.list')}" onClick='Executions.sendRedirect(&quot;listSpecificsSetting.zul&quot;)'/>
+                                               |
+                                               <toolbarbutton id="tbbCurrentAction" label="${c:l('sp.crud.settings.admin')}"/>
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-
+                                          		  <hlayout>
+                                                    <div align="left" width="400px">
+                                                        <label value="${c:l('sp.specific.preference.setting')}" sclass="lblbold"/>
+                                                    </div> 
+	                                                <div align="right" width="385px">
+	                                                    <hlayout>
+	                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
+	                                                    </hlayout>
+	                                                </div>
+											 </hlayout>
                                                 <grid fixedLayout="true">
                                                     <columns>
                                                         <column width="320px"/>

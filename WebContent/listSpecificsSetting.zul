@@ -40,7 +40,7 @@
                                                     <label value="${c:l('sp.specific.preference.transaction.type')}" sclass="lblbold"/>
                                                     <combobox id="cmbTransactionType" width="180px" mold="rounded" readonly="true"/>        
                                                     <label value="${c:l('sp.specific.preference.bussiness')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtBussinessId" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <combobox id="cmbBusiness"  width="180px" mold="rounded" readonly="true"/>        
                                                 </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
@@ -58,10 +58,9 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.specific.preference.classification')}" width="220px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.specific.preference.product')}" width="220px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.specific.preference.transaction.type')}" width="220px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.specific.preference.bussiness')}" width="230px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.specific.preference.product')}" width="290px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.specific.preference.transaction.type')}" width="290px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.specific.preference.bussiness')}" width="300px" sort="auto"/>
                                                     <listheader label="-" width="50px"/>
                                                     <listheader label="-" width="50px"/>
                                                 </listhead>
