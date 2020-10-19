@@ -60,16 +60,16 @@
                                                         </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('cms.common.description')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.preferences.code')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtDescription" value="" rows="2" width="196px"/>
+                                                                <textbox id="txtCode" constraint="no empty" maxlength="80" width="196px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
                                                             </hlayout>
                                                         </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.crud.preferences.code')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.preferences.dataType')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtCode" constraint="no empty" maxlength="80" width="196px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+                                                                <combobox id="cmbTypeData" width="200px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                         </row>
                                                         
@@ -79,11 +79,18 @@
                                                                 <combobox id="cmbTypePreference" width="200px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                         </row>
+
+                                                        <row>
+                                                            <label value="${c:l('sp.preference.description.espanish')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <textbox id="txtDescription" value="" rows="2" width="196px"/>
+                                                            </hlayout>
+                                                        </row>
                                                         
                                                         <row>
-                                                            <label value="${c:l('sp.crud.preferences.dataType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.preference.description.english')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <combobox id="cmbTypeData" width="200px" mold="rounded" readonly="true" />
+                                                                <textbox id="txtDescriptionEnglish" value="" rows="2" width="196px"/>
                                                             </hlayout>
                                                         </row>
                                                         
