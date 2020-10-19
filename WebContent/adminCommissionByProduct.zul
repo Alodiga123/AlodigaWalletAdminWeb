@@ -4,14 +4,14 @@
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminCommissionByProduct" title="${c:l('sp.common.rates')}" width="950px" height="350px" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionsByProductController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winAdminCommissionByProduct" title="${c:l('sp.common.rates')}" width="950px" height="400px" apply="com.alodiga.wallet.admin.web.controllers.AdminCommissionsByProductController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="1200px" align="left" height="300px">
+                        <div width="1200px" align="left" height="400px">
                             <hlayout>
                                 <div width="900px">
                                     <vlayout>

@@ -39,17 +39,20 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
 public class ListCommissionByProductController extends GenericAbstractListController<Commission> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
+    private Label lblProduct;
     private UtilsEJB utilsEJB = null;
     private List<Commission> commissions = null;
     private User currentUser;
     private Profile currentProfile;
     private Product productParam;
+    private Product products = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -96,9 +99,23 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             startListener();
             getData();
             loadList(commissions);
+            getProduct();
         } catch (Exception ex) {
             showError(ex);
         }
+    }
+    
+    public void getProduct(){
+        AdminProductController adminProduct = new AdminProductController();
+        if(adminProduct.getProductParent().getId() != null){
+            products = adminProduct.getProductParent();
+        }
+            String product =  products.getName();
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.product.title"));
+            file.append(":");
+            file.append(" ");
+            file.append(product);
+            lblProduct.setValue(file.toString());
     }
 
     public List<Commission> getFilteredList(String filter) {
@@ -143,12 +160,11 @@ public class ListCommissionByProductController extends GenericAbstractListContro
                     item = new Listitem();
                     item.setValue(commission);
                     value = numberFormat.format(commission.getValue());
-                    item.appendChild(new Listcell(commission.getProductId().getName()));
                     item.appendChild(new Listcell(commission.getTransactionTypeId().getValue()));
                    if (commission.getIndApplicationCommission() == 1){
-                        apply = Labels.getLabel("sp.common.yes");
+                        apply = Labels.getLabel("sp.crud.commission.discount.amount");
                     } else {
-                        apply = Labels.getLabel("sp.common.no");
+                        apply = Labels.getLabel("sp.crud.commission.additional.charge");
                     }
                     
                     if (commission.getIsPercentCommision() == 1) {

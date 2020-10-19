@@ -165,8 +165,6 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
             this.showMessage("sp.error.date.beginningDate", true, null);
-        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
-            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
         } else {
             return true;
         }
@@ -200,7 +198,10 @@ public class AdminCommissionController extends GenericAbstractAdminController {
                 this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
                 dblValue.setFocus(true);
                 return false;
-            }
+        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
+            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
+            return false;
+        }
         return true;
     }
 
