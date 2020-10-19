@@ -96,11 +96,7 @@ public class AdminAddressController extends GenericAbstractAdminController {
         try {
             
             lblCountry.setValue(personHasAddress.getAddressId().getCountryId().getName());
-            if (personHasAddress.getAddressId().getCountyId() != null) {
-                lblCounty.setValue(personHasAddress.getAddressId().getCountyId().getName());
-            }            
-            lblCity.setValue(personHasAddress.getAddressId().getCityId().getName());
-            
+        
             if (personHasAddress.getAddressId().getCityId() != null){
                lblCity.setValue(personHasAddress.getAddressId().getCityId().getName()); 
             }
@@ -108,7 +104,12 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (personHasAddress.getAddressId().getUrbanization() != null) {
                 lblUbanization.setValue(personHasAddress.getAddressId().getUrbanization());
             }
-            lblStreetType.setValue(personHasAddress.getAddressId().getStreetTypeId().getDescription());
+            
+            if (personHasAddress.getAddressId().getStreetTypeId() != null){
+              lblStreetType.setValue(personHasAddress.getAddressId().getStreetTypeId().getDescription());
+              
+            }
+            
             if (personHasAddress.getAddressId().getNameStreet() != null) {
                 lblNameStreet.setValue(personHasAddress.getAddressId().getNameStreet());
             }
