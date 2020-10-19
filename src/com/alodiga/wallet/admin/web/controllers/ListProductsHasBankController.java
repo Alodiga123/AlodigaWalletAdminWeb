@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Window;
 
 public class ListProductsHasBankController extends GenericAbstractListController<BankHasProduct> {
@@ -54,6 +55,7 @@ public class ListProductsHasBankController extends GenericAbstractListController
     private Profile currentProfile;
     private Product product;
     private Product productParam;
+    private Tab tabProductHasBank;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -65,6 +67,14 @@ public class ListProductsHasBankController extends GenericAbstractListController
         }
         initialize();
         getProduct();
+    }
+    
+    public void onSelect$tabProductHasBank() {
+        try {
+            doAfterCompose(self);
+        } catch (Exception ex) {
+            showError(ex);
+        }
     }
 
     @Override

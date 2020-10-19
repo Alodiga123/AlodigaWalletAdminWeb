@@ -11,14 +11,21 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
+import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
+import com.alodiga.wallet.common.model.Language;
 import com.alodiga.wallet.common.model.Preference;
 import com.alodiga.wallet.common.model.PreferenceField;
+import com.alodiga.wallet.common.model.PreferenceFieldData;
 import com.alodiga.wallet.common.model.PreferenceType;
+import com.alodiga.wallet.common.model.PreferenceValue;
+import com.alodiga.wallet.common.enumeraciones.PersonClassificationE;
+import com.alodiga.wallet.common.model.PersonClassification;
+import com.alodiga.wallet.common.model.PreferenceClassification;
 import com.alodiga.wallet.common.utils.Constants;
 
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -39,16 +46,19 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     private Textbox txtPreference;
     private Textbox txtCode;
     private Textbox txtDescription;
+    private Textbox txtDescriptionEnglish;
     private Combobox cmbTypePreference;
     private Combobox cmbTypeData;
     private Radio rEnabledYes;
     private Radio rEnabledNo;
     private UtilsEJB utilsEJB = null;
     private PreferencesEJB preferencesEJB = null;
+    private PersonEJB personEJB = null;
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private PreferenceField preferenceFieldParam;
     private Integer eventType;
+    private List<PreferenceFieldData> preferenceDataList = null;
     List<PreferenceField> preferenceFieldList = new ArrayList<PreferenceField>();
 
     @Override
@@ -60,7 +70,6 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         } else {
             preferenceFieldParam = (Sessions.getCurrent().getAttribute("object") != null) ? (PreferenceField) Sessions.getCurrent().getAttribute("object") : null;
         }
-
         initialize();
     }
 
@@ -83,6 +92,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         try {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             preferencesEJB = (PreferencesEJB) EJBServiceLocator.getInstance().get(EjbConstants.PREFERENCES_EJB);
+            personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
@@ -97,13 +107,29 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         try {
             txtPreference.setText(preferenceField.getName());
             txtCode.setText(preferenceField.getCode());  
-            txtDescription.setText(preferenceField.getDescription()); 
             btnSave.setVisible(true);
             if (preferenceField.getEnabled() == 1) {
                 rEnabledYes.setChecked(true);
             } else {
                 rEnabledNo.setChecked(true);
             }
+                EJBRequest request = new EJBRequest();
+                Map params = new HashMap();
+                params.put(Constants.PREFERENCE_FIELD_KEY, preferenceField.getId());
+                request.setParams(params);
+                preferenceDataList = preferencesEJB.getPreferenceFieldDataByPreference(request);
+
+                if (preferenceDataList != null) {
+                    for (PreferenceFieldData p : preferenceDataList) {
+                        if (p.getLanguage().getId() == Constants.SPANISH) {
+                            txtDescription.setText(p.getDescription());
+                        }
+                        if (p.getLanguage().getId() == Constants.ENGLISH) {
+                            txtDescriptionEnglish.setText(p.getDescription());
+                        }
+                    }
+                }
+                
         } catch (Exception ex) {
             showError(ex);
         }
@@ -113,6 +139,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
        txtPreference.setReadonly(true);
        txtCode.setReadonly(true);
        txtDescription.setReadonly(true);
+       txtDescriptionEnglish.setReadonly(true);
        btnSave.setVisible(false);
        rEnabledYes.setDisabled(true);
        rEnabledNo.setDisabled(true);
@@ -136,34 +163,64 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     }
     
     public boolean validatePreferenceCode() {
-        PreferenceField preferenceField = null;
-        preferenceFieldList.clear();
-        try{
-            EJBRequest request = new EJBRequest();
-            Map params = new HashMap();
-            params.put(Constants.PARAM_CODE, txtCode.getText());
-            request.setParams(params);
-            preferenceFieldList = preferencesEJB.getPreferenceFieldsByCode(request);
-        } catch (Exception ex) {
-            showError(ex);
-        } if(preferenceFieldList.size() > 0){
-            this.showMessage("sp.error.preferences.code", true, null);
-                txtCode.setFocus(true);
-                return false;
-        }
+//        PreferenceField preferenceField = null;
+//        preferenceFieldList.clear();
+//        try{
+//            EJBRequest request = new EJBRequest();
+//            Map params = new HashMap();
+//            params.put(Constants.PARAM_CODE, txtCode.getText());
+//            request.setParams(params);
+//            preferenceFieldList = preferencesEJB.getPreferenceFieldsByCode(request);
+//        } catch (Exception ex) {
+//            showError(ex);
+//        } if(preferenceFieldList.size() > 0){
+//            this.showMessage("sp.error.preferences.code", true, null);
+//                txtCode.setFocus(true);
+//                return false;
+//        }
         return true;
     }
     
 
     private void savePreferenceField(PreferenceField _preferenceField) {
+        PreferenceField preference = null;
+        PreferenceFieldData preferenceDataES = null;
+        PreferenceFieldData preferenceDataEN = null;
+        PreferenceClassification classificationClient = null;
+        PreferenceClassification classificationBussines = null;
+        PreferenceValue preferenceValueClient = null;
+        PreferenceValue preferenceValueBusiness = null;
+        Language languageES = null;
+        Language languageEN = null;
         try {
-            PreferenceField preference = null;
+            
+            
             short indEnable = 1;
+            
+            //Se obtienen los lenguajes Español e Ingles
+            EJBRequest request4 = new EJBRequest();
+            request4.setParam(Constants.SPANISH_LANGUAGE);
+            languageEN = utilsEJB.loadLanguage(request4);
+
+            request4 = new EJBRequest();
+            request4.setParam(Constants.ENGLISH_LANGUAGE);
+            languageES = utilsEJB.loadLanguage(request4);
+            
+            //Se obtienen las clasificaciones para el Preference value
+            EJBRequest request1 = new EJBRequest();
+            request1.setParam(Constants.CLIENT_CLASSIFICATION);
+            classificationClient = preferencesEJB.loadPreferenceClassification(request1);
+            
+            request1 = new EJBRequest();
+            request1.setParam(Constants.BUSINESS_CLASSIFICATION);
+            classificationBussines = preferencesEJB.loadPreferenceClassification(request1);
 
             if (_preferenceField != null) {
                 preference = _preferenceField;
+                
             } else {
                 preference = new PreferenceField();
+                
             }
             
             if (rEnabledYes.isChecked()) {
@@ -171,7 +228,8 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             } else {
                 indEnable = 0;
             }
-
+            
+            //Guardar Preference Field
             preference.setName(txtPreference.getText());
             preference.setDescription(txtDescription.getText());
             preference.setCode(txtCode.getText());
@@ -180,17 +238,76 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             preference.setEnabled(indEnable);
             request.setParam(preference);
             preference = preferencesEJB.savePreferenceField(request);
-            this.showMessage("sp.common.save.success", false, null);
             
+            //Se obtienen las Descripciones de las preferencias
+            if (eventType == WebConstants.EVENT_EDIT) {
+                request = new EJBRequest();
+                Map params = new HashMap();
+                params.put(Constants.PREFERENCE_FIELD_KEY, preference.getId());
+                request.setParams(params);
+                preferenceDataList = preferencesEJB.getPreferenceFieldDataByPreference(request);
+
+                if (preferenceDataList != null) {
+                    for (PreferenceFieldData p : preferenceDataList) {
+                        if (p.getLanguage().getId() == Constants.SPANISH) {
+                            preferenceDataES = p;
+                        }
+                        if (p.getLanguage().getId() == Constants.ENGLISH) {
+                            preferenceDataEN = p;
+                        }
+                    }
+                    //Guardar descripcion en español en PreferenceFieldData
+                    preferenceDataES.setPreferenceField(preference);
+                    preferenceDataES.setLanguage(languageES);
+                    preferenceDataES.setDescription(txtDescription.getText());
+                    preferenceDataES = preferencesEJB.savePreferenceFieldData(preferenceDataES);
+                    //Guardar descripcion en ingles en PreferenceFieldData
+                    preferenceDataEN.setPreferenceField(preference);
+                    preferenceDataEN.setLanguage(languageEN);
+                    preferenceDataEN.setDescription(txtDescriptionEnglish.getText());
+                    preferenceDataEN = preferencesEJB.savePreferenceFieldData(preferenceDataEN);
+                }
+            } else if (eventType == WebConstants.EVENT_ADD) {
+                //Guardar descripcion en español en PreferenceFieldData
+                    preferenceDataES = new PreferenceFieldData();
+                    preferenceDataES.setPreferenceField(preference);
+                    preferenceDataES.setLanguage(languageES);
+                    preferenceDataES.setDescription(txtDescription.getText());
+                    preferenceDataES = preferencesEJB.savePreferenceFieldData(preferenceDataES);
+                    //Guardar descripcion en ingles en PreferenceFieldData
+                    preferenceDataEN = new PreferenceFieldData();
+                    preferenceDataEN.setPreferenceField(preference);
+                    preferenceDataEN.setLanguage(languageEN);
+                    preferenceDataEN.setDescription(txtDescriptionEnglish.getText());
+                    preferenceDataEN = preferencesEJB.savePreferenceFieldData(preferenceDataEN);
+            } 
+            
+            if (eventType == WebConstants.EVENT_ADD){
+                //Guardar Preference Value Cliente
+                //Error de que no agrra el preferencefieldID
+                preferenceValueClient.setPreferenceFieldId(preference);
+                preferenceValueClient.setPreferenceClassficationId(classificationClient);
+                preferenceValueClient.setEnabled(true);
+                preferenceValueClient = preferencesEJB.savePreferenceValue(preferenceValueClient);
+
+                //Guardar Preference Value Business
+                //Error de que no agrra el preferencefieldID
+                preferenceValueBusiness.setPreferenceFieldId(preference);
+                preferenceValueBusiness.setPreferenceClassficationId(classificationBussines);
+                preferenceValueBusiness.setEnabled(true);
+                preferenceValueBusiness = preferencesEJB.savePreferenceValue(preferenceValueBusiness);
+            }
+            
+            this.showMessage("sp.common.save.success", false, null);
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
             } else {
                 btnSave.setVisible(true);
             }
-            
+           
         } catch (Exception ex) {
             showError(ex);
-        }
+        } 
     }
 
     public void onClick$btnCancel() {
