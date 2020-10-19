@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Window;
 
 public class ListCommissionByProductController extends GenericAbstractListController<Commission> {
@@ -53,6 +54,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     private Profile currentProfile;
     private Product productParam;
     private Product products = null;
+    private Tab tabCommissionByProduct;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -75,6 +77,15 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             showError(ex);
         }
     }
+    
+    public void onSelect$tabCommissionByProduct() {
+        try {
+            doAfterCompose(self);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+    }
+
 
     public void startListener() {
         EventQueue que = EventQueues.lookup("updateCommission", EventQueues.APPLICATION, true);
