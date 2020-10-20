@@ -72,6 +72,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             passwordChangeRequestParam = (PasswordChangeRequest) Sessions.getCurrent().getAttribute("object");
         }
         initialize();
+        UserInformation();
         initView(eventType, "crud.passwordChangeRequest");
     }
 
@@ -100,14 +101,35 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             showError(ex);
         }
     }
-
-    public void onChange$txtRepeatNewPassword() {
-        this.clearMessage();
-        if (!txtRepeatNewPassword.getValue().equals(txtNewPassword.getValue())) {
-            this.showMessage("sp.crud.passwordChange.fieldsPasswordNotEquals", false, null);
+    
+    public void onClick$imgEye() {
+        if (txtCurrentPassword.getType().equals("password")) {
+            txtCurrentPassword.setType("text");
         } else {
-            this.clearMessage();
-        }
+            txtCurrentPassword.setType("password");
+        }              
+    }
+    
+    public void onClick$imgEye1() {
+        if (txtNewPassword.getType().equals("password")) {
+            txtNewPassword.setType("text");
+        } else {
+            txtNewPassword.setType("password");
+        }              
+    }
+    
+    public void onClick$imgEye2() {
+        if (txtRepeatNewPassword.getType().equals("password")) {
+            txtRepeatNewPassword.setType("text");
+        } else {
+            txtRepeatNewPassword.setType("password");
+        }              
+    }
+    
+    public void UserInformation(){
+        lblUser.setValue(user.getFirstName() + " " + user.getLastName());
+        lblIdentificationNumber.setValue(user.getIdentificationNumber());
+        lblComercialAgency.setValue(user.getEmployeeId().getComercialAgencyId().getName());
     }
 
     public void onFocus$txtCurrentPassword() {
@@ -117,7 +139,6 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
     }
 
     public void onFocus$txtNewPassword() {
-        this.clearMessage();
         txtRepeatNewPassword.setText("");
     }
 
@@ -148,10 +169,6 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
                 txtCurrentPassword.setValue(passwordChangeRequest.getCurrentPassword());
             }
 
-            if (passwordChangeRequest.getCurrentPassword() == null) {
-                txtCurrentPassword.setValue(passwordChangeRequest.getNewPassword());
-            }
-
             if (passwordChangeRequest.getIndApproved() != null) {
                 if (passwordChangeRequest.getIndApproved() == true) {
                     rApprovedYes.setChecked(true);
@@ -170,7 +187,23 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
         txtNewPassword.setReadonly(true);
         txtRepeatNewPassword.setReadonly(true);
         btnSave.setVisible(false);
-
+    }
+    
+    public boolean validatePasswordChange() {
+        //Valida que la confirmación de la nueva contraseña coincida con la nueva contraseña
+        if (!txtRepeatNewPassword.getValue().equals(txtNewPassword.getValue())) {
+            txtRepeatNewPassword.setValue("");
+            txtRepeatNewPassword.setFocus(true);
+            this.showMessage("maaw.msj.fieldsPasswordNotEquals", true, null);
+        } else if (txtNewPassword.getValue().equals(txtCurrentPassword.getValue())) {
+            txtNewPassword.setValue("");
+            txtRepeatNewPassword.setValue("");
+            txtNewPassword.setFocus(true);
+            this.showMessage("maaw.msj.fieldsCurrentPasswordEqualsNewPassword", true, null);
+        } else {
+            return true;
+        }
+        return false;
     }
 
     public Boolean validateEmpty() {
@@ -195,7 +228,6 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
         Date dateRequest = null;
         List<User> userList = null;
         PasswordChangeRequest passwordChangeRequest = null;
-        this.clearMessage();
 
         try {
             if (_passwordChangeRequest != null) {
@@ -235,7 +267,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
                 passwordChangeRequestParam = passwordChangeRequest;
 
                 //Actualizar la contraseña del usuario en la BD
-                user.setPassword(Encoder.MD5(txtCurrentPassword.getText()));
+                user.setPassword(Encoder.MD5(txtNewPassword.getText()));
                 user = userEJB.saveUser(user);
 
                 rApprovedYes.setVisible(true);
@@ -332,8 +364,10 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    savePasswordChangeRequest(null);
-                    break;
+                    if (validatePasswordChange()) {
+                        savePasswordChangeRequest(null);
+                    }
+                break;
                 default:
                     break;
             }

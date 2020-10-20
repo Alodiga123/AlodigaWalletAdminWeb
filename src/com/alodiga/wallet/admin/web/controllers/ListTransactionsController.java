@@ -17,17 +17,25 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.Transaction;
+import com.alodiga.wallet.common.model.TransactionSource;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Radio;
 
@@ -37,6 +45,8 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
     private List<Transaction> transactions = null;
+    private Transaction transactionsParam;
+    private Combobox cmbTransactionSource;
     private Radio rDaysYes;
     private Radio rDaysNo;
     private Datebox dtbBeginningDate;
@@ -63,7 +73,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     @Override
@@ -76,8 +85,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             checkPermissions();
             adminPage = "adminTransactions.zul";
             btnViewTransactions.setVisible(false);
-//            getData();
-//            loadList(transactions);
+            loadCmbTransactionSource();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -86,13 +94,11 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     public void onClick$rDaysYes() {
         dtbEndingDate.setDisabled(true);
         btnViewTransactions.setVisible(true);
-//        btnViewTransactions.setDisabled(false);
     }
 
     public void onClick$rDaysNo() {
         dtbEndingDate.setDisabled(false);
         btnViewTransactions.setVisible(true);
-//        btnViewTransactions.setDisabled(false);
     }
 
     public void onChange$dtbBeginningDate() {
@@ -102,28 +108,38 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     public void onChange$dtbEndingDate() {
         this.clearMessage();
     }
+    
 
     public void onClick$btnViewTransactions() throws InterruptedException, RegisterNotFoundException {
-        try {
+        try {            
+              clearMessage();
+            if (rDaysYes.isChecked()){
+                  EJBRequest _request = new EJBRequest();
+                  Map<String, Object> params = new HashMap<String, Object>();
+                  params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+              if (cmbTransactionSource.getSelectedItem() != null && cmbTransactionSource.getSelectedIndex() != 0) {
+                  params.put(QueryConstants.PARAM_STATUS_SOURCE_ID, ((TransactionSource) cmbTransactionSource.getSelectedItem().getValue()).getId());
+              } 
+              _request.setParams(params);
+              loadList(utilsEJB.getTransactionByBeginningDateAndOriginTransaccion(_request));   
+            }
 
-            if (rDaysYes.isChecked()) {
-                if (dtbBeginningDate.getValue() != null) {
-                    loadList(utilsEJB.getTransactionByBeginningDate(dtbBeginningDate.getValue()));
-                } else {
-                    this.showMessage("sp.error.date.notSelected", true, null);
+            if (rDaysNo.isChecked()){
+                if ((dtbBeginningDate.getValue() != null) && (dtbEndingDate.getValue() != null)) {
+                    EJBRequest _request = new EJBRequest();
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+                    params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
+                    if (cmbTransactionSource.getSelectedItem() != null && cmbTransactionSource.getSelectedIndex() != 0) {
+                        params.put(QueryConstants.PARAM_STATUS_SOURCE_ID, ((TransactionSource) cmbTransactionSource.getSelectedItem().getValue()).getId());
+                    }   
+                    _request.setParams(params);
+                    loadList(utilsEJB.getTransactionByDatesAndOrigin(_request));
                 }
-            }
+            }  
             
-            if (rDaysNo.isChecked()) {
-                if ((dtbEndingDate.getValue() != null) && (dtbEndingDate.getValue() != null)) {
-//                    if (dtbBeginningDate.getValue().getTime() > dtbEndingDate.getValue().getTime()) {
-                        loadList(utilsEJB.getTransactionByDates(dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
-//                    }
-                } else {
-                    this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
-                }
-            }
         } catch (EmptyListException ex) {
+            lbxRecords.getItems().clear();
             showEmptyList();
         } catch (Exception ex) {
             showError(ex);
@@ -172,7 +188,6 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
                     item.setValue(transaction);
                     item.appendChild(new Listcell(transaction.getProductId().getName()));
                     item.appendChild(new Listcell(transaction.getTransactionTypeId().getValue()));
-                    item.appendChild(new Listcell(transaction.getTransactionSourceId().getName()));
                     if (transaction.getTotalAmount() != null) {
                         totalAmount = numberFormat.format(transaction.getTotalAmount());
                         item.appendChild(new Listcell(totalAmount));
@@ -245,5 +260,25 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
     @Override
     public void onClick$btnAdd() throws InterruptedException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void loadCmbTransactionSource() {
+        try {
+            cmbTransactionSource.getItems().clear();
+            EJBRequest request = new EJBRequest();
+            List<TransactionSource> transactionSource = utilsEJB.getTransactionSource(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setParent(cmbTransactionSource);
+            cmbTransactionSource.setSelectedItem(item);
+            for (int i = 0; i < transactionSource.size(); i++) {
+                item = new Comboitem();
+                item.setValue(transactionSource.get(i));
+                item.setLabel(transactionSource.get(i).getName());
+                item.setParent(cmbTransactionSource);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
     }
 }

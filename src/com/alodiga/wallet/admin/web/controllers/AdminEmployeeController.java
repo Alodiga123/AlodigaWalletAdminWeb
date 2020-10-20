@@ -116,10 +116,10 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-       indIdentification.setDisabled(true); 
-       txtName.setDisabled(true);
-       txtLastName.setDisabled(true);
-       txtEmail.setDisabled(true);
+       indIdentification.setReadonly(true); 
+       txtName.setReadonly(true);
+       txtLastName.setReadonly(true);
+       txtEmail.setReadonly(true);
        btnSave.setVisible(false);
        cmbCountry.setDisabled(true);
        cmbPositionEnterprise.setDisabled(true);
@@ -162,11 +162,14 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
         
         try {
             Employee employee = null;
+            Person person = null;
 
             if (_employee != null) {
                 employee = _employee;
+                person = employee.getPersonId();
             } else {
                 employee = new Employee();
+                person = new Person();
             }
             
             //Obtener la clasificacion del Empleado
@@ -175,7 +178,6 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
             PersonClassification personClassification = personEJB.loadPersonClassification(request1);
             
             //Guardar la persona
-            Person person = new Person();
             person.setEmail(txtEmail.getText());
             person.setPersonTypeId(((DocumentsPersonType) cmbDocumentPersonType.getSelectedItem().getValue()).getPersonTypeId());
             person.setPersonClassificationId(personClassification);
@@ -251,7 +253,6 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
         }
     }
     
-    
     private void loadCmbContryId(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
         List<Country> countries;
@@ -300,7 +301,7 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
             showError(ex);
         } finally {
             if (documentsPersonType == null) {
-                this.showMessage("cms.msj.DocumentsPersonTypeNull", false, null);
+                this.showMessage("sp.msj.DocumentsPersonTypeNull", false, null);
             }
         }
     }

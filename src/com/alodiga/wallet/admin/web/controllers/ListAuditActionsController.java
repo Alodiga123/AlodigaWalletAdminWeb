@@ -32,10 +32,12 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,7 +62,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         initialize();
     }
 
-
     public void startListener() {
     }
 
@@ -78,9 +79,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
             getData();
-            loadList(auditActions);
             loadPermisssions();
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -93,7 +92,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
                 for (AuditAction auditAction : list) {
-
                     item = new Listitem();
                     item.setValue(auditAction);
                     item.appendChild(new Listcell(auditAction.getUser().getLogin()));
@@ -104,7 +102,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                     	 item.appendChild(new Listcell());
                     }
                     item.appendChild(new Listcell(GeneralUtils.date2String(auditAction.getDate(), GeneralUtils.FORMAT_DATE_USA)));
-//                    item.appendChild(new Listcell(auditAction.getHost()));
                     item.appendChild(new Listcell(auditAction.getInfo()));
                     item.setParent(lbxRecords);
                 }
@@ -119,7 +116,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                 item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -150,14 +146,18 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             request.setParams(params);
             userList = userEJB.getUserByLogin(request);
         } catch (Exception ex) {
-            showError(ex);
-        }
-        for (User userName : userList) {
+        } 
+        if(userList.size() > 0){
+            for (User userName : userList) {
                     userNames = userName;
                 }
-        txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());
+          txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());  
+        } else {
+          txtName.setValue(Labels.getLabel("sp.error.field.userNoExistBD"));
+        }
         
     }
+    
     public void onClick$btnDownload() throws InterruptedException {
         try {
             String pattern = "dd-MM-yyyy";
@@ -173,7 +173,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         }
     }
     
-
     public void onClick$btnClear() throws InterruptedException {
         txtName.setText("");
         txtLogin.setText("");
@@ -185,20 +184,42 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
     @Override
     public void onClick$btnSearch() throws InterruptedException {
         try {
-
-            if (dtbBeginningDate.getValue()==null || dtbBeginningDate.getValue()==null) {
-                this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
-            }else if (dtbBeginningDate.getValue().getTime() > dtbEndingDate.getValue().getTime()) {
-                this.showMessage("sp.error.dateSelectInvalid.Invalid", true, null);
-            }
-            String login = !txtLogin.getText().isEmpty() ? txtLogin.getText() : null;
-            String fullName = !txtName.getText().isEmpty() ? txtName.getText() : null;
-            Long permissionId = cmbPermissions.getSelectedIndex() > 0 ? ((Permission) cmbPermissions.getSelectedItem().getValue()).getId() : null;
-            loadList(auditoryEJB.searchAuditAction(login, fullName, permissionId, dtbBeginningDate.getValue(), dtbEndingDate.getValue()));
-
+            String logins = txtLogin.getValue();
+            List<User> userList = new ArrayList<User>();
+            Long userId = null;
+                try{
+                    EJBRequest request = new EJBRequest();
+                    HashMap params = new HashMap();
+                    params.put(Constants.PARAM_LOGIN, logins);
+                    request.setParams(params);
+                    userList = userEJB.getUserByLogin(request);
+                
+                } catch (Exception ex) {
+                    showError(ex);
+                }
+                for (User userName : userList) {
+                            userId = userName.getId();
+                }
+        
+            EJBRequest _request = new EJBRequest();
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
+            params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
+            params.put(QueryConstants.PARAM_USER_ID, userId);
+            
+            if (dtbEndingDate.getValue().getTime() >= dtbBeginningDate.getValue().getTime()) {
+                if (cmbPermissions.getSelectedItem() != null && cmbPermissions.getSelectedIndex() != 0) {
+                      params.put(QueryConstants.PARAM_PERMISSION_ID, ((Permission) cmbPermissions.getSelectedItem().getValue()).getId());
+                  }  
+                _request.setParams(params);
+                loadList(auditoryEJB.searchAuditActions(_request));
+            }   else  {
+                  this.showMessage("sp.error.date.invalid", true, null);
+            }             
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
         	lblInfo.setValue(Labels.getLabel("sp.error.empty.list"));
+                onClick$btnClear();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -207,7 +228,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
     private void loadPermisssions() {
         List<Permission> permissions = null;
         try {
-
             cmbPermissions.getItems().clear();
             permissions = accessControlEJB.getPermissions(new EJBRequest());
             Comboitem cmbItem = new Comboitem();

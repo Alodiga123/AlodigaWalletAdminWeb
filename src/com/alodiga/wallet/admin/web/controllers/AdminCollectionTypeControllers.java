@@ -215,7 +215,6 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
         //cmbOriginAplication
         EJBRequest request1 = new EJBRequest();
         List<OriginApplication> originAplication;
-
         try {
             originAplication = utilsEJB.getOriginApplications(request1);
             loadGenericCombobox(originAplication, cmbOriginApplication, "name", evenInteger, Long.valueOf(collectionTypeParam != null ? collectionTypeParam.getPersonTypeId().getOriginApplicationId().getId() : 0));

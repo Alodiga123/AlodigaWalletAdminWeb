@@ -29,6 +29,7 @@ import com.alodiga.wallet.common.model.PhonePerson;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.model.UserHasProfile;
+import com.alodiga.wallet.common.enumeraciones.PersonClassificationE;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -71,6 +72,7 @@ public class AdminUserController extends GenericAbstractAdminController {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         userParam = (Sessions.getCurrent().getAttribute("object") != null) ? (User) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
         initView(eventType, "sp.crud.user");
@@ -83,7 +85,6 @@ public class AdminUserController extends GenericAbstractAdminController {
             accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
-            loadData();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -238,7 +239,7 @@ public class AdminUserController extends GenericAbstractAdminController {
         lblIdentificationNumber.setValue(String.valueOf(employee.getIdentificationNumber()));
         lblEmailEmployee.setValue(employee.getPersonId().getEmail());
         if (employee.getPersonId().getPhonePerson() != null) {
-            lblUserExtAlodiga.setValue(employee.getPersonId().getPhonePerson().getExtensionPhoneNumber());
+            lblUserExtAlodiga.setValue(employee.getPersonId().getPhonePerson().getNumberPhone());
         } else {
                     EJBRequest request = new EJBRequest();
                     HashMap params = new HashMap();
@@ -248,7 +249,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                     for (PhonePerson phoneUser : phonePersonUserList) {
                         phonePersonEmployee = phoneUser;
                     }
-                    lblUserExtAlodiga.setValue(phonePersonEmployee.getExtensionPhoneNumber());
+                    lblUserExtAlodiga.setValue(phonePersonEmployee.getNumberPhone());
                 }
         } catch (Exception ex) {
             showError(ex);
@@ -279,6 +280,7 @@ public class AdminUserController extends GenericAbstractAdminController {
         boolean indEnabled = true;
         boolean received = true;
         Person person = null;
+
         try {
             User user = null;
             
@@ -297,9 +299,9 @@ public class AdminUserController extends GenericAbstractAdminController {
             }
             //Obtener la clasificacion del Empleado / Usuario
             EJBRequest request1 = new EJBRequest();
-            request1.setParam(Constants.CLASSIFICATION_PERSON_EMPLOYEE);
+            request1.setParam(Constants.CLASSIFICATION_PERSON_USER);
             PersonClassification personClassification = personEJB.loadPersonClassification(request1);
-            
+                        
             //Guardar la persona
             person.setCountryId(employee.getPersonId().getCountryId());
             person.setPersonTypeId(employee.getDocumentsPersonTypeId().getPersonTypeId());
@@ -314,7 +316,9 @@ public class AdminUserController extends GenericAbstractAdminController {
             
             //Guarda el Usuario
             user.setLogin(txtLogin.getText());
-            user.setPassword(txtPassword.getText());
+            if (eventType == WebConstants.EVENT_ADD) {
+                user.setPassword(Encoder.MD5(txtPassword.getText()));
+            }            
             user.setPersonId(person);
             user.setDocumentsPersonTypeId(employee.getDocumentsPersonTypeId());
             user.setIdentificationNumber(lblIdentificationNumber.getValue());
@@ -328,17 +332,17 @@ public class AdminUserController extends GenericAbstractAdminController {
             user.setEnabled(indEnabled);
             user.setCreationDate(new Date());
             
+            //Guardar en UserHasProfile
             List<UserHasProfile> uhphes = new ArrayList<UserHasProfile>();
-            Profile profile = (Profile) cmbProfiles.getSelectedItem().getValue();
             UserHasProfile uhphe = new UserHasProfile();
             uhphe.setUser(user);
-            uhphe.setProfile(profile);
+            uhphe.setProfile((Profile) cmbProfiles.getSelectedItem().getValue());
             uhphe.setBeginningDate(new Timestamp(new java.util.Date().getTime()));
             uhphes.add(uhphe);
             
-             user.setUserHasProfile(uhphes);
-            if (_user != null && _user.getId() != null) {//Is update
-                user.setId(_user.getId());
+            user.setUserHasProfile(uhphes);
+            if (user != null && user.getId() != null) {//Is update
+                user.setId(user.getId());
                 if (!editingPassword) {
                     user.setPassword(userParam.getPassword());
                 }
@@ -351,15 +355,18 @@ public class AdminUserController extends GenericAbstractAdminController {
                         activeUhphes.add(auxUhphes.get(i));
                     }
                 }
-                for (int i = 0; i < activeUhphes.size(); i++) {
+                
+                if(indEnabled != true){
+                 for (int i = 0; i < activeUhphes.size(); i++) {
                     activeUhphes.get(i).setEndingDate(new Timestamp(new java.util.Date().getTime()));
+                }   
                 }
+                
                 user.getUserHasProfile().addAll(activeUhphes);
 
             }
             request.setParam(user);
             userParam = userEJB.saveUser(request);
-            userParam = user;
             this.showMessage("sp.common.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
@@ -369,13 +376,6 @@ public class AdminUserController extends GenericAbstractAdminController {
 
     public void onClick$btnCancel() {
         clearFields();
-    }
-
-    public void onClick$btnEditPassword() {
-        txtPassword.setReadonly(false);
-        txtPassword.setRawValue(null);
-        txtPassword.setFocus(true);
-        editingPassword = true;
     }
 
     public void onClick$btnSave() {
@@ -454,7 +454,6 @@ public class AdminUserController extends GenericAbstractAdminController {
     }
     
     private void loadProfiles(Boolean isAdd) {
-
         List<Profile> profiles = new ArrayList<Profile>();
         try {
             request.setFirst(0);
@@ -470,7 +469,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                     List<UserHasProfile> uhphes = userParam.getUserHasProfile();
                     for (int y = 0; y < uhphes.size(); y++) {
                         Profile p = uhphes.get(y).getProfile();
-                        if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() != null) {
+                        if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() == null) {
                             cmbProfiles.setSelectedIndex(i);
                         }
                         
@@ -494,7 +493,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                 nameEmployee = employeeList.get(i).getFirstNames() + " " + employeeList.get(i).getLastNames();
                 item.setLabel(nameEmployee);
                 item.setParent(cmbAuthorizeEmployee);
-                if (eventType != 1) {
+                if (eventType != WebConstants.EVENT_ADD) {
                     if (employeeList.get(i).getId().equals(userParam.getAuthorizedEmployeeId().getId())) {
                         cmbAuthorizeEmployee.setSelectedItem(item);
                     }
@@ -509,4 +508,5 @@ public class AdminUserController extends GenericAbstractAdminController {
         }
     }
     
+
 }

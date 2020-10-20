@@ -16,9 +16,13 @@ import com.alodiga.wallet.common.model.CalendarDays;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.ExchangeRate;
 import com.alodiga.wallet.common.model.Product;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
@@ -37,6 +41,7 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
     private Toolbarbutton tbbTitle;
     private CalendarDays calendarDaysParam;
     private Integer eventType;
+    List<CalendarDays> calendarDaysList = new ArrayList<CalendarDays>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -92,10 +97,31 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        txtName.setDisabled(true);
+        txtName.setReadonly(true);
         dtbHolidayDate.setDisabled(true);
         cmbCountry.setReadonly(true);
         btnSave.setVisible(false);
+    }
+    
+    public Boolean validateDateByCountry(){
+        calendarDaysList.clear();
+        Country countrys = (Country) cmbCountry.getSelectedItem().getValue();
+        try{
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.HOLI_DAY_DATE_KEY, dtbHolidayDate.getValue());
+            params.put(Constants.COUNTRY_KEY, countrys.getId());
+            request1.setParams(params);
+            calendarDaysList = utilsEJB.getCalendarDaysByCountryAndDate(request1);
+            
+        } catch (Exception ex) {
+                showError(ex);
+        } if (calendarDaysList.size() > 0) {
+                    this.showMessage("sp.error.calendarDays.existInBD", true, null);
+                    dtbHolidayDate.setFocus(true);
+                    return false;
+                }
+        return true;
     }
 
     public boolean validateEmpty() {
@@ -123,12 +149,12 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
 
             if (_calendarDays != null) {
                 calendarDays = _calendarDays;
-                _calendarDays.setUpdateDate(dtbHolidayDate.getValue());
-                _calendarDays.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
-                _calendarDays.setHolidayDate(dtbHolidayDate.getValue());
-                _calendarDays.setDescription(txtName.getValue().toUpperCase());
+                calendarDays.setUpdateDate(dtbHolidayDate.getValue());
+                calendarDays.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
+                calendarDays.setHolidayDate(dtbHolidayDate.getValue());
+                calendarDays.setDescription(txtName.getValue().toUpperCase());
                 
-            } else {//New country
+            } else {
                 calendarDays = new CalendarDays();
                 calendarDays.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
                 calendarDays.setHolidayDate(dtbHolidayDate.getValue());
@@ -164,7 +190,9 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    saveCalendarDays(null);
+                    if(validateDateByCountry()){
+                      saveCalendarDays(null);  
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     saveCalendarDays(calendarDaysParam);

@@ -34,14 +34,9 @@
                                             <vlayout>
                                                 <div align="right">
                                                     <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
+                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
                                                     </hlayout>
                                                 </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
 
                                                 <grid fixedLayout="true">
                                                     <columns>

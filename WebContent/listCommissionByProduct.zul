@@ -29,18 +29,20 @@
                                                         <button id="btnBack" width="80px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listProducts.zul&quot;)"/>
                                                     </div>
                                                 </hlayout>
+                                                <div align="right" width="70px">
+                                                        <label id="lblProduct" value=" " sclass="lblexample"/>
+                                                </div>
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="950px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.commission.product')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.commission.transactionType')}" width="220px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.applyCommission.value')}" width="120px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.commission.percentCommision')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.commission.value')}" width="120px" sort="auto"/>
-                                                    <listheader label="-" width="45px"/>
-                                                    <listheader label="-" width="45px"/>
+                                                    <listheader label="${c:l('sp.crud.commission.transactionType')}" width="350px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.applyCommission.value')}" width="145px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.commission.percentCommision')}" width="215px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.commission.value')}" width="130px" sort="auto"/>
+                                                    <listheader label="-" width="55px"/>
+                                                    <listheader label="-" width="55px"/>
                                                 </listhead>
                                             </listbox>
                                         </div>

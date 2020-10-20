@@ -1,5 +1,6 @@
 package com.alodiga.wallet.admin.web.controllers;
 
+import com.alodiga.wallet.admin.web.components.ChangeStatusButton;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,34 +17,40 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListContr
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.ReportEJB;
 import com.alodiga.wallet.common.ejb.UserEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.Report;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Textbox;
 
-public class ListReportsController extends GenericAbstractListController<Country> {
+public class ListReportsController extends GenericAbstractListController<Report> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private UserEJB userEJB = null;
     private UtilsEJB utilsEJB = null;
-    private List<Country> countries = null;
+    private ReportEJB reportEJB = null;
+    private List<Report> reports = null;
     private User currentUser;
     private Profile currentProfile;
-    private Textbox txtName;
+    private Textbox txtAlias;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -63,7 +70,6 @@ public class ListReportsController extends GenericAbstractListController<Country
     }
 
     public void startListener() {
-
     }
 
     @Override
@@ -72,28 +78,15 @@ public class ListReportsController extends GenericAbstractListController<Country
         try {
             currentUser = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            reportEJB = (ReportEJB) EJBServiceLocator.getInstance().get(EjbConstants.REPORT_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
-            adminPage = "adminCountry.zul";
+            adminPage = "adminReport.zul";
             getData();
-            loadList(countries);
+            loadList(reports);
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    public List<Country> getFilteredList(String filter) {
-        List<Country> list = new ArrayList<Country>();
-        if (countries != null) {
-            for (Iterator<Country> i = countries.iterator(); i.hasNext();) {
-                Country tmp = i.next();
-                String field = tmp.getName().toLowerCase();
-                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                    list.add(tmp);
-                }
-            }
-        }
-        return list;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
@@ -105,21 +98,21 @@ public class ListReportsController extends GenericAbstractListController<Country
     public void onClick$btnDelete() {
     }
 
-    public void loadList(List<Country> list) {
+    public void loadList(List<Report> list) {
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-
-                for (Country country : list) {
+                for (Report report : list) {
                     item = new Listitem();
-                    item.setValue(country);
-                    item.appendChild(new Listcell(country.getName()));
-                    item.appendChild(new Listcell(country.getShortName()));
-                    item.appendChild(new Listcell(country.getCode()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, country, Permission.EDIT_COUNTRY) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, country, Permission.VIEW_COUNTRY) : new Listcell());
+                    item.setValue(report);
+                    item.appendChild(new Listcell(report.getName()));
+                    item.appendChild(new Listcell(report.getReportTypeId().getName()));
+                    item.appendChild(new Listcell((report.getEnabled()==true? Labels.getLabel("sp.crud.report.yes"):Labels.getLabel("sp.crud.report.no"))));
+                    item.appendChild(permissionChangeStatus ? initEnabledButton(report.getEnabled(), item) : new Listcell());
+                    item.appendChild(permissionEdit ? new ListcellViewButton(adminPage, report,Permission.EDIT_REPORTS) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellEditButton(adminPage, report,Permission.VIEW_REPORTS) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -137,11 +130,11 @@ public class ListReportsController extends GenericAbstractListController<Country
     }
 
     public void getData() {
-        countries = new ArrayList<Country>();
+        reports = new ArrayList<Report>();
         try {
             request.setFirst(0);
             request.setLimit(null);
-            countries = utilsEJB.getCountries(request);
+            reports = reportEJB.getReport(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -175,14 +168,59 @@ public class ListReportsController extends GenericAbstractListController<Country
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        txtName.setText("");
+        txtAlias.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-            loadList(getFilteredList(txtName.getText()));
+            loadList(getFilteredList(txtAlias.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
     }
+
+    public List<Report> getFilteredList(String filter) {
+        List<Report> reportaux = new ArrayList<Report>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                reportaux = reportEJB.searchReport(filter);
+            } else {
+                return reports;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return reportaux;
+    }
+        
+    private Component initEnabledButton(final boolean enabled, final Listitem item) {
+        Listcell cell = new Listcell();
+        final ChangeStatusButton button = new ChangeStatusButton(enabled);
+        button.addEventListener("onClick", new EventListener() {
+
+            public void onEvent(Event event) throws Exception {
+                enableReport(button, item);
+            }
+        });
+        button.setParent(cell);
+        return cell;
+    }
+    
+    private void enableReport(ChangeStatusButton button, Listitem item) {
+        try {
+            Report report = (Report) item.getValue();
+            button.changeImageStatus(report.getEnabled());
+            report.setEnabled(!report.getEnabled());
+            item.setValue(report);
+            request.setParam(report);
+            reportEJB.enableProduct(request);
+        } catch (NullParameterException ex) {
+            showError(ex);
+        } catch (RegisterNotFoundException e) {
+            showError(e);
+        } catch (GeneralException ex) {
+            showError(ex);
+        }
+    }
+
 }

@@ -65,6 +65,20 @@
                                                             </hlayout>
                                                         </row>
                                                         <row>
+                                                          <label value="${c:l('sp.common.application')}" sclass="lblbold"/>
+                                                          <hbox width="270px">
+                                                                <radiogroup id="isApplication" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="rIsApplicationYes" label="${c:l('sp.crud.commission.discount.amount')}" radiogroup="isApplication" />
+                                                                            <radio id="rIsApplicationNo" label="${c:l('sp.crud.commission.additional.charge')} " radiogroup="isApplication"/>
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>  
+                                                        </row>
+                                                        <row>
                                                             <label value="${c:l('sp.crud.commission.percentCommision')}" sclass="lblbold"/>
                                                             <hbox width="270px">
                                                                 <radiogroup id="percentCommision" onCheck="choice1.value = self.selectedItem.label" />
@@ -72,14 +86,14 @@
                                                                     <rows>
                                                                         <row>
                                                                             <radio id="rPercentCommisionYes" label="${c:l('sp.common.yes')}" radiogroup="percentCommision" />
-                                                                            <radio id="rPercentCommisionNo" label="${c:l('sp.common.no')}" radiogroup="percentCommision" />
+                                                                            <radio id="rPercentCommisionNo" label="${c:l('sp.common.no')}" radiogroup="percentCommision" checked="true" />
                                                                         </row>
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.commission.value')}" sclass="lblbold"/>
+                                                            <label id="testPorcent" value="${c:l('sp.crud.commission.value')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <doublebox id="dblValue" width="265px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                             </hlayout>

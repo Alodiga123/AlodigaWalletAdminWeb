@@ -53,7 +53,7 @@
                                                             
                                                             <label value="${c:l('sp.crud.employee.position')}" sclass="lblbold"/>
                                                             
-                                                            <label value="${c:l('sp.crud.employeePhone.extensionPhone')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employeePhone')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <hlayout>

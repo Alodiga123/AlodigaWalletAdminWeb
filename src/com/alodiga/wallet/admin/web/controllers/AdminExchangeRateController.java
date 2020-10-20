@@ -17,6 +17,7 @@ import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -100,9 +101,9 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     }
 
     public void blockFields() {
-        dblValue.setDisabled(true);
-        dtbBeginningDate.setDisabled(true);
-        dtbEndingDate.setDisabled(true);
+        dblValue.setReadonly(true);
+        dtbBeginningDate.setReadonly(true);
+        dtbEndingDate.setReadonly(true);
         cmbProduct.setReadonly(true);
 
         btnSave.setVisible(false);
@@ -110,7 +111,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
 
     public boolean validateEmpty() {
         Date today = new Date();
-
+        exchangeList.clear();
         if (cmbProduct.getSelectedItem() == null) {
             cmbProduct.setFocus(true);
             this.showMessage("sp.error.products.notSelected", true, null);
@@ -127,6 +128,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
     }
 
     public boolean validateExchangeRateByProduct(){
+        exchangeList.clear();
         Product product = (Product) cmbProduct.getSelectedItem().getValue();
         try{
            EJBRequest request1 = new EJBRequest();
@@ -139,6 +141,9 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         }   if (exchangeList.size() > 0) {
                 this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
                 cmbProduct.setFocus(true);
+                return false;
+            } else if ((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
+                this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
                 return false;
             }
         return true;

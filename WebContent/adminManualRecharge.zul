@@ -35,15 +35,6 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
                                                 <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
                                                 <grid fixedLayout="true">
                                                     <columns>
@@ -52,40 +43,40 @@
                                                         <column label="" width="299px"/>
                                                     </columns>
                                                     <rows>
-                                                     <group label="${c:l('sp.common.data.basic')}"/> 
+                                                     <group label="${c:l('sp.crud.manual.recharge.approved')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.crud.manual.recharge.request.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.request.date')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.status')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.list.bank.operaton.status')}" sclass="lblbold"/>
                                                         </row>
                                                     	 <row>
                                                     	    <label id="lblRequestNumber" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblRequestDate" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblRequestStatus" value="" width="270px" style="color:#837E76;"/>
                                                         </row>
-                                                      <group label="${c:l('sp.crud.manual.recharge.info.transaction')}"/> 
+                                                      <group label="${c:l('sp.crud.manualWithdrawalApproval.transaction')}"/> 
                                                         <row>
+                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.manual.recharge.product')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.concept')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.transaction')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <label id="lblProduct" value="" width="270px" style="color:#837E76;"/>
-                                                            <label id="lblConcept" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblTransactionNumber" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblTransactionDate" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblProduct" value="" width="270px" style="color:#837E76;"/>   
                                                         </row>
-                                                         <row>
-                                                            <label value="${c:l('sp.crud.manual.recharge.transaction.date')}" sclass="lblbold"/>
+                                                         <row>                         
                                                             <label value="${c:l('sp.crud.manual.recharge.amount')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.concept')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <label id="lblTransactionDate" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblAmount" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblConcept" value="" width="270px" style="color:#837E76;"/>
                                                         </row>
-                                                         <group label="${c:l('sp.crud.manual.recharge.info.user')}"/> 
+                                                         <group label="${c:l('sp.common.user')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manual.recharge.user.name')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.user.phone')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.phone')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.manual.recharge.user.email')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
@@ -93,11 +84,11 @@
                                                             <label id="lblTelephone" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblEmail" value="" width="270px" style="color:#837E76;"/>
                                                         </row>
-                                                         <group label="${c:l('sp.crud.manual.recharge.info.bank.operation')}"/> 
+                                                         <group label="${c:l('sp.crud.manual.recharge.bank.operation')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manual.recharge.bank')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.bank.operation.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.bank.operation.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblBank" value="" width="270px" style="color:#837E76;"/>
@@ -106,15 +97,25 @@
                                                         </row>
                                                         <group label="${c:l('sp.crud.manual.recharge.application.approval')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.crud.manual.recharge.bank.operation.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.approval.user')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.approval.indicator')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.recharge.broker')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.manual.recharge.approval.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.approved')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblApprovalUser" value="" width="270px" style="color:#837E76;"/>
                                                             <datebox id="dtbApprovedRequestDate" width="250px"/>
-                                                           	<checkbox id="chbApprovalIndicator"/>
-                                                        </row>                                                    
+                                                            <hbox>
+                                                                <radiogroup id="isApproved" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="rIsApprovedYes" label="${c:l('sp.common.yes')}" radiogroup="isApproved" />
+                                                                            <radio id="rIsApprovedNo" label="${c:l('sp.common.no')} " radiogroup="isApproved"/>
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox> 
+                                                        </row>                                             
                                                     </rows>
                                                 </grid>
                                                  <grid fixedLayout="true">

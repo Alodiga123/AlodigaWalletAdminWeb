@@ -6,8 +6,10 @@ import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
+import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BankOperation;
 import com.alodiga.wallet.common.model.CommissionItem;
@@ -18,6 +20,9 @@ import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
+import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
+import com.ericsson.alodiga.ws.RespuestaUsuario;
+import com.portal.business.commons.models.Business;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +51,10 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     private Label lblBankOperation;
     private Label lblUserSource;
     private Label lblUser;
+    private Label lblTransactionNumber;
+    private Label lblBankOperationDate;
+    private Label lblTelephone;
+    private Label lblEmail;
     private Datebox dtbApprovedRequestDate;
     private Textbox txtObservations;
     private Doublebox dblAmount;
@@ -56,6 +65,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     private Radio rApprovedNo;
     private UtilsEJB utilsEJB = null;
     private PersonEJB personEJB = null;
+    private BusinessEJB businessEJB = null;
     private TransactionApproveRequest manualWithdrawalApprovalParam;
     private Button btnSave;
     private Integer eventType;
@@ -96,6 +106,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             user = AccessControl.loadCurrentUser();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
+            businessEJB = (BusinessEJB) EJBServiceLocator.getInstance().get(EjbConstants.BUSINESS_EJB);
             dtbApprovedRequestDate.setValue(new Timestamp(new java.util.Date().getTime()));
             loadData();
         } catch (Exception ex) {
@@ -112,6 +123,20 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
+            if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
+               //Obtiene el usuario de origen de Registro Unificado relacionado con la Transacción
+                APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
+                RespuestaUsuario responseUser = new RespuestaUsuario();
+                responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(manualWithdrawalApproval.getUnifiedRegistryUserId()));
+                String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
+                lblUserSource.setValue(userNameSource);
+                lblTelephone.setValue(responseUser.getDatosRespuesta().getTelefonoResidencial());
+                lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
+            } else if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())) {
+                //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
+                Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
+                lblUserSource.setValue(businessSource.getDisplayName());
+            }
             if (manualWithdrawalApproval.getRequestNumber() != null) {
                 lblRequestNumber.setValue(manualWithdrawalApproval.getRequestNumber());
             }
@@ -144,26 +169,13 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
 
             lblBank.setValue(manualWithdrawalApproval.getBankOperationId().getBankId().getName());
             lblBankOperation.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationNumber());
-            lblUserSource.setValue(manualWithdrawalApproval.getBankOperationId().getUserSourceId().toString());
+            
             if (manualWithdrawalApproval.getTransactionId().getAmount() != 0) {
                 dblAmount.setValue(manualWithdrawalApproval.getTransactionId().getAmount());
                 totalAmount = manualWithdrawalApproval.getTransactionId().getAmount();
             }
-            dblBankOperationAmount.setValue(totalAmount.toString());
-            try {
-                List<CommissionItem> items = utilsEJB.getCommissionItems(manualWithdrawalApproval.getTransactionId().getId());
-                if (!items.isEmpty()) {
-                    for (CommissionItem c : items) {
-                        dblCommision.setValue(c.getAmount());
-                        if (manualWithdrawalApproval.getBankOperationId().getCommisionId().getIndApplicationCommission() == 1) {
-                            //Se calcula el monto dependiendo del indicador en la tabla comision
-                            totalAmount = totalAmount - (c.getAmount());
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                
-            }
+            lblTransactionNumber.setValue(manualWithdrawalApproval.getTransactionId().getTransactionNumber());
+            lblBankOperationDate.setValue(simpleDateFormat.format(manualWithdrawalApproval.getBankOperationId().getBankOperationDate()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -245,7 +257,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 }
             }
 
-            manualWithdrawalApproval.setUnifiedRegistryUserId(Long.parseLong(bankOperation.getUserSourceId().toString()));
+            manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
             manualWithdrawalApproval.setStatusTransactionApproveRequestId(status);
             manualWithdrawalApproval.setUpdateDate(new Timestamp(new Date().getTime()));
             manualWithdrawalApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
@@ -254,7 +266,11 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApproval.setUserApprovedRequestId(user);
             manualWithdrawalApproval = utilsEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
-            this.showMessage("sp.common.save.success", false, null);
+            if(indApprovedRequest == true){
+             this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveApproved", false, null);  
+            } else {
+              this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveRejected", false, null);  
+            }
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
