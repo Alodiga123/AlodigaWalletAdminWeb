@@ -4,7 +4,6 @@
     <listbox id="lbxAccount" width="245px" style="background-color: green; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;border-width: 1px;border-color: gray;" class="borderedFrame">
         <listgroup open="true">
             <listcell label="${c:l('sp.menu.main.myAccount')}"/>
-            <listcell/>
         </listgroup>
         <listitem>
             <listcell id="ltcFullName" />

@@ -72,7 +72,6 @@ public class AdminAddressController extends GenericAbstractAdminController {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-
             AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
             AdminBusinnessAffiliationRequestsLegalController adminRequestL = new AdminBusinnessAffiliationRequestsLegalController();
             if (adminRequestN.getBusinessAffiliationRequets() != null){
@@ -81,7 +80,6 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (adminRequestL.getBusinessAffiliationRequets() != null){
                 afilationRequest = adminRequestL.getBusinessAffiliationRequets();
             }
-
             if (afilationRequest != null) {
                 lblRequestNumber.setValue(afilationRequest.getNumberRequest());
                 lblRequestDate.setValue(simpleDateFormat.format(afilationRequest.getDateRequest()));
@@ -100,7 +98,6 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (personHasAddress.getAddressId().getCityId() != null){
                lblCity.setValue(personHasAddress.getAddressId().getCityId().getName()); 
             }
-            
             if (personHasAddress.getAddressId().getUrbanization() != null) {
                 lblUbanization.setValue(personHasAddress.getAddressId().getUrbanization());
             }
@@ -113,11 +110,9 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (personHasAddress.getAddressId().getNameStreet() != null) {
                 lblNameStreet.setValue(personHasAddress.getAddressId().getNameStreet());
             }
-            
             if(personHasAddress.getAddressId().getEdificationTypeId() != null){
               lblEdificationType.setValue(personHasAddress.getAddressId().getEdificationTypeId().getDescription());  
             }
-            
             if (personHasAddress.getAddressId().getNameEdification() != null) {
                 lblNameEdification.setValue(personHasAddress.getAddressId().getNameEdification());
             }
@@ -127,15 +122,12 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (personHasAddress.getAddressId().getFloor() != null) {
                 lblFloor.setValue(personHasAddress.getAddressId().getFloor().toString());
             }
-            
             if(personHasAddress.getAddressId() != null){
               lblZipCode.setValue(personHasAddress.getAddressId().getZipCode());  
             }
-            
             if(personHasAddress.getAddressId().getAddressTypeId() != null){
               lblAddressTypes.setValue(personHasAddress.getAddressId().getAddressTypeId().getDescription());  
             }
-
             if (personHasAddress.getAddressId().getIndMainAddress() == true) {
                 rMainAddressYes.setChecked(true);
             } else {

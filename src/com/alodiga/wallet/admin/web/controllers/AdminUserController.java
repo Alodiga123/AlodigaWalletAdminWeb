@@ -72,6 +72,7 @@ public class AdminUserController extends GenericAbstractAdminController {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         userParam = (Sessions.getCurrent().getAttribute("object") != null) ? (User) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
         initView(eventType, "sp.crud.user");
@@ -279,7 +280,7 @@ public class AdminUserController extends GenericAbstractAdminController {
         boolean indEnabled = true;
         boolean received = true;
         Person person = null;
-//        String statusUser = PersonClassificationE.USER.getPersonClassificationCode();
+
         try {
             User user = null;
             
@@ -315,7 +316,9 @@ public class AdminUserController extends GenericAbstractAdminController {
             
             //Guarda el Usuario
             user.setLogin(txtLogin.getText());
-            user.setPassword(Encoder.MD5(txtPassword.getText()));
+            if (eventType == WebConstants.EVENT_ADD) {
+                user.setPassword(Encoder.MD5(txtPassword.getText()));
+            }            
             user.setPersonId(person);
             user.setDocumentsPersonTypeId(employee.getDocumentsPersonTypeId());
             user.setIdentificationNumber(lblIdentificationNumber.getValue());
@@ -451,7 +454,6 @@ public class AdminUserController extends GenericAbstractAdminController {
     }
     
     private void loadProfiles(Boolean isAdd) {
-
         List<Profile> profiles = new ArrayList<Profile>();
         try {
             request.setFirst(0);
@@ -467,7 +469,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                     List<UserHasProfile> uhphes = userParam.getUserHasProfile();
                     for (int y = 0; y < uhphes.size(); y++) {
                         Profile p = uhphes.get(y).getProfile();
-                        if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() != null) {
+                        if (p.getId().equals(profiles.get(i).getId()) && uhphes.get(y).getEndingDate() == null) {
                             cmbProfiles.setSelectedIndex(i);
                         }
                         
@@ -478,24 +480,6 @@ public class AdminUserController extends GenericAbstractAdminController {
             this.showError(ex);
         }
     }
-    
-//    private void loadCmbAuthorizeEmployee(Integer evenInteger) {
-//        EJBRequest request1 = new EJBRequest();
-//        List<Employee> employeeList;
-//        try {
-//            employeeList = personEJB.getEmployee(request1);
-//            loadGenericCombobox(employeeList, cmbAuthorizeEmployee, "firstNames", evenInteger, Long.valueOf(userParam != null ? userParam.getAuthorizedEmployeeId().getId() : 0));
-//        } catch (EmptyListException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (GeneralException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        } catch (NullParameterException ex) {
-//            showError(ex);
-//            ex.printStackTrace();
-//        }
-//    }
     
     private void loadCmbAuthorizeEmployee(Integer evenInteger) {
         EJBRequest request1 = new EJBRequest();
