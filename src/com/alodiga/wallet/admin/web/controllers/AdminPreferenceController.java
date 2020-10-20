@@ -30,6 +30,7 @@ import com.alodiga.wallet.common.utils.Constants;
 
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -163,21 +164,21 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     }
     
     public boolean validatePreferenceCode() {
-//        PreferenceField preferenceField = null;
-//        preferenceFieldList.clear();
-//        try{
-//            EJBRequest request = new EJBRequest();
-//            Map params = new HashMap();
-//            params.put(Constants.PARAM_CODE, txtCode.getText());
-//            request.setParams(params);
-//            preferenceFieldList = preferencesEJB.getPreferenceFieldsByCode(request);
-//        } catch (Exception ex) {
-//            showError(ex);
-//        } if(preferenceFieldList.size() > 0){
-//            this.showMessage("sp.error.preferences.code", true, null);
-//                txtCode.setFocus(true);
-//                return false;
-//        }
+        PreferenceField preferenceField = null;
+        preferenceFieldList.clear();
+        try{
+            EJBRequest request = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PARAM_CODE, txtCode.getText());
+            request.setParams(params);
+            preferenceFieldList = preferencesEJB.getPreferenceFieldsByCode(request);
+        } catch (Exception ex) {
+            showError(ex);
+        } if(preferenceFieldList.size() > 0){
+            this.showMessage("sp.error.preferences.code", true, null);
+                txtCode.setFocus(true);
+                return false;
+        }
         return true;
     }
     
@@ -198,13 +199,14 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             short indEnable = 1;
             
             //Se obtienen los lenguajes Español e Ingles
+            //Ingles
             EJBRequest request4 = new EJBRequest();
             request4.setParam(Constants.SPANISH_LANGUAGE);
-            languageEN = utilsEJB.loadLanguage(request4);
-
+            languageES  = utilsEJB.loadLanguage(request4);
+            //Español
             request4 = new EJBRequest();
             request4.setParam(Constants.ENGLISH_LANGUAGE);
-            languageES = utilsEJB.loadLanguage(request4);
+            languageEN = utilsEJB.loadLanguage(request4);
             
             //Se obtienen las clasificaciones para el Preference value
             EJBRequest request1 = new EJBRequest();
@@ -231,7 +233,6 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             
             //Guardar Preference Field
             preference.setName(txtPreference.getText());
-            preference.setDescription(txtDescription.getText());
             preference.setCode(txtCode.getText());
             preference.setPreferenceId((Preference) cmbTypePreference.getSelectedItem().getValue());
             preference.setPreferenceTypeId((PreferenceType) cmbTypeData.getSelectedItem().getValue());
@@ -258,42 +259,44 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                     }
                     //Guardar descripcion en español en PreferenceFieldData
                     preferenceDataES.setPreferenceField(preference);
-                    preferenceDataES.setLanguage(languageES);
+                    preferenceDataES.setLanguage(languageEN);
                     preferenceDataES.setDescription(txtDescription.getText());
                     preferenceDataES = preferencesEJB.savePreferenceFieldData(preferenceDataES);
                     //Guardar descripcion en ingles en PreferenceFieldData
                     preferenceDataEN.setPreferenceField(preference);
-                    preferenceDataEN.setLanguage(languageEN);
+                    preferenceDataEN.setLanguage(languageES);
                     preferenceDataEN.setDescription(txtDescriptionEnglish.getText());
                     preferenceDataEN = preferencesEJB.savePreferenceFieldData(preferenceDataEN);
                 }
             } else if (eventType == WebConstants.EVENT_ADD) {
-                //Guardar descripcion en español en PreferenceFieldData
+                    //Guardar descripcion en español en PreferenceFieldData
                     preferenceDataES = new PreferenceFieldData();
                     preferenceDataES.setPreferenceField(preference);
-                    preferenceDataES.setLanguage(languageES);
+                    preferenceDataES.setLanguage(languageEN);
                     preferenceDataES.setDescription(txtDescription.getText());
                     preferenceDataES = preferencesEJB.savePreferenceFieldData(preferenceDataES);
                     //Guardar descripcion en ingles en PreferenceFieldData
                     preferenceDataEN = new PreferenceFieldData();
                     preferenceDataEN.setPreferenceField(preference);
-                    preferenceDataEN.setLanguage(languageEN);
+                    preferenceDataEN.setLanguage(languageES);
                     preferenceDataEN.setDescription(txtDescriptionEnglish.getText());
                     preferenceDataEN = preferencesEJB.savePreferenceFieldData(preferenceDataEN);
             } 
             
             if (eventType == WebConstants.EVENT_ADD){
                 //Guardar Preference Value Cliente
-                //Error de que no agrra el preferencefieldID
+                preferenceValueClient = new PreferenceValue();
                 preferenceValueClient.setPreferenceFieldId(preference);
                 preferenceValueClient.setPreferenceClassficationId(classificationClient);
+                preferenceValueClient.setCreateDate(new Timestamp(new java.util.Date().getTime()));
                 preferenceValueClient.setEnabled(true);
                 preferenceValueClient = preferencesEJB.savePreferenceValue(preferenceValueClient);
 
                 //Guardar Preference Value Business
-                //Error de que no agrra el preferencefieldID
+                preferenceValueBusiness = new PreferenceValue();
                 preferenceValueBusiness.setPreferenceFieldId(preference);
                 preferenceValueBusiness.setPreferenceClassficationId(classificationBussines);
+                preferenceValueBusiness.setCreateDate(new Timestamp(new java.util.Date().getTime()));
                 preferenceValueBusiness.setEnabled(true);
                 preferenceValueBusiness = preferencesEJB.savePreferenceValue(preferenceValueBusiness);
             }
