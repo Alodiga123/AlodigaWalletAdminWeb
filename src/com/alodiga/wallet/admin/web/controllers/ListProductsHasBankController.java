@@ -202,17 +202,22 @@ public class ListProductsHasBankController extends GenericAbstractListController
     }
 
     public void getData() {
+        Product product = null;
         bankHasProductList = new ArrayList<BankHasProduct>();
         try {
-            if (eventType != WebConstants.EVENT_ADD) {
-                    EJBRequest request1 = new EJBRequest();
-                    Map params = new HashMap();
-                    params.put(Constants.PRODUCT_KEY, productParam.getId());
-                    request1.setParams(params);
-                    bankHasProductList = productEJB.getBankHasProduct(request1);
-                } else {
-                    bankHasProductList = null;
-                }       
+            
+            //Producto Principal
+            AdminProductController adminProduct = new AdminProductController();
+            if(adminProduct.getProductParent().getId() != null){
+            product = adminProduct.getProductParent();
+            }
+            
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PRODUCT_KEY, product.getId());
+            request1.setParams(params);
+            bankHasProductList = productEJB.getBankHasProduct(request1);
+      
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

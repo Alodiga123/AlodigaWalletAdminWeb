@@ -229,7 +229,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         List<Permission> permissions = null;
         try {
             cmbPermissions.getItems().clear();
-            permissions = accessControlEJB.getPermissions(new EJBRequest());
+            permissions = accessControlEJB.getPermissionOrderByAsc(new EJBRequest());
             Comboitem cmbItem = new Comboitem();
             cmbItem.setLabel(Labels.getLabel("sp.common.combobox.all"));
             cmbItem.setValue(null);
