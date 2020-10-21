@@ -302,7 +302,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	else if (children.get(1) instanceof Checkbox)	
     		value = ((Checkbox)children.get(1)).isChecked()?"1":"0";
     	preferenceValue.setValue(value);
-    	preferenceValue.setEnabled(((Checkbox)children.get(3)).isChecked());
+    	preferenceValue.setEnabled(((Checkbox)children.get(2)).isChecked());
     	preferenceValue.setUpdateDate(new Timestamp(new Date().getTime()));
     	if(eventType==WebConstants.EVENT_ADD) {
     		preferenceValue.setPreferenceClassficationId(preferenceClassification);
