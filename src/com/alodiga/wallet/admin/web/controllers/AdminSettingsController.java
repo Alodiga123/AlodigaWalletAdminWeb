@@ -202,8 +202,7 @@ public class AdminSettingsController extends GenericAbstractController implement
                 	chb.setParent(row);
                 	preferenceValues.add(pValue);
                 }
-                row.setParent(rowsGrid);               	
-//          
+                row.setParent(rowsGrid);               	        
             }
         } catch (Exception ex) {
             showError(ex);
