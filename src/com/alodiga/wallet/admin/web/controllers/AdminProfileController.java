@@ -70,7 +70,7 @@ public class AdminProfileController extends GenericAbstractAdminController {
         try {
         	ipAddress = Executions.getCurrent().getRemoteAddr();
         	auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
-            accessEjb = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
+                accessEjb = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -101,7 +101,7 @@ public class AdminProfileController extends GenericAbstractAdminController {
         txtDescriptionSpanish.setReadonly(true);
         txtDescriptionEnglish.setReadonly(true);
         cbxEnabled.setDisabled(true);
-        lbxPermissions.setCheckmark(false);
+        lbxPermissions.setDisabled(true);
         btnSave.setVisible(false);
     }
 

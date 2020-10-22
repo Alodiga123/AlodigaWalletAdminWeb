@@ -109,7 +109,9 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             startListener();
             getData();
-            loadList(commissions);
+            if( commissions != null){
+                loadList(commissions);
+            }
             getProduct();
         } catch (Exception ex) {
             showError(ex);
@@ -262,9 +264,14 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         commissions = new ArrayList<Commission>();
         try {
             
+            //Producto Principal
+            AdminProductController adminProduct = new AdminProductController();
+            if(adminProduct.getProductParent().getId() != null){
+            product = adminProduct.getProductParent();
+            }
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
-            params.put(Constants.PRODUCT_KEY, productParam.getId());
+            params.put(Constants.PRODUCT_KEY, product.getId());
             request1.setParams(params);
             commissions = utilsEJB.getCommissionByProduct(request1);
                       
