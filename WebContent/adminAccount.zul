@@ -57,8 +57,7 @@
                                                                 <label value="*" sclass="lblreq"/>
                                                             </hlayout>
                                                         </row>
-                                                        <row>
-                                                            
+                                                        <row>                                                            
                                                             <label value="${c:l('sp.common.fullName')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtFullName" width="320px" constraint="no empty: ${c:l('error.field.required')}" maxlength="45"/>

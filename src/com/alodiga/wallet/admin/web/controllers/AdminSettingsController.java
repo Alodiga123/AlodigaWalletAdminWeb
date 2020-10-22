@@ -32,7 +32,7 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
-public class AdminSettingsController extends GenericAbstractController implements GenericSPController {
+public class AdminSettingsController extends GenericAbstractController {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Long languageId;   
@@ -44,7 +44,6 @@ public class AdminSettingsController extends GenericAbstractController implement
     List<PreferenceValue> preferenceValues = null;
     private User user=null;
     private Rows rowsGrid;
-
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -93,53 +92,51 @@ public class AdminSettingsController extends GenericAbstractController implement
 
     }
 
-	private void loadProviders(Long providerId,Combobox cmbDefaultSMSProvider) {
-		try {
-			List<Provider> providers = new ArrayList<Provider>();
-			EJBRequest r = new EJBRequest();
-			r.setLimit(1000);
-			providers = productEJB.getSMSProviders(r);
-			cmbDefaultSMSProvider.getItems().clear();
-			for (Provider provider : providers) {
-				Comboitem item = new Comboitem();
-				item.setValue(provider);
-				item.setLabel(provider.getName());
-				item.setParent(cmbDefaultSMSProvider);
-				if (providerId.equals(provider.getId())) {
-					cmbDefaultSMSProvider.setSelectedItem(item);
-				}
-			}
-
-		} catch (Exception ex) {
-			showError(ex);
-		}
-	}
+    private void loadProviders(Long providerId,Combobox cmbDefaultSMSProvider) {
+        try {
+            List<Provider> providers = new ArrayList<Provider>();
+            EJBRequest r = new EJBRequest();
+            r.setLimit(1000);
+            providers = productEJB.getSMSProviders(r);
+            cmbDefaultSMSProvider.getItems().clear();
+            for (Provider provider : providers) {
+                Comboitem item = new Comboitem();
+                item.setValue(provider);
+                item.setLabel(provider.getName());
+                item.setParent(cmbDefaultSMSProvider);
+                if (providerId.equals(provider.getId())) {
+                        cmbDefaultSMSProvider.setSelectedItem(item);
+                }
+            }
+        } catch (Exception ex) {
+                showError(ex);
+        }
+    }
     
     public boolean validateEmpty() {
         List<Component> childrens = rowsGrid.getChildren();
         int i=0;
         boolean valid = false;
         for(Component row: childrens) {
-        	Row r = (Row) childrens.get(i++);
-        	List<Component> children = r.getChildren();
-        	if (children.get(1) instanceof Combobox) {   		
-        		if (((Combobox) children.get(1)).getSelectedIndex() == -1 ) {
-        			((Combobox) children.get(1)).setFocus(true);
-        			this.showMessage("sp.error.smsprovider.notSelected", true, null);
-        			valid = false;
-        			break;
-        		}		
-        	}else if (children.get(1) instanceof Textbox) {
-        		if (((Textbox)children.get(1)).getText().isEmpty()) {
-        			((Textbox)children.get(1)).setFocus(true);
-        			this.showMessage("sp.error.field.cannotNull", true, null); 
-        			valid = false;
-        			break;
-
-                } 
-        	} else {
-        		valid = true;
-        	}
+            Row r = (Row) childrens.get(i++);
+            List<Component> children = r.getChildren();
+            if (children.get(1) instanceof Combobox) {   		
+                if (((Combobox) children.get(1)).getSelectedIndex() == -1 ) {
+                        ((Combobox) children.get(1)).setFocus(true);
+                        this.showMessage("sp.error.smsprovider.notSelected", true, null);
+                        valid = false;
+                        break;
+                }		
+            }else if (children.get(1) instanceof Textbox) {
+                if (((Textbox)children.get(1)).getText().isEmpty()) {
+                        ((Textbox)children.get(1)).setFocus(true);
+                        this.showMessage("sp.error.field.cannotNull", true, null); 
+                        valid = false;
+                        break;
+                }    
+            } else {
+                valid = true;
+            }
         }
         return valid;
     }
@@ -148,18 +145,18 @@ public class AdminSettingsController extends GenericAbstractController implement
         this.clearMessage();
         PreferenceClassification preferenceClassification = null;
         if (cmbClassification.getSelectedItem() != null) {
-        	preferenceClassification = (PreferenceClassification) cmbClassification.getSelectedItem().getValue();
+            preferenceClassification = (PreferenceClassification) cmbClassification.getSelectedItem().getValue();
             loadPreferences(preferenceClassification.getId());
         }
     }
 
-
     private void loadPreferences(Long classificationId) {
+        boolean checked = true;
         try {
-        	rowsGrid.getChildren().clear();
+            rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request);
             preferenceValues = new ArrayList<PreferenceValue>();
-            for (PreferenceField field : fields) {
+            for (PreferenceField field : fields) {   
             	PreferenceValue pValue = null;
             	try {
             		pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId, field.getId());
@@ -173,47 +170,52 @@ public class AdminSettingsController extends GenericAbstractController implement
 	                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
 	                label.setParent(row);
 	                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
-	                	Combobox cmbbox = new Combobox();
-	                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
-	                	cmbbox.setParent(row);
-	                	Label labelType = new Label();
-	                	labelType.setValue(field.getPreferenceId().getName());
-	                	labelType.setParent(row);
-	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
-	                	chb.setParent(row);
-	                	preferenceValues.add(pValue);
+	                    Combobox cmbbox = new Combobox();
+	                    loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
+	                    cmbbox.setParent(row);
+	                    Label labelType = new Label();
+	                    labelType.setValue(field.getPreferenceId().getName());
+	                    labelType.setParent(row);
+	                    Checkbox chb = new Checkbox();
+	                    chb.setChecked(pValue.isEnabled());
+	                    chb.setParent(row);
+	                    preferenceValues.add(pValue);
 	                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
-	                	Checkbox chbValue = new Checkbox();
-	                	boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
-	                	chbValue.setChecked(checked);
-	                	chbValue.setParent(row);
-	                  	Label labelType = new Label();
-	                	labelType.setValue(field.getPreferenceId().getName());
-	                	labelType.setParent(row);
-	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
-	                	chb.setParent(row);
-	                	preferenceValues.add(pValue);
+	                    Checkbox chbValue = new Checkbox();
+	                    if (pValue.getValue() != null) {
+	                        checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+	                    }
+	                    chbValue.setChecked(checked);
+	                    chbValue.setParent(row);
+	                    Label labelType = new Label();
+	                    labelType.setValue(field.getPreferenceId().getName());
+	                    labelType.setParent(row);
+	                    Checkbox chb = new Checkbox();
+	                    chb.setChecked(pValue.isEnabled());
+	                    chb.setParent(row);
+	                    preferenceValues.add(pValue);
 	                }  else {
-	                	Textbox txtValue = new Textbox();
-	                	txtValue.setText(pValue.getValue());
-	                	txtValue.setParent(row);
-	                  	Label labelType = new Label();
-	                	labelType.setValue(field.getPreferenceId().getName());
-	                	labelType.setParent(row);
-	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
-	                	chb.setParent(row);
-	                	preferenceValues.add(pValue);
+	                    Textbox txtValue = new Textbox();
+	                    if (pValue.getValue() != null) {
+	                        txtValue.setText(pValue.getValue());
+	                    } else {
+	                        txtValue.setText("");
+	                    }                    
+	                    txtValue.setParent(row);
+	                    Label labelType = new Label();
+	                    labelType.setValue(field.getPreferenceId().getName());
+	                    labelType.setParent(row);
+	                    Checkbox chb = new Checkbox();
+	                    chb.setChecked(pValue.isEnabled());
+	                    chb.setParent(row);
+	                    preferenceValues.add(pValue);
 	                }
-	                row.setParent(rowsGrid);   
+	                row.setParent(rowsGrid);               	
             	}
             }
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     private void savePreferenceValues() {
@@ -225,8 +227,7 @@ public class AdminSettingsController extends GenericAbstractController implement
             for(PreferenceValue pvalue: preferenceValues) {
             	preferenceControls.add(createPreferencenControl(pvalue));
             	Row r = (Row) children.get(i++);
-            	preferenceValueSave.add(updatePreferencenValue(pvalue,r));           	
-          
+            	preferenceValueSave.add(updatePreferencenValue(pvalue,r));         	      
             }
             preferencesEJB.savePreferenceValues(preferenceValueSave,preferenceControls);
             PreferenceManager preferenceManager = PreferenceManager.getInstance();
@@ -250,12 +251,12 @@ public class AdminSettingsController extends GenericAbstractController implement
     	List<Component> children = r.getChildren();
     	String value = "";
     	if (children.get(1) instanceof Combobox) {
-    		Provider provider = (Provider)((Combobox) children.get(1)).getSelectedItem().getValue();
-    		value = provider.getId().toString();
+            Provider provider = (Provider)((Combobox) children.get(1)).getSelectedItem().getValue();
+            value = provider.getId().toString();
     	}else if (children.get(1) instanceof Textbox)
-    		value = ((Textbox)children.get(1)).getText();
+            value = ((Textbox)children.get(1)).getText();
     	else if (children.get(1) instanceof Checkbox)	
-    		value = ((Checkbox)children.get(1)).isChecked()?"1":"0";
+            value = ((Checkbox)children.get(1)).isChecked()?"1":"0";
     	preferenceValue.setValue(value);
     	preferenceValue.setEnabled(((Checkbox)children.get(3)).isChecked());
     	preferenceValue.setUpdateDate(new Timestamp(new Date().getTime()));

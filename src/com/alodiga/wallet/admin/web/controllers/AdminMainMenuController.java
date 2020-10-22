@@ -61,7 +61,7 @@ public class AdminMainMenuController extends GenericForwardComposer {
         String option = getOptionInSession();
         if (option.equals(OPTION_NONE)) {
         } else if (option.equals(OPTION_CUSTOMERS_LIST)) {
-            //ltcCustomerList.setImage("/images/icon-target.png");
+
         }
 
     }

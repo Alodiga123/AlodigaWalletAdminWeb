@@ -172,8 +172,6 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
             this.showMessage("sp.error.date.beginningDate", true, null);
-        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
-            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
         } else {
             return true;
         }
@@ -206,11 +204,14 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
                 this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
                 dblValue.setFocus(true);
                 return false;
-            }
+        } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
+            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
+            return false;
+        }
         return true;
     }
 
-    private void saveBank(Commission _commission) {
+    private void saveCommission(Commission _commission) {
         Commission commission = null;
         Integer application;
         
@@ -264,11 +265,11 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
                     if(validateComissionByProduct()){
-                         saveBank(commissionParam);
+                         saveCommission(commissionParam);
                     }
                     break;
                 case WebConstants.EVENT_EDIT:
-                    saveBank(commissionParam);
+                    saveCommission(commissionParam);
                     break;
                 default:
                     break;

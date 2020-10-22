@@ -62,7 +62,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         initialize();
     }
 
-
     public void startListener() {
     }
 
@@ -93,7 +92,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
                 for (AuditAction auditAction : list) {
-
                     item = new Listitem();
                     item.setValue(auditAction);
                     item.appendChild(new Listcell(auditAction.getUser().getLogin()));
@@ -104,7 +102,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                     	 item.appendChild(new Listcell());
                     }
                     item.appendChild(new Listcell(GeneralUtils.date2String(auditAction.getDate(), GeneralUtils.FORMAT_DATE_USA)));
-//                    item.appendChild(new Listcell(auditAction.getHost()));
                     item.appendChild(new Listcell(auditAction.getInfo()));
                     item.setParent(lbxRecords);
                 }
@@ -119,7 +116,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                 item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -150,17 +146,16 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             request.setParams(params);
             userList = userEJB.getUserByLogin(request);
         } catch (Exception ex) {
-        } finally {
-            if(userList  != null){
+        } 
+        if(userList.size() > 0){
             for (User userName : userList) {
                     userNames = userName;
                 }
           txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());  
         } else {
-            this.showMessage("sp.error.field.loginExistInBD", true, null);
-            txtLogin.setFocus(true);
+          txtName.setValue(Labels.getLabel("sp.error.field.userNoExistBD"));
         }
-        } 
+        
     }
     
     public void onClick$btnDownload() throws InterruptedException {
@@ -217,15 +212,14 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                       params.put(QueryConstants.PARAM_PERMISSION_ID, ((Permission) cmbPermissions.getSelectedItem().getValue()).getId());
                   }  
                 _request.setParams(params);
-                _request.setParam(true);
                 loadList(auditoryEJB.searchAuditActions(_request));
             }   else  {
                   this.showMessage("sp.error.date.invalid", true, null);
-            } 
-            
+            }             
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
         	lblInfo.setValue(Labels.getLabel("sp.error.empty.list"));
+                onClick$btnClear();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -235,7 +229,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
         List<Permission> permissions = null;
         try {
             cmbPermissions.getItems().clear();
-            permissions = accessControlEJB.getPermissions(new EJBRequest());
+            permissions = accessControlEJB.getPermissionOrderByAsc(new EJBRequest());
             Comboitem cmbItem = new Comboitem();
             cmbItem.setLabel(Labels.getLabel("sp.common.combobox.all"));
             cmbItem.setValue(null);

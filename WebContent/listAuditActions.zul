@@ -39,7 +39,7 @@
                                                     <label value="${c:l('sp.common.user')}" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.auditActions.permission')}" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.auditActions.functionality')}" sclass="lblbold"/>
                                                     <combobox id="cmbPermissions" width="100px" mold="rounded" readonly="true"/>
                                                     <separator/>
                                                     <label value="${c:l('sp.common.beginningDateFrom')}"  sclass="lblbold"/>
@@ -60,11 +60,11 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="1080px" height="530px" mold="paging" pageSize="18">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.permission')}" width="216px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.date')}" width="216px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.info')}" width="216px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="120px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="140px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.functionality')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.date')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.info')}" width="300px" sort="auto"/>
                                                 </listhead>
                                             </listbox>
                                         </div>
