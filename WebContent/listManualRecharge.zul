@@ -58,7 +58,7 @@
                                         <!--Download button-->
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="450px" mold="paging" pageSize="15">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="450px" mold="paging" pageSize="10">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.request.number')}" width="190px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.manual.recharge.date')}" width="170px" sort="auto"/>
