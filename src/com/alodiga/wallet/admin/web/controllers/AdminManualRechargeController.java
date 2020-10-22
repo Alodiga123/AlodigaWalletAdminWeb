@@ -60,6 +60,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     private ProductEJB productEJB = null;
     private BusinessEJB businessEJB = null;
     private Button btnSave;
+    public static TransactionApproveRequest transactionApproveRequestParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -81,6 +82,10 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
 		} catch (Exception e) {
         }
     }
+    
+    public TransactionApproveRequest getTransactionAprroveRequest() {
+        return transactionApproveRequestParam;
+    }
 
     public void clearFields() {
     	txtObservation.setReadonly(true);
@@ -91,16 +96,29 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
-                //Obtiene el usuario de origen de Registro Unificado relacionado con la Transacción
-                APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
-                RespuestaUsuario responseUser = new RespuestaUsuario();
-                responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
-                String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-                lblUserName.setValue(userNameSource);
+                if (transactionApproveRequest.getTransactionId().getUserSourceId() != null) {
+                    //Obtiene el usuario de origen de Registro Unificado relacionado con la Transacción
+                    APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
+                    RespuestaUsuario responseUser = new RespuestaUsuario();
+                    responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transactionApproveRequest.getUnifiedRegistryUserId()));
+                    String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
+                    lblUserName.setValue(userNameSource);
+                    lblTelephone.setValue(responseUser.getDatosRespuesta().getMovil());
+                    lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
+                }
+                if (transactionApproveRequest.getTransactionId().getBusinessId() != null) {
+                    //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
+                    Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
+                    lblUserName.setValue(businessSource.getDisplayName());
+                    lblTelephone.setValue(businessSource.getPhoneNumber());
+                    lblEmail.setValue(businessSource.getEmail());
+                }                
             } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                 Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
                 lblUserName.setValue(businessSource.getDisplayName());
+                lblTelephone.setValue(businessSource.getPhoneNumber());
+                lblEmail.setValue(businessSource.getEmail());
             }
             lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
             lblRequestDate.setValue(simpleDateFormat.format(transactionApproveRequest.getCreateDate()));
@@ -196,6 +214,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             manualRechargeApproval.setIndApproveRequest(indApproved);
             manualRechargeApproval.setObservations(txtObservation.getText());
             manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+            transactionApproveRequestParam = manualRechargeApproval;
 
             if(indApproved == true){
               this.showMessage("sp.crud.manual.recharge.saveApproved", false, null);  
