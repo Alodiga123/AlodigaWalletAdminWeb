@@ -159,7 +159,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 	preferenceValues.add(createPreferencenValue(pValue));
                 } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
                 	Checkbox chbValue = new Checkbox();
-                	boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
                 	chbValue.setChecked(checked);
                 	chbValue.setParent(row);
                 	Checkbox chb = new Checkbox();
@@ -168,7 +168,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 	preferenceValues.add(createPreferencenValue(pValue));
                 }  else {
                 	Textbox txtValue = new Textbox();
-                	txtValue.setText(pValue.getValue());
+                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
                 	txtValue.setParent(row);
                 	Checkbox chb = new Checkbox();
                 	chb.setChecked(pValue.isEnabled());
@@ -217,7 +217,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 						preferenceValues.add(pValue);
 					} else if (pValue.getPreferenceFieldId().getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
 						Checkbox chbValue = new Checkbox();
-						boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+						boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
 						chbValue.setChecked(checked);
 						chbValue.setParent(row);
 						Checkbox chb = new Checkbox();
@@ -226,7 +226,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 						preferenceValues.add(pValue);
 					} else {
 						Textbox txtValue = new Textbox();
-						txtValue.setText(pValue.getValue());
+						txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
 						txtValue.setParent(row);
 						Checkbox chb = new Checkbox();
 						chb.setChecked(pValue.isEnabled());
