@@ -8,7 +8,9 @@ import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.ejb.ProductEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusTransactionApproveRequestE;
 import com.alodiga.wallet.common.enumeraciones.TransactionSourceE;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.BankOperation;
@@ -66,6 +68,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     private UtilsEJB utilsEJB = null;
     private PersonEJB personEJB = null;
     private BusinessEJB businessEJB = null;
+    private ProductEJB productEJB = null;
     private TransactionApproveRequest manualWithdrawalApprovalParam;
     private Button btnSave;
     private Integer eventType;
@@ -107,6 +110,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             businessEJB = (BusinessEJB) EJBServiceLocator.getInstance().get(EjbConstants.BUSINESS_EJB);
+            productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
             dtbApprovedRequestDate.setValue(new Timestamp(new java.util.Date().getTime()));
             loadData();
         } catch (Exception ex) {
@@ -208,68 +212,49 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     }
     
     private void saveManualWithdrawalApproval(TransactionApproveRequest _manualWithdrawalApproval) {
-        List<StatusTransactionApproveRequest> statusApproved = new ArrayList<StatusTransactionApproveRequest>();
-        List<StatusTransactionApproveRequest> statusRejected = new ArrayList<StatusTransactionApproveRequest>();
-        StatusTransactionApproveRequest status = null;
+        StatusTransactionApproveRequest statusTransactionApproveRequest;
+        EJBRequest request = new EJBRequest();
+        HashMap params = new HashMap();
         TransactionApproveRequest manualWithdrawalApproval = null;
         BankOperation bankOperation = null;
-
-        boolean indApprovedRequest;
+        boolean indApproved;
+        
         try {
             if (_manualWithdrawalApproval != null) {
                 manualWithdrawalApproval = _manualWithdrawalApproval;
                 bankOperation = manualWithdrawalApproval.getBankOperationId();
-            } else {//New DocumentsPersonType
+            } else {
                 manualWithdrawalApproval = new TransactionApproveRequest();
             }
-
+            
             if (rApprovedYes.isChecked()) {
-                indApprovedRequest = true;
-
-                //Se cambia el estado para aprobada
-                EJBRequest statusA = new EJBRequest();
-                Map params = new HashMap();
-                params = new HashMap();
-                params.put(QueryConstants.PARAM_CODE, Constants.STATUS_TRANSACTIONS_APPR);
-                statusA.setParams(params);
-                statusApproved = utilsEJB.getStatusTransactionApproveRequestPending(statusA);
-
-                if (statusApproved != null) {
-                    for (StatusTransactionApproveRequest s : statusApproved) {
-                        status = s;
-                    }
-                }
+                indApproved = true;              
+                params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.APROBA.getStatusTransactionApproveRequestCode() );
+                request.setParams(params);
+                //Obtener el estatus "Transacción Aprobada"
+                statusTransactionApproveRequest = productEJB.loadStatusTransactionApproveRequestbyCode(request); 
             } else {
-                indApprovedRequest = false;
-
-                //Se cambia el estatus a rechazada
-                EJBRequest statusR = new EJBRequest();
-                Map params = new HashMap();
-                params = new HashMap();
-                params.put(QueryConstants.PARAM_CODE, Constants.STATUS_TRANSACTIONS_REJE);
-                statusR.setParams(params);
-                statusRejected = utilsEJB.getStatusTransactionApproveRequestPending(statusR);
-
-                if (statusRejected != null) {
-                    for (StatusTransactionApproveRequest s : statusRejected) {
-                        status = s;
-                    }
-                }
+                indApproved = false;
+                params.put(Constants.PARAM_CODE, StatusTransactionApproveRequestE.RECHAZ.getStatusTransactionApproveRequestCode());
+                request.setParams(params);
+                //Obtener el estatus "Transacción Rechazada"
+                statusTransactionApproveRequest = productEJB.loadStatusTransactionApproveRequestbyCode(request);               
             }
 
             manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
-            manualWithdrawalApproval.setStatusTransactionApproveRequestId(status);
+            manualWithdrawalApproval.setStatusTransactionApproveRequestId(statusTransactionApproveRequest);
             manualWithdrawalApproval.setUpdateDate(new Timestamp(new Date().getTime()));
             manualWithdrawalApproval.setApprovedRequestDate(dtbApprovedRequestDate.getValue());
-            manualWithdrawalApproval.setIndApproveRequest(indApprovedRequest);
+            manualWithdrawalApproval.setIndApproveRequest(indApproved);
             manualWithdrawalApproval.setObservations(txtObservations.getText());
             manualWithdrawalApproval.setUserApprovedRequestId(user);
-            manualWithdrawalApproval = utilsEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
+            manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
-            if(indApprovedRequest == true){
-             this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveApproved", false, null);  
+            
+            if(indApproved == true){
+                 this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveApproved", false, null);  
             } else {
-              this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveRejected", false, null);  
+                 this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveRejected", false, null);  
             }
 
             if (eventType == WebConstants.EVENT_ADD) {

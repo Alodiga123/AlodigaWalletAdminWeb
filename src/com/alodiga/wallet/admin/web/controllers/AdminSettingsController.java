@@ -151,6 +151,7 @@ public class AdminSettingsController extends GenericAbstractController {
     }
 
     private void loadPreferences(Long classificationId) {
+        boolean checked = true;
         try {
             rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request);
@@ -175,7 +176,9 @@ public class AdminSettingsController extends GenericAbstractController {
                     preferenceValues.add(pValue);
                 } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
                     Checkbox chbValue = new Checkbox();
-                    boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+                    if (pValue.getValue() != null) {
+                        checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+                    }
                     chbValue.setChecked(checked);
                     chbValue.setParent(row);
                     Label labelType = new Label();
@@ -187,7 +190,11 @@ public class AdminSettingsController extends GenericAbstractController {
                     preferenceValues.add(pValue);
                 }  else {
                     Textbox txtValue = new Textbox();
-                    txtValue.setText(pValue.getValue());
+                    if (pValue.getValue() != null) {
+                        txtValue.setText(pValue.getValue());
+                    } else {
+                        txtValue.setText("");
+                    }                    
                     txtValue.setParent(row);
                     Label labelType = new Label();
                     labelType.setValue(field.getPreferenceId().getName());
