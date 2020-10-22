@@ -80,7 +80,7 @@
                                                 </grid>
 
 
-                                                <grid fixedLayout="true">
+                                               <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
                                                         <column label ="${c:l('sp.specific.preference.field')}" width="320px"/>
                                                         <column label ="${c:l('sp.crud.settings.main.value')}" width="330px"/>
