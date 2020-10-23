@@ -141,41 +141,46 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
-                
-                PreferenceValue pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId, field.getId());
-
-                Row row = new Row();
-                row.setId(pValue.getId().toString());
-                Label label = new Label();
-                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                label.setParent(row);
-                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
-                	Combobox cmbbox = new Combobox();
-                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
-                	cmbbox.setParent(row);
-                	Checkbox chb = new Checkbox();
-                	chb.setChecked(pValue.isEnabled());
-                	chb.setParent(row);
-                	preferenceValues.add(createPreferencenValue(pValue));
-                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
-                	Checkbox chbValue = new Checkbox();
-                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
-                	chbValue.setChecked(checked);
-                	chbValue.setParent(row);
-                	Checkbox chb = new Checkbox();
-                	chb.setChecked(pValue.isEnabled());
-                	chb.setParent(row);
-                	preferenceValues.add(createPreferencenValue(pValue));
-                }  else {
-                	Textbox txtValue = new Textbox();
-                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
-                	txtValue.setParent(row);
-                	Checkbox chb = new Checkbox();
-                	chb.setChecked(pValue.isEnabled());
-                	chb.setParent(row);
-                	preferenceValues.add(createPreferencenValue(pValue));
-                }
-                row.setParent(rowsGrid);  
+            	 PreferenceValue pValue = null;
+            	try {
+                pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId, field.getId());
+            	} catch (Exception ex) {
+            		pValue = null;
+            	}
+            	if (pValue != null) {
+	                Row row = new Row();
+	                row.setId(pValue.getId().toString());
+	                Label label = new Label();
+	                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
+	                label.setParent(row);
+	                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
+	                	Combobox cmbbox = new Combobox();
+	                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
+	                	cmbbox.setParent(row);
+	                	Checkbox chb = new Checkbox();
+	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setParent(row);
+	                	preferenceValues.add(createPreferencenValue(pValue));
+	                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
+	                	Checkbox chbValue = new Checkbox();
+	                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
+	                	chbValue.setChecked(checked);
+	                	chbValue.setParent(row);
+	                	Checkbox chb = new Checkbox();
+	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setParent(row);
+	                	preferenceValues.add(createPreferencenValue(pValue));
+	                }  else {
+	                	Textbox txtValue = new Textbox();
+	                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
+	                	txtValue.setParent(row);
+	                	Checkbox chb = new Checkbox();
+	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setParent(row);
+	                	preferenceValues.add(createPreferencenValue(pValue));
+	                }
+	                row.setParent(rowsGrid);  
+              }
             }
         } catch (Exception ex) {
             showError(ex);

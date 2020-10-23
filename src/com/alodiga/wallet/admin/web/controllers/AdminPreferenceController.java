@@ -39,7 +39,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Radio;
+import org.zkoss.zul.Row;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminPreferenceController extends GenericAbstractAdminController {
@@ -53,6 +55,12 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     private Combobox cmbTypeData;
     private Radio rEnabledYes;
     private Radio rEnabledNo;
+    private Checkbox chkCustomer;
+    private Checkbox chkBusiness;
+    private Row rowCustomer;
+    private Row rowBusiness;
+    private Textbox txtValueCustomer;
+    private Textbox txtValueBusiness;
     private UtilsEJB utilsEJB = null;
     private PreferencesEJB preferencesEJB = null;
     private PersonEJB personEJB = null;
@@ -131,7 +139,36 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                         }
                     }
                 }
+                //Se obtienen las clasificaciones para el Preference value
+                EJBRequest request1 = new EJBRequest();
+                request1.setParam(Constants.CLIENT_CLASSIFICATION);
+                PreferenceClassification classificationClient = preferencesEJB.loadPreferenceClassification(request1);
                 
+                request1 = new EJBRequest();
+                request1.setParam(Constants.BUSINESS_CLASSIFICATION);
+                PreferenceClassification classificationBussines = preferencesEJB.loadPreferenceClassification(request1);
+                PreferenceValue pValueClient = null;
+            	try {
+            		pValueClient = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationClient.getId(), preferenceField.getId());
+            		chkCustomer.setChecked(pValueClient.isEnabled()); 
+            		txtValueCustomer.setText(pValueClient.getValue());
+        	    	rowCustomer.setVisible(true);
+            	} catch (Exception e) {
+            		chkCustomer.setChecked(false); 
+            		txtValueCustomer.setText("");
+        	    	rowCustomer.setVisible(false);
+            	}
+            	PreferenceValue pValueBusiness = null;
+            	try {
+            		pValueBusiness = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationBussines.getId(), preferenceField.getId());
+            		chkBusiness.setChecked(pValueBusiness.isEnabled()); 
+            		txtValueBusiness.setText(pValueBusiness.getValue());
+        	    	rowBusiness.setVisible(true);
+            	} catch (Exception e) {
+            		chkBusiness.setChecked(false);
+            		txtValueBusiness.setText("");
+        	    	rowBusiness.setVisible(false);          		
+            	}
         } catch (Exception ex) {
             showError(ex);
         }
@@ -142,6 +179,10 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
        txtCode.setReadonly(true);
        txtDescription.setReadonly(true);
        txtDescriptionEnglish.setReadonly(true);
+       txtValueCustomer.setReadonly(true);
+       txtValueBusiness.setReadonly(true);
+       chkCustomer.setDisabled(true);
+       chkBusiness.setDisabled(true);
        btnSave.setVisible(false);
        rEnabledYes.setDisabled(true);
        rEnabledNo.setDisabled(true);
@@ -157,7 +198,10 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         }  else if (cmbTypeData.getSelectedItem() == null) {
             cmbTypeData.setFocus(true);
             this.showMessage("sp.error.preferences.typeData", true, null);
-        } else {
+        } else if (!chkCustomer.isChecked() && !chkBusiness.isChecked()) {
+        	chkCustomer.setFocus(true);
+        	this.showMessage("sp.error.preferences.checked", true, null);
+        }else {
             return true;
         }
         return false;
@@ -265,6 +309,43 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                     preferenceDataEN.setLanguage(languageES);
                     preferenceDataEN.setDescription(txtDescriptionEnglish.getText());
                     preferenceDataEN = preferencesEJB.savePreferenceFieldData(preferenceDataEN);
+                    
+                    if (chkCustomer.isChecked()) {
+                    	PreferenceValue pValueClient = null;
+                    	try {
+                    		pValueClient = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationClient.getId(), preference.getId());
+                    		pValueClient.setValue(txtValueCustomer.getText());
+                    		pValueClient.setUpdateDate(new Timestamp(new Date().getTime()));
+                    		pValueClient = preferencesEJB.savePreferenceValue(pValueClient); 
+                    	} catch (Exception e) {
+                    		pValueClient = new PreferenceValue();
+                    		pValueClient.setPreferenceFieldId(preference);
+                    		pValueClient.setPreferenceClassficationId(classificationClient);
+                    		pValueClient.setCreateDate(new Timestamp(new java.util.Date().getTime()));
+                    		pValueClient.setEnabled(true);
+                    		pValueClient.setCreateDate(new Timestamp(new Date().getTime()));
+                    		pValueClient.setValue(txtValueCustomer.getText());
+                    		pValueClient = preferencesEJB.savePreferenceValue(pValueClient);               	
+        				}
+                    }
+                    if (chkBusiness.isChecked()) {
+                    	PreferenceValue pValueBusiness = null;
+                    	try {
+                    		pValueBusiness = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationBussines.getId(), preference.getId());
+                    		pValueBusiness.setValue(txtValueBusiness.getText());
+                    		pValueBusiness.setUpdateDate(new Timestamp(new Date().getTime()));
+                    		pValueBusiness = preferencesEJB.savePreferenceValue(pValueBusiness);               	              	
+                    	} catch (Exception e) {
+                    		pValueBusiness = new PreferenceValue();
+                    		pValueBusiness.setPreferenceFieldId(preference);
+                    		pValueBusiness.setPreferenceClassficationId(classificationBussines);
+                    		pValueBusiness.setCreateDate(new Timestamp(new java.util.Date().getTime()));
+                    		pValueBusiness.setEnabled(true);
+                    		pValueBusiness.setCreateDate(new Timestamp(new Date().getTime()));
+                    		pValueBusiness.setValue(txtValueBusiness.getText());
+                    		pValueBusiness = preferencesEJB.savePreferenceValue(pValueBusiness);               	              	
+        				}
+                    }
                 }
             } else if (eventType == WebConstants.EVENT_ADD) {
                     //Guardar descripcion en español en PreferenceFieldData
@@ -283,22 +364,28 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             
             if (eventType == WebConstants.EVENT_ADD){
                 //Guardar Preference Value Cliente
-                preferenceValueClient = new PreferenceValue();
-                preferenceValueClient.setPreferenceFieldId(preference);
-                preferenceValueClient.setPreferenceClassficationId(classificationClient);
-                preferenceValueClient.setCreateDate(new Timestamp(new java.util.Date().getTime()));
-                preferenceValueClient.setEnabled(true);
-                preferenceValueClient.setCreateDate(new Timestamp(new Date().getTime()));
-                preferenceValueClient = preferencesEJB.savePreferenceValue(preferenceValueClient);
+                if (chkCustomer.isChecked()) {
+                	preferenceValueClient = new PreferenceValue();
+                	preferenceValueClient.setPreferenceFieldId(preference);
+                	preferenceValueClient.setPreferenceClassficationId(classificationClient);
+                	preferenceValueClient.setCreateDate(new Timestamp(new java.util.Date().getTime()));
+                	preferenceValueClient.setEnabled(true);
+                	preferenceValueClient.setCreateDate(new Timestamp(new Date().getTime()));
+                	preferenceValueClient.setValue(txtValueCustomer.getText());
+                	preferenceValueClient = preferencesEJB.savePreferenceValue(preferenceValueClient);               	
+                }
 
                 //Guardar Preference Value Business
-                preferenceValueBusiness = new PreferenceValue();
-                preferenceValueBusiness.setPreferenceFieldId(preference);
-                preferenceValueBusiness.setPreferenceClassficationId(classificationBussines);
-                preferenceValueBusiness.setCreateDate(new Timestamp(new java.util.Date().getTime()));
-                preferenceValueBusiness.setEnabled(true);
-                preferenceValueBusiness.setCreateDate(new Timestamp(new Date().getTime()));
-                preferenceValueBusiness = preferencesEJB.savePreferenceValue(preferenceValueBusiness);
+                if (chkBusiness.isChecked()) {
+                	preferenceValueBusiness = new PreferenceValue();
+                	preferenceValueBusiness.setPreferenceFieldId(preference);
+                	preferenceValueBusiness.setPreferenceClassficationId(classificationBussines);
+                	preferenceValueBusiness.setCreateDate(new Timestamp(new java.util.Date().getTime()));
+                	preferenceValueBusiness.setEnabled(true);
+                	preferenceValueBusiness.setCreateDate(new Timestamp(new Date().getTime()));
+                	preferenceValueBusiness.setValue(txtValueBusiness.getText());
+                	preferenceValueBusiness = preferencesEJB.savePreferenceValue(preferenceValueBusiness);               	
+                }
             }
             
             this.showMessage("sp.common.save.success", false, null);
@@ -395,4 +482,23 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         } catch (RegisterNotFoundException ex) {
         }
     }
+    
+    public void onClick$chkCustomer(){
+	     if (chkCustomer.isChecked()) {
+	    	 txtValueCustomer.setText("");
+	    	 rowCustomer.setVisible(true);
+	     }else {
+	    	 rowCustomer.setVisible(false);
+	     }
+    }
+    
+    public void onClick$chkBusiness(){
+	     if (chkBusiness.isChecked()) {
+	    	 txtValueBusiness.setText("");
+	    	 rowBusiness.setVisible(true);
+	     }else {
+	    	 rowBusiness.setVisible(false);
+	     }
+   }
+
 }
