@@ -50,14 +50,6 @@
                                                         <column width="570px"/>
                                                     </columns>
                                                     <rows>
-
-<!--                                                         <row> -->
-<!--                                                             <label value="${c:l('sp.preference.classification')}" sclass="lblbold"/> -->
-<!--                                                             <hlayout> -->
-<!--                                                                 <combobox id="cmbClassification" width="250px" mold="rounded" readonly="true"/> -->
-<!--                                                             </hlayout> -->
-                         
-<!--                                                         </row> -->
                                                         <row>
                                                         <label value="${c:l('sp.specific.preference.product')}" sclass="lblbold"/>  
                                                             <hlayout>
@@ -86,10 +78,10 @@
                                                         <column label ="${c:l('sp.crud.settings.main.value')}" width="330px"/>
                                                         <column label ="${c:l('sp.specific.preference.spacific')}" width="240px"/>
                                                     </columns>
-                                                     <rows id = "rowsGrid">
-                                                                      
+                                                     <rows id = "rowsGrid">                                                                      
                                                     
-                                                     </rows>                                              </grid>
+                                                     </rows>
+                                               </grid>
                                             </vlayout>
                                         </div>
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
