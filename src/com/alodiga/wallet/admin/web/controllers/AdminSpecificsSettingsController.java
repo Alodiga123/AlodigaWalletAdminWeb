@@ -137,7 +137,6 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     private void loadPreferences(Long classificationId) {
         try {
             setData();
-
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
@@ -190,57 +189,56 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     
     private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId) {
         try {
-            setData();
-                
+            setData();                
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             PreferenceValue pValue = null;
             for (PreferenceField field : fields) {
-				try {
-					pValue = preferencesEJB.getPreferenceValuesByParamAndBussiness(preferenceValue.getPreferenceClassficationId().getId(),
-							preferenceValue.getProductId().getId(), preferenceValue.getTransactionTypeId().getId(),preferenceValue.getBussinessId(), field.getId());
-				} catch (Exception ex) {
-					try {
-						pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId,field.getId());
-						pValue = createPreferencenValue(pValue);
-					} catch (Exception e) {
-						pValue = null;
-					}
-				}
-				if (pValue != null) {
-					Row row = new Row();
-					Label label = new Label();
-					label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
-					label.setParent(row);
-					if (pValue.getPreferenceFieldId().getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
-						Combobox cmbbox = new Combobox();
-						loadProviders(Long.parseLong(pValue.getValue()), cmbbox);
-						cmbbox.setParent(row);
-						Checkbox chb = new Checkbox();
-						chb.setChecked(pValue.isEnabled());
-						chb.setParent(row);
-						preferenceValues.add(pValue);
-					} else if (pValue.getPreferenceFieldId().getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
-						Checkbox chbValue = new Checkbox();
-						boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
-						chbValue.setChecked(checked);
-						chbValue.setParent(row);
-						Checkbox chb = new Checkbox();
-						chb.setChecked(pValue.isEnabled());
-						chb.setParent(row);
-						preferenceValues.add(pValue);
-					} else {
-						Textbox txtValue = new Textbox();
-						txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
-						txtValue.setParent(row);
-						Checkbox chb = new Checkbox();
-						chb.setChecked(pValue.isEnabled());
-						chb.setParent(row);
-						preferenceValues.add(pValue);
-					}
-					row.setParent(rowsGrid);
-				}
-			}
+                try {
+                    pValue = preferencesEJB.getPreferenceValuesByParamAndBussiness(preferenceValue.getPreferenceClassficationId().getId(),
+                    preferenceValue.getProductId().getId(), preferenceValue.getTransactionTypeId().getId(),preferenceValue.getBussinessId(), field.getId());
+                } catch (Exception ex) {
+                    try {
+                        pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId,field.getId());
+                        pValue = createPreferencenValue(pValue);
+                    } catch (Exception e) {
+                        pValue = null;
+                    }
+                }
+                if (pValue != null) {
+                    Row row = new Row();
+                    Label label = new Label();
+                    label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                    label.setParent(row);
+                    if (pValue.getPreferenceFieldId().getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
+                            Combobox cmbbox = new Combobox();
+                            loadProviders(Long.parseLong(pValue.getValue()), cmbbox);
+                            cmbbox.setParent(row);
+                            Checkbox chb = new Checkbox();
+                            chb.setChecked(pValue.isEnabled());
+                            chb.setParent(row);
+                            preferenceValues.add(pValue);
+                    } else if (pValue.getPreferenceFieldId().getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
+                            Checkbox chbValue = new Checkbox();
+                            boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
+                            chbValue.setChecked(checked);
+                            chbValue.setParent(row);
+                            Checkbox chb = new Checkbox();
+                            chb.setChecked(pValue.isEnabled());
+                            chb.setParent(row);
+                            preferenceValues.add(pValue);
+                    } else {
+                            Textbox txtValue = new Textbox();
+                            txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
+                            txtValue.setParent(row);
+                            Checkbox chb = new Checkbox();
+                            chb.setChecked(pValue.isEnabled());
+                            chb.setParent(row);
+                            preferenceValues.add(pValue);
+                    }
+                    row.setParent(rowsGrid);
+                }
+            }
         } catch (Exception ex) {
             showError(ex);
         }
@@ -334,10 +332,10 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	preferenceValue.setPreferenceFieldId(value.getPreferenceFieldId());
     	preferenceValue.setPreferenceValueParentId(value);
     	preferenceValue.setValue(value.getValue());
-		preferenceValue.setPreferenceClassficationId(preferenceClassification);
-		preferenceValue.setProductId((Product)cmbProduct.getSelectedItem().getValue());
-		preferenceValue.setTransactionTypeId((TransactionType)cmbTransactionType.getSelectedItem().getValue());
-		preferenceValue.setBussinessId(((Business)cmbBusiness.getSelectedItem().getValue()).getId());
+        preferenceValue.setPreferenceClassficationId(preferenceClassification);
+        preferenceValue.setProductId((Product)cmbProduct.getSelectedItem().getValue());
+        preferenceValue.setTransactionTypeId((TransactionType)cmbTransactionType.getSelectedItem().getValue());
+        preferenceValue.setBussinessId(((Business)cmbBusiness.getSelectedItem().getValue()).getId());
     	return preferenceValue;
     }
 
