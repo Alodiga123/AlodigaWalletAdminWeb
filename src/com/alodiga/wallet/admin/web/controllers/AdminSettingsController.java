@@ -61,16 +61,9 @@ public class AdminSettingsController extends GenericAbstractController {
             user = AccessControl.loadCurrentUser();
             loadPreferenceClassifications();
             onChange$cmbClassification();
-            if (eventType != null && eventType == WebConstants.EVENT_VIEW) {
-                blockFields();
-            }
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    private void blockFields() {
-        btnSave.setVisible(false);
     }
 
     private void loadPreferenceClassifications() {
