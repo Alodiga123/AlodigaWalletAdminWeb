@@ -46,8 +46,8 @@
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.preferenceType.type')}" width="375px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.enabled')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.common.description')}" width="375px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.preference.value.active')}" width="150px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
