@@ -301,10 +301,10 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
         } catch (NullParameterException ex) {
             showError(ex);
             ex.printStackTrace();
-//        } finally {
-//            if (personTypes == null) {
-//                this.showMessage("sp.msj.PersonTypeNull", true, null);
-//            } 
+        } finally {
+            if (personTypes == null) {
+                this.showMessage("sp.msj.PersonTypeNull", true, null);
+            } 
         }
     }
 
