@@ -195,8 +195,13 @@ public class ListSettingController extends GenericAbstractListController<Prefere
         }
     }
 
-    public void onClick$btnClear() throws InterruptedException {
-        
+    public void onClick$btnClear() {
+    	lbxRecords.getItems().clear();
+    	cmbProduct.getItems().clear();
+    	cmbTransactionType.getItems().clear();
+    	cmbBusiness.getItems().clear();
+    	cmbBusiness.setText("");
+    	getData();
     }
 
     public void onClick$btnSearch() throws InterruptedException {

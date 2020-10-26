@@ -157,7 +157,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
 	                	cmbbox.setParent(row);
 	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setChecked(false);
 	                	chb.setParent(row);
 	                	preferenceValues.add(createPreferencenValue(pValue));
 	                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
@@ -166,7 +166,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	                	chbValue.setChecked(checked);
 	                	chbValue.setParent(row);
 	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setChecked(false);
 	                	chb.setParent(row);
 	                	preferenceValues.add(createPreferencenValue(pValue));
 	                }  else {
@@ -174,7 +174,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
 	                	txtValue.setParent(row);
 	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setChecked(false);
 	                	chb.setParent(row);
 	                	preferenceValues.add(createPreferencenValue(pValue));
 	                }
@@ -187,7 +187,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 
     }
     
-    private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId) {
+    private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId, boolean readOnly) {
         try {
             setData();                
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
@@ -213,26 +213,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                     if (pValue.getPreferenceFieldId().getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
                             Combobox cmbbox = new Combobox();
                             loadProviders(Long.parseLong(pValue.getValue()), cmbbox);
+                            cmbbox.setReadonly(readOnly);
                             cmbbox.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
+                            chb.setDisabled(readOnly);
                             chb.setParent(row);
                             preferenceValues.add(pValue);
                     } else if (pValue.getPreferenceFieldId().getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
                             Checkbox chbValue = new Checkbox();
                             boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
                             chbValue.setChecked(checked);
+                            chbValue.setDisabled(readOnly);
                             chbValue.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
+                            chb.setDisabled(readOnly);
                             chb.setParent(row);
                             preferenceValues.add(pValue);
                     } else {
                             Textbox txtValue = new Textbox();
                             txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
                             txtValue.setParent(row);
+                            txtValue.setReadonly(readOnly);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
+                            chb.setDisabled(readOnly);
                             chb.setParent(row);
                             preferenceValues.add(pValue);
                     }
@@ -370,16 +376,17 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
             case WebConstants.EVENT_EDIT:
             	loadProduct(preferenceValueParam.getProductId());
             	loadTransactionType(preferenceValueParam.getTransactionTypeId());
-            	loadBusiness(preferenceValueParam.getBussinessId());     
-            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId());
+            	loadBusiness(preferenceValueParam.getBussinessId());  
+            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId(), false);
             	cmbProduct.setDisabled(true);
             	cmbTransactionType.setDisabled(true);
+            	cmbBusiness.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
             	loadProduct(preferenceValueParam.getProductId());
             	loadTransactionType(preferenceValueParam.getTransactionTypeId());
             	loadBusiness(preferenceValueParam.getBussinessId()); 
-            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId());
+            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId(), true);
             	blockFields();
                 break;
             case WebConstants.EVENT_ADD:
@@ -404,9 +411,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 cmbItem.setParent(cmbProduct);
                 if (p != null && p.getId().equals(product.getId())) {
                 	cmbProduct.setSelectedItem(cmbItem);
-                } else {
-                	cmbProduct.setSelectedIndex(0);
-                }
+                } 
             }
         }  catch (Exception ex) {
             this.showError(ex);
@@ -425,8 +430,6 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 cmbItem.setParent(cmbTransactionType);
                 if (t != null && t.getId().equals(transactionType.getId())) {
                 	cmbTransactionType.setSelectedItem(cmbItem);
-                } else {
-                	cmbTransactionType.setSelectedIndex(0);
                 }
             }
         }  catch (Exception ex) {
@@ -447,9 +450,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 item.setParent(cmbBusiness);
                 if (businesses.get(i) != null && businesses.get(i).getId().equals(businessId)) {
                 	cmbBusiness.setSelectedItem(item);
-                } else {
-                	cmbBusiness.setSelectedIndex(0);
-                }
+                } 
             }
         } catch (Exception ex) {
             this.showError(ex);
@@ -478,5 +479,20 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 			showError(ex);
 		}
 	}
+    
+    public void onChange$cmbProduct() {
+    	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
+    		loadPreferences(preferenceClassification.getId());  
+    }
+    
+    public void onChange$cmbTransactionType() {
+    	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
+    		loadPreferences(preferenceClassification.getId());  
+    }
 
+    public void onChange$cmbBusiness() {
+    	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
+    		loadPreferences(preferenceClassification.getId());  
+    }
+    
 }
