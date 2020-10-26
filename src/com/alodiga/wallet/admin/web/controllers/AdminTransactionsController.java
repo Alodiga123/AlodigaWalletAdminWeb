@@ -17,13 +17,16 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminCont
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.TransactionTypeE;
 import com.alodiga.wallet.common.model.CommissionItem;
 import com.alodiga.wallet.common.model.Transaction;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.portal.business.commons.models.Business;
 import java.text.SimpleDateFormat;
+import org.zkoss.zul.Group;
 import org.zkoss.zul.Radio;
+import org.zkoss.zul.Row;
 
 public class AdminTransactionsController extends GenericAbstractAdminController {
 
@@ -40,11 +43,24 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
     private Label lblAmountComission;
     private Label lblComissionValue;
     private Label lblEndDate;
+    private Label lblUserDocumentType;
+    private Label lblUserDocumentNumber;
+    private Label lblUserPhone;
+    private Label lblUserEmail;  
+    private Label lblUserDestinationDocumentType;
+    private Label lblUserDestinationDocumentNumber;
+    private Label lblUserDestinationPhone;
+    private Label lblUserDestinationEmail;
     private Radio rIsCloseYes;
     private Radio rIsCloseNo;
     private Checkbox chbPercentComission;
     private Grid grdCommision;
     private Button btnSave;
+    private Row rowTitleNameDestinationTypeNumber;
+    private Row rowNameDestinationTypeNumber;
+    private Row rowTitlePhoneEmail;
+    private Row rowPhoneEmail;
+    private Group UserDestination;
     private Toolbarbutton tbbTitle;
     private Transaction transactionParam;
     private Integer eventType;
@@ -92,35 +108,81 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
 
     private void loadFields(Transaction transaction) {
         try {
+            UserDestination.setVisible(false);
             //Formato de fecha
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
             if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
-                //Obtiene los usuarios de Origen y Destino de Registro Unificado relacionados con la Transacción
+                //Obtiene los usuarios de Origen de Registro Unificado relacionados con la Transacción
                 APIRegistroUnificadoProxy apiRegistroUnificado = new APIRegistroUnificadoProxy();
                 RespuestaUsuario responseUser = new RespuestaUsuario();
                 responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(transaction.getUserSourceId()));
                 String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
-                responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
-                String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
+                
+                //Datos Usuario de Origen
                 lblUserSource.setValue(userNameSource);
-                lblUserDestination.setValue(userNameDestination);
+                lblUserDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
+                lblUserDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
+                lblUserPhone.setValue(responseUser.getDatosRespuesta().getMovil());
+                lblUserEmail.setValue(responseUser.getDatosRespuesta().getEmail());
+            
+                //Verificar que tipo de transaccion es para traer el usuario destino
+                if((!transaction.getTransactionTypeId().getCode().equals(TransactionTypeE.MANREC .getTransactionTypeCode())) 
+                    && (!transaction.getTransactionTypeId().getCode().equals(TransactionTypeE.WITMAN.getTransactionTypeCode())
+                )){ 
+                    //Se activan el grupo y los campos del usuario de destino
+                    UserDestination.setVisible(true);
+                    rowTitleNameDestinationTypeNumber.setVisible(true);
+                    rowNameDestinationTypeNumber.setVisible(true);
+                    rowTitlePhoneEmail.setVisible(true);
+                    rowPhoneEmail.setVisible(true);
+                    
+                    //Datos Usuario Destino
+                    responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",transaction.getUserDestinationId().toString());
+                    String userNameDestination = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
+                    lblUserDestination.setValue(userNameDestination);
+                    lblUserDestinationDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
+                    lblUserDestinationDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
+                    lblUserDestinationPhone.setValue(responseUser.getDatosRespuesta().getMovil());
+                    lblUserDestinationEmail.setValue(responseUser.getDatosRespuesta().getEmail());
+                }
+
             } else if (transaction.getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
-                //Obtiene los usuarios de Origen y Destino de BusinessPortal relacionados con la Transacción
+                //Obtiene los usuarios de Origen de BusinessPortal relacionados con la Transacción
                 List<Business> businessList = businessEJB.getAll();
                 Business businessSource = businessEJB.getBusinessById(transaction.getBusinessId().longValue());
-                Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
-                lblUserDestination.setValue(businessDestination.getDisplayName());
+                
+                if((!transaction.getTransactionTypeId().getCode().equals(TransactionTypeE.MANREC .getTransactionTypeCode())) 
+                    && (!transaction.getTransactionTypeId().getCode().equals(TransactionTypeE.WITMAN.getTransactionTypeCode()))
+                    && (!transaction.getTransactionTypeId().getCode().equals(TransactionTypeE.PROEXC.getTransactionTypeCode()))){ 
+                    //Se activan el grupo y los campos del usuario de destino
+                    UserDestination.setVisible(true);
+                    rowTitleNameDestinationTypeNumber.setVisible(true);
+                    rowNameDestinationTypeNumber.setVisible(true);
+                    rowTitlePhoneEmail.setVisible(true);
+                    rowPhoneEmail.setVisible(true);
+                    
+                    //Datos Business Destino
+                    Business businessDestination = businessEJB.getBusinessById(transaction.getBusinessDestinationId().longValue());   
+                    lblUserDestination.setValue(businessDestination.getDisplayName());
+                    // lblUserDestinationDocumentType.setValue();
+                    lblUserDestinationDocumentNumber.setValue(businessDestination.getIdentification());
+                    lblUserDestinationPhone.setValue(businessDestination.getPhoneNumber());
+                    lblUserDestinationEmail.setValue(businessDestination.getEmail());
+                }
+            
+            
             }    
+
             if (transaction.getProductId().getName() != null) {
                 lblProduct.setValue(transaction.getProductId().getName());
             } else {
                 lblProduct.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }
             if (transaction.getTransactionTypeId() != null) {
-                lblTransactionType.setValue(transaction.getTransactionTypeId().getDescription());
+                lblTransactionType.setValue(transaction.getTransactionTypeId().getCode());
             } else {
                 lblTransactionType.setValue(Labels.getLabel("sp.crud.transaction.empty"));
             }

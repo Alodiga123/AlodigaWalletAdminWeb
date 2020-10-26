@@ -1,7 +1,6 @@
 package com.alodiga.wallet.admin.web.controllers;
 
 import java.util.List;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Label;
@@ -9,12 +8,10 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
-
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UserEJB;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.model.UserHasProfile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -24,7 +21,7 @@ import com.alodiga.wallet.common.utils.Encoder;
 
 public class MyAccountController extends GenericAbstractAdminController {
 
-	private static final long serialVersionUID = -9145887024839938515L;
+    private static final long serialVersionUID = -9145887024839938515L;
     private Label lblLogin;
     private Textbox txtOldPassword;
     private Textbox txtNewPassword1;

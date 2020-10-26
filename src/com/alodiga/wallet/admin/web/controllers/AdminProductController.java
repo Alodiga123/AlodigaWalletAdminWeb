@@ -14,12 +14,8 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Category;
-import com.alodiga.wallet.common.model.Enterprise;
-import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
-import com.alodiga.wallet.common.model.ProductIntegrationType;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -135,7 +131,6 @@ public class AdminProductController extends GenericAbstractAdminController {
             txtName.setText(product.getName());
             txtSymbol.setText(product.getSymbol());
             txtReferenceCode.setText(product.getReferenceCode());
-            txtAccessNumberUrl.setText(product.getAccessNumberUrl());
             btnSave.setVisible(true);
 
             if (product.getEnabled() == true) {
@@ -326,13 +321,11 @@ public class AdminProductController extends GenericAbstractAdminController {
             } else {
                 product = new Product();
             }
-
             product.setCategoryId((Category) cmbCategory.getSelectedItem().getValue());
             product.setName(txtName.getText());
             product.setTaxInclude(rTaxIncludeYes.isChecked() ? true : false);
             product.setEnabled(rEnabledYes.isChecked() ? true : false);
             product.setReferenceCode(txtReferenceCode.getText());
-            product.setAccessNumberUrl(txtAccessNumberUrl.getText());
             product.setIsFree(rIsFreeYes.isChecked() ? true : false);
             product.setIsAlocashProduct(rIsAlocashProductYes.isChecked() ? true : false);
             product.setSymbol(txtSymbol.getText());
