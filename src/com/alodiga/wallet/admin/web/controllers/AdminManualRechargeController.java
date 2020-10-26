@@ -48,6 +48,8 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
     private Label lblBankOperationNumber;
     private Label lblBankOperationDate;
     private Label lblApprovalUser;
+    private Label lblUserDocumentType;
+    private Label lblUserDocumentNumber;
     private Datebox dtbApprovedRequestDate;
     private Label lblUserName;
     private Label lblTelephone;
@@ -105,20 +107,18 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                     lblUserName.setValue(userNameSource);
                     lblTelephone.setValue(responseUser.getDatosRespuesta().getMovil());
                     lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
+                    lblUserDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
+                    lblUserDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
                 }
+                               
+            } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
                 if (transactionApproveRequest.getTransactionId().getBusinessId() != null) {
                     //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                     Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
                     lblUserName.setValue(businessSource.getDisplayName());
                     lblTelephone.setValue(businessSource.getPhoneNumber());
                     lblEmail.setValue(businessSource.getEmail());
-                }                
-            } else if(transactionApproveRequest.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())){
-                //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
-                Business businessSource = businessEJB.getBusinessById(transactionApproveRequest.getTransactionId().getBusinessId().longValue());
-                lblUserName.setValue(businessSource.getDisplayName());
-                lblTelephone.setValue(businessSource.getPhoneNumber());
-                lblEmail.setValue(businessSource.getEmail());
+                } 
             }
             lblRequestNumber.setValue(transactionApproveRequest.getRequestNumber());
             lblRequestDate.setValue(simpleDateFormat.format(transactionApproveRequest.getCreateDate()));

@@ -76,11 +76,19 @@
                                                          <group label="${c:l('sp.common.user')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manual.recharge.user.name')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.common.phone')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.user.email')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.bank.operaton.documentNumber')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblUserName" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblUserDocumentType" width="250px" style="color:#837E76;"/>
+                                                            <label id="lblUserDocumentNumber" width="250px" style="color:#837E76;"/>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.phone.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
                                                             <label id="lblTelephone" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblEmail" value="" width="270px" style="color:#837E76;"/>
                                                         </row>
