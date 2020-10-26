@@ -28,7 +28,6 @@ import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Audit;
 import com.alodiga.wallet.common.model.AuditAction;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Event;
 import com.alodiga.wallet.common.model.Language;
 import com.alodiga.wallet.common.model.Permission;
@@ -56,7 +55,7 @@ public class AccessControl {
 	    private static UtilsEJB utilsEJB;
 		LanguageDefinition definition;
 
-	    public static boolean savePermissionUser(List<UserHasProfile> userHasProfiles, Long enterpriseId) {
+	    public static boolean savePermissionUser(List<UserHasProfile> userHasProfiles) {
 	        HashMap<String, List<String>> permissionsMap = new HashMap<String, List<String>>();
 
 	        try {
@@ -109,7 +108,7 @@ public class AccessControl {
 	        user = accessEjb.validateUser(login, Encoder.MD5(password));
 	        List<UserHasProfile> userHasProfile = user.getUserHasProfile();
 	        if (userHasProfile != null && userHasProfile.size() > 0 && user.getEnabled()) {
-	            AccessControl.savePermissionUser(userHasProfile, Enterprise.ALODIGA);
+	            AccessControl.savePermissionUser(userHasProfile);
 	            Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
 	            saveAction(null, Permission.LOG_IN);
 	            valid = true;
@@ -183,11 +182,8 @@ public class AccessControl {
 	                user.setPassword(GeneralUtils.encryptMD5(newPassword));
 	                request.setParam(user);
 	                userEJB.saveUser(request);
-	                request = new EJBRequest();
-	                request.setParam(Enterprise.ALODIGA);
-	                Enterprise enterprise = utilsEJB.loadEnterprise(request);
 	                try {
-	                    sendUserRecoveryPasswordMail(user, newPassword, enterprise);
+	                    sendUserRecoveryPasswordMail(user, newPassword);
 	                } catch (Exception ex) {
 	                    /*Si ocurre un error al enviar el correo se guarda el
 	                    usuario con el password que tenia previamente.*/
@@ -204,10 +200,10 @@ public class AccessControl {
 	        }
 	    }
 
-	    private static void sendUserRecoveryPasswordMail(User user, String newPassword, Enterprise enterprise) throws GeneralException {
+	    private static void sendUserRecoveryPasswordMail(User user, String newPassword) throws GeneralException {
 	        try {
 	            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
-	            SendMailTherad sendMailTherad = new SendMailTherad("ES",user, newPassword, enterprise,Constants.SEND_TYPE_EMAIL_RECOVER_PASSWORD);
+	            SendMailTherad sendMailTherad = new SendMailTherad("ES",user, newPassword, Constants.SEND_TYPE_EMAIL_RECOVER_PASSWORD);
 	            sendMailTherad.run();
 	        } catch (Exception ex) {
 	            ex.printStackTrace();
