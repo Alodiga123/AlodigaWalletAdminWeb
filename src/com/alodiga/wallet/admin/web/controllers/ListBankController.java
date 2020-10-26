@@ -56,11 +56,9 @@ public class ListBankController extends GenericAbstractListController<Bank> {
             btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_BANK));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_BANK);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_BANK);
-//            permissionChangeStatus = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.CHANGE_USER_STATUS);
         } catch (Exception ex) {
             showError(ex);
         }
-
     }
 
     public void startListener() {
@@ -84,19 +82,11 @@ public class ListBankController extends GenericAbstractListController<Bank> {
     }
 
     private Listcell initEnabledButton(final Boolean enabled, final Listitem listItem) {
-
         Listcell cell = new Listcell();
         cell.setValue("");
         final ChangeStatusButton button = new ChangeStatusButton(enabled);
         button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
         button.setClass("open orange");
-//        button.addEventListener("onClick", new EventListener() {
-//
-//            public void onEvent(Event event) throws Exception {
-//                changeStatus(button, listItem);
-//            }
-//        });
-
         button.setParent(cell);
         return cell;
     }
@@ -109,21 +99,6 @@ public class ListBankController extends GenericAbstractListController<Bank> {
 
     public void onClick$btnDelete() {
     }
-
-//    private void changeStatus(ChangeStatusButton button, Listitem listItem) {
-//        try {
-//            Bank bank = (Bank) listItem.getValue();
-//            button.changeImageStatus(bank.getEnabled());
-//            bank.setEnabled(!bank.getEnabled());
-//            listItem.setValue(bank);
-//            //request.setAuditData(AccessControl.getCurrentAudit());
-//            request.setParam(bank);
-//            userEJB.saveUser(request);
-////            AccessControl.saveAction(Permission.CHANGE_USER_STATUS, "changeStatus user = " + user.getId() + " to status = " + !user.getEnabled());
-//        } catch (Exception ex) {
-//            showError(ex);
-//        }
-//    }
 
     public void loadList(List<Bank> list) {
         try {
@@ -139,7 +114,6 @@ public class ListBankController extends GenericAbstractListController<Bank> {
                     item.appendChild(new Listcell(bank.getCountryId().getName()));
                     item.appendChild(new Listcell(bank.getSwiftCode()));
                     item.appendChild(new Listcell(bank.getAbaCode()));
-                    item.appendChild(new Listcell(bank.getEnterpriseId().getName()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, bank, Permission.EDIT_BANK) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, bank, Permission.VIEW_BANK) : new Listcell());
                     item.setParent(lbxRecords);

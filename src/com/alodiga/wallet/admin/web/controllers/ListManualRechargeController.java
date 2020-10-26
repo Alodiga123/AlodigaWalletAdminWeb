@@ -155,7 +155,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
             params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_NUMBER, Constants.TRANSACTION_APPROVE_REQUEST_RECHARGE);
             request.setParams(params);
-            approveRequests = utilsEJB.getTransactionApproveRequestByStatus(request);
+            approveRequests = productEJB.getTransactionApproveRequestByStatus(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

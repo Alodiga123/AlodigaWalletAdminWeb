@@ -68,11 +68,10 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.common.bank.name')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.common.country')}" width="180px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.bank.name')}" width="220px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.country')}" width="200px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.bank.codeSwift')}" width="180px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.bank.codeAba')}" width="180px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.product.enterprise')}" width="180px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
