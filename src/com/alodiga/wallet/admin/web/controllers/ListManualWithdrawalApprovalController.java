@@ -98,7 +98,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
             params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_NUMBER, Constants.REQUEST_NUMBER_MANUAL_WITHDRAWAL);
             status.setParams(params);
-            manualWithdrawalApproval = utilsEJB.getTransactionApproveRequestByStatus(status);
+            manualWithdrawalApproval = productEJB.getTransactionApproveRequestByStatus(status);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

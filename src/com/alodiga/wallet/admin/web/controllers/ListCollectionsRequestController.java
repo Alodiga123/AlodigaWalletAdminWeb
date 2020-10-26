@@ -39,6 +39,7 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
     private List<CollectionsRequest> collectionsRequests = null;
     private User currentUser;
     private Profile currentProfile;
+    private Textbox txtName;
     
 
     @Override
@@ -121,11 +122,12 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -171,7 +173,17 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
 
     @Override
     public List<CollectionsRequest> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CollectionsRequest> collectionsRequestaux = new ArrayList<CollectionsRequest>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                collectionsRequestaux = utilsEJB.searchCollectionsRequestByCountry(filter);
+            } else {
+                return collectionsRequests;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return collectionsRequestaux;
     }
 
 }

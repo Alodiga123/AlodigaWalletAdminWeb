@@ -63,24 +63,26 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     }
 
     private void saveStatus(StatusBusinessAffiliationHasFinalState _status) {
+        StatusBusinessAffiliationHasFinalState status = null;
         try {
             if (_status != null) {
-            	_status.setUpdateDate(new Timestamp(new Date().getTime()));
+                status = _status;
+                status.setUpdateDate(new Timestamp(new Date().getTime()));
             }else {
-            	_status = new StatusBusinessAffiliationHasFinalState();
-            	_status.setCreateDate(new Timestamp(new Date().getTime()));
+            	status = new StatusBusinessAffiliationHasFinalState();
+            	status.setCreateDate(new Timestamp(new Date().getTime()));
             }
-			_status.setStatusBusinessAffiliationRequetsId((StatusBusinessAffiliationRequest) cmbStatus.getSelectedItem().getValue());
-			_status.setFinalStateId((StatusBusinessAffiliationRequest) cmbFinal.getSelectedItem().getValue());
-			if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusBusinessAffiliationHasFinalState(_status.getStatusBusinessAffiliationRequetsId().getId(),_status.getFinalStateId().getId()))
-					|| eventType.equals(WebConstants.EVENT_EDIT)) {
-				_status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(_status);
-				this.showMessage("sp.common.save.success", false, null);
-				if (eventType == WebConstants.EVENT_ADD) {
-					btnSave.setVisible(false);
-				} 				
-			}else
-				this.showMessage("sp.error.status.business.affiliation.exist", true, null);     
+            status.setStatusBusinessAffiliationRequetsId((StatusBusinessAffiliationRequest) cmbStatus.getSelectedItem().getValue());
+            status.setFinalStateId((StatusBusinessAffiliationRequest) cmbFinal.getSelectedItem().getValue());
+            if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusBusinessAffiliationHasFinalState(status.getStatusBusinessAffiliationRequetsId().getId(),status.getFinalStateId().getId()))
+		|| eventType.equals(WebConstants.EVENT_EDIT)) {
+                    status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(status);
+            	    this.showMessage("sp.common.save.success", false, null);
+            if (eventType == WebConstants.EVENT_ADD) {
+		btnSave.setVisible(false);
+            } 				
+            }else
+                this.showMessage("sp.error.status.business.affiliation.exist", true, null);     
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {

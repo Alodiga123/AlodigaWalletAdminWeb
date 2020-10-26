@@ -140,6 +140,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                 Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
+                lblTelephone.setValue(businessSource.getPhoneNumber());
+                lblEmail.setValue(businessSource.getEmail());
             }
             if (manualWithdrawalApproval.getRequestNumber() != null) {
                 lblRequestNumber.setValue(manualWithdrawalApproval.getRequestNumber());
@@ -241,6 +243,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 statusTransactionApproveRequest = productEJB.loadStatusTransactionApproveRequestbyCode(request);               
             }
 
+            //Se actualiza el estatus de la solicitud de aprobación y el saldo del usuario en la billetera
             manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
             manualWithdrawalApproval.setStatusTransactionApproveRequestId(statusTransactionApproveRequest);
             manualWithdrawalApproval.setUpdateDate(new Timestamp(new Date().getTime()));
@@ -248,6 +251,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApproval.setIndApproveRequest(indApproved);
             manualWithdrawalApproval.setObservations(txtObservations.getText());
             manualWithdrawalApproval.setUserApprovedRequestId(user);
+            manualWithdrawalApproval = productEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
             

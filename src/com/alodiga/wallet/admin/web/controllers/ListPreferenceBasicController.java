@@ -164,8 +164,8 @@ public class ListPreferenceBasicController extends GenericAbstractListController
                     item = new Listitem();
                     item.setValue(preference);
                     item.appendChild(new Listcell(preference.getName()));
-                    item.appendChild(new Listcell((preference.getEnabled()==true? Labels.getLabel("sp.common.yes"):Labels.getLabel("sp.common.no"))));
                     item.appendChild(new Listcell(preference.getDescription()));
+                    item.appendChild(new Listcell((preference.getEnabled()==true? Labels.getLabel("sp.common.yes"):Labels.getLabel("sp.common.no"))));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, preference, Permission.EDIT_BASIC_PREFERENCE) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, preference, Permission.VIEW_BASIC_PREFERENCE) : new Listcell());
                     item.setParent(lbxRecords);

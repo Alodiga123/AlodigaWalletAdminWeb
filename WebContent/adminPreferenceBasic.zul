@@ -36,10 +36,7 @@
                                         <div>
                                             <vlayout>
                                                 <hlayout>
-                                                    <div align="left" width="400px">
-                                                        <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
-                                                    </div>  
-                                                    <div align="right" width="585px">
+                                                    <div align="right" width="985px">
                                                         <hlayout>
                                                             <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
                                                         </hlayout>
@@ -52,20 +49,20 @@
                                                     </columns> 
                                                     <rows>
                                                         <row>
-                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.preferenceType.type')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtPreferenceName" maxlength="45" width="250px"/>
+                                                                <textbox id="txtPreferenceName" maxlength="45" width="246px"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.common.description')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtPreferenceDescription" maxlength="45" width="250px"/>
+                                                                <textbox id="txtPreferenceDescription" value="" rows="2" width="246px"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.common.enabled')}" sclass="lblbold"/>
-                                                            <hbox width="260px">
+                                                            <label value="${c:l('sp.preference.value.active')}" sclass="lblbold"/>
+                                                            <hbox width="250px">
                                                                 <radiogroup id="isEnabled" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
                                                                     <rows>

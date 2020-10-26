@@ -206,13 +206,14 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
                 statusTransactionApproveRequest = productEJB.loadStatusTransactionApproveRequestbyCode(request);               
             }      
 
-            //Se crea el objeto manualRechargeApproval
+            //Se actualiza el estatus de la solicitud de aprobación y el saldo del usuario en la billetera
             manualRechargeApproval.setStatusTransactionApproveRequestId(statusTransactionApproveRequest);
             manualRechargeApproval.setUpdateDate(new Date());
             manualRechargeApproval.setApprovedRequestDate(new Date());
             manualRechargeApproval.setUserApprovedRequestId(user);
             manualRechargeApproval.setIndApproveRequest(indApproved);
             manualRechargeApproval.setObservations(txtObservation.getText());
+            manualRechargeApproval = productEJB.saveTransactionApproveRequest(manualRechargeApproval);
             manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
             transactionApproveRequestParam = manualRechargeApproval;
 

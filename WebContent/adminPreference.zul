@@ -2,7 +2,7 @@
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
 <?page title="${c:l('sp.crud.profile.admin')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
-<!--<?init class="com.alodiga.services.provider.web.security.InitiatorLoggedUser" ?>-->
+<?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 <zk xmlns:n="native">
     <window id="winAdminCollectionType" width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.AdminPreferenceController" class="general-window">
         <style src="/css/general.css"/>
@@ -94,6 +94,30 @@
                                                             </hlayout>
                                                         </row>
                                                         
+                                                        <row>
+                                                            <label value="${c:l('sp.preference.description.customer')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <checkbox id="chkCustomer" checked="false"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <row id="rowCustomer" visible="false">
+                                                            <label value="${c:l('sp.preference.description.value.customer')}" sclass="lblbold"/>
+                                                            <hlayout>                                                        
+                                                                 <textbox id="txtValueCustomer" value=""  width="196px"/>
+                                                            </hlayout>
+                                                        </row>
+                                                         <row>
+                                                            <label value="${c:l('sp.preference.description.business')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <checkbox id="chkBusiness" checked="false"/>
+                                                            </hlayout>
+                                                         </row>
+                                                        <row id="rowBusiness" visible="false">                                                                                                          
+                                                            <label value="${c:l('sp.preference.description.valeu.business')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                 <textbox id="txtValueBusiness" value="" width="196px"/>
+                                                            </hlayout>
+                                                        </row>
                                                         <row>
                                                             <label value="${c:l('sp.preference.value.active')}" sclass="lblbold"/>
                                                             <hbox width="200px">

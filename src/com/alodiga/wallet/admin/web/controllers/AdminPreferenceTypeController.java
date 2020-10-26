@@ -6,9 +6,15 @@ import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.PreferenceType;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Toolbarbutton;
@@ -22,6 +28,7 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
     private Button btnSave;
     private Integer eventType;
     private Toolbarbutton tbbTitle;
+    List<PreferenceType> preferenceTypeList = new ArrayList<PreferenceType>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -79,6 +86,24 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
         btnSave.setVisible(false);
     }
 
+    public Boolean validateDataTypePreference() {
+        preferenceTypeList.clear();
+        try {
+            EJBRequest request1 = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PARAM_TYPE, txtPreferenceType.getText());
+            request1.setParams(params);
+            preferenceTypeList = preferencesEJB.getPreferenceTypeByType(request1);
+        } catch (Exception ex) {
+            showError(ex);
+        } if (preferenceTypeList.size() > 0) {
+                this.showMessage("sp.error.preferenceType.typeInBd", true, null);
+                txtPreferenceType.setFocus(true);
+                return false;
+        }
+        return true;
+    }
+    
     public Boolean validateEmpty() {
         if (txtPreferenceType.getText().isEmpty()) {
             txtPreferenceType.setFocus(true);
@@ -118,7 +143,9 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
         if (validateEmpty()) {
             switch (eventType) {
                 case WebConstants.EVENT_ADD:
-                    savePreferenceType(preferenceTypeParam);
+                    if(validateDataTypePreference()){
+                      savePreferenceType(preferenceTypeParam);  
+                    }
                     break;
                 case WebConstants.EVENT_EDIT:
                     savePreferenceType(preferenceTypeParam);

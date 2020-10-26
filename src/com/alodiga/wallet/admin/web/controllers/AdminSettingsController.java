@@ -61,16 +61,9 @@ public class AdminSettingsController extends GenericAbstractController {
             user = AccessControl.loadCurrentUser();
             loadPreferenceClassifications();
             onChange$cmbClassification();
-            if (eventType != null && eventType == WebConstants.EVENT_VIEW) {
-                blockFields();
-            }
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    private void blockFields() {
-        btnSave.setVisible(false);
     }
 
     private void loadPreferenceClassifications() {
@@ -181,7 +174,7 @@ public class AdminSettingsController extends GenericAbstractController {
 	                	preferenceValues.add(pValue);
 	                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
 	                	Checkbox chbValue = new Checkbox();
-	                	boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
+	                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
 	                	chbValue.setChecked(checked);
 	                	chbValue.setParent(row);
 	                  	Label labelType = new Label();
@@ -193,7 +186,7 @@ public class AdminSettingsController extends GenericAbstractController {
 	                	preferenceValues.add(pValue);
 	                }  else {
 	                	Textbox txtValue = new Textbox();
-	                	txtValue.setText(pValue.getValue());
+	                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
 	                	txtValue.setParent(row);
 	                  	Label labelType = new Label();
 	                	labelType.setValue(field.getPreferenceId().getName());
