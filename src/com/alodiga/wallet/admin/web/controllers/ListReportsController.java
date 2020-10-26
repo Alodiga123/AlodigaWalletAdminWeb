@@ -26,7 +26,6 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Country;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.Report;
