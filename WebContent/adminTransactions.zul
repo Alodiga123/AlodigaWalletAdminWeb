@@ -64,23 +64,19 @@
                                                             <label id="lblTransactionDate" value="" width="300px" style="color:#837E76;"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.transaction.userSource')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.transaction.userDestination')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.transaction.status')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.transaction.concept')}" sclass="lblbold"/> 
+                                                            <label value="${c:l('sp.crud.transaction.endDate')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <label id="lblUserSource" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblUserDestination" value="" width="300px" style="color:#837E76;"/>
                                                             <label id="lblStatus" value="" width="300px" style="color:#837E76;"/>
+                                                            <label id="lblConcept" value="" width="300px" style="color:#837E76;"/>
+                                                            <label id="lblEndDate" value="" width="300px" style="color:#837E76;"/>
                                                         </row>                      
                                                         <row>
-                                                            <label value="${c:l('sp.crud.transaction.concept')}" sclass="lblbold"/> 
-                                                            <label value="${c:l('sp.crud.transaction.endDate')}" sclass="lblbold"/> 
                                                             <label value="${c:l('sp.crud.transaction.itsClose')}" sclass="lblbold"/> 
                                                         </row>
                                                         <row>
-                                                            <label id="lblConcept" value="" width="300px" style="color:#837E76;"/>
-                                                            <label id="lblEndDate" value="" width="300px" style="color:#837E76;"/>
                                                             <hbox>
                                                                 <radiogroup id="isClose" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -93,6 +89,69 @@
                                                                 </grid>
                                                             </hbox>
                                                         </row>
+                                                        <group label="${c:l('sp.crud.transaction.userSource')}"/>
+                                                        <row>
+                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.bank.operaton.documentNumber')}" sclass="lblbold"/>
+                                                        </row> 
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblUserSource" value="" width="300px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDocumentType" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDocumentNumber" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.phone.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblUserPhone" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserEmail" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <group id="UserDestination" label="${c:l('sp.crud.transaction.userDestination')}"/> 
+                                                        <row id="rowTitleNameDestinationTypeNumber" visible="false">
+                                                            <label id="NameLabel" value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <label id="DocumentTyLabel" value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label id="DocumentNumLabel" value="${c:l('sp.crud.bank.operaton.documentNumber')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row id="rowNameDestinationTypeNumber" visible="false">
+                                                            <hlayout>
+                                                                <label id="lblUserDestination" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationDocumentType" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationDocumentNumber" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row id="rowTitlePhoneEmail" visible="false">
+                                                            <label id="PhoneNumLabel" value="${c:l('sp.crud.manual.recharge.phone.number')}" sclass="lblbold"/>
+                                                            <label id="EmailLabel" value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row id="rowPhoneEmail" visible="false">
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationPhone" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationEmail" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
                                                     </rows>
                                                 </grid>
                                             </vlayout>

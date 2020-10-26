@@ -57,6 +57,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     private Label lblBankOperationDate;
     private Label lblTelephone;
     private Label lblEmail;
+    private Label lblUserDocumentType;
+    private Label lblUserDocumentNumber;
     private Datebox dtbApprovedRequestDate;
     private Textbox txtObservations;
     private Doublebox dblAmount;
@@ -136,6 +138,9 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 lblUserSource.setValue(userNameSource);
                 lblTelephone.setValue(responseUser.getDatosRespuesta().getTelefonoResidencial());
                 lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
+                lblUserDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
+                lblUserDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
+            
             } else if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())) {
                 //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                 Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
