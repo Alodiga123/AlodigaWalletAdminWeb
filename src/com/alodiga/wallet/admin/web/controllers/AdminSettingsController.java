@@ -146,7 +146,8 @@ public class AdminSettingsController extends GenericAbstractController {
     private void loadPreferences(Long classificationId) {
         try {
             rowsGrid.getChildren().clear();
-            List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request);
+            EJBRequest request1 = new EJBRequest();
+            List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request1);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
             	PreferenceValue pValue = null;
