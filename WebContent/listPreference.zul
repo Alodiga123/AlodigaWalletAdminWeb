@@ -34,7 +34,7 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.preference.name')}" width="80px" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.preference.value.type')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtAlias" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
 
