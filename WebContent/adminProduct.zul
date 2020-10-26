@@ -14,7 +14,7 @@
                         <div></div>
                         <div width="970px" align="left" height="100%">
                             <hlayout>
-                                <div width="910px">
+                                <div width="970px">
                                     <vlayout>
                               
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -36,31 +36,15 @@
                                                     <rows>
                                                         <group label="${c:l('sp.common.data.basic')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.common.enterprise')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.common.category')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.integration.type')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.name')}" sclass="lblbold"/> 
+                                                            <label value="${c:l('sp.crud.product.symbol')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <hlayout>
-                                                                <combobox id="cmbEnterprise" width="260px" mold="rounded" readonly="true" />
-                                                                <label value="" sclass="lblreq" />
-                                                            </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbCategory" width="260px" mold="rounded" readonly="true" />
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout>
-                                                            <hlayout>
-                                                                <combobox id="cmbProductIntegrationType" width="260px" mold="rounded" readonly="true" />
-                                                                <label value="" sclass="lblreq" />
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.product.name')}" sclass="lblbold"/> 
-                                                           <label value="${c:l('sp.crud.product.symbol')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.referenceCode')}" sclass="lblbold"/>
- 
-                                                        </row>
-                                                        <row>
                                                             <hlayout>
                                                                 <textbox id="txtName" width="260px" maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
@@ -69,26 +53,22 @@
                                                                 <textbox id="txtSymbol" width="260px"  maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.product.referenceCode')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.accessNumberUrl')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
                                                             <hlayout>
                                                                 <textbox id="txtReferenceCode" width="260px"  maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout> 
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.product.ratesUrl')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.accessNumberUrl')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
-                               
-                                                            <hlayout>
-                                                                <textbox id="txtRatesUrl" width="260px"  maxlength="60"/>
-                                                                <label value="" sclass="lblreq" />
-                                                            </hlayout>  
                                                             <hlayout>
                                                                 <textbox id="txtAccessNumberUrl" width="260px"  maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout>
                                                         </row>
+
                                                         <group label="${c:l('sp.common.configuration')}"/> 
                                                         <row>
                                                             
@@ -98,7 +78,7 @@
                                                             
                                                         </row>
                                                         <row>
-                                                                           <hbox>
+                                                            <hbox>
                                                                 <radiogroup id="enabled" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
                                                                     <rows>
