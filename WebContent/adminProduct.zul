@@ -56,17 +56,12 @@
                                                         </row>
                                                         <row>
                                                             <label value="${c:l('sp.crud.product.referenceCode')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.accessNumberUrl')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <hlayout>
                                                                 <textbox id="txtReferenceCode" width="260px"  maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout> 
-                                                            <hlayout>
-                                                                <textbox id="txtAccessNumberUrl" width="260px"  maxlength="60"/>
-                                                                <label value="" sclass="lblreq" />
-                                                            </hlayout>
                                                         </row>
 
                                                         <group label="${c:l('sp.common.configuration')}"/> 
