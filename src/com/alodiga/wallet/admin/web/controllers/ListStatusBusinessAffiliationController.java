@@ -30,7 +30,7 @@ import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.StatusBusinessAffiliationHasFinalState;
-import com.alodiga.wallet.common.model.StatusBusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.StatusRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -89,7 +89,7 @@ public class ListStatusBusinessAffiliationController extends GenericAbstractList
         try {
         	cmbStatus.getItems().clear();
         	EJBRequest request = new EJBRequest();
-            List<StatusBusinessAffiliationRequest> list = utilsEJB.getStatusBusinessAffiliationRequest(request);
+            List<StatusRequest> list = utilsEJB.getStatusBusinessAffiliationRequest(request);
             Comboitem item = new Comboitem();
             for (int i = 0; i < list.size(); i++) {
                 item = new Comboitem();

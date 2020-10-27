@@ -23,12 +23,12 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.NaturalPerson;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.Profile;
-import com.alodiga.wallet.common.model.StatusBusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.StatusRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -53,7 +53,7 @@ public class ListApplicantOFACController extends GenericAbstractListController<N
     private User currentUser;
     private Profile currentProfile;
     private List<NaturalPerson> applicantList = null;
-    private BusinessAffiliationRequest affiliationRequetsParam;
+    private AffiliationRequest affiliationRequetsParam;
     private Button btnSave;
     private Integer eventType;
     private Tab tabApplicantOFAC;
@@ -65,7 +65,7 @@ public class ListApplicantOFACController extends GenericAbstractListController<N
         if (eventType == WebConstants.EVENT_ADD) {
             affiliationRequetsParam = null;
         } else {
-            affiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+            affiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         }
         initialize();
         startListener();
@@ -120,7 +120,7 @@ public class ListApplicantOFACController extends GenericAbstractListController<N
     public void getData() {
         applicantList = new ArrayList<NaturalPerson>();
         NaturalPerson naturalPerson = null;
-        BusinessAffiliationRequest affiliationRequest = null;
+        AffiliationRequest affiliationRequest = null;
         Person person = null;
         try {
             //Solicitud de Tarjeta
@@ -207,8 +207,8 @@ public class ListApplicantOFACController extends GenericAbstractListController<N
 //    }
 
 
-    public StatusBusinessAffiliationRequest getStatusAffiliationRequest(BusinessAffiliationRequest requestAfilation, int statusRequestId) {
-        StatusBusinessAffiliationRequest statusRequest = requestAfilation.getStatusBusinessAffiliationRequestId();
+    public StatusRequest getStatusAffiliationRequest(AffiliationRequest requestAfilation, int statusRequestId) {
+        StatusRequest statusRequest = requestAfilation.getStatusRequestId();
         try {
             EJBRequest request = new EJBRequest();
             request.setParam(statusRequestId);

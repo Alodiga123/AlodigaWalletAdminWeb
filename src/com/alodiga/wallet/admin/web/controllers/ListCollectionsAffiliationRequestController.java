@@ -31,7 +31,7 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
@@ -45,7 +45,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
     private List<RequestHasCollectionRequest> collectionsRequests = null;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private AffiliationRequest businessAffiliationRequestParam;
     private User currentUser;
     private Profile currentProfile;
     private Textbox txtName;
@@ -54,7 +54,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+        businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
     }
     

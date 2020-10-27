@@ -17,7 +17,7 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.BusinessServiceType;
 import com.alodiga.wallet.common.model.CollectionType;
 import com.alodiga.wallet.common.model.CollectionsRequest;
@@ -108,7 +108,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     public void clearFields() {
     }
 
-    private void loadField(BusinessAffiliationRequest businessAffiliationRequest) {
+    private void loadField(AffiliationRequest businessAffiliationRequest) {
         try {
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -116,7 +116,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             if (businessAffiliationRequest.getNumberRequest() != null) {
                 lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
                 lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-                lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+                lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
             }
         } catch (Exception ex) {
             showError(ex);
@@ -192,7 +192,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
-            params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST,requestHasCollectionsRequest.getBusinessAffiliationRequestId().getId());
+            params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST,requestHasCollectionsRequest.getAffiliationRequestId().getId());
             request.setParams(params);
             utilsEJB.updateBusinessAffiliationRequest(request);
             this.showMessage("sp.common.save.success", false, null);
@@ -217,14 +217,14 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(requestHasCollectionsRequestParam);
-                loadField(requestHasCollectionsRequestParam.getBusinessAffiliationRequestId());
+                loadField(requestHasCollectionsRequestParam.getAffiliationRequestId());
                 loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 loadCmbCountry(eventType);
                 loadCmbPersonType(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(requestHasCollectionsRequestParam);
-                loadField(requestHasCollectionsRequestParam.getBusinessAffiliationRequestId());
+                loadField(requestHasCollectionsRequestParam.getAffiliationRequestId());
                 loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 blockFields();
                 loadCmbCountry(eventType);
