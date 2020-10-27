@@ -136,11 +136,9 @@ public class AdminBankOperationController extends GenericAbstractAdminController
                 lblUserEmail.setValue(responseUser.getDatosRespuesta().getEmail());
                 
                 //Verificar que tipo de transaccion es para traer el usuario destino
-                if((!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.MANREC .getTransactionTypeCode()) 
-                    || 
-                    (!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.WITMAN.getTransactionTypeCode())
-                )))
-                {
+                if((!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.MANREC .getTransactionTypeCode())) 
+                    && (!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.WITMAN.getTransactionTypeCode())
+                )){     
                     UserDestination.setVisible(true);
                     rowTitleNameDestinationTypeNumber.setVisible(true);
                     rowNameDestinationTypeNumber.setVisible(true);
@@ -165,10 +163,9 @@ public class AdminBankOperationController extends GenericAbstractAdminController
                 lblUserEmail.setValue(businessSource.getEmail());
                 
                 //Verificar que tipo de transaccion es para traer el usuario destino
-                if((!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.MANREC .getTransactionTypeCode()) 
-                    || 
-                    (!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.WITMAN.getTransactionTypeCode())
-                )))
+                if((!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.MANREC .getTransactionTypeCode())) 
+                   && (!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.WITMAN.getTransactionTypeCode()))
+                   && (!bankOperation.getTransactionId().getTransactionTypeId().getCode().equals(TransactionTypeE.PROEXC.getTransactionTypeCode())))
                 {   
                     UserDestination.setVisible(true);
                     rowTitleNameDestinationTypeNumber.setVisible(true);
