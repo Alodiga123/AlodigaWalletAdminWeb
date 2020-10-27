@@ -74,9 +74,10 @@
 
                                                <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
-                                                        <column label ="${c:l('sp.specific.preference.field')}" width="320px"/>
-                                                        <column label ="${c:l('sp.crud.settings.main.value')}" width="330px"/>
-                                                        <column label ="${c:l('sp.specific.preference.spacific')}" width="240px"/>
+                                                        <column label ="${c:l('sp.specific.preference.field')}" width="270px"/>
+                                                        <column label ="${c:l('sp.crud.settings.main.value')}" width="280px"/>
+                                                        <column label ="${c:l('sp.specific.preference.spacific')}" width="170px"/>
+                                                         <column label ="${c:l('sp.specific.preference.enabled')}" width="170px"/>
                                                     </columns>
                                                      <rows id = "rowsGrid">                                                                      
                                                     

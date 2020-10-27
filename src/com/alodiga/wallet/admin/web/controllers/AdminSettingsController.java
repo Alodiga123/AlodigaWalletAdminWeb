@@ -3,7 +3,10 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
@@ -24,11 +27,13 @@ import com.alodiga.wallet.common.manager.PreferenceManager;
 import com.alodiga.wallet.common.model.PreferenceClassification;
 import com.alodiga.wallet.common.model.PreferenceControl;
 import com.alodiga.wallet.common.model.PreferenceField;
+import com.alodiga.wallet.common.model.PreferenceFieldData;
 import com.alodiga.wallet.common.model.PreferenceFieldEnum;
 import com.alodiga.wallet.common.model.PreferenceTypeValuesEnum;
 import com.alodiga.wallet.common.model.PreferenceValue;
 import com.alodiga.wallet.common.model.Provider;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
@@ -146,7 +151,8 @@ public class AdminSettingsController extends GenericAbstractController {
     private void loadPreferences(Long classificationId) {
         try {
             rowsGrid.getChildren().clear();
-            List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request);
+            EJBRequest request1 = new EJBRequest();
+            List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request1);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
             	PreferenceValue pValue = null;
@@ -159,7 +165,11 @@ public class AdminSettingsController extends GenericAbstractController {
 	                Row row = new Row();
 	                row.setId(pValue.getId().toString());
 	                Label label = new Label();
-	                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
+	                try {
+                    	label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                    } catch (Exception e) {
+                    	label.setValue(getPreferenceDataLabel(field.getId()));
+                    }
 	                label.setParent(row);
 	                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
 	                	Combobox cmbbox = new Combobox();
@@ -257,4 +267,23 @@ public class AdminSettingsController extends GenericAbstractController {
 
     }
 
+    @SuppressWarnings("unchecked")
+    public String getPreferenceDataLabel(Long preferenceFieldId) {
+    	EJBRequest request = new EJBRequest();
+        Map params = new HashMap();
+        params.put(Constants.PREFERENCE_FIELD_KEY, preferenceFieldId);
+        request.setParams(params);
+        try {
+        	List<PreferenceFieldData> preferenceDataList = preferencesEJB.getPreferenceFieldDataByPreference(request);
+        	if (preferenceDataList != null) {
+        		for (PreferenceFieldData p : preferenceDataList) {
+        			if (p.getLanguage().getId().equals(languageId)) {
+        				return p.getDescription();
+        			}
+        		}
+        	}
+        }  catch (Exception ex) {      	
+        }
+        return null;
+    }
 }
