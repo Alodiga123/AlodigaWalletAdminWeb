@@ -3,7 +3,7 @@ package com.alodiga.wallet.admin.web.controllers;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.model.Address;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.PersonHasAddress;
 import java.text.SimpleDateFormat;
 import org.zkoss.zk.ui.Component;
@@ -39,7 +39,7 @@ public class AdminAddressController extends GenericAbstractAdminController {
     private Button btnSave;
     private Integer eventType;
     public Window winAdminPersonAddress;
-    private BusinessAffiliationRequest afilationRequest;
+    private AffiliationRequest afilationRequest;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -83,7 +83,7 @@ public class AdminAddressController extends GenericAbstractAdminController {
             if (afilationRequest != null) {
                 lblRequestNumber.setValue(afilationRequest.getNumberRequest());
                 lblRequestDate.setValue(simpleDateFormat.format(afilationRequest.getDateRequest()));
-                lblStatusRequest.setValue(afilationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+                lblStatusRequest.setValue(afilationRequest.getStatusRequestId().getDescription());
             }
         } catch (Exception ex) {
             showError(ex);

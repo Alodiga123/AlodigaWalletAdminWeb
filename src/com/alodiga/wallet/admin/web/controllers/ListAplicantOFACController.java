@@ -23,7 +23,7 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.LegalPerson;
 import com.alodiga.wallet.common.model.LegalRepresentative;
 import com.alodiga.wallet.common.model.NaturalPerson;
@@ -32,7 +32,7 @@ import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.ReviewOfac;
 import com.alodiga.wallet.common.model.StatusApplicant;
-import com.alodiga.wallet.common.model.StatusBusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.StatusRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -227,7 +227,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         NaturalPerson naturalPerson = new NaturalPerson();
         LegalPerson legalPerson = new LegalPerson();
         LegalRepresentative legalRepresentative = new LegalRepresentative();
-        BusinessAffiliationRequest affiliatinRequest = new BusinessAffiliationRequest();
+        AffiliationRequest affiliatinRequest = new AffiliationRequest();
         OFACMethodWSProxy ofac = new OFACMethodWSProxy();
         try {
             WsLoginResponse loginResponse = new WsLoginResponse();
@@ -285,9 +285,9 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
                 if (ofacResponse != null) {
                     if (indBlackList == 1) {
-                        affiliatinRequest.setStatusBusinessAffiliationRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusBusinessAffiliationRequestId(), Constants.STATUS_REQUEST_PENDING));
+                        affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
                     } else {
-                        affiliatinRequest.setStatusBusinessAffiliationRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusBusinessAffiliationRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                        affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
                     }
                     affiliatinRequest = utilsEJB.saveBusinessAffiliationRequest(affiliatinRequest);
 
@@ -317,13 +317,13 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         return legalPersonParam;
     }
 
-    public void saveReviewOfac(Person applicant, WsExcludeListResponse ofacResponse, BusinessAffiliationRequest affiliationRequest) {
+    public void saveReviewOfac(Person applicant, WsExcludeListResponse ofacResponse, AffiliationRequest affiliationRequest) {
         ReviewOfac reviewOFAC = new ReviewOfac();
         try {
             //Guardar el resultado de revisión en lista OFAC para cada solicitante
             reviewOFAC.setPersonId(applicant);
             reviewOFAC.setResultReview(Float.parseFloat(ofacResponse.getPercentMatch()));
-            reviewOFAC.setBusinessAffiliationRequestId(affiliationRequest);
+            reviewOFAC.setAffiliationRequestId(affiliationRequest);
             reviewOFAC.setUserReviewId(currentUser);
             reviewOFAC.setCreateDate(new Timestamp(new Date().getTime()));
 
@@ -344,7 +344,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         return statusAplicant;
     }
 
-    public StatusBusinessAffiliationRequest getStatusAffiliationRequest(StatusBusinessAffiliationRequest statusRequest, int statusRequestId) {
+    public StatusRequest getStatusAffiliationRequest(StatusRequest statusRequest, int statusRequestId) {
         try {
             EJBRequest request = new EJBRequest();
             request.setParam(statusRequestId);

@@ -3,10 +3,13 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
@@ -27,6 +30,7 @@ import com.alodiga.wallet.common.manager.PreferenceManager;
 import com.alodiga.wallet.common.model.PreferenceClassification;
 import com.alodiga.wallet.common.model.PreferenceControl;
 import com.alodiga.wallet.common.model.PreferenceField;
+import com.alodiga.wallet.common.model.PreferenceFieldData;
 import com.alodiga.wallet.common.model.PreferenceFieldEnum;
 import com.alodiga.wallet.common.model.PreferenceTypeValuesEnum;
 import com.alodiga.wallet.common.model.PreferenceValue;
@@ -93,7 +97,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
         btnSave.setVisible(false);
     }
 
-    
+    @SuppressWarnings("unchecked")
     public boolean validateEmpty() {
         if (cmbProduct.getSelectedIndex() == -1) {
         	cmbProduct.setFocus(true);
@@ -150,32 +154,90 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	                Row row = new Row();
 	                row.setId(pValue.getId().toString());
 	                Label label = new Label();
-	                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
+	                try {
+                    	label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                    } catch (Exception e) {
+                    	label.setValue(getPreferenceDataLabel(field.getId()));
+                    }
 	                label.setParent(row);
 	                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
 	                	Combobox cmbbox = new Combobox();
 	                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
+	                	cmbbox.addEventListener("onChange", new EventListener() {
+                             public void onEvent(Event event) throws Exception {
+                                 changeStatus(row);
+                             }
+                        });
 	                	cmbbox.setParent(row);
 	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setChecked(false);
+	                	chb.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                            	changeSpecific(row);
+                            }
+                        });
 	                	chb.setParent(row);
+	                	Checkbox chbEnabled = new Checkbox();
+                        chbEnabled.setChecked(false);
+                        chb.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                            	changeEnabled(row);
+                            }
+                        });
+                        chbEnabled.setParent(row);
 	                	preferenceValues.add(createPreferencenValue(pValue));
 	                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
 	                	Checkbox chbValue = new Checkbox();
 	                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
 	                	chbValue.setChecked(checked);
+	                	chbValue.addEventListener("onClick", new EventListener() {
+                             public void onEvent(Event event) throws Exception {
+                                 changeStatus(row);
+                             }
+                        });
 	                	chbValue.setParent(row);
 	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setChecked(false);
+	                	chb.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                            	changeSpecific(row);
+                            }
+                        });
 	                	chb.setParent(row);
+	                	Checkbox chbEnabled = new Checkbox();
+                        chbEnabled.setChecked(false);
+                        chbEnabled.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                            	changeEnabled(row);
+                            }
+                        });
+                        chbEnabled.setParent(row);
 	                	preferenceValues.add(createPreferencenValue(pValue));
 	                }  else {
 	                	Textbox txtValue = new Textbox();
 	                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
+	                	txtValue.addEventListener("onChange", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                                changeStatus(row);
+                            }
+                        });
 	                	txtValue.setParent(row);
 	                	Checkbox chb = new Checkbox();
-	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setChecked(false);
+	                	chb.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                            	changeSpecific(row);
+                            }
+                        });
 	                	chb.setParent(row);
+	                	Checkbox chbEnabled = new Checkbox();
+                        chbEnabled.setChecked(false);
+                        chbEnabled.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                            	changeEnabled(row);
+                            }
+                        });
+                        chbEnabled.setParent(row);
 	                	preferenceValues.add(createPreferencenValue(pValue));
 	                }
 	                row.setParent(rowsGrid);  
@@ -187,7 +249,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 
     }
     
-    private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId) {
+    private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId, boolean readOnly) {
         try {
             setData();                
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
@@ -208,32 +270,102 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 if (pValue != null) {
                     Row row = new Row();
                     Label label = new Label();
-                    label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                    try {
+                    	label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                    } catch (Exception e) {
+                    	label.setValue(getPreferenceDataLabel(field.getId()));
+                    }
                     label.setParent(row);
                     if (pValue.getPreferenceFieldId().getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
                             Combobox cmbbox = new Combobox();
                             loadProviders(Long.parseLong(pValue.getValue()), cmbbox);
+                            cmbbox.setReadonly(readOnly);
+                            cmbbox.addEventListener("onChange", new EventListener() {
+
+                                public void onEvent(Event event) throws Exception {
+                                    changeStatus(row);
+                                }
+                            });
                             cmbbox.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
+                            chb.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                	changeSpecific(row);
+                                }
+                            });
+                            chb.setDisabled(readOnly);
                             chb.setParent(row);
+                            Checkbox chbEnabled = new Checkbox();
+                            chbEnabled.setChecked(pValue.isEnabled());
+                            chbEnabled.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                	changeEnabled(row);
+                                }
+                            });
+                            chbEnabled.setDisabled(readOnly);
+                            chbEnabled.setParent(row);
                             preferenceValues.add(pValue);
                     } else if (pValue.getPreferenceFieldId().getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
                             Checkbox chbValue = new Checkbox();
                             boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
                             chbValue.setChecked(checked);
+                            chbValue.setDisabled(readOnly);
+                            chbValue.addEventListener("onClick", new EventListener() {
+                            	
+                            	public void onEvent(Event event) throws Exception {
+                            		changeStatus(row);
+                            	}
+                            });
                             chbValue.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
+                            chb.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                	changeSpecific(row);
+                                }
+                            });
+                            chb.setDisabled(readOnly);
                             chb.setParent(row);
+                            Checkbox chbEnabled = new Checkbox();
+                            chbEnabled.setChecked(pValue.isEnabled());
+                            chbEnabled.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                	changeEnabled(row);
+                                }
+                            });
+                            chbEnabled.setDisabled(readOnly);
+                            chbEnabled.setParent(row);
                             preferenceValues.add(pValue);
                     } else {
                             Textbox txtValue = new Textbox();
                             txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
                             txtValue.setParent(row);
+                            txtValue.setReadonly(readOnly);
+                            txtValue.addEventListener("onChange", new EventListener() {
+
+                                public void onEvent(Event event) throws Exception {
+                                    changeStatus(row);
+                                }
+                            });
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
+                            chb.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                	changeSpecific(row);
+                                }
+                            });
+                            chb.setDisabled(readOnly);
                             chb.setParent(row);
+                            Checkbox chbEnabled = new Checkbox();
+                            chbEnabled.setChecked(pValue.isEnabled());
+                            chbEnabled.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                	changeEnabled(row);
+                                }
+                            });
+                            chbEnabled.setDisabled(readOnly);
+                            chbEnabled.setParent(row);
                             preferenceValues.add(pValue);
                     }
                     row.setParent(rowsGrid);
@@ -249,6 +381,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
         DEFAULT_SMS_PROVIDER_ID = PreferenceFieldEnum.DEFAULT_SMS_PROVIDER_ID.getId();
     }
 
+    @SuppressWarnings("unchecked")
     private void savePreferenceValues() {
         try {
         	 boolean save= true;
@@ -370,16 +503,17 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
             case WebConstants.EVENT_EDIT:
             	loadProduct(preferenceValueParam.getProductId());
             	loadTransactionType(preferenceValueParam.getTransactionTypeId());
-            	loadBusiness(preferenceValueParam.getBussinessId());     
-            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId());
+            	loadBusiness(preferenceValueParam.getBussinessId());  
+            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId(), false);
             	cmbProduct.setDisabled(true);
             	cmbTransactionType.setDisabled(true);
+            	cmbBusiness.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
             	loadProduct(preferenceValueParam.getProductId());
             	loadTransactionType(preferenceValueParam.getTransactionTypeId());
             	loadBusiness(preferenceValueParam.getBussinessId()); 
-            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId());
+            	loadPreferencesByParam(preferenceValueParam,preferenceClassification.getId(), true);
             	blockFields();
                 break;
             case WebConstants.EVENT_ADD:
@@ -404,9 +538,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 cmbItem.setParent(cmbProduct);
                 if (p != null && p.getId().equals(product.getId())) {
                 	cmbProduct.setSelectedItem(cmbItem);
-                } else {
-                	cmbProduct.setSelectedIndex(0);
-                }
+                } 
             }
         }  catch (Exception ex) {
             this.showError(ex);
@@ -425,8 +557,6 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 cmbItem.setParent(cmbTransactionType);
                 if (t != null && t.getId().equals(transactionType.getId())) {
                 	cmbTransactionType.setSelectedItem(cmbItem);
-                } else {
-                	cmbTransactionType.setSelectedIndex(0);
                 }
             }
         }  catch (Exception ex) {
@@ -447,9 +577,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                 item.setParent(cmbBusiness);
                 if (businesses.get(i) != null && businesses.get(i).getId().equals(businessId)) {
                 	cmbBusiness.setSelectedItem(item);
-                } else {
-                	cmbBusiness.setSelectedIndex(0);
-                }
+                } 
             }
         } catch (Exception ex) {
             this.showError(ex);
@@ -478,5 +606,70 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 			showError(ex);
 		}
 	}
+    
+    public void onChange$cmbProduct() {
+    	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
+    		loadPreferences(preferenceClassification.getId());  
+    }
+    
+    public void onChange$cmbTransactionType() {
+    	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
+    		loadPreferences(preferenceClassification.getId());  
+    }
 
+    public void onChange$cmbBusiness() {
+    	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
+    		loadPreferences(preferenceClassification.getId());  
+    }
+    
+    @SuppressWarnings("unchecked")
+    public String getPreferenceDataLabel(Long preferenceFieldId) {
+    	EJBRequest request = new EJBRequest();
+        Map params = new HashMap();
+        params.put(Constants.PREFERENCE_FIELD_KEY, preferenceFieldId);
+        request.setParams(params);
+        try {
+        	List<PreferenceFieldData> preferenceDataList = preferencesEJB.getPreferenceFieldDataByPreference(request);
+        	if (preferenceDataList != null) {
+        		for (PreferenceFieldData p : preferenceDataList) {
+        			if (p.getLanguage().getId().equals(languageId)) {
+        				return p.getDescription();
+        			}
+        		}
+        	}
+        }  catch (Exception ex) {      	
+        }
+        return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void changeStatus(Row row) {
+     	List<Component> children = row.getChildren();
+     	((Checkbox)children.get(2)).setChecked(true);
+     	((Checkbox)children.get(3)).setChecked(true);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void changeSpecific(Row row) {
+     	List<Component> children = row.getChildren();
+     	if (((Checkbox)children.get(2)).isChecked()){
+	     	((Checkbox)children.get(2)).setChecked(true);
+	     	((Checkbox)children.get(3)).setChecked(true);
+     	}else {
+     		((Checkbox)children.get(2)).setChecked(false);
+	     	((Checkbox)children.get(3)).setChecked(false);
+     	}
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void changeEnabled(Row row) {
+     	List<Component> children = row.getChildren();
+     	if (((Checkbox)children.get(3)).isChecked()){
+	     	((Checkbox)children.get(2)).setChecked(true);
+	     	((Checkbox)children.get(3)).setChecked(true);
+     	}else {
+     		((Checkbox)children.get(2)).setChecked(false);
+	     	((Checkbox)children.get(3)).setChecked(false);
+     	}
+    }
 }

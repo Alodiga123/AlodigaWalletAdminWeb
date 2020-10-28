@@ -11,7 +11,7 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.LegalPerson;
 import com.alodiga.wallet.common.model.LegalRepresentative;
 import com.alodiga.wallet.common.model.NaturalPerson;
@@ -49,7 +49,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private UtilsEJB utilsEJB = null;
     private ReviewOfac reviewOfacParam;
     private LegalPerson legalPersonParam;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private AffiliationRequest businessAffiliationRequestParam;
     private List<ReviewOfac> reviewOfac;
     private List<LegalPerson> legalPerson;
     private Button btnSave;
@@ -202,7 +202,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             person = personParam;
 
             reviewOfac.setPersonId(personParam);
-            reviewOfac.setBusinessAffiliationRequestId(businessAffiliationRequestParam);
+            reviewOfac.setAffiliationRequestId(businessAffiliationRequestParam);
             reviewOfac.setObservations(txtObservations.toString());
             reviewOfac.setUserReviewId(user);
             if (_reviewOfac != null) {

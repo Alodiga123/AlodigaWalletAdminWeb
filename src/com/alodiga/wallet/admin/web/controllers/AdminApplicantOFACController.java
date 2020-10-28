@@ -6,7 +6,7 @@ import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.NaturalPerson;
 import com.alodiga.wallet.common.utils.Constants;
 import java.text.SimpleDateFormat;
@@ -36,7 +36,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public Window winAdminApplicantOFAC;
     public String indGender = null;
     private Long optionMenu;
-    private BusinessAffiliationRequest afilationRequest;
+    private AffiliationRequest afilationRequest;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -68,13 +68,13 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void clearFields() {
     }
 
-    private void loadFields(BusinessAffiliationRequest businessAffiliationRequest) {
+    private void loadFields(AffiliationRequest businessAffiliationRequest) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
 
             btnSave.setVisible(false);
         } catch (Exception ex) {

@@ -6,7 +6,7 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminCont
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.LegalRepresentative;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PhonePerson;
@@ -46,7 +46,7 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
     private PersonEJB personEJB = null;
     private Button btnSave;
     private List<PhonePerson> phonePersonList = null;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private AffiliationRequest businessAffiliationRequestParam;
     private Integer eventType;
     private Tab tabBusinessAffiliationRequests;
 
@@ -57,7 +57,7 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
         if (eventType == WebConstants.EVENT_ADD) {
             businessAffiliationRequestParam = null;
         } else {
-            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         }
 
         initialize();
@@ -83,13 +83,13 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
 
     }
 
-    private void loadFields(BusinessAffiliationRequest businessAffiliationRequest) {
+    private void loadFields(AffiliationRequest businessAffiliationRequest) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
             
             btnSave.setVisible(false);
         } catch (Exception ex) {

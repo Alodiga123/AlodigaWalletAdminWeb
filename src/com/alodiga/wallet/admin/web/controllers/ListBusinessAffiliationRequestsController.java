@@ -17,7 +17,7 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
@@ -26,13 +26,13 @@ import com.alodiga.wallet.common.utils.EjbConstants;
 import java.text.SimpleDateFormat;
 import org.zkoss.zul.Textbox;
 
-public class ListBusinessAffiliationRequestsController extends GenericAbstractListController<BusinessAffiliationRequest> {
+public class ListBusinessAffiliationRequestsController extends GenericAbstractListController<AffiliationRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtNumber;
     private UtilsEJB utilsEJB = null;
-    private List<BusinessAffiliationRequest> businessAffiliationRequestList = null;
+    private List<AffiliationRequest> businessAffiliationRequestList = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -73,7 +73,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
     }
 
     public void getData() {
-        businessAffiliationRequestList = new ArrayList<BusinessAffiliationRequest>();
+        businessAffiliationRequestList = new ArrayList<AffiliationRequest>();
         try {
             request.setFirst(0);
             request.setLimit(null);
@@ -100,7 +100,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void loadDataList(List<BusinessAffiliationRequest> list) {
+    public void loadDataList(List<AffiliationRequest> list) {
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String applicantNameLegal = "";
@@ -110,7 +110,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (BusinessAffiliationRequest businessAffiliationRequest : list) {
+                for (AffiliationRequest businessAffiliationRequest : list) {
                     item = new Listitem();
                     item.setValue(businessAffiliationRequest);
                     item.appendChild(new Listcell(businessAffiliationRequest.getNumberRequest()));
@@ -130,7 +130,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
                         item.appendChild(new Listcell(applicantNameLegal));
                         adminPage = "TabAffiliationRequestsLegal.zul";
                     }
-                    item.appendChild(new Listcell(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription()));
+                    item.appendChild(new Listcell(businessAffiliationRequest.getStatusRequestId().getDescription()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, businessAffiliationRequest, Permission.EDIT_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, businessAffiliationRequest, Permission.VIEW_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
                     item.setParent(lbxRecords);
@@ -171,12 +171,12 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
     }
 
     @Override
-    public void loadList(List<BusinessAffiliationRequest> list) {
+    public void loadList(List<AffiliationRequest> list) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<BusinessAffiliationRequest> getFilteredList(String filter) {
+    public List<AffiliationRequest> getFilteredList(String filter) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
