@@ -147,7 +147,7 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
         EJBRequest request1 = new EJBRequest();
         List<StatusRequest> requests;
         try {
-            requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
+            requests = utilsEJB.getStatusRequest(request1);
             loadGenericCombobox(requests, cmbStatus, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getStatusBusinessAffiliationRequetsId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
@@ -166,7 +166,7 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
         EJBRequest request1 = new EJBRequest();
         List<StatusRequest> requests;
         try {
-        	requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
+        	requests = utilsEJB.getStatusRequest(request1);
             loadGenericCombobox(requests, cmbFinal, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getFinalStateId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);

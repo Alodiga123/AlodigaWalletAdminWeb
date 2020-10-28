@@ -77,7 +77,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
         try {
             request.setFirst(0);
             request.setLimit(null);
-            businessAffiliationRequestList = utilsEJB.getBusinessAffiliationRequest(request);
+            businessAffiliationRequestList = utilsEJB.getAffiliationRequest(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
