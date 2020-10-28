@@ -70,7 +70,6 @@ public class ListAddressController extends GenericAbstractListController<PersonH
     @Override
     public void checkPermissions() {
         try {
-//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_ADDRESS));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_ADDRESS);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_ADDRESS);
         } catch (Exception ex) {
@@ -106,18 +105,6 @@ public class ListAddressController extends GenericAbstractListController<PersonH
             showEmptyList();
         }
     }
-
-//    public void onClick$btnAdd() throws InterruptedException {
-//        try {
-//            Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
-//            Map<String, Object> paramsPass = new HashMap<String, Object>();
-//            paramsPass.put("object", personHasAddressList);
-//            final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
-//            window.doModal();
-//        } catch (Exception ex) {
-//            this.showMessage("sp.error.general", true, ex);
-//        }
-//    }
 
     public void getData() {
         personHasAddressList = new ArrayList<PersonHasAddress>();
