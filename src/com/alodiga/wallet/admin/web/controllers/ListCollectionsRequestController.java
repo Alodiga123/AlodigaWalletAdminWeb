@@ -148,6 +148,7 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
                     item.appendChild(new Listcell(collectionsRequest.getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionTypeId().getDescription()));
                     item.appendChild(new Listcell(collectionsRequest.getPersonTypeId().getDescription()));
+                    item.appendChild(new Listcell(collectionsRequest.getRequestTypeId().getCode()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionsRequest, Permission.EDIT_COLLECTIONS_REQUEST) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionsRequest, Permission.VIEW_COLLECTIONS_REQUEST) : new Listcell());
                     item.setParent(lbxRecords);
