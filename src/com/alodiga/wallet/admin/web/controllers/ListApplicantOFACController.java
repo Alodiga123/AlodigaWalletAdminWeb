@@ -212,7 +212,7 @@ public class ListApplicantOFACController extends GenericAbstractListController<N
         try {
             EJBRequest request = new EJBRequest();
             request.setParam(statusRequestId);
-            statusRequest = utilsEJB.loadStatusBusinessAffiliationRequest(request);
+            statusRequest = utilsEJB.loadStatusRequest(request);
         } catch (Exception ex) {
             showError(ex);
         }

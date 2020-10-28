@@ -89,7 +89,7 @@ public class ListStatusBusinessAffiliationController extends GenericAbstractList
         try {
         	cmbStatus.getItems().clear();
         	EJBRequest request = new EJBRequest();
-            List<StatusRequest> list = utilsEJB.getStatusBusinessAffiliationRequest(request);
+            List<StatusRequest> list = utilsEJB.getStatusRequest(request);
             Comboitem item = new Comboitem();
             for (int i = 0; i < list.size(); i++) {
                 item = new Comboitem();

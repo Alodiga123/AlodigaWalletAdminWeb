@@ -289,7 +289,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                     } else {
                         affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
                     }
-                    affiliatinRequest = utilsEJB.saveBusinessAffiliationRequest(affiliatinRequest);
+                    affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
 
                     getData();
                     loadList(personList);
@@ -348,7 +348,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         try {
             EJBRequest request = new EJBRequest();
             request.setParam(statusRequestId);
-            statusRequest = utilsEJB.loadStatusBusinessAffiliationRequest(request);
+            statusRequest = utilsEJB.loadStatusRequest(request);
         } catch (Exception ex) {
             showError(ex);
         }
