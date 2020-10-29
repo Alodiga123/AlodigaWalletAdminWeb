@@ -43,14 +43,16 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
+        AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
+        
         if (adminRequestN.getBusinessAffiliationRequets() != null) {
             afilationRequest = adminRequestN.getBusinessAffiliationRequets();
         }
-//        if (eventType == WebConstants.EVENT_ADD) {
-//            businessAffiliationRequestParam = null;
-//        } else {
-//            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
-//        }
+        
+        if (adminRequestUser.getUserAffiliationRequets() != null){
+            afilationRequest = adminRequestUser.getUserAffiliationRequets();
+        }
+        
         initialize();
     }
 
@@ -68,13 +70,13 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void clearFields() {
     }
 
-    private void loadFields(AffiliationRequest businessAffiliationRequest) {
+    private void loadFields(AffiliationRequest affiliationRequest) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
+            lblRequestNumber.setValue(affiliationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(affiliationRequest.getDateRequest()));
+            lblStatusRequest.setValue(affiliationRequest.getStatusRequestId().getDescription());
 
             btnSave.setVisible(false);
         } catch (Exception ex) {
@@ -87,10 +89,16 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         Float percentageMatchApplicant = 0.00F;
         try {
             AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
+            AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
+        
             if (adminRequestN.getBusinessAffiliationRequets() != null) {
                 afilationRequest = adminRequestN.getBusinessAffiliationRequets();
             }
-
+            
+            if (adminRequestUser.getUserAffiliationRequets() != null){
+                afilationRequest = adminRequestUser.getUserAffiliationRequets();
+            }
+        
             StringBuilder builder = new StringBuilder(applicant.getFirstName());
             builder.append(" ");
             builder.append(applicant.getLastName());
@@ -100,7 +108,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
 //            EJBRequest request = new EJBRequest();
 //            Map params = new HashMap();
 //            params.put(Constants.PERSON_KEY, applicant.getPersonId().getId());
-//            params.put(Constants.BUSINESS_AFFILIATION_REQUEST_KEY, afilationRequest.getId());
+//            params.put(Constants.AFFILIATION_REQUEST_KEY, afilationRequest.getId());
 //            request.setParams(params);
 //            List<ReviewOFAC> reviewOFACList = requestEJB.getReviewOFACByApplicantByRequest(request);
 //            for (ReviewOFAC r : reviewOFACList) {
@@ -130,12 +138,25 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
-                loadFields(afilationRequest);
+                if(afilationRequest.getBusinessPersonId() != null){
+                    loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
+                    loadFields(afilationRequest);
+                } else if(afilationRequest.getUserRegisterUnifiedId() != null){
+                    loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
+                    loadFields(afilationRequest);
+                }
                 break;
             case WebConstants.EVENT_VIEW:
-                loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
-                blockFields();
+                if(afilationRequest.getBusinessPersonId() != null){
+                    loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
+                    loadFields(afilationRequest);
+                    blockFields();
+                } else if(afilationRequest.getUserRegisterUnifiedId() != null){
+                    loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
+                    loadFields(afilationRequest);
+                    blockFields();
+                }
+
                 break;
         }
     }

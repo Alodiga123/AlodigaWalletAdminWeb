@@ -123,7 +123,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
             params.put(QueryConstants.PARAM_PERSON_ID, personParam.getId());
-            params.put(QueryConstants.PARAM_BUSINESS_AFFILIATION_REQUEST_ID, businessAffiliationRequestParam.getId());
+            params.put(QueryConstants.PARAM_AFFILIATION_REQUEST_ID, businessAffiliationRequestParam.getId());
             request1.setParams(params);
             reviewOfac = utilsEJB.getReviewOfacByRequest(request1);
             for (ReviewOfac r : reviewOfac) {

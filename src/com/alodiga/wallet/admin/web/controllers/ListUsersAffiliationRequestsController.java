@@ -23,6 +23,7 @@ import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
@@ -32,13 +33,13 @@ import java.util.Iterator;
 import java.util.Map;
 import org.zkoss.zul.Textbox;
 
-public class ListBusinessAffiliationRequestsController extends GenericAbstractListController<AffiliationRequest> {
+public class ListUsersAffiliationRequestsController extends GenericAbstractListController<AffiliationRequest> {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private Textbox txtNumber;
     private UtilsEJB utilsEJB = null;
-    private List<AffiliationRequest> businessAffiliationRequestList = null;
+    private List<AffiliationRequest> userAffiliationRequestList = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -68,8 +69,9 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             currentProfile = currentUser.getCurrentProfile();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             checkPermissions();
+            adminPage = "TabUserAffiliationRequests.zul";
             getData();
-            loadDataList(businessAffiliationRequestList);
+            loadDataList(userAffiliationRequestList);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -79,14 +81,14 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
     }
 
     public void getData() {
-        businessAffiliationRequestList = new ArrayList<AffiliationRequest>();
+        userAffiliationRequestList = new ArrayList<AffiliationRequest>();
         try {
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
             params = new HashMap();
-            params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SOAFNE.getId());
+            params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
             request.setParams(params);
-            businessAffiliationRequestList = utilsEJB.getTransactionApproveRequestByType(request);
+            userAffiliationRequestList = utilsEJB.getTransactionApproveRequestByType(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -119,29 +121,18 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-                for (AffiliationRequest businessAffiliationRequest : list) {
+                for (AffiliationRequest usersAffiliationRequest : list) {
                     item = new Listitem();
-                    item.setValue(businessAffiliationRequest);
-                    item.appendChild(new Listcell(businessAffiliationRequest.getNumberRequest()));
-                    item.appendChild(new Listcell(simpleDateFormat.format(businessAffiliationRequest.getDateRequest())));
-                    if (businessAffiliationRequest.getBusinessPersonId().getPersonTypeId().getIndNaturalPerson() == true) {
-                        tipo = "Persona Natural";
-                        item.appendChild(new Listcell(tipo));
-                        StringBuilder applicantNameNatural = new StringBuilder(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getFirstName());
-                        applicantNameNatural.append(" ");
-                        applicantNameNatural.append(businessAffiliationRequest.getBusinessPersonId().getNaturalPerson().getLastName());
-                        item.appendChild(new Listcell(applicantNameNatural.toString()));
-                        adminPage = "TabAffiliationRequestsNatural.zul";
-                    } else {
-                        tipo = "Persona Juridica";
-                        item.appendChild(new Listcell(tipo));
-                        applicantNameLegal = businessAffiliationRequest.getBusinessPersonId().getLegalPerson().getBusinessName();
-                        item.appendChild(new Listcell(applicantNameLegal));
-                        adminPage = "TabAffiliationRequestsLegal.zul";
-                    }
-                    item.appendChild(new Listcell(businessAffiliationRequest.getStatusRequestId().getDescription()));
-                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, businessAffiliationRequest, Permission.EDIT_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
-                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, businessAffiliationRequest, Permission.VIEW_BUSINESS_AFFILIATION_REQUESTS) : new Listcell());
+                    item.setValue(usersAffiliationRequest);
+                    item.appendChild(new Listcell(usersAffiliationRequest.getNumberRequest()));
+                    item.appendChild(new Listcell(simpleDateFormat.format(usersAffiliationRequest.getDateRequest())));
+                    StringBuilder applicantNameNatural = new StringBuilder(usersAffiliationRequest.getUserRegisterUnifiedId().getNaturalPerson().getFirstName());
+                    applicantNameNatural.append(" ");
+                    applicantNameNatural.append(usersAffiliationRequest.getUserRegisterUnifiedId().getNaturalPerson().getLastName());
+                    item.appendChild(new Listcell(applicantNameNatural.toString()));
+                    item.appendChild(new Listcell(usersAffiliationRequest.getStatusRequestId().getDescription()));
+                    item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, usersAffiliationRequest, Permission.EDIT_USERS_AFFILIATION_REQUESTS) : new Listcell());
+                    item.appendChild(permissionRead ? new ListcellViewButton(adminPage, usersAffiliationRequest, Permission.VIEW_USERS_AFFILIATION_REQUESTS) : new Listcell());
                     item.setParent(lbxRecords);
                 }
             } else {
@@ -176,7 +167,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             loadDataList(getFilteredList(txtNumber.getText()));
         } catch (Exception ex) {
             showError(ex);
-        }           
+        }         
     }
     
     public List<AffiliationRequest> getFilteredList(String filter) {
@@ -190,13 +181,13 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
                 _request.setParams(params);
                 afiliationRequestaux = utilsEJB.searchAffiliationRequestByParams(_request); 
             } else {
-                return businessAffiliationRequestList;
+                return userAffiliationRequestList;
             }
         } catch (Exception ex) {
             showError(ex);
         }
         return afiliationRequestaux;
-    } 
+    }  
 
     @Override
     public void loadList(List<AffiliationRequest> list) {
