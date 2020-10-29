@@ -70,6 +70,12 @@
                                                             </hlayout>
                                                         </row>
                                                         <row>
+                                                            <label value="${c:l('sp.crud.requestCollection.requestType')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <combobox id="cmbRequestType" width="250px" mold="rounded" readonly="true"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <row>
                                                             <label value="${c:l('sp.crud.requestCollection.collectionTypes')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <combobox id="cmbCollectionType" width="250px" mold="rounded" readonly="true"/>

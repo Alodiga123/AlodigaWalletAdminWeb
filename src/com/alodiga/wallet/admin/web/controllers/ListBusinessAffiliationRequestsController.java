@@ -13,9 +13,11 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListContr
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
@@ -23,7 +25,11 @@ import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.zkoss.zul.Textbox;
 
 public class ListBusinessAffiliationRequestsController extends GenericAbstractListController<AffiliationRequest> {
@@ -164,19 +170,45 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-//            loadDataList(getFilterList(txtName.getText()));
+            loadDataList(getFilteredList(txtNumber.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
+//        try{  
+//            EJBRequest _request = new EJBRequest();
+//            Map<String, Object> params = new HashMap<String, Object>();
+//            params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
+//            params.put(QueryConstants.PARAM_NUMBER_REQUEST, txtNumber.getText());
+//            _request.setParams(params);
+//            loadDataList(utilsEJB.searchAffiliationRequestByParams(_request));
+//        }  catch (Exception ex) {
+//            showError(ex);
+//        }            
     }
+    
+    public List<AffiliationRequest> getFilteredList(String filter) {
+        List<AffiliationRequest> afiliationRequestaux = new ArrayList<AffiliationRequest>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                EJBRequest _request = new EJBRequest();
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
+                params.put(QueryConstants.PARAM_NUMBER_REQUEST, txtNumber.getText());
+                _request.setParams(params);
+                afiliationRequestaux = utilsEJB.searchAffiliationRequestByParams(_request); 
+            } else {
+                return businessAffiliationRequestList;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return afiliationRequestaux;
+    } 
 
     @Override
     public void loadList(List<AffiliationRequest> list) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<AffiliationRequest> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

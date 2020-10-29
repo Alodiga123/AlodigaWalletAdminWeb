@@ -18,6 +18,7 @@ import com.alodiga.wallet.common.model.CollectionsRequest;
 import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.OriginApplication;
 import com.alodiga.wallet.common.model.PersonType;
+import com.alodiga.wallet.common.model.RequestType;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
@@ -38,6 +39,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
     private Combobox cmbPersonType;
     private Combobox cmbCollectionType;
     private Combobox cmbOriginAplication;
+    private Combobox cmbRequestType;
     private UtilsEJB utilsEJB = null;
     private CollectionsRequest collectionsRequestParam;
     private Button btnSave;
@@ -93,10 +95,12 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
             cmbOriginAplication.setDisabled(true);
             cmbCollectionType.setDisabled(true);
             cmbPersonType.setDisabled(true);
+            cmbRequestType.setDisabled(true);
         } else {
             cmbOriginAplication.setDisabled(false);
             cmbCollectionType.setDisabled(false);
             cmbPersonType.setDisabled(false);
+            cmbRequestType.setDisabled(false);
         }
 
     }
@@ -131,22 +135,27 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
 
             collectionsRequest.setPersonTypeId((PersonType) cmbPersonType.getSelectedItem().getValue());
             collectionsRequest.setCollectionTypeId((CollectionType) cmbCollectionType.getSelectedItem().getValue());
-            
-            if (validate(collectionsRequest)) {
+            collectionsRequest.setRequestTypeId((RequestType) cmbRequestType.getSelectedItem().getValue());
+            if(eventType == WebConstants.EVENT_ADD){
+                if (validate(collectionsRequest)) {
+                    collectionsRequest = utilsEJB.saveCollectionsRequest(collectionsRequest);
+                    collectionsRequestParam = collectionsRequest;
+                    this.showMessage("sp.common.save.success", false, null);
+                } else {
+                    this.showMessage("sp.crud.product.exist", true, null);
+                }
+            } else {
                 collectionsRequest = utilsEJB.saveCollectionsRequest(collectionsRequest);
                 collectionsRequestParam = collectionsRequest;
                 this.showMessage("sp.common.save.success", false, null);
-
-                eventType = WebConstants.EVENT_EDIT;
-
-                if (eventType == WebConstants.EVENT_ADD) {
-                    btnSave.setVisible(false);
-                } else {
-                    btnSave.setVisible(true);
-                }
-            } else {
-                this.showMessage("sp.crud.product.exist", true, null);
             }
+
+            if (eventType == WebConstants.EVENT_ADD) {
+                btnSave.setVisible(false);
+            } else {
+                btnSave.setVisible(true);
+            }
+
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {
@@ -186,6 +195,9 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
         } else if (cmbPersonType.getSelectedItem() == null) {
             cmbPersonType.setFocus(true);
             this.showMessage("sp.error.personType.notSelected", true, null);
+        } else if (cmbRequestType.getSelectedItem() == null) {
+            cmbRequestType.setFocus(true);
+            this.showMessage("sp.error.requestType.notSelected", true, null);
         } else {
             return true;
         }
@@ -215,6 +227,8 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
                 loadCmbCountry(eventType);                
                 onChange$cmbOriginAplication();
                 onChange$cmbPersonType();
+                loadCmbRequestType(eventType);
+                cmbCollectionType.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(collectionsRequestParam);
@@ -223,13 +237,14 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
                 loadCmbCountry(eventType);                
                 onChange$cmbOriginAplication();
                 onChange$cmbPersonType();
+                loadCmbRequestType(eventType);
                 break;
             case WebConstants.EVENT_ADD:
                 onChange$cmbCountry();
+                loadCmbRequestType(eventType);
                 loadCmbOriginAplication(eventType);
                 loadCmbCountry(eventType);
                 onChange$cmbPersonType();
-
                 break;
             default:
                 break;
@@ -305,6 +320,25 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
             if (personTypes == null) {
                 this.showMessage("sp.msj.PersonTypeNull", true, null);
             } 
+        }
+    }
+    
+     private void loadCmbRequestType(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<RequestType> requestType;
+
+        try {
+            requestType = utilsEJB.getRequestType(request1);
+            loadGenericCombobox(requestType, cmbRequestType, "description", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getRequestTypeId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
         }
     }
 
