@@ -123,7 +123,6 @@ public class AdminProductController extends GenericAbstractAdminController {
         txtName.setRawValue(null);
         txtSymbol.setRawValue(null);
         txtReferenceCode.setRawValue(null);
-        txtAccessNumberUrl.setRawValue(null);
     }
 
     private void loadFields(Product product) {
@@ -191,7 +190,6 @@ public class AdminProductController extends GenericAbstractAdminController {
         txtName.setReadonly(true);
         txtSymbol.setReadonly(true);
         txtReferenceCode.setReadonly(true);
-        txtAccessNumberUrl.setReadonly(true);
         rEnabledYes.setDisabled(true);
         rEnabledNo.setDisabled(true);
         rIsFreeYes.setDisabled(true);
@@ -251,12 +249,6 @@ public class AdminProductController extends GenericAbstractAdminController {
         if (txtReferenceCode.getText().isEmpty()) {
             txtReferenceCode.setFocus(true);
             this.showMessage("sp.crud.product.referenceCode.error", true, null);
-            return false;
-        }
-
-        if (txtAccessNumberUrl.getText().isEmpty()) {
-            txtAccessNumberUrl.setFocus(true);
-            this.showMessage("sp.crud.product.accessNumberUrl.error", true, null);
             return false;
         }
 
