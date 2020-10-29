@@ -155,7 +155,7 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
-//            loadDataList(getFilterList(txtName.getText()));
+            loadDataList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -163,9 +163,18 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
 
     @Override
     public List<DocumentsPersonType> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<DocumentsPersonType> documentsPersonTypeaux = new ArrayList<DocumentsPersonType>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                documentsPersonTypeaux = personEJB.searchDocumentsPersonTypeByCountry(filter);
+            } else {
+                return documentsPersonType;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return documentsPersonTypeaux;
     }
-
     @Override
     public void loadList(List<DocumentsPersonType> list) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
