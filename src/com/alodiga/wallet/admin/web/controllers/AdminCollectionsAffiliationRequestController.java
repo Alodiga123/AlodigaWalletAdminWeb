@@ -75,10 +75,6 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-//        AdminRequestController adminRequestController = new AdminRequestController();
-//        if (adminRequestController.getRequest().getId() != null) {
-//            requestParam = adminRequestController.getRequest();
-//        }
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
@@ -108,15 +104,15 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     public void clearFields() {
     }
 
-    private void loadField(AffiliationRequest businessAffiliationRequest) {
+    private void loadField(AffiliationRequest affiliationRequest) {
         try {
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-            if (businessAffiliationRequest.getNumberRequest() != null) {
-                lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
-                lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-                lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
+            if (affiliationRequest.getNumberRequest() != null) {
+                lblRequestNumber.setValue(affiliationRequest.getNumberRequest());
+                lblRequestDate.setValue(simpleDateFormat.format(affiliationRequest.getDateRequest()));
+                lblStatusRequest.setValue(affiliationRequest.getStatusRequestId().getDescription());
             }
         } catch (Exception ex) {
             showError(ex);
@@ -192,10 +188,11 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
-            params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST,requestHasCollectionsRequest.getAffiliationRequestId().getId());
+            params.put(EjbConstants.PARAM_AFFILIATION_REQUEST,requestHasCollectionsRequest.getAffiliationRequestId().getId());
             request.setParams(params);
             utilsEJB.updateBusinessAffiliationRequest(request);
             this.showMessage("sp.common.save.success", false, null);
+            EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true).publish(new Event(""));
         } catch (Exception ex) {
             showError(ex);
         }
