@@ -35,7 +35,7 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.crud.businnesSubCategory.category')}" width="80px" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.crud.businessAffiliationRequests.number')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtNumber" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
