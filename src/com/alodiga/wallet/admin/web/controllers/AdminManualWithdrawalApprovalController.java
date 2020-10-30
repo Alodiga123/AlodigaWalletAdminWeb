@@ -51,10 +51,10 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     private Label lblTransactionConcept;
     private Label lblTransactionDate;
     private Label lblBank;
-    private Intbox intBankNumber;
     private Label lblUserSource;
     private Label lblUser;
     private Label lblTransactionNumber;
+    private Textbox txtBankNumber;
     private Datebox dtbBankOperationDate;
     private Label lblTelephone;
     private Label lblEmail;
@@ -130,10 +130,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
 
     private void loadFields(TransactionApproveRequest manualWithdrawalApproval) {
         String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        intBankNumber.setValue(Integer.valueOf(manualWithdrawalApproval.getBankOperationId().getBankOperationNumber()));
-        txtResponsible.setValue(manualWithdrawalApproval.getBankOperationId().getResponsible());
-        dtbBankOperationDate.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationDate());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);     
         try {
             if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.APPBIL.getTransactionSourceCode())){
                //Obtiene el usuario de origen de Registro Unificado relacionado con la Transacción
@@ -146,17 +143,15 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
                 lblUserDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
                 lblUserDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
-                lblBankAccount.setValue(responseUser.getDatosRespuesta().getCuenta().getNumeroCuenta());
-            
-                
             } else if(manualWithdrawalApproval.getTransactionId().getTransactionSourceId().getCode().equals(TransactionSourceE.PORNEG.getTransactionSourceCode())) {
                 //Obtiene el negocio de origen de BusinessPortal relacionado con la Transacción
                 Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblTelephone.setValue(businessSource.getPhoneNumber());
                 lblEmail.setValue(businessSource.getEmail());
-
-            }
+            }            
+            
+            //Datos de la Solicitud
             if (manualWithdrawalApproval.getRequestNumber() != null) {
                 lblRequestNumber.setValue(manualWithdrawalApproval.getRequestNumber());
             }
@@ -164,14 +159,19 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 lblRequestDate.setValue(simpleDateFormat.format(manualWithdrawalApproval.getRequestDate()));
             }
             lblStatusRequest.setValue(manualWithdrawalApproval.getStatusTransactionApproveRequestId().getDescription());
+            
+            //Datos de la Transacción
+            lblTransactionNumber.setValue(manualWithdrawalApproval.getTransactionId().getTransactionNumber());
+            lblTransactionDate.setValue(simpleDateFormat.format(manualWithdrawalApproval.getTransactionId().getCreationDate()));
             lblProduct.setValue(manualWithdrawalApproval.getProductId().getName());
+            if (manualWithdrawalApproval.getTransactionId().getAmount() != 0) {
+                dblAmount.setValue(manualWithdrawalApproval.getTransactionId().getAmount());
+            }
             if (manualWithdrawalApproval.getTransactionId().getConcept() != null) {
                 lblTransactionConcept.setValue(manualWithdrawalApproval.getTransactionId().getConcept());
             }
-            lblTransactionDate.setValue(simpleDateFormat.format(manualWithdrawalApproval.getTransactionId().getCreationDate()));
-            if (manualWithdrawalApproval.getTransactionId().getCreationDate() != null) {
-                lblRequestDate.setValue(simpleDateFormat.format(manualWithdrawalApproval.getTransactionId().getCreationDate()));
-            }
+            
+            //Datos de Aprobación de la Solicitud
             if (manualWithdrawalApproval.getApprovedRequestDate() != null) {
                 dtbApprovedRequestDate.setValue(manualWithdrawalApproval.getApprovedRequestDate());
             }
@@ -186,18 +186,19 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             if (manualWithdrawalApproval.getObservations() != null) {
                 txtObservations.setValue(manualWithdrawalApproval.getObservations());
             }
-
+            
+            //Datos de la operación bancaria
             lblBank.setValue(manualWithdrawalApproval.getBankOperationId().getBankId().getName());
             lblBankAccount.setValue(manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber());
-
-            if (manualWithdrawalApproval.getTransactionId().getAmount() != 0) {
-                dblAmount.setValue(manualWithdrawalApproval.getTransactionId().getAmount());
-                totalAmount = manualWithdrawalApproval.getTransactionId().getAmount();
+            if (manualWithdrawalApproval.getBankOperationId().getBankOperationNumber() != null) {
+                txtBankNumber.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationNumber());
             }
-            lblTransactionNumber.setValue(manualWithdrawalApproval.getTransactionId().getTransactionNumber());
-//            lblBankOperationDate.setValue(simpleDateFormat.format(manualWithdrawalApproval.getBankOperationId().getBankOperationDate()));
-            
-        
+            if (manualWithdrawalApproval.getBankOperationId().getResponsible() != null) {
+                txtResponsible.setValue(manualWithdrawalApproval.getBankOperationId().getResponsible());
+            }
+            if (manualWithdrawalApproval.getBankOperationId().getBankOperationDate() != null) {
+                dtbBankOperationDate.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationDate());
+            }  
         } catch (Exception ex) {
             showError(ex);
         }
@@ -210,7 +211,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         txtObservations.setDisabled(true);
         dblAmount.setDisabled(true);
         dblCommision.setDisabled(true);
-        intBankNumber.setDisabled(true);
+        txtBankNumber.setDisabled(true);
         txtResponsible.setDisabled(true);
         dtbBankOperationDate.setDisabled(true);
         btnSave.setVisible(false);
@@ -225,8 +226,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         } else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
             this.showMessage("sp.error.observations", true, null);
-        } else if (intBankNumber.getValue() == null) {
-            intBankNumber.setFocus(true);
+        } else if (txtBankNumber.getText().isEmpty()) {
+            txtBankNumber.setFocus(true);
             this.showMessage("sp.error.date.bankNumberOperation", true, null);
         } else if (txtResponsible.getText().isEmpty()) {
             txtResponsible.setFocus(true);
@@ -271,7 +272,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             }
             
             //Se actualiza el responsable, numero y fecha en la operación bancaria
-            bankOperation.setBankOperationNumber(intBankNumber.getValue().toString());
+            bankOperation.setBankOperationNumber(txtBankNumber.getValue().toString());
             bankOperation.setResponsible(txtResponsible.getText());
             bankOperation.setBankOperationDate(dtbBankOperationDate.getValue());
             bankOperation.setUpdateDate(new Timestamp(new Date().getTime()));
