@@ -74,11 +74,15 @@ public class AdminAddressController extends GenericAbstractAdminController {
         try {
             AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
             AdminBusinnessAffiliationRequestsLegalController adminRequestL = new AdminBusinnessAffiliationRequestsLegalController();
+            AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
             if (adminRequestN.getBusinessAffiliationRequets() != null){
                 afilationRequest = adminRequestN.getBusinessAffiliationRequets();
             }
             if (adminRequestL.getBusinessAffiliationRequets() != null){
                 afilationRequest = adminRequestL.getBusinessAffiliationRequets();
+            }
+            if (adminRequestUser.getUserAffiliationRequets() != null){
+                afilationRequest = adminRequestUser.getUserAffiliationRequets();
             }
             if (afilationRequest != null) {
                 lblRequestNumber.setValue(afilationRequest.getNumberRequest());
