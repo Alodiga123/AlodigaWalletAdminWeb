@@ -3,18 +3,28 @@ package com.alodiga.wallet.admin.web.controllers;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.exception.EmptyListException;
+import com.alodiga.wallet.common.exception.GeneralException;
+import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.NaturalPerson;
+import com.alodiga.wallet.common.model.Person;
+import com.alodiga.wallet.common.model.ReviewOfac;
+import com.alodiga.wallet.common.model.StatusApplicant;
 import com.alodiga.wallet.common.utils.Constants;
+import com.alodiga.ws.remittance.services.WSOFACMethod;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
@@ -29,7 +39,9 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     private Label lblIdentificationNumber;
     private Label lblPercentageMatch;
     private Label lblStatus;
+    private Combobox cmbStatusApplicant;
     private PersonEJB personEJB = null;
+    private UtilsEJB utilsEJB = null;
     private NaturalPerson naturalPersonParam;
     private Button btnSave;
     private Integer eventType;
@@ -37,6 +49,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public String indGender = null;
     private Long optionMenu;
     private AffiliationRequest afilationRequest;
+    private Person personParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -44,7 +57,6 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
         AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
-        
         if (adminRequestN.getBusinessAffiliationRequets() != null) {
             afilationRequest = adminRequestN.getBusinessAffiliationRequets();
         }
@@ -61,6 +73,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         super.initialize();
         try {
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
@@ -70,23 +83,10 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void clearFields() {
     }
 
-    private void loadFields(AffiliationRequest affiliationRequest) {
+    private void loadFields(NaturalPerson applicant) {
+        Float percentageMatchApplicant = 0.00F;
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        try {
-            lblRequestNumber.setValue(affiliationRequest.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(affiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(affiliationRequest.getStatusRequestId().getDescription());
-
-            btnSave.setVisible(false);
-        } catch (Exception ex) {
-            showError(ex);
-        }
-    }
-
-    private void loadFields(NaturalPerson applicant) {
-//        ReviewOFAC reviewOFAC = null;
-        Float percentageMatchApplicant = 0.00F;
         try {
             AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
             AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
@@ -98,37 +98,54 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
             if (adminRequestUser.getUserAffiliationRequets() != null){
                 afilationRequest = adminRequestUser.getUserAffiliationRequets();
             }
-        
+            
+            lblRequestNumber.setValue(afilationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(afilationRequest.getDateRequest()));
+            lblStatusRequest.setValue(afilationRequest.getStatusRequestId().getDescription());
+            
             StringBuilder builder = new StringBuilder(applicant.getFirstName());
             builder.append(" ");
             builder.append(applicant.getLastName());
+            
             lblName.setValue(builder.toString());
             lblDocumentType.setValue(applicant.getDocumentsPersonTypeId().getDescription());
             lblIdentificationNumber.setValue(applicant.getIdentificationNumber());
-//            EJBRequest request = new EJBRequest();
-//            Map params = new HashMap();
-//            params.put(Constants.PERSON_KEY, applicant.getPersonId().getId());
-//            params.put(Constants.AFFILIATION_REQUEST_KEY, afilationRequest.getId());
-//            request.setParams(params);
-//            List<ReviewOFAC> reviewOFACList = requestEJB.getReviewOFACByApplicantByRequest(request);
-//            for (ReviewOFAC r : reviewOFACList) {
-//                reviewOFAC = r;
-//            }
-//            percentageMatchApplicant = Float.parseFloat(reviewOFAC.getResultReview()) * 100;
-            lblPercentageMatch.setValue(percentageMatchApplicant.toString());
             lblStatus.setValue(applicant.getStatusApplicantId().getDescription());
+            percentageMatchApplicant = getReviewOFAC(applicant).getResultReview()*100;
+            lblPercentageMatch.setValue(percentageMatchApplicant.toString());
 
-            btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
         }
     }
+    
+    
+    public ReviewOfac getReviewOFAC(NaturalPerson applicant) {
+        ReviewOfac reviewOFAC = null;
+        try {
+            EJBRequest request = new EJBRequest();
+            Map params = new HashMap();
+            params.put(Constants.PERSON_KEY, applicant.getPersonId().getId());
+            params.put(Constants.AFFILIATION_REQUEST_KEY, afilationRequest.getId());
+            request.setParams(params);
+            List<ReviewOfac> reviewOFACList = utilsEJB.getReviewOfacByRequest(request);
+            for (ReviewOfac r: reviewOFACList) {
+                reviewOFAC = r;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return reviewOFAC;
+    }
 
     public void blockFields() {
     }
+    
+    private void saveReviewOfac(ReviewOfac _reviewOfac) {
+    
+    }
 
     public void onClick$btnSave() {
-
     }
 
     public void onClick$btnBack() {
@@ -140,24 +157,43 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
             case WebConstants.EVENT_EDIT:
                 if(afilationRequest.getBusinessPersonId() != null){
                     loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
-                    loadFields(afilationRequest);
                 } else if(afilationRequest.getUserRegisterUnifiedId() != null){
                     loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
-                    loadFields(afilationRequest);
                 }
                 break;
             case WebConstants.EVENT_VIEW:
                 if(afilationRequest.getBusinessPersonId() != null){
                     loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
-                    loadFields(afilationRequest);
                     blockFields();
                 } else if(afilationRequest.getUserRegisterUnifiedId() != null){
                     loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
-                    loadFields(afilationRequest);
                     blockFields();
                 }
 
                 break;
+        }
+    }
+    
+     private void loadCmbStatusApplicant(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<StatusApplicant> statusApplicants;
+        try {
+            statusApplicants = personEJB.getStatusApplicant(request1);
+            if (afilationRequest.getUserRegisterUnifiedId() != null){
+                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(afilationRequest != null ? afilationRequest.getUserRegisterUnifiedId().getNaturalPerson().getStatusApplicantId().getId() : 0));
+            } else if (afilationRequest.getBusinessPersonId() != null){
+                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(afilationRequest != null ? afilationRequest.getBusinessPersonId().getNaturalPerson().getStatusApplicantId().getId() : 0));
+            }
+           
+        } catch (EmptyListException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (GeneralException ex) {
+            showError(ex);
+            ex.printStackTrace();
+        } catch (NullParameterException ex) {
+            showError(ex);
+            ex.printStackTrace();
         }
     }
 }
