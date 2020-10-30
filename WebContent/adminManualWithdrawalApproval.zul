@@ -89,7 +89,7 @@
                                                         <row>
                                                             <label id="lblBank" value="" width="250px" style="color:#837E76;"/>
                                                             <label id="lblBankAccount" value="" width="250px" style="color:#837E76;"/>
-                                                            <intbox id="intBankNumber" width="250px" maxlength="20"/>
+                                                            <textbox id="txtBankNumber" width="250px" maxlength="20"/>
                                                         </row>
                                                         
                                                         <row>
