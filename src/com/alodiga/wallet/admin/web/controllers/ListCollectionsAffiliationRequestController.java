@@ -172,12 +172,16 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                     item.setValue(collectionsRequest);
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
-                    if (collectionsRequest.getIndApproved() == 1) {
-                        
-                        indAprroved = Labels.getLabel("sp.transactionStatus.approved");
+                    if(collectionsRequest.getIndApproved() != null){
+                       if (collectionsRequest.getIndApproved() == 1) {
+                            indAprroved = Labels.getLabel("sp.transactionStatus.approved");
+                        } else {
+                            indAprroved = Labels.getLabel("sp.common.rejected");
+                        } 
                     } else {
-                        indAprroved = Labels.getLabel("sp.common.rejected");
+                            indAprroved = Labels.getLabel("sp.common.unspecified");
                     }
+                    
                     
                     item.appendChild(new Listcell(indAprroved));
                     item.appendChild(permissionEdit ?createButtonEditModal(collectionsRequest) : new Listcell());

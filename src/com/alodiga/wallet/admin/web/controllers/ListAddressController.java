@@ -113,14 +113,14 @@ public class ListAddressController extends GenericAbstractListController<PersonH
         try {
             
             if(affiliationRequetsParam.getRequestTypeId().getCode().equals(RequestTypeE.SOAFNE.getRequestTypeCode())){
-                person = affiliationRequetsParam.getUserRegisterUnifiedId();
+                person = affiliationRequetsParam.getBusinessPersonId();
                 EJBRequest request1 = new EJBRequest();
                 Map params = new HashMap();
                 params.put(Constants.PERSON_KEY, person.getId());
                 request1.setParams(params);
                 personHasAddressList = personEJB.getPersonHasAddressesByPerson(request1);
             } else if(affiliationRequetsParam.getRequestTypeId().getCode().equals(RequestTypeE.SORUBI.getRequestTypeCode())){
-                person = affiliationRequetsParam.getBusinessPersonId();
+                person = affiliationRequetsParam.getUserRegisterUnifiedId();
                 EJBRequest request1 = new EJBRequest();
                 Map params = new HashMap();
                 params.put(Constants.PERSON_KEY, person.getId());
