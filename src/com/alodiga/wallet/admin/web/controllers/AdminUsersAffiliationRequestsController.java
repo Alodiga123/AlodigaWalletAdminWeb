@@ -149,10 +149,8 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             phonePersonList = personEJB.getPhoneByPerson(request);
             if (phonePersonList != null) {
                 for (PhonePerson p : phonePersonList) {
-                    if (p.getPhoneTypeId().getId() == Constants.PHONE_TYPE_ROOM) {
                         lblPhoneType.setValue(p.getPhoneTypeId().getDescription());
                         lblPhoneNumber.setValue(p.getNumberPhone());
-                    }
                 }
             }
             
