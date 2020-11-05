@@ -49,7 +49,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private UtilsEJB utilsEJB = null;
     private ReviewOfac reviewOfacParam;
     private LegalPerson legalPersonParam;
-    private AffiliationRequest businessAffiliationRequestParam;
+    private AffiliationRequest affiliationRequestParam;
     private List<ReviewOfac> reviewOfac;
     private List<LegalPerson> legalPerson;
     private Button btnSave;
@@ -116,19 +116,18 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     public ReviewOfac getReviewOfacParam() {
         reviewOfacParam = null;
         try {
-            if (personParam.getBusinessAffiliationRequest() != null) {
-                businessAffiliationRequestParam = personParam.getBusinessAffiliationRequest();
-            }
-
+           
+            affiliationRequestParam = personParam.getAffiliationRequest();
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
             params.put(QueryConstants.PARAM_PERSON_ID, personParam.getId());
-            params.put(QueryConstants.PARAM_AFFILIATION_REQUEST_ID, businessAffiliationRequestParam.getId());
+            params.put(QueryConstants.PARAM_AFFILIATION_REQUEST_ID, affiliationRequestParam.getId());
             request1.setParams(params);
             reviewOfac = utilsEJB.getReviewOfacByRequest(request1);
             for (ReviewOfac r : reviewOfac) {
                 reviewOfacParam = r;
             }
+            
         } catch (Exception ex) {
         }
         return reviewOfacParam;
@@ -151,12 +150,12 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                     lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
                 } else if (person.getPersonClassificationId().getId() == 3) {
                     if (getLegalPersonParam() != null) {
-                        businessAffiliationRequestParam = legalPersonParam.getPersonId().getBusinessAffiliationRequest();
+                        affiliationRequestParam = legalPersonParam.getPersonId().getAffiliationRequest();
                     }
                     lblName.setValue(person.getLegalRepresentative().getFirstNames() + " " + person.getLegalRepresentative().getLastNames());
                     lblDocumentType.setValue(person.getLegalRepresentative().getDocumentsPersonTypeId().getDescription());
                     lblIdentificationNumber.setValue(person.getLegalRepresentative().getIdentificationNumber());
-                }
+                } 
             }
 
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
@@ -202,8 +201,8 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             person = personParam;
 
             reviewOfac.setPersonId(personParam);
-            reviewOfac.setAffiliationRequestId(businessAffiliationRequestParam);
-            reviewOfac.setObservations(txtObservations.toString());
+            reviewOfac.setAffiliationRequestId(affiliationRequestParam);
+            reviewOfac.setObservations(txtObservations.getText());
             reviewOfac.setUserReviewId(user);
             if (_reviewOfac != null) {
                 reviewOfac.setUpdateDate(new Timestamp(new Date().getTime()));
