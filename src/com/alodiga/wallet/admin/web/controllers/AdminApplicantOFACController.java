@@ -84,6 +84,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     }
 
     private void loadFields(NaturalPerson applicant) {
+        btnSave.setVisible(false);
         Float percentageMatchApplicant = 0.00F;
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -141,10 +142,6 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     public void blockFields() {
     }
     
-    private void saveReviewOfac(ReviewOfac _reviewOfac) {
-    
-    }
-
     public void onClick$btnSave() {
     }
 
@@ -173,27 +170,5 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
                 break;
         }
     }
-    
-     private void loadCmbStatusApplicant(Integer evenInteger) {
-        EJBRequest request1 = new EJBRequest();
-        List<StatusApplicant> statusApplicants;
-        try {
-            statusApplicants = personEJB.getStatusApplicant(request1);
-            if (afilationRequest.getUserRegisterUnifiedId() != null){
-                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(afilationRequest != null ? afilationRequest.getUserRegisterUnifiedId().getNaturalPerson().getStatusApplicantId().getId() : 0));
-            } else if (afilationRequest.getBusinessPersonId() != null){
-                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(afilationRequest != null ? afilationRequest.getBusinessPersonId().getNaturalPerson().getStatusApplicantId().getId() : 0));
-            }
-           
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        }
-    }
+ 
 }
