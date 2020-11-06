@@ -17,7 +17,7 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.BusinessServiceType;
 import com.alodiga.wallet.common.model.CollectionType;
 import com.alodiga.wallet.common.model.CollectionsRequest;
@@ -28,6 +28,8 @@ import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -75,10 +77,6 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-//        AdminRequestController adminRequestController = new AdminRequestController();
-//        if (adminRequestController.getRequest().getId() != null) {
-//            requestParam = adminRequestController.getRequest();
-//        }
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
@@ -97,7 +95,6 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
         try {
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
-            btnUpload.setDisabled(true);
         } catch (Exception ex) {
             showError(ex);
         } 
@@ -108,15 +105,15 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     public void clearFields() {
     }
 
-    private void loadField(BusinessAffiliationRequest businessAffiliationRequest) {
+    private void loadField(AffiliationRequest affiliationRequest) {
         try {
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-            if (businessAffiliationRequest.getNumberRequest() != null) {
-                lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
-                lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-                lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+            if (affiliationRequest.getNumberRequest() != null) {
+                lblRequestNumber.setValue(affiliationRequest.getNumberRequest());
+                lblRequestDate.setValue(simpleDateFormat.format(affiliationRequest.getDateRequest()));
+                lblStatusRequest.setValue(affiliationRequest.getStatusRequestId().getDescription());
             }
         } catch (Exception ex) {
             showError(ex);
@@ -188,14 +185,15 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             requestHasCollectionsRequest.setIndApproved(approved);
             requestHasCollectionsRequest.setObservations(txtObservations.getText());
             requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
-           
+            requestHasCollectionsRequest.setImageFileUrl(UrlFile);
             requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
-            params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST,requestHasCollectionsRequest.getBusinessAffiliationRequestId().getId());
+            params.put(EjbConstants.PARAM_AFFILIATION_REQUEST,requestHasCollectionsRequest.getAffiliationRequestId().getId());
             request.setParams(params);
             utilsEJB.updateBusinessAffiliationRequest(request);
             this.showMessage("sp.common.save.success", false, null);
+            EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true).publish(new Event(""));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -217,20 +215,42 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(requestHasCollectionsRequestParam);
-                loadField(requestHasCollectionsRequestParam.getBusinessAffiliationRequestId());
+                loadField(requestHasCollectionsRequestParam.getAffiliationRequestId());
                 loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 loadCmbCountry(eventType);
                 loadCmbPersonType(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(requestHasCollectionsRequestParam);
-                loadField(requestHasCollectionsRequestParam.getBusinessAffiliationRequestId());
+                loadField(requestHasCollectionsRequestParam.getAffiliationRequestId());
                 loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 blockFields();
                 loadCmbCountry(eventType);
                 loadCmbPersonType(eventType);         
             default:
                 break;
+        }
+    }
+    
+    public void onUpload$btnUpload(org.zkoss.zk.ui.event.UploadEvent event) throws Throwable {
+        org.zkoss.util.media.Media media = event.getMedia();
+        if (media != null) {
+            divPreview.getChildren().clear();
+            media = event.getMedia();
+            File file = new File("/opt/proyecto/cms/imagenes/" + media.getName());
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(media.getByteData());
+            fos.flush();
+            fos.close();
+            UrlFile = file.getAbsolutePath();
+            format = media.getFormat();
+            org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+            image.setContent((org.zkoss.image.Image) media);
+            image.setWidth("250px");
+            image.setParent(divPreview);
+            uploaded = true;
+        } else {
+            lblInfo.setValue("Error");
         }
     }
 

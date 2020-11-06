@@ -53,7 +53,8 @@
                                                             <label id="lblRequestDate" value="" width="290px" style="color:#837E76;"/>
                                                             <label id="lblStatusRequest" value="" width="290px" style="color:#837E76;"/>
                                                         </row>
-                                                        <group label="${c:l('sp.crud.manualWithdrawalApproval.data')}"/> 
+                                                        
+                                                        <group label="${c:l('sp.crud.manualWithdrawalApproval.transaction')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.requestNumber')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.transactionDate')}" sclass="lblbold"/>
@@ -64,34 +65,58 @@
                                                             <label id="lblTransactionDate" value="" width="250px" style="color:#837E76;"/>
                                                             <label id="lblProduct" value="" width="250px" style="color:#837E76;"/>   
                                                         </row>
+                                                        
                                                         <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.amount')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.commision')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.transactionConcept')}" sclass="lblbold"/>
                                                         </row>
+                                                        
                                                         <row>
                                                             <doublebox id="dblAmount" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                             <doublebox id="dblCommision" width="250px" constraint="no negative" format="#,###.##" maxlength="20"/>
                                                             <label id="lblTransactionConcept" value="" width="250px" style="color:#837E76;"/> 
                                                         </row>
+                                                        
+                                                        <group label="${c:l('sp.crud.manual.recharge.bank.operation')}"/> 
+                       
                                                         <row>
                                                             <label value="${c:l('sp.crud.manualWithdrawalApproval.bank')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.bankOperation')}" sclass="lblbold"/>  
-                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.bankOperationDate')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.bank.number')}" sclass="lblbold"/>  
+                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>  
+                                                            
                                                         </row>
                                                         <row>
                                                             <label id="lblBank" value="" width="250px" style="color:#837E76;"/>
-                                                            <label id="lblBankOperation" value="" width="250px" style="color:#837E76;"/>
-                                                            <label id="lblBankOperationDate" value="" width="250px" style="color:#837E76;"/>
+                                                            <label id="lblBankAccount" value="" width="250px" style="color:#837E76;"/>
+                                                            <textbox id="txtBankNumber" width="250px" maxlength="20"/>
                                                         </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.report.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.responsible')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            <datebox id="dtbBankOperationDate" width="250px"/>
+                                                            <textbox id="txtResponsible" width="250px" maxlength="30"/> 
+                                                        </row>
+                                                        
                                                         <group label="${c:l('sp.common.user')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.manual.recharge.user.name')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.common.phone')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manual.recharge.user.email')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.bank.operaton.documentNumber')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblUserSource" value="" width="270px" style="color:#837E76;"/>
+                                                            <label id="lblUserDocumentType" width="250px" style="color:#837E76;"/>
+                                                            <label id="lblUserDocumentNumber" width="250px" style="color:#837E76;"/>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.phone.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
                                                             <label id="lblTelephone" value="" width="270px" style="color:#837E76;"/>
                                                             <label id="lblEmail" value="" width="270px" style="color:#837E76;"/>
                                                         </row>

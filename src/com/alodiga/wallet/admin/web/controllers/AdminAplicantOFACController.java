@@ -11,7 +11,7 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.LegalPerson;
 import com.alodiga.wallet.common.model.LegalRepresentative;
 import com.alodiga.wallet.common.model.NaturalPerson;
@@ -49,7 +49,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private UtilsEJB utilsEJB = null;
     private ReviewOfac reviewOfacParam;
     private LegalPerson legalPersonParam;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private AffiliationRequest affiliationRequestParam;
     private List<ReviewOfac> reviewOfac;
     private List<LegalPerson> legalPerson;
     private Button btnSave;
@@ -116,19 +116,18 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     public ReviewOfac getReviewOfacParam() {
         reviewOfacParam = null;
         try {
-            if (personParam.getBusinessAffiliationRequest() != null) {
-                businessAffiliationRequestParam = personParam.getBusinessAffiliationRequest();
-            }
-
+           
+            affiliationRequestParam = personParam.getAffiliationRequest();
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
             params.put(QueryConstants.PARAM_PERSON_ID, personParam.getId());
-            params.put(QueryConstants.PARAM_BUSINESS_AFFILIATION_REQUEST_ID, businessAffiliationRequestParam.getId());
+            params.put(QueryConstants.PARAM_AFFILIATION_REQUEST_ID, affiliationRequestParam.getId());
             request1.setParams(params);
             reviewOfac = utilsEJB.getReviewOfacByRequest(request1);
             for (ReviewOfac r : reviewOfac) {
                 reviewOfacParam = r;
             }
+            
         } catch (Exception ex) {
         }
         return reviewOfacParam;
@@ -151,12 +150,12 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                     lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
                 } else if (person.getPersonClassificationId().getId() == 3) {
                     if (getLegalPersonParam() != null) {
-                        businessAffiliationRequestParam = legalPersonParam.getPersonId().getBusinessAffiliationRequest();
+                        affiliationRequestParam = legalPersonParam.getPersonId().getAffiliationRequest();
                     }
                     lblName.setValue(person.getLegalRepresentative().getFirstNames() + " " + person.getLegalRepresentative().getLastNames());
                     lblDocumentType.setValue(person.getLegalRepresentative().getDocumentsPersonTypeId().getDescription());
                     lblIdentificationNumber.setValue(person.getLegalRepresentative().getIdentificationNumber());
-                }
+                } 
             }
 
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
@@ -202,8 +201,8 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             person = personParam;
 
             reviewOfac.setPersonId(personParam);
-            reviewOfac.setBusinessAffiliationRequestId(businessAffiliationRequestParam);
-            reviewOfac.setObservations(txtObservations.toString());
+            reviewOfac.setAffiliationRequestId(affiliationRequestParam);
+            reviewOfac.setObservations(txtObservations.getText());
             reviewOfac.setUserReviewId(user);
             if (_reviewOfac != null) {
                 reviewOfac.setUpdateDate(new Timestamp(new Date().getTime()));

@@ -64,7 +64,6 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
     @Override
     public void checkPermissions() {
         try {
-//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_MANUAL_WITHDRAWAL_APPROVAL));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_MANUAL_WITHDRAWAL_APPROVAL);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_MANUAL_WITHDRAWAL_APPROVAL);
         } catch (Exception ex) {
@@ -94,13 +93,12 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
         loadStatus();
 	loadProducts();
         try {
-
             EJBRequest status = new EJBRequest();
             Map params = new HashMap();
             params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_NUMBER, Constants.REQUEST_NUMBER_MANUAL_WITHDRAWAL);
             status.setParams(params);
-            manualWithdrawalApproval = utilsEJB.getTransactionApproveRequestByStatus(status);
+            manualWithdrawalApproval = productEJB.getTransactionApproveRequestByStatus(status);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

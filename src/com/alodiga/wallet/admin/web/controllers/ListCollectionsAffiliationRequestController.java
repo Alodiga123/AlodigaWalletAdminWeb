@@ -26,18 +26,21 @@ import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 
 public class ListCollectionsAffiliationRequestController extends GenericAbstractListController<RequestHasCollectionRequest> {
 
@@ -45,7 +48,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     private Listbox lbxRecords;
     private UtilsEJB utilsEJB = null;
     private List<RequestHasCollectionRequest> collectionsRequests = null;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
+    private AffiliationRequest affiliationRequestParam;
     private User currentUser;
     private Profile currentProfile;
     private Textbox txtName;
@@ -54,7 +57,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+        affiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
     }
     
@@ -78,6 +81,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminCollectionsAffiliationRequest.zul";
+            startListener();
             getData();
             loadList(collectionsRequests);
         } catch (Exception ex) {
@@ -88,12 +92,12 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     public void getData() {
         collectionsRequests = new ArrayList<RequestHasCollectionRequest>();
         try {
-        	  EJBRequest request = new EJBRequest();
-              Map params = new HashMap();
-              params.put(EjbConstants.PARAM_BUSINESS_AFFILIATION_REQUEST, businessAffiliationRequestParam.getId());
-              request.setParams(params);
-            collectionsRequests = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request);
-
+                EJBRequest request = new EJBRequest();
+                Map params = new HashMap();
+                params.put(EjbConstants.PARAM_AFFILIATION_REQUEST, affiliationRequestParam.getId());
+                request.setParams(params);
+                collectionsRequests = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request);
+                
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -146,9 +150,18 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     }
 
     public void startListener() {
+        EventQueue que = EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true);
+        que.subscribe(new EventListener() {
+
+            public void onEvent(Event evt) {
+                getData();
+                loadList(collectionsRequests);
+            }
+        });
     }
 
     public void loadList(List<RequestHasCollectionRequest> list) {
+        String indAprroved = "";
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
@@ -159,7 +172,18 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                     item.setValue(collectionsRequest);
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
-                    item.appendChild(new Listcell(collectionsRequest.getIndApproved()!=null?collectionsRequest.getIndApproved().toString():null));
+                    if(collectionsRequest.getIndApproved() != null){
+                       if (collectionsRequest.getIndApproved() == 1) {
+                            indAprroved = Labels.getLabel("sp.transactionStatus.approved");
+                        } else {
+                            indAprroved = Labels.getLabel("sp.common.rejected");
+                        } 
+                    } else {
+                            indAprroved = Labels.getLabel("sp.common.unspecified");
+                    }
+                    
+                    
+                    item.appendChild(new Listcell(indAprroved));
                     item.appendChild(permissionEdit ?createButtonEditModal(collectionsRequest) : new Listcell());
                     item.appendChild(permissionRead ?createButtonViewModal(collectionsRequest) : new Listcell());
                     item.setParent(lbxRecords);

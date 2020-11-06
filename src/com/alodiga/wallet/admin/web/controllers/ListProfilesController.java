@@ -84,8 +84,6 @@ public class ListProfilesController extends GenericAbstractListController<Profil
             checkPermissions();
             adminPage = "adminProfile.zul";
             accessEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
-            //loadPermission(new Profile());
-            //startListener();
             getData();
             loadList(profiles);
         } catch (Exception ex) {
@@ -185,12 +183,11 @@ public class ListProfilesController extends GenericAbstractListController<Profil
         try {
             request.setFirst(0);
             request.setLimit(null);
-//            request.setAuditData(AccessControl.getCurrentAudit());
             profiles = accessEJB.getProfiles(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
-            //lblInfo.setValue(Labels.getLabel("error.empty.list"));
+            showError(ex);
         } catch (GeneralException ex) {
             showError(ex);
         }

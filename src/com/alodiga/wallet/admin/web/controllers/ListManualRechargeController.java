@@ -49,6 +49,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
     private static final long serialVersionUID = -9145887024839938515L;
     private Listbox lbxRecords;
     private ProductEJB productEJB = null;
+    private UtilsEJB utilsEJB = null;
     private List<TransactionApproveRequest> approveRequests = null;
     private Datebox dtbBeginningDate;
     private Datebox dtbEndingDate;
@@ -58,6 +59,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
     private Combobox cmbProduct; 
     private Textbox txtRequestNumber;
     private Label lblInfo;
+    private AdminManualRechargeController adminManualRechargeController = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -86,18 +88,20 @@ public class ListManualRechargeController extends GenericAbstractListController<
         try {
             currentUser = AccessControl.loadCurrentUser();
             productEJB = (ProductEJB) EJBServiceLocator.getInstance().get(EjbConstants.PRODUCT_EJB);
+            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             currentProfile = currentUser.getCurrentProfile();
             checkPermissions();
             adminPage = "adminManualRecharge.zul";
             getData();
             loadList(approveRequests);
+            loadStatus();
+            loadProducts();
         } catch (Exception ex) {
             showError(ex);
         }
     }
     
     private void loadStatus() {
-
         try {
             cmbStatus.getItems().clear();
             EJBRequest request = new EJBRequest();
@@ -115,15 +119,12 @@ public class ListManualRechargeController extends GenericAbstractListController<
         } catch (Exception ex) {
             this.showError(ex);
         }
-
-    }
-    
+    }    
     
     private void loadProducts() {
-
         try {
-        	cmbProduct.getItems().clear();
-        	EJBRequest request = new EJBRequest();
+            cmbProduct.getItems().clear();
+            EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
             item.setLabel(Labels.getLabel("sp.common.all"));
@@ -138,19 +139,35 @@ public class ListManualRechargeController extends GenericAbstractListController<
         } catch (Exception ex) {
             this.showError(ex);
         }
-
     }
-    
-   
     
     public void clearFields() {
         lblInfo.setValue("");
         lblInfo.setVisible(false);
     }
-
-
+    
+    @Override
+    public void getData() {
+        approveRequests = new ArrayList<TransactionApproveRequest>();
+        try {
+            EJBRequest request = new EJBRequest();
+            Map params = new HashMap();
+            params = new HashMap();
+            params.put(QueryConstants.PARAM_REQUEST_NUMBER, Constants.TRANSACTION_APPROVE_REQUEST_RECHARGE);
+            request.setParams(params);
+            approveRequests = productEJB.getTransactionApproveRequestByStatus(request);
+        } catch (NullParameterException ex) {
+            showError(ex);
+        } catch (EmptyListException ex) {
+            showEmptyList();
+        } catch (GeneralException ex) {
+            showError(ex);
+        }
+    }
+    
     public void onClick$btnSearch()  {
         try {
+              adminManualRechargeController = new AdminManualRechargeController();
               clearFields();
               clearMessage();
               EJBRequest _request = new EJBRequest();
@@ -167,8 +184,10 @@ public class ListManualRechargeController extends GenericAbstractListController<
                   if (!txtRequestNumber.getText().equals("")) {
                       params.put(QueryConstants.PARAM_REQUEST_NUMBER, txtRequestNumber.getText());
                   }
+                  if (adminManualRechargeController.getTransactionAprroveRequest() != null) {
+                    params.put(QueryConstants.PARAM_TRANSACTION_APPROVE_REQUEST, adminManualRechargeController.getTransactionAprroveRequest());
+                  }                  
                   _request.setParams(params);
-                  _request.setParam(true);
                   loadList(productEJB.getTransactionApproveRequestByParams(_request));
               } else  {
                   this.showMessage("sp.error.date.invalid", true, null);
@@ -179,7 +198,6 @@ public class ListManualRechargeController extends GenericAbstractListController<
             showError(ex);
         }
     }
-
 
     public List<TransactionApproveRequest> getFilteredList(String filter) {
         List<TransactionApproveRequest> list = new ArrayList<TransactionApproveRequest>();
@@ -201,27 +219,23 @@ public class ListManualRechargeController extends GenericAbstractListController<
             Listitem item = null;
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
-
                 for (TransactionApproveRequest approveRequest : list) {
                     String pattern = "yyyy-MM-dd";
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
                     item = new Listitem();
                     item.setValue(approveRequest);
-
                     item.appendChild(new Listcell(approveRequest.getRequestNumber()));
-                    	item.appendChild(new Listcell(simpleDateFormat.format(approveRequest.getCreateDate())));
-                    	item.appendChild(new Listcell(approveRequest.getProductId().getName()));
-                    	item.appendChild(new Listcell(String.valueOf(approveRequest.getTransactionId().getAmount())));
-                    	item.appendChild(new Listcell(approveRequest.getStatusTransactionApproveRequestId().getDescription()));
-                    	if(approveRequest.getStatusTransactionApproveRequestId().getCode().equals(StatusTransactionApproveRequestE.PENDIEN.getStatusTransactionApproveRequestCode()))
-                    		item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, approveRequest,Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
-                    	else
-                    		item.appendChild(new Listcell());
+                    item.appendChild(new Listcell(simpleDateFormat.format(approveRequest.getCreateDate())));
+                    item.appendChild(new Listcell(approveRequest.getProductId().getName()));
+                    item.appendChild(new Listcell(String.valueOf(approveRequest.getTransactionId().getAmount())));
+                    item.appendChild(new Listcell(approveRequest.getStatusTransactionApproveRequestId().getDescription()));
+                    if (approveRequest.getStatusTransactionApproveRequestId().getCode().equals(StatusTransactionApproveRequestE.PENDIEN.getStatusTransactionApproveRequestCode())) {
+                        item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, approveRequest,Permission.EDIT_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
                         item.appendChild(permissionRead ? new ListcellViewButton(adminPage, approveRequest,Permission.VIEW_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
-                    	item.setParent(lbxRecords);
-                    	
-                    
+                    } else {
+                        item.appendChild(permissionRead ? new ListcellViewButton(adminPage, approveRequest,Permission.VIEW_MANUAL_RECHARGUES_APPROVAL) : new Listcell());
+                    }
+                    item.setParent(lbxRecords);                   	                    
                 }
             } else {
                 btnDownload.setVisible(false);
@@ -236,31 +250,6 @@ public class ListManualRechargeController extends GenericAbstractListController<
                 item.setParent(lbxRecords);
             }
         } catch (Exception ex) {
-            showError(ex);
-        }
-    }
-
-    public void getData() {
-        dtbBeginningDate.setFormat("yyyy/MM/dd");
-        dtbBeginningDate.setValue(new Timestamp(new java.util.Date().getTime()));
-        dtbEndingDate.setFormat("yyyy/MM/dd");
-        dtbEndingDate.setValue(new Timestamp(new java.util.Date().getTime()));
-        loadStatus();
-        loadProducts();
-        approveRequests = new ArrayList<TransactionApproveRequest>();
-        try {
-            EJBRequest _request = new EJBRequest();
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
-            params.put(QueryConstants.PARAM_ENDING_DATE, dtbBeginningDate.getValue()); 
-            _request.setParams(params);
-            _request.setParam(true);
-            approveRequests = productEJB.getTransactionApproveRequestByParams(_request);
-        } catch (NullParameterException ex) {
-            showError(ex);
-        } catch (EmptyListException ex) {
-            showEmptyList();
-        } catch (GeneralException ex) {
             showError(ex);
         }
     }
@@ -305,9 +294,9 @@ public class ListManualRechargeController extends GenericAbstractListController<
         clearFields();
     }
 
-
     @Override
     public void onClick$btnAdd() throws InterruptedException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

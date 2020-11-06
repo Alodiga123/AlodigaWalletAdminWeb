@@ -14,12 +14,8 @@ import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Category;
-import com.alodiga.wallet.common.model.Enterprise;
-import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Product;
-import com.alodiga.wallet.common.model.ProductIntegrationType;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -32,13 +28,10 @@ import org.zkoss.zul.Toolbarbutton;
 public class AdminProductController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    private Combobox cmbEnterprise;
     private Combobox cmbCategory;
-    private Combobox cmbProductIntegrationType;
     private Textbox txtName;
     private Textbox txtSymbol;
     private Textbox txtReferenceCode;
-    private Textbox txtRatesUrl;
     private Textbox txtAccessNumberUrl;
     private Radio rEnabledYes;
     private Radio rEnabledNo;
@@ -130,8 +123,6 @@ public class AdminProductController extends GenericAbstractAdminController {
         txtName.setRawValue(null);
         txtSymbol.setRawValue(null);
         txtReferenceCode.setRawValue(null);
-        txtRatesUrl.setRawValue(null);
-        txtAccessNumberUrl.setRawValue(null);
     }
 
     private void loadFields(Product product) {
@@ -139,8 +130,6 @@ public class AdminProductController extends GenericAbstractAdminController {
             txtName.setText(product.getName());
             txtSymbol.setText(product.getSymbol());
             txtReferenceCode.setText(product.getReferenceCode());
-            txtRatesUrl.setText(product.getRatesUrl());
-            txtAccessNumberUrl.setText(product.getAccessNumberUrl());
             btnSave.setVisible(true);
 
             if (product.getEnabled() == true) {
@@ -197,14 +186,10 @@ public class AdminProductController extends GenericAbstractAdminController {
     }
 
     public void blockFields() {
-        cmbEnterprise.setReadonly(true);
         cmbCategory.setReadonly(true);
-        cmbProductIntegrationType.setReadonly(true);
         txtName.setReadonly(true);
         txtSymbol.setReadonly(true);
         txtReferenceCode.setReadonly(true);
-        txtRatesUrl.setReadonly(true);
-        txtAccessNumberUrl.setReadonly(true);
         rEnabledYes.setDisabled(true);
         rEnabledNo.setDisabled(true);
         rIsFreeYes.setDisabled(true);
@@ -242,21 +227,10 @@ public class AdminProductController extends GenericAbstractAdminController {
 
     public boolean validateEmpty() {
         this.showMessage("", false, null);
-        if (cmbEnterprise.getSelectedItem() == null) {
-            this.showMessage("sp.crud.bank.enterprise.error", true, null);
-            cmbEnterprise.setFocus(true);
-            return false;
-        }
 
         if (cmbCategory.getSelectedItem() == null) {
             this.showMessage("sp.common.category.error", true, null);
             cmbCategory.setFocus(true);
-            return false;
-        }
-
-        if (cmbProductIntegrationType.getSelectedItem() == null) {
-            this.showMessage("sp.crud.product.integration.type.error", true, null);
-            cmbProductIntegrationType.setFocus(true);
             return false;
         }
 
@@ -275,18 +249,6 @@ public class AdminProductController extends GenericAbstractAdminController {
         if (txtReferenceCode.getText().isEmpty()) {
             txtReferenceCode.setFocus(true);
             this.showMessage("sp.crud.product.referenceCode.error", true, null);
-            return false;
-        }
-
-        if (txtRatesUrl.getText().isEmpty()) {
-            txtRatesUrl.setFocus(true);
-            this.showMessage("sp.crud.product.ratesUrl.error", true, null);
-            return false;
-        }
-
-        if (txtAccessNumberUrl.getText().isEmpty()) {
-            txtAccessNumberUrl.setFocus(true);
-            this.showMessage("sp.crud.product.accessNumberUrl.error", true, null);
             return false;
         }
 
@@ -351,16 +313,11 @@ public class AdminProductController extends GenericAbstractAdminController {
             } else {
                 product = new Product();
             }
-
-            product.setEnterpriseId((Enterprise) cmbEnterprise.getSelectedItem().getValue());
             product.setCategoryId((Category) cmbCategory.getSelectedItem().getValue());
-            product.setProductIntegrationTypeId((ProductIntegrationType) cmbProductIntegrationType.getSelectedItem().getValue());
             product.setName(txtName.getText());
             product.setTaxInclude(rTaxIncludeYes.isChecked() ? true : false);
             product.setEnabled(rEnabledYes.isChecked() ? true : false);
             product.setReferenceCode(txtReferenceCode.getText());
-            product.setRatesUrl(txtRatesUrl.getText());
-            product.setAccessNumberUrl(txtAccessNumberUrl.getText());
             product.setIsFree(rIsFreeYes.isChecked() ? true : false);
             product.setIsAlocashProduct(rIsAlocashProductYes.isChecked() ? true : false);
             product.setSymbol(txtSymbol.getText());
@@ -408,20 +365,14 @@ public class AdminProductController extends GenericAbstractAdminController {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 loadFields(productParam);
-                loadCmbProductIntegrationType(eventType);
-                loadCmbEnterprise(eventType);
                 loadCmbCategory(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(productParam);
                 blockFields();
-                loadCmbProductIntegrationType(eventType);
-                loadCmbEnterprise(eventType);
                 loadCmbCategory(eventType);
                 break;
             case WebConstants.EVENT_ADD:
-                loadCmbProductIntegrationType(eventType);
-                loadCmbEnterprise(eventType);
                 loadCmbCategory(eventType);
                 break;
             default:
@@ -435,42 +386,6 @@ public class AdminProductController extends GenericAbstractAdminController {
         try {
             category = productEJB.getCategories(request1);
             loadGenericCombobox(category, cmbCategory, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getCategoryId().getId() : 0));
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        }
-    }
-
-    private void loadCmbEnterprise(Integer evenInteger) {
-        EJBRequest request1 = new EJBRequest();
-        List<Enterprise> enterprise;
-        try {
-            enterprise = utilsEJB.getEnterprises(request1);
-            loadGenericCombobox(enterprise, cmbEnterprise, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getEnterpriseId().getId() : 0));
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        }
-    }
-
-    private void loadCmbProductIntegrationType(Integer evenInteger) {
-        EJBRequest request1 = new EJBRequest();
-        List<ProductIntegrationType> productIntegrationType;
-        try {
-            productIntegrationType = productEJB.getProductIntegrationType(request1);
-            loadGenericCombobox(productIntegrationType, cmbProductIntegrationType, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getProductIntegrationTypeId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
             ex.printStackTrace();

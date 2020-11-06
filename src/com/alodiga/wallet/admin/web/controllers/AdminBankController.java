@@ -16,7 +16,6 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.Bank;
 import com.alodiga.wallet.common.model.Country;
-import com.alodiga.wallet.common.model.Enterprise;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import org.zkoss.util.resource.Labels;
@@ -29,7 +28,6 @@ public class AdminBankController extends GenericAbstractAdminController {
     private Textbox txtName;
     private Textbox txtCodeSwift;
     private Textbox txtAba;
-    private Combobox cmbEnterprise;
     private Combobox cmbCountry;
     private UtilsEJB utilsEJB = null;
     private Button btnSave;
@@ -87,9 +85,7 @@ public class AdminBankController extends GenericAbstractAdminController {
         txtName.setReadonly(true);
         txtCodeSwift.setReadonly(true);
         txtAba.setReadonly(true);
-        cmbCountry.setReadonly(true);
-        cmbEnterprise.setReadonly(true);
-        
+        cmbCountry.setReadonly(true);        
         btnSave.setVisible(false);
     }
 
@@ -106,9 +102,6 @@ public class AdminBankController extends GenericAbstractAdminController {
         } else if (txtAba.getText().isEmpty()) {
             txtAba.setFocus(true);
             this.showMessage("sp.crud.empty.codeAba", true, null);
-        } else if (cmbEnterprise.getSelectedItem() == null) {
-            cmbEnterprise.setFocus(true);
-            this.showMessage("sp.error.enteprise.notSelected", true, null);
         } else {
             return true;
         }
@@ -127,7 +120,6 @@ public class AdminBankController extends GenericAbstractAdminController {
             }
 
             bank.setName(txtName.getText());
-            bank.setEnterpriseId((Enterprise) cmbEnterprise.getSelectedItem().getValue());
             bank.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
             if (txtAba.getText() != "") {
                 bank.setAbaCode(txtAba.getText());
@@ -172,17 +164,14 @@ public class AdminBankController extends GenericAbstractAdminController {
             case WebConstants.EVENT_EDIT:
                 loadFields(bankParam);
                 loadCmbCountry(eventType);
-                loadCmbEnterprise(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(bankParam);
                 blockFields();
                 loadCmbCountry(eventType);
-                loadCmbEnterprise(eventType);
                 break;
             case WebConstants.EVENT_ADD:
                 loadCmbCountry(eventType);
-                loadCmbEnterprise(eventType);
                 break;
             default:
                 break;
@@ -207,21 +196,4 @@ public class AdminBankController extends GenericAbstractAdminController {
         }
     }
 
-    private void loadCmbEnterprise(Integer evenInteger) {
-        EJBRequest request1 = new EJBRequest();
-        List<Enterprise> enterprise;
-        try {
-            enterprise = utilsEJB.getEnterprises(request1);
-            loadGenericCombobox(enterprise, cmbEnterprise, "name", evenInteger, Long.valueOf(bankParam != null ? bankParam.getEnterpriseId().getId() : 0));
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        }
-    }
 }

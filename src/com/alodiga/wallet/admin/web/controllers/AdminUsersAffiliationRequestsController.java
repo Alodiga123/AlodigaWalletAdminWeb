@@ -22,7 +22,7 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Toolbarbutton;
 
-public class AdminBusinnessAffiliationRequestsNaturalController extends GenericAbstractAdminController {
+public class AdminUsersAffiliationRequestsController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Label lblRequestNumber;
@@ -49,20 +49,20 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
-    private AffiliationRequest businessAffiliationRequestParam;
-    public static AffiliationRequest businessAffiliationRequestParent = null;
+    private AffiliationRequest userAffiliationRequestParam;
+    public static AffiliationRequest userAffiliationRequestParent = null;
     private Integer eventType;
-    private Tab tabBusinessAffiliationRequests;
+    private Tab tabUserAffiliationRequests;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         if (eventType == WebConstants.EVENT_ADD) {
-            businessAffiliationRequestParam = null;
+            userAffiliationRequestParam = null;
         } else {
-            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
-            businessAffiliationRequestParent = businessAffiliationRequestParam;
+            userAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+            userAffiliationRequestParent = userAffiliationRequestParam;
         }
 
         initialize();
@@ -73,13 +73,13 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.edit"));
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.view"));
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.add"));
+                tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.add"));
                 break;
             default:
                 break;
@@ -92,12 +92,12 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
         }
     }
 
-    public AffiliationRequest getBusinessAffiliationRequets() {
-        return this.businessAffiliationRequestParent;
+    public AffiliationRequest getUserAffiliationRequets() {
+        return this.userAffiliationRequestParent;
     }
 
-    public void setProductParent(AffiliationRequest businessAffiliationRequest) {
-        this.businessAffiliationRequestParent = businessAffiliationRequest;
+    public void setProductParent(AffiliationRequest userAffiliationRequest) {
+        this.userAffiliationRequestParent = userAffiliationRequest;
     }
 
     public Integer getEventType() {
@@ -108,15 +108,15 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
 
     }
 
-    private void loadFields(AffiliationRequest businessAffiliationRequest) {
+    private void loadFields(AffiliationRequest userAffiliationRequest) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
-            lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
+            lblRequestNumber.setValue(userAffiliationRequest.getNumberRequest());
+            lblRequestDate.setValue(simpleDateFormat.format(userAffiliationRequest.getDateRequest()));
+            lblStatusRequest.setValue(userAffiliationRequest.getStatusRequestId().getDescription());
 
-            businessAffiliationRequestParent = businessAffiliationRequest;
+            userAffiliationRequestParent = userAffiliationRequest;
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
@@ -149,10 +149,8 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
             phonePersonList = personEJB.getPhoneByPerson(request);
             if (phonePersonList != null) {
                 for (PhonePerson p : phonePersonList) {
-                    if (p.getPhoneTypeId().getId() == Constants.PHONE_TYPE_ROOM) {
                         lblPhoneType.setValue(p.getPhoneTypeId().getDescription());
                         lblPhoneNumber.setValue(p.getNumberPhone());
-                    }
                 }
             }
             
@@ -184,12 +182,12 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                loadFields(businessAffiliationRequestParam);
-                loadFieldRequest(businessAffiliationRequestParam.getBusinessPersonId());
+                loadFields(userAffiliationRequestParam);
+                loadFieldRequest(userAffiliationRequestParam.getUserRegisterUnifiedId());
                 break;
             case WebConstants.EVENT_VIEW:
-                loadFields(businessAffiliationRequestParam);
-                loadFieldRequest(businessAffiliationRequestParam.getBusinessPersonId());
+                loadFields(userAffiliationRequestParam);
+                loadFieldRequest(userAffiliationRequestParam.getUserRegisterUnifiedId());
                 blockFields();
                 break;
             case WebConstants.EVENT_ADD:

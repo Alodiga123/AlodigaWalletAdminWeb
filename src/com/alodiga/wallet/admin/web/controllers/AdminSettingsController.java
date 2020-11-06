@@ -3,7 +3,10 @@ package com.alodiga.wallet.admin.web.controllers;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
@@ -24,11 +27,13 @@ import com.alodiga.wallet.common.manager.PreferenceManager;
 import com.alodiga.wallet.common.model.PreferenceClassification;
 import com.alodiga.wallet.common.model.PreferenceControl;
 import com.alodiga.wallet.common.model.PreferenceField;
+import com.alodiga.wallet.common.model.PreferenceFieldData;
 import com.alodiga.wallet.common.model.PreferenceFieldEnum;
 import com.alodiga.wallet.common.model.PreferenceTypeValuesEnum;
 import com.alodiga.wallet.common.model.PreferenceValue;
 import com.alodiga.wallet.common.model.Provider;
 import com.alodiga.wallet.common.model.User;
+import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
@@ -61,16 +66,9 @@ public class AdminSettingsController extends GenericAbstractController {
             user = AccessControl.loadCurrentUser();
             loadPreferenceClassifications();
             onChange$cmbClassification();
-            if (eventType != null && eventType == WebConstants.EVENT_VIEW) {
-                blockFields();
-            }
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-
-    private void blockFields() {
-        btnSave.setVisible(false);
     }
 
     private void loadPreferenceClassifications() {
@@ -153,51 +151,64 @@ public class AdminSettingsController extends GenericAbstractController {
     private void loadPreferences(Long classificationId) {
         try {
             rowsGrid.getChildren().clear();
-            List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request);
+            EJBRequest request1 = new EJBRequest();
+            List<PreferenceField> fields = preferencesEJB.getPreferenceFields(request1);
             preferenceValues = new ArrayList<PreferenceValue>();
-            for (PreferenceField field : fields) {                
-                PreferenceValue pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId, field.getId());
-                Row row = new Row();
-                row.setId(pValue.getId().toString());
-                Label label = new Label();
-                label.setValue(field.getPreferenceFieldDataByLanguageId(languageId).getDescription());
-                label.setParent(row);
-                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
-                    Combobox cmbbox = new Combobox();
-                    loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
-                    cmbbox.setParent(row);
-                    Label labelType = new Label();
-                    labelType.setValue(field.getPreferenceId().getName());
-                    labelType.setParent(row);
-                    Checkbox chb = new Checkbox();
-                    chb.setChecked(pValue.isEnabled());
-                    chb.setParent(row);
-                    preferenceValues.add(pValue);
-                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
-                    Checkbox chbValue = new Checkbox();
-                    boolean checked = Integer.parseInt(pValue.getValue()) == 1 ? true : false;
-                    chbValue.setChecked(checked);
-                    chbValue.setParent(row);
-                    Label labelType = new Label();
-                    labelType.setValue(field.getPreferenceId().getName());
-                    labelType.setParent(row);
-                    Checkbox chb = new Checkbox();
-                    chb.setChecked(pValue.isEnabled());
-                    chb.setParent(row);
-                    preferenceValues.add(pValue);
-                }  else {
-                    Textbox txtValue = new Textbox();
-                    txtValue.setText(pValue.getValue());
-                    txtValue.setParent(row);
-                    Label labelType = new Label();
-                    labelType.setValue(field.getPreferenceId().getName());
-                    labelType.setParent(row);
-                    Checkbox chb = new Checkbox();
-                    chb.setChecked(pValue.isEnabled());
-                    chb.setParent(row);
-                    preferenceValues.add(pValue);
-                }
-                row.setParent(rowsGrid);               	
+            for (PreferenceField field : fields) {
+            	PreferenceValue pValue = null;
+            	try {
+            		pValue = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationId, field.getId());
+            	} catch (Exception e) {
+					pValue = null;
+				}
+            	if (pValue != null) {
+	                Row row = new Row();
+	                row.setId(pValue.getId().toString());
+	                Label label = new Label();
+	                try {
+                    	label.setValue(pValue.getPreferenceFieldId().getPreferenceFieldDataByLanguageId(languageId).getDescription());
+                    } catch (Exception e) {
+                    	label.setValue(getPreferenceDataLabel(field.getId()));
+                    }
+	                label.setParent(row);
+	                if (field.getId().equals(DEFAULT_SMS_PROVIDER_ID)) {
+	                	Combobox cmbbox = new Combobox();
+	                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
+	                	cmbbox.setParent(row);
+	                	Label labelType = new Label();
+	                	labelType.setValue(field.getPreferenceId().getName());
+	                	labelType.setParent(row);
+	                	Checkbox chb = new Checkbox();
+	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setParent(row);
+	                	preferenceValues.add(pValue);
+	                } else if (field.getPreferenceTypeId().getId().equals(PreferenceTypeValuesEnum.BOOLEAN.getValue())) {
+	                	Checkbox chbValue = new Checkbox();
+	                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
+	                	chbValue.setChecked(checked);
+	                	chbValue.setParent(row);
+	                  	Label labelType = new Label();
+	                	labelType.setValue(field.getPreferenceId().getName());
+	                	labelType.setParent(row);
+	                	Checkbox chb = new Checkbox();
+	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setParent(row);
+	                	preferenceValues.add(pValue);
+	                }  else {
+	                	Textbox txtValue = new Textbox();
+	                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
+	                	txtValue.setParent(row);
+	                  	Label labelType = new Label();
+	                	labelType.setValue(field.getPreferenceId().getName());
+	                	labelType.setParent(row);
+	                	Checkbox chb = new Checkbox();
+	                	chb.setChecked(pValue.isEnabled());
+	                	chb.setParent(row);
+	                	preferenceValues.add(pValue);
+	                }
+	                row.setParent(rowsGrid);   
+            	}
+
             }
         } catch (Exception ex) {
             showError(ex);
@@ -256,4 +267,23 @@ public class AdminSettingsController extends GenericAbstractController {
 
     }
 
+    @SuppressWarnings("unchecked")
+    public String getPreferenceDataLabel(Long preferenceFieldId) {
+    	EJBRequest request = new EJBRequest();
+        Map params = new HashMap();
+        params.put(Constants.PREFERENCE_FIELD_KEY, preferenceFieldId);
+        request.setParams(params);
+        try {
+        	List<PreferenceFieldData> preferenceDataList = preferencesEJB.getPreferenceFieldDataByPreference(request);
+        	if (preferenceDataList != null) {
+        		for (PreferenceFieldData p : preferenceDataList) {
+        			if (p.getLanguage().getId().equals(languageId)) {
+        				return p.getDescription();
+        			}
+        		}
+        	}
+        }  catch (Exception ex) {      	
+        }
+        return null;
+    }
 }

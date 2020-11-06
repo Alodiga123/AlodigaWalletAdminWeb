@@ -39,8 +39,8 @@
                                                 </div>
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column width="400px"/>
-                                                        <column width="497px"/>
+                                                        <column width="300px"/>
+                                                        <column width="597px"/>
                                                     </columns>
                                                     <rows>
                                                         <row>
@@ -68,7 +68,7 @@
                                         <!--Buttons-->
                                         <div align="right">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;home-admin.zul&quot;)"/>
+<!--                                             <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;home-admin.zul&quot;)"/> -->
                                         </div>
                                     </vlayout>
                                 </div>

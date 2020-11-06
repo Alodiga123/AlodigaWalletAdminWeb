@@ -5,7 +5,7 @@
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser"?>
 
 <zk xmlns:n="native">
-    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListSettingController" class="general-window">
+    <window width="100%" height="100%" apply="com.alodiga.wallet.admin.web.controllers.ListUsersAffiliationRequestsController" class="general-window">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <north border="none" size="52px" class="content-transparent">
@@ -27,28 +27,20 @@
                                             <hlayout>
                                                 <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                 |
-                                                <toolbarbutton label="${c:l('sp.specific.preference.list')}" />
+                                                <toolbarbutton label="${c:l('sp.userAffiliationRequests.list')}" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
-                                               <hlayout style="text-align:right">
-                                               <label value="${c:l('sp.specific.preference.product')}" sclass="lblbold"/>
-                                                    <combobox id="cmbProduct" width="140px" mold="rounded" readonly="true"/>
-                                                    <label value="${c:l('sp.specific.preference.transaction.type')}" sclass="lblbold"/>
-                                                    <combobox id="cmbTransactionType" width="180px" mold="rounded" readonly="true"/>        
-                                                    <label value="${c:l('sp.specific.preference.bussiness')}" width="80px" sclass="lblbold"/>
-                                                    <combobox id="cmbBusiness"  width="180px" mold="rounded" readonly="true"/>        
+                                                <hlayout style="text-align:right">
+                                                    <label value="${c:l('sp.crud.businessAffiliationRequests.number')}" width="80px" sclass="lblbold"/>
+                                                    <textbox id="txtNumber" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
-                                                    <!--Add button-->
-                                                    <div align="left" width="495px">
-                                                        <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}"/>
-                                                    </div>
                                                     <!--Filters button-->
-                                                    <div align="right" width="495px">
+                                                    <div align="right" width="990px">
                                                         <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                         <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                     </div>
@@ -56,19 +48,20 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="430px" mold="paging" pageSize="10">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.specific.preference.product')}" width="290px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.specific.preference.transaction.type')}" width="290px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.specific.preference.bussiness')}" width="300px" sort="auto"/>
-                                                    <listheader label="-" width="50px"/>
-                                                    <listheader label="-" width="50px"/>
+                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.number')}" width="250px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.date')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.applicant')}" width="275px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.status')}" width="225px" sort="auto"/>
+                                                    <listheader label="-" width="45px"/>
+                                                    <listheader label="-" width="45px"/>
                                                 </listhead>
                                             </listbox>
                                         </div>
                                         <!--Download button-->
                                         <div align="right">
-                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
+                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}" width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>
                                 </div>

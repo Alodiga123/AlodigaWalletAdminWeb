@@ -39,6 +39,7 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
     private List<CollectionsRequest> collectionsRequests = null;
     private User currentUser;
     private Profile currentProfile;
+    private Textbox txtName;
     
 
     @Override
@@ -121,11 +122,12 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
     }
 
     public void onClick$btnClear() throws InterruptedException {
-        
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
@@ -146,6 +148,7 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
                     item.appendChild(new Listcell(collectionsRequest.getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionTypeId().getDescription()));
                     item.appendChild(new Listcell(collectionsRequest.getPersonTypeId().getDescription()));
+                    item.appendChild(new Listcell(collectionsRequest.getRequestTypeId().getCode()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionsRequest, Permission.EDIT_COLLECTIONS_REQUEST) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionsRequest, Permission.VIEW_COLLECTIONS_REQUEST) : new Listcell());
                     item.setParent(lbxRecords);
@@ -171,7 +174,17 @@ public class ListCollectionsRequestController extends GenericAbstractListControl
 
     @Override
     public List<CollectionsRequest> getFilteredList(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<CollectionsRequest> collectionsRequestaux = new ArrayList<CollectionsRequest>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                collectionsRequestaux = utilsEJB.searchCollectionsRequestByCountry(filter);
+            } else {
+                return collectionsRequests;
+            }
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        return collectionsRequestaux;
     }
 
 }

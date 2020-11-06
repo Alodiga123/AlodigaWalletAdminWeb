@@ -70,7 +70,7 @@ public class AdminProfileController extends GenericAbstractAdminController {
         try {
         	ipAddress = Executions.getCurrent().getRemoteAddr();
         	auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
-            accessEjb = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
+                accessEjb = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -101,7 +101,7 @@ public class AdminProfileController extends GenericAbstractAdminController {
         txtDescriptionSpanish.setReadonly(true);
         txtDescriptionEnglish.setReadonly(true);
         cbxEnabled.setDisabled(true);
-        lbxPermissions.setCheckmark(false);
+        lbxPermissions.setDisabled(true);
         btnSave.setVisible(false);
     }
 
@@ -125,7 +125,6 @@ public class AdminProfileController extends GenericAbstractAdminController {
     }
 
     private void loadPermissionsList(Boolean isAdd) {
-
         List<Permission> permissions = new ArrayList<Permission>();
         try {
             request.setFirst(0);
@@ -141,11 +140,10 @@ public class AdminProfileController extends GenericAbstractAdminController {
                             for (int y = 0; y < permissionsProfile.size(); y++) {
                                 Permission p = permissionsProfile.get(y).getPermission();
                                 if (p.getId().equals(permission.getId())) {
-                                    item.setSelected(true);
+                                    item.setSelected(true);                                  
                                 }
                             }
-                        }
-                        
+                        }                        
                         item.setValue(permission);
                         item.appendChild(new Listcell());
                         item.appendChild(new Listcell(permission.getPermissionGroup().getPermissionGroupDataByLanguageId(languageId) != null ? permission.getPermissionGroup().getPermissionGroupDataByLanguageId(languageId).getAlias() : permission.getName()));
@@ -155,7 +153,6 @@ public class AdminProfileController extends GenericAbstractAdminController {
 
                 }
             }
-
         } catch (Exception ex) {
             showError(ex);
         }
@@ -216,7 +213,6 @@ public class AdminProfileController extends GenericAbstractAdminController {
             profileParam = profile;
             eventType = WebConstants.EVENT_EDIT;
             this.showMessage("sp.common.save.success", false, null);
-//            saveAudit(rolOld, profile);
             try {
                 PermissionManager.refresh();
             } catch (Exception ex) {
@@ -249,6 +245,7 @@ public class AdminProfileController extends GenericAbstractAdminController {
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(profileParam);
+                blockFields();
                 loadPermissionsList(false);
                 break;
             case WebConstants.EVENT_ADD:
@@ -259,48 +256,4 @@ public class AdminProfileController extends GenericAbstractAdminController {
         }
     }
     
-//    public void saveAudit(Profile rolOld ,Profile rolNew){
-//        EJBRequest request1 = new EJBRequest();
-//        EJBRequest request2 = new EJBRequest();            
-//        String result = "";
-//         String oldValue ="";
-//        request1.setParam(rolOld);
-//        request2.setParam(rolNew);
-//
-//        try {
-//            result = auditoryEJB.getNaturalFieldProfile(request1, request2);
-//        } catch (Exception ex) {
-//           
-//        }
-//
-//        if(!result.isEmpty()||!"".equals(result)){
-//            String descrip = rolOld.getName();
-//            
-//            String status = String.valueOf(!rolOld.getEnabled());
-//           
-//            oldValue = "Name:"+descrip+"|Status:"+status;
-//            
-//			try {
-//				EJBRequest ejbRequest = new EJBRequest();
-//				ejbRequest.setParam(eventType);
-//				Event ev = auditoryEJB.loadEvent(ejbRequest);
-//				Audit audit = new Audit();
-//				EJBRequest auditRequest = new EJBRequest();
-//				audit.setUser(user);
-//				audit.setEvent(ev);
-//				Permission permission = PermissionManager.getInstance().getPermissionById(2L);
-//				audit.setPermission(permission);
-//				audit.setCreationDate(new Timestamp((new java.util.Date().getTime())));
-//				audit.setTableName("Profile");
-//				audit.setRemoteIp(ipAddress);
-//				audit.setOriginalValues(oldValue);
-//				audit.setNewValues(result);
-//				audit.setResponsibleType("usuario");
-//				auditRequest.setParam(audit);
-//				audit = auditoryEJB.saveAudit(auditRequest);
-//			} catch (Exception ex) {
-//				ex.printStackTrace();
-//			}
-//        }
-//    }
 }

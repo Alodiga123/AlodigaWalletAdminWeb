@@ -6,7 +6,7 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminCont
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PhonePerson;
 import com.alodiga.wallet.common.utils.Constants;
@@ -44,8 +44,8 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
     private Button btnSave;
     private Toolbarbutton tbbTitle;
     private List<PhonePerson> phonePersonList = null;
-    private BusinessAffiliationRequest businessAffiliationRequestParam;
-    public static BusinessAffiliationRequest businessAffiliationRequetsParent = null;
+    private AffiliationRequest businessAffiliationRequestParam;
+    public static AffiliationRequest businessAffiliationRequetsParent = null;
     private Tab tabBusinessAffiliationRequests;
     private Tab tabAddress;
     private Tab tabLegalRepresentative;
@@ -59,7 +59,7 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         if (eventType == WebConstants.EVENT_ADD) {
             businessAffiliationRequestParam = null;
         } else {
-            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+            businessAffiliationRequestParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
             businessAffiliationRequetsParent = businessAffiliationRequestParam;
         }
 
@@ -91,11 +91,11 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         }
     }
 
-    public BusinessAffiliationRequest getBusinessAffiliationRequets() {
+    public AffiliationRequest getBusinessAffiliationRequets() {
         return this.businessAffiliationRequetsParent;
     }
 
-    public void setProductParent(BusinessAffiliationRequest businessAffiliationRequets) {
+    public void setProductParent(AffiliationRequest businessAffiliationRequets) {
         this.businessAffiliationRequetsParent = businessAffiliationRequets;
     }
 
@@ -107,13 +107,13 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
 
     }
 
-    private void loadFields(BusinessAffiliationRequest businessAffiliationRequest) {
+    private void loadFields(AffiliationRequest businessAffiliationRequest) {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
-            lblStatusRequest.setValue(businessAffiliationRequest.getStatusBusinessAffiliationRequestId().getDescription());
+            lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
 
             businessAffiliationRequetsParent = businessAffiliationRequest;
             btnSave.setVisible(false);

@@ -75,7 +75,7 @@
                                                         <row>
                                                             <label value="${c:l('cms.common.description')}" sclass="lblbold"/>
                                                             <hlayout>
-                                                                <textbox id="txtDescription" constraint="no empty" maxlength="80" width="196px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+                                                                <textbox id="txtDescription" constraint="no empty" maxlength="80" width="400px" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
                                                             </hlayout>
                                                         </row>
                                                         

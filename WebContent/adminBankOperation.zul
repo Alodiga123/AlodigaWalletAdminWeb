@@ -35,82 +35,154 @@
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
                                             <vlayout>
-                                                <div align="right">
-                                                    <hlayout>
-                                                        <label value="${c:l('sp.common.field.required1')}" sclass="lblexample" />
-                                                        <separator/>
-                                                        <label value="*" sclass="lblreq" />
-                                                        <separator/>
-                                                        <label value="${c:l('sp.common.field.required2')}" sclass="lblexample" />
-                                                    </hlayout>
-                                                </div>
-                                                <label value="${c:l('sp.common.data.basic')}" sclass="lblbold"/>
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="700px"/>
+                                                        <column label="" width="330px"/>
+                                                        <column label="" width="330px"/>
+                                                        <column label="" width="330px"/>
                                                     </columns>
                                                     <rows>
-                                                     <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.number')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblNumber" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.user')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblUser" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.transaccion.id')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblTransaction" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
+                                                      <group label="${c:l('sp.crud.transaction.data')}"/> 
+
                                                          <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.bank')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblBank" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.type')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblType" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.mode')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblMode" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
-                                                       <row>
+                                                             <label value="${c:l('sp.crud.manual.recharge.transaction')}" sclass="lblbold"/>
+                                                             <label value="${c:l('sp.crud.bank.operaton.date')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.bank.operaton.product')}" sclass="lblbold"/>
-                                                            <hlayout>
-                                                                <label id="lblProduct" width="250px" style="color:#837E76;"/>
+                                                         </row>
+                                                         <row>
+                                                             
+                                                             <hlayout>
+                                                                <label id="lblTransactionNumber" width="250px" style="color:#837E76;"/>                
                                                             </hlayout>
-                                                        </row>
-                                                        <row>
-                                                        <label value="${c:l('sp.crud.bank.operaton.date')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <label id="lblDate" width="250px" style="color:#837E76;"/>                
                                                             </hlayout>
-                                                        </row>
-                                                         <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.amount')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                <label id="lblProduct" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                         </row> 
+                                                         
+                                                        <row>
+                                                           <label value="${c:l('sp.crud.bank.operaton.amount')}" sclass="lblbold"/>
+                                                           <label value="${c:l('sp.crud.transaction.transactionType')}" sclass="lblbold"/>
+                                                           <label value="${c:l('sp.crud.bank.operaton.status')}" sclass="lblbold"/>
+                                                        </row> 
+                                                        
+                                                        <row>
                                                             <hlayout>
                                                               <label id="lblAmount" width="250px" style="color:#837E76;"/>
-                                                            </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.bank.operaton.status')}" sclass="lblbold"/>
+                                                            </hlayout>  
+                                                            <hlayout>
+                                                                <label id="lblTransactionType" width="250px" style="color:#837E76;"/>
+                                                            </hlayout> 
                                                             <hlayout>
                                                                <label id="lblStatus" width="250px" style="color:#837E76;"/>
                                                             </hlayout>
                                                         </row>
+                                                        
+                                                        
+                                                        <group label="${c:l('sp.crud.transaction.userSource')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.bank.operaton.documentNumber')}" sclass="lblbold"/>
+                                                        </row> 
+                                                        
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblUserName" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDocumentType" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDocumentNumber" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.manual.recharge.phone.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblUserPhone" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserEmail" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <group id="UserDestination" label="${c:l('sp.crud.transaction.userDestination')}"/> 
+                                                        <row id="rowTitleNameDestinationTypeNumber" visible="false">
+                                                            <label id="NameLabel" value="${c:l('sp.common.name')}" sclass="lblbold"/>
+                                                            <label id="DocumentTyLabel" value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label id="DocumentNumLabel" value="${c:l('sp.crud.bank.operaton.documentNumber')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row id="rowNameDestinationTypeNumber" visible="false">
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationName" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationDocumentType" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationDocumentNumber" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        
+                                                        <row id="rowTitlePhoneEmail" visible="false">
+                                                            <label id="PhoneNumLabel" value="${c:l('sp.crud.manual.recharge.phone.number')}" sclass="lblbold"/>
+                                                            <label id="EmailLabel" value="${c:l('sp.crud.employee.email')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row id="rowPhoneEmail" visible="false">
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationPhone" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblUserDestinationEmail" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row>
+                                             
+                                                        <group label="${c:l('sp.crud.bank.operation.data')}"/> 
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.bank.operaton.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.bank.operaton.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.bank.operaton.bank')}" sclass="lblbold"/>
+                                                        </row> 
+                                                        
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblNumber" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblBankDate" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblBank" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                        </row> 
+                                                        
+                                                        <row>
+                                                             <label value="${c:l('sp.common.bank.number')}" sclass="lblbold"/>
+                                                             <label value="${c:l('sp.crud.bank.operaton.amount')}" sclass="lblbold"/>
+                                                             <label value="${c:l('sp.crud.bank.operaton.mode')}" sclass="lblbold"/>
+                                                        </row>
+                                                            
+                                                        <row>
+                                                            <hlayout>
+                                                                <label id="lblBankAccount" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblBankAmount" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            <hlayout>
+                                                                <label id="lblMode" width="250px" style="color:#837E76;"/>
+                                                            </hlayout>
+                                                            
+                                                        </row>
+                  
                                                     </rows>
                                                 </grid>
                                             </vlayout>

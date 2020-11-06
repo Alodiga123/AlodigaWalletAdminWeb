@@ -39,7 +39,7 @@
                                                     <label value="${c:l('sp.common.user')}" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.auditActions.permission')}" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.auditActions.functionality')}" sclass="lblbold"/>
                                                     <combobox id="cmbPermissions" width="100px" mold="rounded" readonly="true"/>
                                                     <separator/>
                                                     <label value="${c:l('sp.common.beginningDateFrom')}"  sclass="lblbold"/>
@@ -62,7 +62,7 @@
                                                 <listhead>
                                                     <listheader label="${c:l('sp.auditActions.userLogin')}" width="120px" sort="auto"/>
                                                     <listheader label="${c:l('sp.auditActions.userName')}" width="140px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.permission')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.auditActions.functionality')}" width="260px" sort="auto"/>
                                                     <listheader label="${c:l('sp.auditActions.date')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.auditActions.info')}" width="300px" sort="auto"/>
                                                 </listhead>

@@ -18,7 +18,7 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.StatusBusinessAffiliationHasFinalState;
-import com.alodiga.wallet.common.model.StatusBusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.StatusRequest;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 
@@ -63,24 +63,26 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     }
 
     private void saveStatus(StatusBusinessAffiliationHasFinalState _status) {
+        StatusBusinessAffiliationHasFinalState status = null;
         try {
             if (_status != null) {
-            	_status.setUpdateDate(new Timestamp(new Date().getTime()));
+                status = _status;
+                status.setUpdateDate(new Timestamp(new Date().getTime()));
             }else {
-            	_status = new StatusBusinessAffiliationHasFinalState();
-            	_status.setCreateDate(new Timestamp(new Date().getTime()));
+            	status = new StatusBusinessAffiliationHasFinalState();
+            	status.setCreateDate(new Timestamp(new Date().getTime()));
             }
-			_status.setStatusBusinessAffiliationRequetsId((StatusBusinessAffiliationRequest) cmbStatus.getSelectedItem().getValue());
-			_status.setFinalStateId((StatusBusinessAffiliationRequest) cmbFinal.getSelectedItem().getValue());
-			if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusBusinessAffiliationHasFinalState(_status.getStatusBusinessAffiliationRequetsId().getId(),_status.getFinalStateId().getId()))
-					|| eventType.equals(WebConstants.EVENT_EDIT)) {
-				_status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(_status);
-				this.showMessage("sp.common.save.success", false, null);
-				if (eventType == WebConstants.EVENT_ADD) {
-					btnSave.setVisible(false);
-				} 				
-			}else
-				this.showMessage("sp.error.status.business.affiliation.exist", true, null);     
+            status.setStatusBusinessAffiliationRequetsId((StatusRequest) cmbStatus.getSelectedItem().getValue());
+            status.setFinalStateId((StatusRequest) cmbFinal.getSelectedItem().getValue());
+            if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusBusinessAffiliationHasFinalState(status.getStatusBusinessAffiliationRequetsId().getId(),status.getFinalStateId().getId()))
+		|| eventType.equals(WebConstants.EVENT_EDIT)) {
+                    status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(status);
+            	    this.showMessage("sp.common.save.success", false, null);
+            if (eventType == WebConstants.EVENT_ADD) {
+		btnSave.setVisible(false);
+            } 				
+            }else
+                this.showMessage("sp.error.status.business.affiliation.exist", true, null);     
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {
@@ -143,9 +145,9 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     private void loadCmbStatus(StatusBusinessAffiliationHasFinalState _status) {
         cmbStatus.getItems().clear();
         EJBRequest request1 = new EJBRequest();
-        List<StatusBusinessAffiliationRequest> requests;
+        List<StatusRequest> requests;
         try {
-            requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
+            requests = utilsEJB.getStatusRequest(request1);
             loadGenericCombobox(requests, cmbStatus, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getStatusBusinessAffiliationRequetsId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
@@ -162,9 +164,9 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     private void loadCmbFinal(StatusBusinessAffiliationHasFinalState _status) {
         cmbFinal.getItems().clear();
         EJBRequest request1 = new EJBRequest();
-        List<StatusBusinessAffiliationRequest> requests;
+        List<StatusRequest> requests;
         try {
-        	requests = utilsEJB.getStatusBusinessAffiliationRequest(request1);
+        	requests = utilsEJB.getStatusRequest(request1);
             loadGenericCombobox(requests, cmbFinal, "description", eventType, Long.valueOf(statusParam != null ? statusParam.getFinalStateId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);

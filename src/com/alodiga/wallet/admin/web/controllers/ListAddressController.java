@@ -15,13 +15,14 @@ import com.alodiga.wallet.admin.web.utils.Utils;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.Address;
-import com.alodiga.wallet.common.model.BusinessAffiliationRequest;
+import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.PersonHasAddress;
@@ -52,17 +53,16 @@ public class ListAddressController extends GenericAbstractListController<PersonH
     private User currentUser;
     private Profile currentProfile;
     private Integer eventType;
-    private BusinessAffiliationRequest businessAffiliationRequetsParam;
-    private Tab tabLegalRepresentative;
+    private AffiliationRequest affiliationRequetsParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         if (eventType == WebConstants.EVENT_ADD) {
-            businessAffiliationRequetsParam = null;
+            affiliationRequetsParam = null;
         } else {
-            businessAffiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (BusinessAffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
+            affiliationRequetsParam = (Sessions.getCurrent().getAttribute("object") != null) ? (AffiliationRequest) Sessions.getCurrent().getAttribute("object") : null;
         }
         initialize();
     }
@@ -70,7 +70,6 @@ public class ListAddressController extends GenericAbstractListController<PersonH
     @Override
     public void checkPermissions() {
         try {
-//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_ADDRESS));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_ADDRESS);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_ADDRESS);
         } catch (Exception ex) {
@@ -107,31 +106,27 @@ public class ListAddressController extends GenericAbstractListController<PersonH
         }
     }
 
-//    public void onClick$btnAdd() throws InterruptedException {
-//        try {
-//            Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_ADD);
-//            Map<String, Object> paramsPass = new HashMap<String, Object>();
-//            paramsPass.put("object", personHasAddressList);
-//            final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
-//            window.doModal();
-//        } catch (Exception ex) {
-//            this.showMessage("sp.error.general", true, ex);
-//        }
-//    }
-
     public void getData() {
         personHasAddressList = new ArrayList<PersonHasAddress>();
         Address address = null;
         Person person = null;
         try {
-            person = businessAffiliationRequetsParam.getBusinessPersonId();
-
-            EJBRequest request1 = new EJBRequest();
-            Map params = new HashMap();
-            params.put(Constants.PERSON_KEY, person.getId());
-            request1.setParams(params);
-            personHasAddressList = personEJB.getPersonHasAddressesByPerson(request1);
-
+            
+            if(affiliationRequetsParam.getRequestTypeId().getCode().equals(RequestTypeE.SOAFNE.getRequestTypeCode())){
+                person = affiliationRequetsParam.getBusinessPersonId();
+                EJBRequest request1 = new EJBRequest();
+                Map params = new HashMap();
+                params.put(Constants.PERSON_KEY, person.getId());
+                request1.setParams(params);
+                personHasAddressList = personEJB.getPersonHasAddressesByPerson(request1);
+            } else if(affiliationRequetsParam.getRequestTypeId().getCode().equals(RequestTypeE.SORUBI.getRequestTypeCode())){
+                person = affiliationRequetsParam.getUserRegisterUnifiedId();
+                EJBRequest request1 = new EJBRequest();
+                Map params = new HashMap();
+                params.put(Constants.PERSON_KEY, person.getId());
+                request1.setParams(params);
+                personHasAddressList = personEJB.getPersonHasAddressesByPerson(request1);
+            }
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
