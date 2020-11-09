@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
@@ -22,6 +26,7 @@ import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
+import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PreferenceManager;
 import com.alodiga.wallet.common.model.PreferenceClassification;
@@ -175,9 +180,35 @@ public class AdminSettingsController extends GenericAbstractController {
 	                	Combobox cmbbox = new Combobox();
 	                	loadProviders(Long.parseLong(pValue.getValue()),cmbbox);
 	                	cmbbox.setParent(row);
+	                	Datebox beginninDate = new Datebox();
+	                	beginninDate.setFormat("dd-MM-yyyy");
+	                	beginninDate.setValue(pValue.getBeginningDate());
+	                	beginninDate.setParent(row);
+	                	Hlayout hlayout = new Hlayout();
+	                	Checkbox endCheck = new Checkbox();
+	                	endCheck.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                              changeEndinningDate(hlayout);
+                            }
+                        });
+	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+	                	endCheck.setParent(hlayout);
+	                	Datebox endinngDate = new Datebox();
+	                	endinngDate.setFormat("dd-MM-yyyy");
+	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+	                	if (endCheck.isChecked()) {
+	                		endinngDate.setVisible(true);
+	                	}else{
+	                		endinngDate.setVisible(false);
+	                	}	                	
+	                	endinngDate.setParent(hlayout);	  
+	                	hlayout.setParent(row);
 	                	Label labelType = new Label();
 	                	labelType.setValue(field.getPreferenceId().getName());
 	                	labelType.setParent(row);
+	                	Checkbox percentage = new Checkbox();
+	                	percentage.setChecked(pValue.getIsPercentage());
+	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(pValue.isEnabled());
 	                	chb.setParent(row);
@@ -187,9 +218,35 @@ public class AdminSettingsController extends GenericAbstractController {
 	                	boolean checked = Integer.parseInt(pValue.getValue()!=null?pValue.getValue():"0") == 1 ? true : false;
 	                	chbValue.setChecked(checked);
 	                	chbValue.setParent(row);
-	                  	Label labelType = new Label();
+	                	Datebox beginninDate = new Datebox();
+	                	beginninDate.setFormat("dd-MM-yyyy");
+	                	beginninDate.setValue(pValue.getBeginningDate());
+	                	beginninDate.setParent(row);
+	                	Hlayout hlayout = new Hlayout();
+	                	Checkbox endCheck = new Checkbox();
+	                	endCheck.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                              changeEndinningDate(hlayout);
+                            }
+                        });
+	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+	                	endCheck.setParent(hlayout);
+	                	Datebox endinngDate = new Datebox();
+	                	endinngDate.setFormat("dd-MM-yyyy");
+	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+	                	if (endCheck.isChecked()) {
+	                		endinngDate.setVisible(true);
+	                	}else{
+	                		endinngDate.setVisible(false);
+	                	}	                	
+	                	endinngDate.setParent(hlayout);	  
+	                	hlayout.setParent(row);
+	                	Label labelType = new Label();
 	                	labelType.setValue(field.getPreferenceId().getName());
 	                	labelType.setParent(row);
+	                	Checkbox percentage = new Checkbox();
+	                	percentage.setChecked(pValue.getIsPercentage());
+	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(pValue.isEnabled());
 	                	chb.setParent(row);
@@ -198,9 +255,35 @@ public class AdminSettingsController extends GenericAbstractController {
 	                	Textbox txtValue = new Textbox();
 	                	txtValue.setText(pValue.getValue()!=null?pValue.getValue():"");
 	                	txtValue.setParent(row);
-	                  	Label labelType = new Label();
+	                	Datebox beginninDate = new Datebox();
+	                	beginninDate.setFormat("dd-MM-yyyy");
+	                	beginninDate.setValue(pValue.getBeginningDate());
+	                	beginninDate.setParent(row);
+	                	Hlayout hlayout = new Hlayout();
+	                	Checkbox endCheck = new Checkbox();
+	                	endCheck.addEventListener("onClick", new EventListener() {
+                            public void onEvent(Event event) throws Exception {
+                              changeEndinningDate(hlayout);
+                            }
+                        });
+	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+	                	endCheck.setParent(hlayout);
+	                	Datebox endinngDate = new Datebox();
+	                	endinngDate.setFormat("dd-MM-yyyy");
+	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+	                	if (endCheck.isChecked()) {
+	                		endinngDate.setVisible(true);
+	                	}else{
+	                		endinngDate.setVisible(false);
+	                	}	                	
+	                	endinngDate.setParent(hlayout);	                		
+	                	hlayout.setParent(row);
+	                	Label labelType = new Label();
 	                	labelType.setValue(field.getPreferenceId().getName());
 	                	labelType.setParent(row);
+	                	Checkbox percentage = new Checkbox();
+	                	percentage.setChecked(pValue.getIsPercentage());
+	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(pValue.isEnabled());
 	                	chb.setParent(row);
@@ -213,6 +296,16 @@ public class AdminSettingsController extends GenericAbstractController {
         } catch (Exception ex) {
             showError(ex);
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void changeEndinningDate(Hlayout hlayout) {
+     	List<Component> children = hlayout.getChildren();
+     	if (((Checkbox)children.get(0)).isChecked()){
+	     	((Datebox)children.get(1)).setVisible(true);
+     	}else {
+     		((Datebox)children.get(1)).setVisible(false);
+     	}
     }
 
     private void savePreferenceValues() {
@@ -230,6 +323,8 @@ public class AdminSettingsController extends GenericAbstractController {
             PreferenceManager preferenceManager = PreferenceManager.getInstance();
             preferenceManager.refresh();
             this.showMessage("sp.common.save.success", false, null);
+        } catch (GeneralException ex) {
+            //showError(ex);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -244,7 +339,7 @@ public class AdminSettingsController extends GenericAbstractController {
     	return preferenceControl;
     }
     
-    private PreferenceValue updatePreferencenValue(PreferenceValue preferenceValue,Row r) {
+    private PreferenceValue updatePreferencenValue(PreferenceValue preferenceValue,Row r) throws GeneralException {
     	List<Component> children = r.getChildren();
     	String value = "";
     	if (children.get(1) instanceof Combobox) {
@@ -255,8 +350,24 @@ public class AdminSettingsController extends GenericAbstractController {
     	else if (children.get(1) instanceof Checkbox)	
             value = ((Checkbox)children.get(1)).isChecked()?"1":"0";
     	preferenceValue.setValue(value);
-    	preferenceValue.setEnabled(((Checkbox)children.get(3)).isChecked());
+    	preferenceValue.setBeginningDate(((Datebox)children.get(2)).getValue());
+    	if (children.get(3) instanceof Hlayout) {
+    		List<Component> childrenHlayout = ((Hlayout)children.get(3)).getChildren();
+    		if (((Checkbox)childrenHlayout.get(0)).isChecked()) {
+    			if (((Datebox)childrenHlayout.get(1)).getValue().getTime() >= ((Datebox)children.get(2)).getValue().getTime()) {
+    				preferenceValue.setEndingDate(((Datebox)childrenHlayout.get(1)).getValue()); 			
+    			} else {
+    				this.showMessage("sp.error.date.invalid", true, null);
+    				throw new GeneralException("Error Invalid Dates");
+    			}
+    		}else
+    			preferenceValue.setEndingDate(null);
+    	}
+    	preferenceValue.setIsPercentage(((Checkbox)children.get(5)).isChecked());
+    	preferenceValue.setEnabled(((Checkbox)children.get(6)).isChecked());
     	preferenceValue.setUpdateDate(new Timestamp(new Date().getTime()));
+    	
+    	
     	return preferenceValue;
     }
 
