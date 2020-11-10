@@ -53,10 +53,13 @@
                                                 </grid>
                                                 <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
-                                                        <column label="${c:l('sp.crud.settings.main.description')}" width="300px"/>
-                                                        <column label="${c:l('sp.crud.settings.main.value')}" width="300px"/>
-                                                        <column label="${c:l('sp.crud.settings.main.type')}" width="197px"/>
-                                                        <column label="${c:l('sp.crud.settings.main.enabled')}" width="100px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.description')}" width="270px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.value')}" width="160px"/>
+                                                        <column label="${c:l('sp.specific.preference.beginningDate')}" width="110px"/>
+                                                        <column label="${c:l('sp.specific.preference.endingDate')}" width="130px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.type')}" width="87px"/>
+                                                        <column label="${c:l('sp.specific.preference.percentage')}" width="75px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.enabled')}" width="65px"/>
                                                     </columns>
                                                        <rows id = "rowsGrid">                                                                     
                                                     

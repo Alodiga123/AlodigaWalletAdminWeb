@@ -141,6 +141,8 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     private void loadPreferences(Long classificationId) {
         try {
             setData();
+            preferenceValues = new ArrayList<PreferenceValue>();
+            rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
@@ -251,7 +253,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     
     private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId, boolean readOnly) {
         try {
-            setData();                
+            setData();  
+            preferenceValues = new ArrayList<PreferenceValue>();
+            rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             PreferenceValue pValue = null;
@@ -481,9 +485,12 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 							preferenceClassification.getId(),
 							((Product) cmbProduct.getSelectedItem().getValue()).getId(),
 							((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
-							((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+							((Business) cmbBusiness.getSelectedItem().getValue()).getId())) {
 						savePreferenceValues();
-					else
+			      	cmbProduct.setDisabled(true);
+	            	cmbTransactionType.setDisabled(true);
+	            	cmbBusiness.setDisabled(true);
+					}else
 						this.showMessage("sp.error.field.exists", true, null);     
 				}  catch (Exception e) {
 					e.printStackTrace();
@@ -608,18 +615,81 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	}
     
     public void onChange$cmbProduct() {
+    	clearMessage();
+    	btnSave.setVisible(true);
     	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
-    		loadPreferences(preferenceClassification.getId());  
+    		try {
+				if (preferencesEJB.validatePreferencesValues(
+						preferenceClassification.getId(),
+						((Product) cmbProduct.getSelectedItem().getValue()).getId(),
+						((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
+						((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+		    		loadPreferences(preferenceClassification.getId());  
+				else {
+					PreferenceValue pValue = new PreferenceValue();
+					pValue.setPreferenceClassficationId(preferenceClassification);
+					pValue.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+					pValue.setTransactionTypeId((TransactionType) cmbTransactionType.getSelectedItem().getValue());
+					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
+	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
+	            	btnSave.setVisible(false);
+					this.showMessage("sp.error.field.exists", true, null);   
+				}  
+			}  catch (Exception e) {
+				e.printStackTrace();
+			}
     }
     
     public void onChange$cmbTransactionType() {
+    	clearMessage();
+    	btnSave.setVisible(true);
     	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
-    		loadPreferences(preferenceClassification.getId());  
+    		try {
+				if (preferencesEJB.validatePreferencesValues(
+						preferenceClassification.getId(),
+						((Product) cmbProduct.getSelectedItem().getValue()).getId(),
+						((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
+						((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+		    		loadPreferences(preferenceClassification.getId());  
+				else {
+					PreferenceValue pValue = new PreferenceValue();
+					pValue.setPreferenceClassficationId(preferenceClassification);
+					pValue.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+					pValue.setTransactionTypeId((TransactionType) cmbTransactionType.getSelectedItem().getValue());
+					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
+	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
+	            	btnSave.setVisible(false);
+					this.showMessage("sp.error.field.exists", true, null);   
+				}     
+			}  catch (Exception e) {
+				e.printStackTrace();
+			}  
     }
 
     public void onChange$cmbBusiness() {
+    	clearMessage();
+    	btnSave.setVisible(true);
     	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
-    		loadPreferences(preferenceClassification.getId());  
+    		try {
+				if (preferencesEJB.validatePreferencesValues(
+						preferenceClassification.getId(),
+						((Product) cmbProduct.getSelectedItem().getValue()).getId(),
+						((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
+						((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+		    		loadPreferences(preferenceClassification.getId());  
+				else {
+					PreferenceValue pValue = new PreferenceValue();
+					pValue.setPreferenceClassficationId(preferenceClassification);
+					pValue.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+					pValue.setTransactionTypeId((TransactionType) cmbTransactionType.getSelectedItem().getValue());
+					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
+	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
+	            	btnSave.setVisible(false);
+					this.showMessage("sp.error.field.exists", true, null);   
+				}
+			}  catch (Exception e) {
+				e.printStackTrace();
+			}
     }
     
     @SuppressWarnings("unchecked")
