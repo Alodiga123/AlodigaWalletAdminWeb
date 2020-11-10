@@ -39,7 +39,7 @@
                                                     <div align="left" width="400px">
                                                         <label value="${c:l('sp.crud.collectionsRequest')}" sclass="lblbold"/>
                                                     </div>                                                
-                                                    <div align="right" width="485px">
+                                                    <div align="right" width="585px">
                                                         <hlayout>
                                                             <label value="${c:l('sp.common.field.required.full')}" sclass="lblbold" />
                                                         </hlayout>
@@ -80,7 +80,23 @@
                                                             <hlayout>
                                                                 <combobox id="cmbCollectionType" width="250px" mold="rounded" readonly="true"/>
                                                             </hlayout>
-                                                        </row>                                                        
+                                                        </row>  
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.report.enable')}" sclass="lblbold"/>
+                                                            <hbox width="250px">
+                                                                <radiogroup id="isEnabled" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="isEnabledYes" label="${c:l('sp.common.yes')}" radiogroup="isEnabled" />
+                                                                            <radio id="isEnabledNo" label="${c:l('sp.common.no')} " radiogroup="isEnabled"/>
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>
+                                                        </row>
+                                                                                                                                                                    
                                                     </rows>
                                                 </grid>
                                             </vlayout>
