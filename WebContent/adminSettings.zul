@@ -51,15 +51,15 @@
                                                         </row>
                                                     </rows>
                                                 </grid>
-                                                <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
+                                                <grid id="gridData" width="1000px" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
-                                                        <column label="${c:l('sp.crud.settings.main.description')}" width="300px"/>
-                                                        <column label="${c:l('sp.crud.settings.main.value')}" width="180px"/>
-                                                        <column label="${c:l('sp.specific.preference.beginningDate')}" width="130px"/>
-                                                        <column label="${c:l('sp.specific.preference.endingDate')}" width="130px"/>
-                                                        <column label="${c:l('sp.crud.settings.main.type')}" width="87px"/>
-                                                        <column label="${c:l('sp.specific.preference.percentage')}" width="85px"/>
-                                                        <column label="${c:l('sp.crud.settings.main.enabled')}" width="85px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.description')}" width="320px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.value')}" width="120px"/>
+                                                        <column label="${c:l('sp.specific.preference.beginningDate')}" width="140px"/>
+                                                        <column label="${c:l('sp.specific.preference.endingDate')}" width="140px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.type')}" width="140px"/>
+                                                        <column label="${c:l('sp.specific.preference.percentage')}" width="75px"/>
+                                                        <column label="${c:l('sp.crud.settings.main.enabled')}" width="65px"/>
                                                     </columns>
                                                        <rows id = "rowsGrid">                                                                     
                                                     
