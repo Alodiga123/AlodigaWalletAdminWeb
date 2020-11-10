@@ -30,6 +30,7 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Radio;
 import org.zkoss.zul.Toolbarbutton;
 
 public class AdminCollectionsRequestController extends GenericAbstractAdminController {
@@ -40,6 +41,8 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
     private Combobox cmbCollectionType;
     private Combobox cmbOriginAplication;
     private Combobox cmbRequestType;
+    private Radio isEnabledYes;
+    private Radio isEnabledNo;
     private UtilsEJB utilsEJB = null;
     private CollectionsRequest collectionsRequestParam;
     private Button btnSave;
@@ -88,6 +91,11 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
 
     private void loadFields(CollectionsRequest collectionsRequest) {
         btnSave.setVisible(true);
+        if (collectionsRequest.getEnabled() == true) {
+            isEnabledYes.setChecked(true);
+        } else {
+            isEnabledNo.setChecked(true);
+        }
     }
 
     public void onChange$cmbCountry() {
@@ -125,17 +133,25 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
 
     private void saveCollectionsRequest(CollectionsRequest _collectionsRequest) {
         CollectionsRequest collectionsRequest = null;
-
+        boolean isEnabled  = true;
+        
         try {
             if (_collectionsRequest != null) {
                 collectionsRequest = _collectionsRequest;
             } else {//New collectionsRequest
                 collectionsRequest = new CollectionsRequest();
             }
+            
+            if (isEnabledYes.isChecked()) {
+                isEnabled = true;
+            } else {
+                isEnabled = false;
+            }
 
             collectionsRequest.setPersonTypeId((PersonType) cmbPersonType.getSelectedItem().getValue());
             collectionsRequest.setCollectionTypeId((CollectionType) cmbCollectionType.getSelectedItem().getValue());
             collectionsRequest.setRequestTypeId((RequestType) cmbRequestType.getSelectedItem().getValue());
+            collectionsRequest.setEnabled(isEnabled);
             if(eventType == WebConstants.EVENT_ADD){
                 if (validate(collectionsRequest)) {
                     collectionsRequest = utilsEJB.saveCollectionsRequest(collectionsRequest);
