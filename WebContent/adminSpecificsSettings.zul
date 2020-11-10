@@ -14,12 +14,12 @@
                 <div align="center" >
                     <hlayout >
                         <div></div>
-                        <div width="1200px" align="left" height="780px">
+                        <div width="100%" align="left" height="100%">
                             <hlayout>
                                 <div>
                                     <include src="adminMainMenu.zul"/>
                                 </div>
-                                <div width="900px">
+                                <div width="1000px">
                                     <vlayout>
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
@@ -46,7 +46,7 @@
 											 </hlayout>
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column width="320px"/>
+                                                        <column width="427px"/>
                                                         <column width="570px"/>
                                                     </columns>
                                                     <rows>
@@ -74,10 +74,13 @@
 
                                                <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
-                                                        <column label ="${c:l('sp.specific.preference.field')}" width="270px"/>
-                                                        <column label ="${c:l('sp.crud.settings.main.value')}" width="280px"/>
-                                                        <column label ="${c:l('sp.specific.preference.spacific')}" width="170px"/>
-                                                         <column label ="${c:l('sp.specific.preference.enabled')}" width="170px"/>
+                                                        <column label ="${c:l('sp.specific.preference.field')}" width="300px"/>
+                                                        <column label ="${c:l('sp.crud.settings.main.value')}" width="180px"/>
+                                                        <column label="${c:l('sp.specific.preference.beginningDate')}" width="130px"/>
+                                                        <column label="${c:l('sp.specific.preference.endingDate')}" width="130px"/>
+                                                        <column label="${c:l('sp.specific.preference.percentage')}" width="85px"/>
+                                                        <column label ="${c:l('sp.specific.preference.spacific')}" width="85px"/>
+                                                        <column label ="${c:l('sp.specific.preference.enabled')}" width="85px"/>
                                                     </columns>
                                                      <rows id = "rowsGrid">                                                                      
                                                     

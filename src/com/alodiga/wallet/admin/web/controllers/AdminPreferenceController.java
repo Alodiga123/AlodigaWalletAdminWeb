@@ -4,6 +4,8 @@ import java.util.List;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
@@ -58,9 +60,19 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     private Checkbox chkCustomer;
     private Checkbox chkBusiness;
     private Row rowCustomer;
+    private Row rowCustomerBeginning;
+    private Row rowCustomerEnding;
     private Row rowBusiness;
+    private Row rowBusinessBeginning;
+    private Row rowBusinessEnding;
+    private Datebox dtxCustomerBeginning;
+    private Datebox dtxCustomerEnding;
+    private Datebox dtxBusinessBeginning;
+    private Datebox dtxBusinessEnding;
     private Textbox txtValueCustomer;
     private Textbox txtValueBusiness;
+    private Checkbox chkCustomerEnding;
+    private Checkbox chkBusinessEnding;
     private UtilsEJB utilsEJB = null;
     private PreferencesEJB preferencesEJB = null;
     private PersonEJB personEJB = null;
@@ -104,6 +116,10 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             preferencesEJB = (PreferencesEJB) EJBServiceLocator.getInstance().get(EjbConstants.PREFERENCES_EJB);
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             loadData();
+            dtxCustomerBeginning.setValue(new Timestamp(new Date().getTime()));
+            dtxCustomerEnding.setValue(new Timestamp(new Date().getTime()));
+            dtxBusinessBeginning.setValue(new Timestamp(new Date().getTime()));
+            dtxBusinessEnding.setValue(new Timestamp(new Date().getTime()));          
         } catch (Exception ex) {
             showError(ex);
         }
@@ -153,10 +169,20 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             		chkCustomer.setChecked(pValueClient.isEnabled()); 
             		txtValueCustomer.setText(pValueClient.getValue());
         	    	rowCustomer.setVisible(true);
+        	    	rowCustomerBeginning.setVisible(true);
+        	    	dtxCustomerBeginning.setValue(pValueClient.getBeginningDate());
+        	    	if (pValueClient.getEndingDate()!=null) {
+        	    		chkCustomerEnding.setChecked(pValueClient.getEndingDate()!=null);
+        	    		dtxCustomerEnding.setVisible(true);
+        	    		dtxCustomerEnding.setValue(pValueClient.getEndingDate());
+        	    	}
+        	    	rowCustomerEnding.setVisible(true);
             	} catch (Exception e) {
             		chkCustomer.setChecked(false); 
             		txtValueCustomer.setText("");
         	    	rowCustomer.setVisible(false);
+        	    	rowCustomerBeginning.setVisible(false);
+        	    	rowCustomerEnding.setVisible(false);
             	}
             	PreferenceValue pValueBusiness = null;
             	try {
@@ -164,15 +190,27 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             		chkBusiness.setChecked(pValueBusiness.isEnabled()); 
             		txtValueBusiness.setText(pValueBusiness.getValue());
         	    	rowBusiness.setVisible(true);
+        	    	rowBusinessBeginning.setVisible(true);
+        	    	dtxBusinessBeginning.setValue(pValueBusiness.getBeginningDate());
+        	    	if (pValueBusiness.getEndingDate()!=null) {
+        	    		chkBusinessEnding.setChecked(pValueBusiness.getEndingDate()!=null);
+        	    		dtxBusinessEnding.setValue(pValueBusiness.getEndingDate());
+        	    		dtxBusinessEnding.setVisible(true);
+        	    	}
+        	    	rowBusinessEnding.setVisible(true);
             	} catch (Exception e) {
             		chkBusiness.setChecked(false);
             		txtValueBusiness.setText("");
-        	    	rowBusiness.setVisible(false);          		
+        	    	rowBusiness.setVisible(false);  
+        	    	rowBusinessBeginning.setVisible(false);
+        	    	rowBusinessEnding.setVisible(false);
             	}
         } catch (Exception ex) {
             showError(ex);
         }
     }
+    
+  
 
     public void blockFields() {
        txtPreference.setReadonly(true);
@@ -241,6 +279,14 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         short indEnable = 1;
         
         try {            
+    		if (chkBusinessEnding.isChecked() && dtxBusinessBeginning.getValue().getTime() >= dtxBusinessEnding.getValue().getTime()) {
+				this.showMessage("sp.error.date.invalid", true, null);
+				throw new GeneralException("Error Invalid Dates");
+			}
+    		if (chkCustomerEnding.isChecked() && dtxCustomerBeginning.getValue().getTime() >= dtxCustomerEnding.getValue().getTime()) {
+				this.showMessage("sp.error.date.invalid", true, null);
+				throw new GeneralException("Error Invalid Dates");
+			}
             //Se obtienen los lenguajes Español e Ingles
             //Ingles
             EJBRequest request4 = new EJBRequest();
@@ -315,6 +361,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                     	try {
                     		pValueClient = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationClient.getId(), preference.getId());
                     		pValueClient.setValue(txtValueCustomer.getText());
+                    		pValueClient.setBeginningDate(dtxCustomerBeginning.getValue());
+                    		if (chkCustomerEnding.isChecked())
+                    			pValueClient.setEndingDate(dtxCustomerEnding.getValue());
                     		pValueClient.setUpdateDate(new Timestamp(new Date().getTime()));
                     		pValueClient = preferencesEJB.savePreferenceValue(pValueClient); 
                     	} catch (Exception e) {
@@ -325,6 +374,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                     		pValueClient.setEnabled(true);
                     		pValueClient.setCreateDate(new Timestamp(new Date().getTime()));
                     		pValueClient.setValue(txtValueCustomer.getText());
+                    		pValueClient.setBeginningDate(dtxCustomerBeginning.getValue());
+                    		if (chkCustomerEnding.isChecked())
+                    			pValueClient.setEndingDate(dtxCustomerEnding.getValue());
                     		pValueClient = preferencesEJB.savePreferenceValue(pValueClient);               	
         				}
                     }
@@ -333,6 +385,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                     	try {
                     		pValueBusiness = preferencesEJB.loadActivePreferenceValuesByClassificationIdAndFieldId(classificationBussines.getId(), preference.getId());
                     		pValueBusiness.setValue(txtValueBusiness.getText());
+                    		pValueBusiness.setBeginningDate(dtxBusinessBeginning.getValue());
+                    		if (chkBusinessEnding.isChecked())
+                    			pValueBusiness.setEndingDate(dtxBusinessEnding.getValue());
                     		pValueBusiness.setUpdateDate(new Timestamp(new Date().getTime()));
                     		pValueBusiness = preferencesEJB.savePreferenceValue(pValueBusiness);               	              	
                     	} catch (Exception e) {
@@ -343,6 +398,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                     		pValueBusiness.setEnabled(true);
                     		pValueBusiness.setCreateDate(new Timestamp(new Date().getTime()));
                     		pValueBusiness.setValue(txtValueBusiness.getText());
+                    		pValueBusiness.setBeginningDate(dtxBusinessBeginning.getValue());
+                    		if (chkBusinessEnding.isChecked())
+                    			pValueBusiness.setEndingDate(dtxBusinessEnding.getValue());
                     		pValueBusiness = preferencesEJB.savePreferenceValue(pValueBusiness);               	              	
         				}
                     }
@@ -372,6 +430,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                 	preferenceValueClient.setEnabled(true);
                 	preferenceValueClient.setCreateDate(new Timestamp(new Date().getTime()));
                 	preferenceValueClient.setValue(txtValueCustomer.getText());
+                	preferenceValueClient.setBeginningDate(dtxCustomerBeginning.getValue());
+                	if (chkCustomerEnding.isChecked())
+                		preferenceValueClient.setEndingDate(dtxCustomerEnding.getValue());
                 	preferenceValueClient = preferencesEJB.savePreferenceValue(preferenceValueClient);               	
                 }
 
@@ -384,6 +445,9 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                 	preferenceValueBusiness.setEnabled(true);
                 	preferenceValueBusiness.setCreateDate(new Timestamp(new Date().getTime()));
                 	preferenceValueBusiness.setValue(txtValueBusiness.getText());
+                	preferenceValueBusiness.setBeginningDate(dtxBusinessBeginning.getValue());
+                	if (chkBusinessEnding.isChecked())
+                		preferenceValueBusiness.setEndingDate(dtxBusinessEnding.getValue());
                 	preferenceValueBusiness = preferencesEJB.savePreferenceValue(preferenceValueBusiness);               	
                 }
             }
@@ -394,7 +458,8 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
             } else {
                 btnSave.setVisible(true);
             }
-           
+        } catch (GeneralException ex) {
+ 
         } catch (Exception ex) {
             showError(ex);
         } 
@@ -487,8 +552,12 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
 	     if (chkCustomer.isChecked()) {
 	    	 txtValueCustomer.setText("");
 	    	 rowCustomer.setVisible(true);
+	    	 rowCustomerBeginning.setVisible(true);
+	    	 rowCustomerEnding.setVisible(true);
 	     }else {
 	    	 rowCustomer.setVisible(false);
+	    	 rowCustomerBeginning.setVisible(false);
+	    	 rowCustomerEnding.setVisible(false);
 	     }
     }
     
@@ -496,9 +565,29 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
 	     if (chkBusiness.isChecked()) {
 	    	 txtValueBusiness.setText("");
 	    	 rowBusiness.setVisible(true);
+	    	 rowBusinessBeginning.setVisible(true);
+	    	 rowBusinessEnding.setVisible(true);
 	     }else {
 	    	 rowBusiness.setVisible(false);
+	    	 rowBusinessBeginning.setVisible(false);
+	    	 rowBusinessEnding.setVisible(false);
 	     }
    }
 
+    
+    public void onClick$chkCustomerEnding() {
+     	if (chkCustomerEnding.isChecked()) {
+     		dtxCustomerEnding.setVisible(true);
+     	}else {
+     		dtxCustomerEnding.setVisible(false);
+     	}
+    }
+    
+    public void onClick$chkBusinessEnding() {
+     	if (chkBusinessEnding.isChecked()) {
+     		dtxBusinessEnding.setVisible(true);
+     	}else {
+     		dtxBusinessEnding.setVisible(false);
+     	}
+    }
 }
