@@ -39,7 +39,7 @@
                                                 </div>
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column width="300px"/>
+                                                        <column width="400px"/>
                                                         <column width="597px"/>
                                                     </columns>
                                                     <rows>
