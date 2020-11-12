@@ -50,7 +50,6 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
             documentsPersonTypeParam = null;
         } else {
             documentsPersonTypeParam = (DocumentsPersonType) Sessions.getCurrent().getAttribute("object");
-//            documentsPersonTypeParam = (Sessions.getCurrent().getAttribute("object") != null) ? (DocumentsPersonType) Sessions.getCurrent().getAttribute("object") : null;
         }
         initialize();
         initView(eventType, "crud.documentsPersonType");
@@ -144,7 +143,7 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
             DocumentsPersonType documentsPersonType = null;
             if (_documentsPersonType != null) {
                 documentsPersonType = _documentsPersonType;
-            } else {//New DocumentsPersonType
+            } else {
                 documentsPersonType = new DocumentsPersonType();
             }
             documentsPersonType.setDescription(txtDocumentPerson.getText());
@@ -160,7 +159,7 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
                 btnSave.setVisible(true);
             }
         } catch (Exception ex) {
-//            showError(ex);
+            showError(ex);
             this.showMessage("sp.msj.errorSave", true, null);
         }
     }

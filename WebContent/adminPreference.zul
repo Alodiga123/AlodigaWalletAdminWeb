@@ -47,8 +47,8 @@
                                                 
                                                 <grid fixedLayout="true">
                                                     <columns>
-                                                        <column label="" width="300px"/>
-                                                        <column label="" width="400px"/>
+                                                        <column label="" width="397px"/>
+                                                        <column label="" width="500px"/>
                                                     </columns> 
                                                     <rows>
                                                         
@@ -106,6 +106,19 @@
                                                                  <textbox id="txtValueCustomer" value=""  width="196px"/>
                                                             </hlayout>
                                                         </row>
+                                                           <row id="rowCustomerBeginning" visible="false">                                                                                                          
+                                                            <label value="${c:l('sp.specific.preference.beginningDate')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                  <datebox id="dtxCustomerBeginning" width="120px" format="dd-MM-yyyy"/>
+                                                            </hlayout>
+                                                        </row>
+                                                         <row id="rowCustomerEnding" visible="false">                                                                                                          
+                                                            <label value="${c:l('sp.specific.preference.endingDate')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                  <checkbox id="chkCustomerEnding" checked="false"/>
+                                                                  <datebox id="dtxCustomerEnding" width="120px" format="dd-MM-yyyy" visible="false"/>
+                                                            </hlayout>
+                                                        </row>
                                                          <row>
                                                             <label value="${c:l('sp.preference.description.business')}" sclass="lblbold"/>
                                                             <hlayout>
@@ -116,6 +129,19 @@
                                                             <label value="${c:l('sp.preference.description.valeu.business')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                  <textbox id="txtValueBusiness" value="" width="196px"/>
+                                                            </hlayout>
+                                                        </row>
+                                                        <row id="rowBusinessBeginning" visible="false">                                                                                                          
+                                                            <label value="${c:l('sp.specific.preference.beginningDate')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                  <datebox id="dtxBusinessBeginning" width="120px" format="dd-MM-yyyy"/>
+                                                            </hlayout>
+                                                        </row>
+                                                         <row id="rowBusinessEnding" visible="false">                                                                                                          
+                                                            <label value="${c:l('sp.specific.preference.endingDate')}" sclass="lblbold"/>
+                                                            <hlayout>
+                                                                  <checkbox id="chkBusinessEnding" checked="false"/>
+                                                                  <datebox id="dtxBusinessEnding" width="120px" format="dd-MM-yyyy" visible="false"/>
                                                             </hlayout>
                                                         </row>
                                                         <row>

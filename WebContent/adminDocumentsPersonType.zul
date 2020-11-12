@@ -78,7 +78,7 @@
                                                             </hlayout>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.documentPersonType.identityCode')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtIdentityCode" maxlength="10" width="245px"/>
                                                             </hlayout>
