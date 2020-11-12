@@ -53,19 +53,19 @@
                                                         <row>
                                                         <label value="${c:l('sp.specific.preference.product')}" sclass="lblbold"/>  
                                                             <hlayout>
-                                                                <combobox id="cmbProduct" width="250px" mold="rounded" readonly="true" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                                <combobox id="cmbProduct" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                          </row>
                                                          <row>
                                                          <label value="${c:l('sp.specific.preference.transaction.type')}" sclass="lblbold"/>
                                                              <hlayout>
-                                                                <combobox id="cmbTransactionType" width="250px" mold="rounded" readonly="true" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                                <combobox id="cmbTransactionType" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                          </row>
                                                           <row>
                                                           <label value="${c:l('sp.specific.preference.bussiness')}" sclass="lblbold"/>
                                                              <hlayout>
-                                                               <combobox id="cmbBusiness" width="250px" mold="rounded" readonly="true" constraint="no empty: ${c:l('error.field.required')}"/>
+                                                               <combobox id="cmbBusiness" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                           </row>
                                                     </rows>
