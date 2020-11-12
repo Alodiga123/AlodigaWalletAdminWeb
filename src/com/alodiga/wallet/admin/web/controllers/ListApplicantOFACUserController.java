@@ -39,9 +39,12 @@ import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
-import com.alodiga.ws.cumpliments.services.OFACMethodWSProxy;
-import com.alodiga.ws.cumpliments.services.WsExcludeListResponse;
-import com.alodiga.ws.cumpliments.services.WsLoginResponse;
+import com.alodiga.ws.remittance.services.WSOFACMethodProxy;
+import com.alodiga.ws.remittance.services.WsExcludeListResponse;
+import com.alodiga.ws.remittance.services.WsLoginResponse;
+//import com.alodiga.ws.cumpliments.services.OFACMethodWSProxy;
+//import com.alodiga.ws.cumpliments.services.WsExcludeListResponse;
+//import com.alodiga.ws.cumpliments.services.WsLoginResponse;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -199,7 +202,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
         float ofacPercentege = 0.5F;
         NaturalPerson naturalPerson = new NaturalPerson();
         AffiliationRequest affiliatinRequest = new AffiliationRequest();
-        OFACMethodWSProxy ofac = new OFACMethodWSProxy();
+        WSOFACMethodProxy ofac = new WSOFACMethodProxy();
         try {
             WsLoginResponse loginResponse = new WsLoginResponse();
             loginResponse = ofac.loginWS("alodiga", "d6f80e647631bb4522392aff53370502");
