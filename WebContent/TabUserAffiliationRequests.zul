@@ -39,7 +39,7 @@
                                                     <tabs>
                                                         <tab id="tabUserAffiliationRequests" label="${c:l('sp.tab.businessAffiliationRequests')}" />
                                                         <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
-                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
+                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.userRequestByCollections')}" />
                                                         <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
                                                         <tab id="tabReview" label="${c:l('sp.tab.businessAffiliationRequests.review')}"/>
                                                     </tabs>
