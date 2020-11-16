@@ -212,9 +212,9 @@ public class AdminMainMenuController extends GenericForwardComposer {
 
     private void loadManageMembershipRequestGroup(PermissionGroup permissionGroup) {
         Listgroup listgroup = createListGroup(permissionGroup);
-        createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);
-        createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup);       
+        createCell(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "listBusinessAffiliationRequests.zul", permissionGroup, listgroup);    
         createCell(Permission.LIST_USERS_AFFILIATION_REQUESTS, "listUsersAffiliationRequests.zul", permissionGroup, listgroup);         
+        createCell(Permission.LIST_APLICANT_OFAC, "listAplicantOFAC.zul", permissionGroup, listgroup); 
         createCell(Permission.LIST_APLICANT_USER_OFAC, "listApplicantOFACUser.zul", permissionGroup, listgroup); 
     }
     

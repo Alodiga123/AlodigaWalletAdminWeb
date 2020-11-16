@@ -28,16 +28,16 @@
                                                     <rows>
                                                         <group label="${c:l('sp.tab.businessAffiliationRequests')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.date')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.status')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.status')}" sclass="lblbold"/>
                                                         </row>                                                        
                                                         <row>
                                                             <label id="lblRequestNumber" value="" width="300px" style="color:#837E76;"/>
                                                             <label id="lblRequestDate" value="" width="300px" style="color:#837E76;"/>
                                                             <label id="lblStatusRequest" value="" width="300px" style="color:#837E76;"/>
                                                         </row>
-                                                        <group label="${c:l('sp.tab.businessAffiliationRequests.dataRequest')}"/> 
+                                                        <group label="${c:l('sp.userAffiliationRequests.groupApplicant')}"/> 
                                                         <row>
                                                             <label value="${c:l('sp.crud.businessAffiliationRequests.country')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.businessAffiliationRequests.identificationType')}" sclass="lblbold"/>
@@ -51,7 +51,7 @@
                                                         <row>
                                                             <label value="${c:l('sp.crud.businessAffiliationRequests.expirationDater')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.businessAffiliationRequests.identificationNumberOld')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.fullName')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.first.name')}" sclass="lblbold"/>
                                                         </row>                                                        
                                                         <row>
                                                             <label id="lblExpirationDater" value="" width="300px" style="color:#837E76;"/>
@@ -59,7 +59,7 @@
                                                             <label id="lblFullName" value="" width="300px" style="color:#837E76;"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.fullLastName')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.employee.last.name')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.businessAffiliationRequests.marriedLastName')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.businessAffiliationRequests.birthPlace')}" sclass="lblbold"/>
                                                         </row>

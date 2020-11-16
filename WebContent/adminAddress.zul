@@ -27,16 +27,16 @@
                                                     <rows>
                                                         <group label="${c:l('sp.crud.businessAffiliationRequests')}"/>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.date')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.businessAffiliationRequests.status')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.common.status')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblRequestNumber" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblRequestDate" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblStatusRequest" value="" width="200px" style="color:#837E76;"/>
                                                         </row> 
-                                                        <group label="${c:l('sp.crud.address.main')}"/>
+                                                        <group label="${c:l('sp.crud.passwordChange.request')}"/>
                                                         <row>
                                                             <label value="${c:l('sp.crud.address.country')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.address.city')}" sclass="lblbold"/>

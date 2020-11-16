@@ -34,9 +34,11 @@
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
-                                                <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.businessAffiliationRequests.ofac.nameLastName')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                <hlayout id="hParams2" style="text-align:right">
+                                                    <label value="${c:l('sp.crud.manual.recharge.status')}" sclass="lblbold"/>
+                                                    <combobox id="cmbStatus" width="100px" mold="rounded" readonly="true"/>
+                                                    <label value="${c:l('sp.crud.collection.affiliation.request.number')}" width="80px" sclass="lblbold"/>
+                                                    <textbox id="txtNumber" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
@@ -44,22 +46,25 @@
                                                         <button id="btnReviewOFAC" label="${c:l('sp.businessAffiliationRequests.ofac.reviewOFAC')}" width="150px" class="open orange" />
                                                     </div>
                                                     <!--Filters button-->
-                                                    <div align="right" width="600px">
+                                                    <hlayout id="hParams" style="text-align:right" width="615px">  
+                                                        <div style="margin-right: 17px;">          
                                                         <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
                                                         <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
-                                                    </div>
+                                                        </div>
+                                                    </hlayout>
+                                                  
                                                 </hlayout>
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="380px" mold="paging" pageSize="10">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.nameLastName')}" width="200px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.identificationsTypes')}" width="100px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.collection.affiliation.request.number')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.nameLastName')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.businessAffiliationRequests.ofac.identificationNumber')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.applicantType')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.tab.businessAffiliationRequests.mainApplicant')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('cms.common.personType')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.businessAffiliationRequests.ofac.statusApplicant')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.applicantOfac.percentageMatch')}" width="150px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

@@ -39,6 +39,7 @@ import com.alodiga.wallet.common.model.RequestHasCollectionRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 
@@ -168,22 +169,31 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
             if (list != null && !list.isEmpty()) {
                 btnDownload.setVisible(true);
                 for (RequestHasCollectionRequest collectionsRequest : list) {
+                    String pattern = "yyyy-MM-dd";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                    
                     item = new Listitem();
                     item.setValue(collectionsRequest);
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
                     if(collectionsRequest.getIndApproved() != null){
                        if (collectionsRequest.getIndApproved() == 1) {
-                            indAprroved = Labels.getLabel("sp.transactionStatus.approved");
+                            indAprroved = Labels.getLabel("sp.common.approveds");
                         } else {
-                            indAprroved = Labels.getLabel("sp.common.rejected");
+                            indAprroved = Labels.getLabel("sp.common.rejecteds");
                         } 
                     } else {
-                            indAprroved = Labels.getLabel("sp.common.unspecified");
+                            indAprroved = Labels.getLabel("sp.common.pending");
                     }
                     
                     
                     item.appendChild(new Listcell(indAprroved));
+                    if (collectionsRequest.getUpdateDate() != null){
+                      item.appendChild(new Listcell(simpleDateFormat.format(collectionsRequest.getUpdateDate())));  
+                    } else {
+                      item.appendChild(new Listcell(""));  
+                    }
+                    
                     item.appendChild(permissionEdit ?createButtonEditModal(collectionsRequest) : new Listcell());
                     item.appendChild(permissionRead ?createButtonViewModal(collectionsRequest) : new Listcell());
                     item.setParent(lbxRecords);
@@ -206,17 +216,23 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
 
     @Override
     public List<RequestHasCollectionRequest> getFilteredList(String filter) {
-        List<RequestHasCollectionRequest> list = new ArrayList<RequestHasCollectionRequest>();
-        if (collectionsRequests != null) {
-            for (Iterator<RequestHasCollectionRequest> i = collectionsRequests.iterator(); i.hasNext();) {
-            	RequestHasCollectionRequest tmp = i.next();
-                String field = tmp.getCollectionsRequestId().getCollectionTypeId().getDescription().toLowerCase();
-                if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                    list.add(tmp);
-                }
+        List<RequestHasCollectionRequest> requestHasCollectionlist = new ArrayList<RequestHasCollectionRequest>();
+        try {
+            if(filter != null && !filter.equals(" ")){
+                EJBRequest request = new EJBRequest();
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put(QueryConstants.PARAM_AFFILIATION_REQUEST_ID , affiliationRequestParam.getId());
+                params.put(QueryConstants.PARAM_NAME, txtName.getText());
+                request.setParams(params);
+                requestHasCollectionlist = utilsEJB.searchRequestHasCollectionRequest(request);
+             } else {
+                return collectionsRequests;
             }
+                  
+        } catch (Exception ex ){
+            showError(ex);
         }
-        return list;
+        return requestHasCollectionlist;
     }
 
     public Listcell createButtonEditModal(final Object obg) {
