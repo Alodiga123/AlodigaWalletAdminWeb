@@ -86,7 +86,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SOAFNE.getId());
             request.setParams(params);
-            businessAffiliationRequestList = utilsEJB.getTransactionApproveRequestByType(request);
+            businessAffiliationRequestList = utilsEJB.getAffiliationRequestByRequestByType(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {

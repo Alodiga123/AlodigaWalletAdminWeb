@@ -89,7 +89,7 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
             params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
             request.setParams(params);
-            userAffiliationRequestList = utilsEJB.getTransactionApproveRequestByType(request);
+            userAffiliationRequestList = utilsEJB.getAffiliationRequestByRequestByType(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
