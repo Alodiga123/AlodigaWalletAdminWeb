@@ -92,11 +92,11 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     public void getData() {
         collectionsRequests = new ArrayList<RequestHasCollectionRequest>();
         try {
-                EJBRequest request = new EJBRequest();
-                Map params = new HashMap();
-                params.put(EjbConstants.PARAM_AFFILIATION_REQUEST, affiliationRequestParam.getId());
-                request.setParams(params);
-                collectionsRequests = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request);
+            EJBRequest request = new EJBRequest();
+            Map params = new HashMap();
+            params.put(EjbConstants.PARAM_AFFILIATION_REQUEST, affiliationRequestParam.getId());
+            request.setParams(params);
+            collectionsRequests = utilsEJB.getRequestsHasCollectionsRequestByBusinessAffiliationRequest(request);
                 
         } catch (NullParameterException ex) {
             showError(ex);
@@ -180,9 +180,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                         } 
                     } else {
                             indAprroved = Labels.getLabel("sp.common.unspecified");
-                    }
-                    
-                    
+                    }                   
                     item.appendChild(new Listcell(indAprroved));
                     item.appendChild(permissionEdit ?createButtonEditModal(collectionsRequest) : new Listcell());
                     item.appendChild(permissionRead ?createButtonViewModal(collectionsRequest) : new Listcell());

@@ -196,7 +196,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
         int indBlackList = 0;
         String lastName = "";
         String firstName = "";
-        float ofacPercentege = 0.5F;
+        float ofacPercentege = 0.1F;
         NaturalPerson naturalPerson = new NaturalPerson();
         AffiliationRequest affiliatinRequest = new AffiliationRequest();
         WSOFACMethodProxy ofac = new WSOFACMethodProxy();

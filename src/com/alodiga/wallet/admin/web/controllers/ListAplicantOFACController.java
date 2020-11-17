@@ -239,8 +239,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                     }
                 }
                 
-                if (lastName != null && firstName != null) {
-                    
+                if (lastName != null && firstName != null) {                    
                     ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), firstName, ofacPercentege);
 
                     //Se guarda el registro de la revision OFAC

@@ -237,7 +237,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
         if (media != null) {
             divPreview.getChildren().clear();
             media = event.getMedia();
-            File file = new File("/opt/proyecto/cms/imagenes/" + media.getName());
+            File file = new File("/opt/alodiga/proyecto/maw/imagenes/" + media.getName());
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(media.getByteData());
             fos.flush();
