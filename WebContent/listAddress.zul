@@ -18,21 +18,6 @@
                                     <vlayout>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
                                         <div>
-                                            <!--Filters for Searching-->
-                                            <vlayout>
-                                                <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.crud.businnesSubCategory.category')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtName" value="" width="100px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
-                                                </hlayout>
-                                                <hlayout>
-                                                    <!--Filters button-->
-                                                    <div align="right" width="950px">
-                                                        <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
-                                                        <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
-                                                    </div>
-                                                </hlayout>
-                                            </vlayout>
-                                            <separator/>
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="950px" height="430px" mold="paging" pageSize="10">
                                                 <listhead>

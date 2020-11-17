@@ -35,7 +35,7 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('sp.crud.businessAffiliationRequests.number')}" width="80px" sclass="lblbold"/>
+                                                    <label value="${c:l('sp.crud.collection.affiliation.request.number')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtNumber" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
@@ -50,10 +50,10 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.number')}" width="250px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.date')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.applicant')}" width="275px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.status')}" width="225px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.collection.affiliation.request.number')}" width="250px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.collection.affiliation.request.date')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.userAffiliationRequests.applicant')}" width="275px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.manual.recharge.status')}" width="225px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

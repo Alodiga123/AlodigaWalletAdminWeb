@@ -153,7 +153,12 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     }
 
     public Boolean validateEmpty() {
-        return true;
+        if(txtObservations.getText().isEmpty()){
+             this.showMessage("sp.error.renewal.observations",true, null);
+        } else {
+            return true;
+        }
+        return false;
     }
 
   
@@ -219,6 +224,8 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
                 loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 loadCmbCountry(eventType);
                 loadCmbPersonType(eventType);
+                cmbPersonType.setDisabled(true);
+                cmbCountry.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(requestHasCollectionsRequestParam);
