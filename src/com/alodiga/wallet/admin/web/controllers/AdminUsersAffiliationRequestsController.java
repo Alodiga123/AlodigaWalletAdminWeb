@@ -5,6 +5,7 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Person;
@@ -53,6 +54,8 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
     public static AffiliationRequest userAffiliationRequestParent = null;
     private Integer eventType;
     private Tab tabUserAffiliationRequests;
+    private Tab tabOfac;
+    private Tab tabReview;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -74,9 +77,13 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.edit"));
+                activateTabOfac();
+//                activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.view"));
+                activateTabOfac();
+                activateTabReview();
                 break;
             case WebConstants.EVENT_ADD:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.add"));
@@ -195,5 +202,24 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             default:
                 break;
         }
+    }
+    
+    public void activateTabOfac(){
+         if((userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECCOM.getStatusRequestCode())) ||
+             (userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode()))){
+            tabOfac.setDisabled(false);
+         } else {
+            tabOfac.setDisabled(true);
+         }
+  
+    }
+    
+    public void activateTabReview(){
+         if(userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode())){
+            tabReview.setDisabled(false);
+         } else {
+            tabReview.setDisabled(true);
+         }
+  
     }
 }
