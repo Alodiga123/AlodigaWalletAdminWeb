@@ -55,11 +55,9 @@
                                                         <row>
                                                             <hlayout>
                                                                 <combobox id="cmbCountry" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbPersonType" width="250px" mold="rounded" readonly="true"/>
-                                                                <label value="*" sclass="lblreq" />
                                                             </hlayout>
                                                             
                                                         </row>
