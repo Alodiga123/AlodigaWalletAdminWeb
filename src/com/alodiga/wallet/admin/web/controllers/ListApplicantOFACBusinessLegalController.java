@@ -254,10 +254,11 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
             if(filter != null && !filter.equals(" ")){
                 EJBRequest request = new EJBRequest();
                 Map<String, Object> params = new HashMap<String, Object>();
+                params.put(QueryConstants.PARAM_PERSON_ID , affiliationRequestParam.getBusinessPersonId().getId());
                 params.put(QueryConstants.PARAM_AFFILIATION_REQUEST_ID , affiliationRequestParam.getId());
                 params.put(QueryConstants.PARAM_NAME, txtName.getText());
                 request.setParams(params);
-//                personlist = utilsEJB.searchRequestHasCollectionRequest(request);
+                personlist = personEJB.searchPersonByLegalPersonAndLegalRepresentative(request);
              } else {
                 return applicantList;
             }
