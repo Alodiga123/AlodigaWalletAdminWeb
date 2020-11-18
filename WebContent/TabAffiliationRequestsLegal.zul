@@ -41,6 +41,7 @@
                                                         <tab id="tabAddress" label="${c:l('sp.tab.businessAffiliationRequests.address')}" />
                                                         <tab id="tabLegalRepresentative" label="${c:l('sp.tab.businessAffiliationRequests.legalRepresentative')}" />
                                                         <tab id="tabCollectionAffiliationRequests" label="${c:l('sp.tab.requestByCollections')}" />
+                                                        <tab id="tabOfac" label="${c:l('sp.tab.businessAffiliationRequests.ofac')}" />
                                                         <tab id="tabReview" label="${c:l('sp.tab.businessAffiliationRequests.review')}"/>
                                                     </tabs>
                                                     <tabpanels>
@@ -55,6 +56,9 @@
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="listCollectionsAffiliationRequest.zul"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <include src="listAppplicantOFACBusinessLegal.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
                                                             <include src="adminApplicationReview.zul"/>
