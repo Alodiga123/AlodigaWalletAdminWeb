@@ -78,7 +78,6 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             accessControlEJB = (AccessControlEJB) EJBServiceLocator.getInstance().get(EjbConstants.ACCESS_CONTROL_EJB);
             auditoryEJB = (AuditoryEJB) EJBServiceLocator.getInstance().get(EjbConstants.AUDITORY_EJB);
             userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
-            getData();
             loadPermisssions();
         } catch (Exception ex) {
             showError(ex);
@@ -185,36 +184,36 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
     public void onClick$btnSearch() throws InterruptedException {
         try {
             String logins = txtLogin.getValue();
-            List<User> userList = new ArrayList<User>();
+            List<User> userList = new ArrayList<User>();            
             Long userId = null;
-                try{
-                    EJBRequest request = new EJBRequest();
-                    HashMap params = new HashMap();
-                    params.put(Constants.PARAM_LOGIN, logins);
-                    request.setParams(params);
-                    userList = userEJB.getUserByLogin(request);
-                
-                } catch (Exception ex) {
-                    showError(ex);
-                }
-                for (User userName : userList) {
-                            userId = userName.getId();
-                }
-        
+            
+            try{
+                EJBRequest request = new EJBRequest();
+                HashMap params = new HashMap();
+                params.put(Constants.PARAM_LOGIN, logins);
+                request.setParams(params);
+                userList = userEJB.getUserByLogin(request);
+
+            } catch (Exception ex) {
+                showError(ex);
+            }            
+            for (User userName : userList) {
+                userId = userName.getId();
+            }        
+            
             EJBRequest _request = new EJBRequest();
             Map<String, Object> params = new HashMap<String, Object>();
             params.put(QueryConstants.PARAM_BEGINNING_DATE, dtbBeginningDate.getValue());
             params.put(QueryConstants.PARAM_ENDING_DATE, dtbEndingDate.getValue());
-            params.put(QueryConstants.PARAM_USER_ID, userId);
-            
+            params.put(QueryConstants.PARAM_USER_ID, userId);            
             if (dtbEndingDate.getValue().getTime() >= dtbBeginningDate.getValue().getTime()) {
                 if (cmbPermissions.getSelectedItem() != null && cmbPermissions.getSelectedIndex() != 0) {
                       params.put(QueryConstants.PARAM_PERMISSION_ID, ((Permission) cmbPermissions.getSelectedItem().getValue()).getId());
-                  }  
+                }  
                 _request.setParams(params);
                 loadList(auditoryEJB.searchAuditActions(_request));
-            }   else  {
-                  this.showMessage("sp.error.date.invalid", true, null);
+            } else  {
+                this.showMessage("sp.error.date.invalid", true, null);
             }             
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
