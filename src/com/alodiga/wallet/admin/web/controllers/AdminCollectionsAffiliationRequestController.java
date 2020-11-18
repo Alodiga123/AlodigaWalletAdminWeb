@@ -73,10 +73,17 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     String format = "";
     private boolean uploaded = false;
     public Window winAdminCollectionsRequestController;
+    private AdminUsersAffiliationRequestsController adminUserRequest = null;
+    private AffiliationRequest affiliationRequest = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        adminUserRequest = new AdminUsersAffiliationRequestsController();
+        if(adminUserRequest.getUserAffiliationRequets() != null){
+            affiliationRequest = adminUserRequest.getUserAffiliationRequets();
+        }
+        
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
@@ -192,18 +199,22 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
             requestHasCollectionsRequest.setImageFileUrl(UrlFile);
             requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
+            
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
             params.put(EjbConstants.PARAM_AFFILIATION_REQUEST,requestHasCollectionsRequest.getAffiliationRequestId().getId());
             request.setParams(params);
             utilsEJB.updateBusinessAffiliationRequest(request);
+           
+            
+            
             this.showMessage("sp.common.save.success", false, null);
             EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true).publish(new Event(""));
         } catch (Exception ex) {
             showError(ex);
         }
     }
-
+  
     public void onClick$btnSave() {
         if (validateEmpty()) {
             switch (eventType) {
