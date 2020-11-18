@@ -185,7 +185,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             if (filter != null && !filter.equals("")) {
                 EJBRequest _request = new EJBRequest();
                 Map<String, Object> params = new HashMap<String, Object>();
-                params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
+                params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SOAFNE.getId());
                 params.put(QueryConstants.PARAM_NUMBER_REQUEST, txtNumber.getText());
                 _request.setParams(params);
                 afiliationRequestaux = utilsEJB.searchAffiliationRequestByParams(_request); 
