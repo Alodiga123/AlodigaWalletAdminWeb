@@ -309,20 +309,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             legalPerson.setStatusApplicantId(getStatusApplicant(legalPerson.getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST_OK));
                         }
                         legalPerson = personEJB.saveLegalPerson(legalPerson);
-                        
-                            //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
-                        if (ofacResponse != null) {
-                            if (indBlackList == 1) {
-                                affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-                            } else {
-                                affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-                            }
-                            affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
 
-                            getData();
-                            loadList(personList);
-                            this.showMessage("sp.common.finishReviewOFAC", false, null);
-                        } 
                     } 
                 }
                 
@@ -336,19 +323,6 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                         }
                         naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
                         
-                            //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
-                        if (ofacResponse != null) {
-                            if (indBlackList == 1) {
-                                affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-                            } else {
-                                affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-                            }
-                            affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
-
-                            getData();
-                            loadList(personList);
-                            this.showMessage("sp.common.finishReviewOFAC", false, null);
-                        } 
                      }
                 }
                 if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
@@ -360,8 +334,13 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             legalRepresentative.setStatusApplicantId(getStatusApplicant(applicant.getLegalRepresentative().getStatusApplicantId() ,Constants.STATUS_APPLICANT_BLACK_LIST_OK));
                         }
                         legalRepresentative = personEJB.saveLegalRepresentative(legalRepresentative);
-                        
-                            //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
+                       
+                    }
+                }
+                
+                if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
+                    if( businessName != null && !businessName.equals("")){
+                           //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
                         if (ofacResponse != null) {
                             if (indBlackList == 1) {
                                 affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
@@ -373,10 +352,28 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             getData();
                             loadList(personList);
                             this.showMessage("sp.common.finishReviewOFAC", false, null);
-                        } 
+                        }
+                    }
+                } else {
+                    if (!lastName.equals("") && !firstName.equals("") && lastName != null && firstName != null) {
+                           //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
+                        if (ofacResponse != null) {
+                            if (indBlackList == 1) {
+                                affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
+                            } else {
+                                affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                            }
+                            affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
+
+                            getData();
+                            loadList(personList);
+                            this.showMessage("sp.common.finishReviewOFAC", false, null);
+                        }
                     }
                 }
                 
+                
+
                 
                     
                 
