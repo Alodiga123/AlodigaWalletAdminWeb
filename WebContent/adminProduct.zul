@@ -36,11 +36,15 @@
                                                     <rows>
                                                         <group label="${c:l('sp.common.data.basic')}"/> 
                                                         <row>
+                                                            <label value="${c:l('sp.common.country')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.common.category')}" sclass="lblbold"/>
                                                             <label value="${c:l('sp.crud.product.name')}" sclass="lblbold"/> 
-                                                            <label value="${c:l('sp.crud.product.symbol')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
+                                                            <hlayout>
+                                                                <combobox id="cmbCountry" width="280px" mold="rounded" readonly="true" />
+                                                                <label value="" sclass="lblreq" />
+                                                            </hlayout>
                                                             <hlayout>
                                                                 <combobox id="cmbCategory" width="280px" mold="rounded" readonly="true" />
                                                                 <label value="" sclass="lblreq" />
@@ -49,15 +53,18 @@
                                                                 <textbox id="txtName" width="280px" maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.product.symbol')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.referenceCode')}" sclass="lblbold"/>
+                                                        </row>
+                                                        <row>
+                                                            
                                                             <hlayout>
                                                                 <textbox id="txtSymbol" width="280px"  maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
                                                             </hlayout>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.product.referenceCode')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
+                                                            
                                                             <hlayout>
                                                                 <textbox id="txtReferenceCode" width="273px"  maxlength="60"/>
                                                                 <label value="" sclass="lblreq" />
@@ -68,12 +75,11 @@
                                                         <row>
                                                             
                                                             <label value="${c:l('sp.common.enabled')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.isFree')}" sclass="lblbold"/> 
-                                                            <label value="${c:l('sp.crud.product.isAlocashProduct')}" sclass="lblbold"/>
-                                                            
+                                                            <label value="${c:l('sp.crud.product.isDefaultProduct')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.isUsePrepaidCard')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
-                                                            <hbox width="300px">
+                                                           <hbox width="300px">
                                                                 <radiogroup id="enabled" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
                                                                     <rows>
@@ -84,6 +90,41 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
+                                                            
+                                                            <hbox width="300px">
+                                                                <radiogroup id="isDefaultProduct" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="isDefaultYes" label="${c:l('sp.crud.product.yes')}" radiogroup="isDefaultProduct" />
+                                                                            <radio id="isDefaultNo" label="${c:l('sp.crud.product.no')} " radiogroup="isDefaultProduct" />
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>
+                                                            
+                                                            <hbox width="300px">
+                                                                <radiogroup id="isUsePrepaidCard" onCheck="value = self.selectedItem.label"/>
+                                                                <grid>
+                                                                    <rows>
+                                                                        <row>
+                                                                            <radio id="isUsePrepaidCardYes" label="${c:l('sp.crud.product.yes')}" radiogroup="isUsePrepaidCard" />
+                                                                            <radio id="isUsePrepaidCardNo" label="${c:l('sp.crud.product.no')} " radiogroup="isUsePrepaidCard" />
+                                                                        </row>
+                                                                    </rows>
+                                                                </grid>
+                                                            </hbox>
+                                               
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.product.isFree')}" sclass="lblbold"/> 
+                                                            <label value="${c:l('sp.crud.product.isAlocashProduct')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.isPayTopUp')}" sclass="lblbold"/> 
+                                                            
+                                                        </row>
+                                                        
+                                                        <row>
                                                             <hbox width="300px">
                                                                 <radiogroup id="isFree" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -95,6 +136,7 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
+                                                            
                                                             <hbox width="300px">
                                                                 <radiogroup id="isAlocashProduct" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -106,14 +148,7 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
-                                               
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.product.isPayTopUp')}" sclass="lblbold"/> 
-                                                            <label value="${c:l('sp.crud.product.isExchangeProduct')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.product.isRemettence')}" sclass="lblbold"/>
-                                                        </row>
-                                                        <row>
+                                                            
                                                             <hbox width="300px">
                                                                 <radiogroup id="isPayTopUp" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -125,6 +160,15 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
+                                                        </row>
+                                                        
+                                                        <row>
+                                                            <label value="${c:l('sp.crud.product.isExchangeProduct')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.isRemettence')}" sclass="lblbold"/>
+                                                            <label value="${c:l('sp.crud.product.taxInclude')}" sclass="lblbold"/>
+                                                        </row>
+                                                        
+                                                        <row>
                                                             <hbox width="300px">
                                                                 <radiogroup id="isExchangeProduct" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -136,7 +180,8 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
-                                                           <hbox width="300px">
+                                                            
+                                                            <hbox width="300px">
                                                                 <radiogroup id="isRemettence" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
                                                                     <rows>
@@ -147,13 +192,7 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
-                                                        </row>
-                                                        <row>
-                                                            <label value="${c:l('sp.crud.product.taxInclude')}" sclass="lblbold"/>
-                                         
-                                                            <label value="${c:l('sp.crud.product.isPaymentInfo')}" sclass="lblbold"/> 
-                                                        </row>
-                                                        <row>
+                                                            
                                                             <hbox width="300px">
                                                                 <radiogroup id="taxInclude" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
@@ -165,7 +204,13 @@
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
-                                                            <hbox width="300px">
+                                                        </row>
+                                                        
+                                                        <row>
+                                                             <label value="${c:l('sp.crud.product.isPaymentInfo')}" sclass="lblbold"/> 
+                                                        </row>
+                                                         <row>
+                                                             <hbox width="300px">
                                                                 <radiogroup id="isPaymentInfo" onCheck="value = self.selectedItem.label"/>
                                                                 <grid>
                                                                     <rows>
@@ -175,7 +220,7 @@
                                                                         </row>
                                                                     </rows>
                                                                 </grid>
-                                                            </hbox>  
+                                                            </hbox>    
                                                         </row>
                                                     </rows>
                                                 </grid>
@@ -183,7 +228,7 @@
                                         </div>
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                         <!--Buttons-->
-                                        <div align="right">
+                                        <div align="right" style="margin-right: 25px;">
                                             <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
                                             <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listProducts.zul&quot;)"/>
                                         </div>
