@@ -15,6 +15,7 @@ import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.Category;
+import com.alodiga.wallet.common.model.Country;
 import com.alodiga.wallet.common.model.Product;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
@@ -29,12 +30,17 @@ public class AdminProductController extends GenericAbstractAdminController {
 
     private static final long serialVersionUID = -9145887024839938515L;
     private Combobox cmbCategory;
+    private Combobox cmbCountry;
     private Textbox txtName;
     private Textbox txtSymbol;
     private Textbox txtReferenceCode;
     private Textbox txtAccessNumberUrl;
     private Radio rEnabledYes;
     private Radio rEnabledNo;
+    private Radio isDefaultYes;
+    private Radio isDefaultNo;
+    private Radio isUsePrepaidCardYes;
+    private Radio isUsePrepaidCardNo;
     private Radio rIsFreeYes;
     private Radio rIsFreeNo;
     private Radio rIsAlocashProductYes;
@@ -137,7 +143,19 @@ public class AdminProductController extends GenericAbstractAdminController {
             } else {
                 rEnabledNo.setChecked(true);
             }
-
+            
+            if (product.isIsDefaultProduct() == true){
+                isDefaultYes.setChecked(true);
+            } else {
+                isDefaultNo.setChecked(true);
+            }
+            
+            if (product.getIsUsePrepaidCard() == true){
+                isUsePrepaidCardYes.setChecked(true);
+            } else {
+                isUsePrepaidCardNo.setChecked(true);
+            }
+            
             if (product.getIsFree() == true) {
                 rIsFreeYes.setChecked(true);
             } else {
@@ -192,6 +210,10 @@ public class AdminProductController extends GenericAbstractAdminController {
         txtReferenceCode.setReadonly(true);
         rEnabledYes.setDisabled(true);
         rEnabledNo.setDisabled(true);
+        isDefaultYes.setDisabled(true);
+        isDefaultNo.setDisabled(true); 
+        isUsePrepaidCardYes.setDisabled(true);
+        isUsePrepaidCardNo.setDisabled(true);   
         rIsFreeYes.setDisabled(true);
         rIsFreeNo.setDisabled(true);
         rIsAlocashProductYes.setDisabled(true);
@@ -227,6 +249,12 @@ public class AdminProductController extends GenericAbstractAdminController {
 
     public boolean validateEmpty() {
         this.showMessage("", false, null);
+        
+        if (cmbCountry.getSelectedItem()  == null) {
+            this.showMessage("sp.error.countryNotSelected", true, null); 
+            cmbCountry.setFocus(true);
+            return false;
+        }
 
         if (cmbCategory.getSelectedItem() == null) {
             this.showMessage("sp.common.category.error", true, null);
@@ -254,6 +282,18 @@ public class AdminProductController extends GenericAbstractAdminController {
 
         if (!(rEnabledYes.isChecked() || rEnabledNo.isChecked())) {
             this.showMessage("sp.common.enabled.error", true, null);
+            rEnabledYes.setFocus(true);
+            return false;
+        }
+        
+        if (!(isDefaultYes.isChecked() || isDefaultNo.isChecked())) {
+            this.showMessage("sp.crud.product.isDefaultProduc.error", true, null);
+            rEnabledYes.setFocus(true);
+            return false;
+        }
+        
+        if (!(isUsePrepaidCardYes.isChecked() || isUsePrepaidCardNo.isChecked())) {
+            this.showMessage("sp.crud.product.isUsePrepaidCard.error", true, null);
             rEnabledYes.setFocus(true);
             return false;
         }
@@ -313,10 +353,13 @@ public class AdminProductController extends GenericAbstractAdminController {
             } else {
                 product = new Product();
             }
+            product.setCountryId((Country) cmbCountry.getSelectedItem().getValue());
             product.setCategoryId((Category) cmbCategory.getSelectedItem().getValue());
             product.setName(txtName.getText());
             product.setTaxInclude(rTaxIncludeYes.isChecked() ? true : false);
             product.setEnabled(rEnabledYes.isChecked() ? true : false);
+            product.setIsDefaultProduct(isDefaultYes.isChecked() ? true : false);
+            product.setIsUsePrepaidCard(isUsePrepaidCardYes.isChecked() ? true : false);
             product.setReferenceCode(txtReferenceCode.getText());
             product.setIsFree(rIsFreeYes.isChecked() ? true : false);
             product.setIsAlocashProduct(rIsAlocashProductYes.isChecked() ? true : false);
@@ -366,14 +409,17 @@ public class AdminProductController extends GenericAbstractAdminController {
             case WebConstants.EVENT_EDIT:
                 loadFields(productParam);
                 loadCmbCategory(eventType);
+                loadCmbCountry(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(productParam);
                 blockFields();
                 loadCmbCategory(eventType);
+                loadCmbCountry(eventType);
                 break;
             case WebConstants.EVENT_ADD:
                 loadCmbCategory(eventType);
+                loadCmbCountry(eventType);
                 break;
             default:
                 break;
@@ -397,5 +443,21 @@ public class AdminProductController extends GenericAbstractAdminController {
             ex.printStackTrace();
         }
     }
+    
+    private void loadCmbCountry(Integer evenInteger) {
+        EJBRequest request1 = new EJBRequest();
+        List<Country> countryList;
+        try {
+            countryList = utilsEJB.getCountries(request1);
+            loadGenericCombobox(countryList, cmbCountry, "name", evenInteger, Long.valueOf(productParam != null ? productParam.getCountryId().getId() : 0));
+        } catch (EmptyListException ex) {
+            showError(ex);
+        } catch (GeneralException ex) {
+            showError(ex);
+        } catch (NullParameterException ex) {
+            showError(ex);
+        }
+    } 
+
 
 }
