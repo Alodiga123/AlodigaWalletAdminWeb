@@ -80,7 +80,6 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
     @Override
     public void checkPermissions() {
         try {
-//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_APLICANT_OFAC));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_APLICANT_OFAC);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_APLICANT_OFAC);
         } catch (Exception ex) {
@@ -256,49 +255,40 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             loginResponse = ofac.loginWS("alodiga", "d6f80e647631bb4522392aff53370502");
             WsExcludeListResponse ofacResponse = new WsExcludeListResponse();
             for (Person applicant : personList) {
-                 if (applicant.getPersonTypeId().getIndNaturalPerson() == false) {
-                   if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
-                            if (applicant.getLegalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
-                                
-                                affiliatinRequest = applicant.getLegalPerson().getPersonId().getAffiliationRequest();
-                                businessName = applicant.getLegalPerson().getBusinessName();
-                            }
+                if (applicant.getPersonTypeId().getIndNaturalPerson() == false) {
+                    if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
+                        if (applicant.getLegalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
+                            affiliatinRequest = applicant.getLegalPerson().getPersonId().getAffiliationRequest();
+                            businessName = applicant.getLegalPerson().getBusinessName();
+                        }
                     } else if (applicant.getLegalRepresentative().getPersonId().getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
-                            if (applicant.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
-                                if (getLegalPersonParam(applicant.getLegalRepresentative()) != null) {
-                                legalPerson = legalPersonParam;
-                                }
+                        if (getLegalPersonParam(applicant.getLegalRepresentative()) != null) {
+                            legalPerson = legalPersonParam;
+                        }
+                            if (applicant.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())) {
                                 affiliatinRequest = legalPerson.getLegalRepresentativeId().getPersonId().getAffiliationRequest();
                                 lastName = legalPerson.getLegalRepresentativeId().getLastNames();
                                 firstName = legalPerson.getLegalRepresentativeId().getFirstNames();
-                            }
+                            }                        
                     } 
-                         
-                 } else {
-                     if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
+                    ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), businessName, ofacPercentege);
+                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                } else {
+                    if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                         if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
                             affiliatinRequest = applicant.getNaturalPerson().getPersonId().getAffiliationRequest();
                             lastName = applicant.getNaturalPerson().getLastName();
                             firstName = applicant.getNaturalPerson().getFirstName();
-                        }            
-                     }
-                 }
-                
-                if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
-                    if( businessName != null && !businessName.equals("")){
-                       ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), businessName, ofacPercentege); 
-                       //Se guarda el registro de la revision OFAC
-                       saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
-                    }
-                }  else {
-                    if (!lastName.equals("") && !firstName.equals("") && lastName != null && firstName != null) {
-                        ofacResponse = ofac.queryOFACList(loginResponse.getToken(),lastName, firstName, null, null, null, null, ofacPercentege);
-                        //Se guarda el registro de la revision OFAC
-                        saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                            ofacResponse = ofac.queryOFACList(loginResponse.getToken(),lastName, firstName, null, null, null, null, ofacPercentege);
+                            saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                        }                        
                     }
                 }
                 
-                
+                //Se guarda el registro de la revision OFAC
+                saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+
+
                 //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
                 if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
                     if (applicant.getLegalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
