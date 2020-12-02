@@ -123,7 +123,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
                 for (LegalPerson legal : legalPersonList){
                     applicantList.add(legal.getPersonId());
                     request = new EJBRequest();
-                    request.setParam(legal.getLegalRepresentativeId());
+                    request.setParam(legal.getLegalRepresentativeId().getId());
                     legalRepre = personEJB.loadLegalRepresentative(request);
                     applicantList.add(legalRepre.getPersonId());
                 }
@@ -201,7 +201,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
                 for (Person applicant : list) {
                     item = new Listitem();
                     item.setValue(applicant);
-                    if (affiliationRequestParam.getBusinessPersonId().getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
+                    if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
                        item.appendChild(new Listcell(applicant.getLegalPerson().getBusinessName())); 
                        item.appendChild(new Listcell(applicant.getLegalPerson().getIdentificationNumber()));
                        item.appendChild(new Listcell("Solicitante Principal"));
@@ -213,7 +213,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
                        }
                        item.appendChild(permissionEdit ?createButtonEditModal(affiliationRequestParam) : new Listcell());
                        item.appendChild(permissionRead ?createButtonViewModal(affiliationRequestParam) : new Listcell());
-                    } else if(affiliationRequestParam.getBusinessPersonId().getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
+                    } else if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
                        StringBuilder names = new StringBuilder(applicant.getLegalRepresentative().getFirstNames());
                        names.append(" ");
                        names.append(applicant.getLegalRepresentative().getLastNames());
