@@ -107,17 +107,29 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
             lblCountryName.setValue(person.getCountryId().getName());
             lblIdentificationType.setValue(legalRepresentative.getDocumentsPersonTypeId().getDescription());
             lblIdentificationNumber.setValue(legalRepresentative.getIdentificationNumber());
+            
             if(legalRepresentative.getDueDateDocumentIdentification() != null){
               lblExpirationDater.setValue(simpleDateFormat.format(legalRepresentative.getDueDateDocumentIdentification()));  
             }
+            
             if(legalRepresentative.getDateBirth() != null){
                lblBirthday.setValue(simpleDateFormat.format(legalRepresentative.getDateBirth())); 
             }
-            lblIdentificationNumberOld.setValue(legalRepresentative.getIdentificationNumberOld());
+            
+            if(legalRepresentative.getIdentificationNumberOld() != null){
+               lblIdentificationNumberOld.setValue(legalRepresentative.getIdentificationNumberOld()); 
+            } 
+            
             lblFullName.setValue(legalRepresentative.getFirstNames());
             lblFullLastName.setValue(legalRepresentative.getLastNames());
-            lblBirthPlace.setValue(legalRepresentative.getPlaceBirth());
-            lblAge.setValue(String.valueOf(legalRepresentative.getAge()));
+            
+            if(legalRepresentative.getPlaceBirth() != null){
+               lblBirthPlace.setValue(legalRepresentative.getPlaceBirth()); 
+            }
+            if(String.valueOf(legalRepresentative.getAge()) != null){
+               lblAge.setValue(String.valueOf(legalRepresentative.getAge())); 
+            }
+            
             lblGender.setValue(legalRepresentative.getGender());
             lblCivilState.setValue(legalRepresentative.getCivilStatusId().getDescription());            
             lblEmail.setValue(person.getEmail());
