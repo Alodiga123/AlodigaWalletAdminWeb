@@ -211,8 +211,8 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
                        } else {
                            item.appendChild(new Listcell(""));
                        }
-                       item.appendChild(permissionEdit ?createButtonEditModal(affiliationRequestParam) : new Listcell());
-                       item.appendChild(permissionRead ?createButtonViewModal(affiliationRequestParam) : new Listcell());
+                       item.appendChild(permissionEdit ?createButtonEditModal(applicant) : new Listcell());
+                       item.appendChild(permissionRead ?createButtonViewModal(applicant) : new Listcell());
                     } else if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
                        StringBuilder names = new StringBuilder(applicant.getLegalRepresentative().getFirstNames());
                        names.append(" ");
@@ -226,8 +226,8 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
                        } else {
                            item.appendChild(new Listcell(""));
                        }
-                       item.appendChild(permissionEdit ?createButtonEditModal(affiliationRequestParam) : new Listcell());
-                       item.appendChild(permissionRead ?createButtonViewModal(affiliationRequestParam) : new Listcell());
+                       item.appendChild(permissionEdit ?createButtonEditModal(applicant) : new Listcell());
+                       item.appendChild(permissionRead ?createButtonViewModal(applicant) : new Listcell());
                     }
                     item.setParent(lbxRecords);
                 }
