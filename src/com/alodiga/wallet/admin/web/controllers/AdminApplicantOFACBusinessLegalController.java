@@ -57,19 +57,20 @@ public class AdminApplicantOFACBusinessLegalController extends GenericAbstractAd
     private Long optionMenu;
     private AffiliationRequest afilationRequest;
     private Person personParam;
+    private Person applicantParam;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
-        AdminBusinnessAffiliationRequestsLegalController adminRequestN = new AdminBusinnessAffiliationRequestsLegalController();
-        
-        if (adminRequestN.getBusinessAffiliationRequets().getBusinessPersonId().getLegalPerson() != null) {
-            afilationRequest = adminRequestN.getBusinessAffiliationRequets();
+        switch (eventType) {
+            case WebConstants.EVENT_EDIT:
+                applicantParam = (Person) Sessions.getCurrent().getAttribute("object");
+                break;
+            case WebConstants.EVENT_VIEW:
+                applicantParam = (Person) Sessions.getCurrent().getAttribute("object");
+                break;
         }
-        
-        
-        
         initialize();
     }
 
@@ -103,13 +104,13 @@ public class AdminApplicantOFACBusinessLegalController extends GenericAbstractAd
             lblRequestDate.setValue(simpleDateFormat.format(afilationRequest.getDateRequest()));
             lblStatusRequest.setValue(afilationRequest.getStatusRequestId().getDescription());
             
-            if(afilationRequest.getBusinessPersonId().getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
+            if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
                 lblName.setValue(applicant.getLegalPerson().getBusinessName()); 
                 lblDocumentType.setValue(applicant.getLegalPerson().getDocumentsPersonTypeId().getDescription());
                 lblIdentificationNumber.setValue(applicant.getLegalPerson().getIdentificationNumber());
                 percentageMatchApplicant = getReviewOFAC(applicant.getLegalPerson().getPersonId()).getResultReview()*100;
                 lblPercentageMatch.setValue(percentageMatchApplicant.toString());
-            } else if(afilationRequest.getBusinessPersonId().getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
+            } else if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())) {
                 StringBuilder builder = new StringBuilder(applicant.getLegalRepresentative().getFirstNames());
                 builder.append(" ");
                 builder.append(applicant.getLegalRepresentative().getLastNames());
@@ -252,11 +253,11 @@ public class AdminApplicantOFACBusinessLegalController extends GenericAbstractAd
     public void loadData() {
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                    loadFields(afilationRequest.getBusinessPersonId());
+                    loadFields(applicantParam);
                     loadCmbStatusApplicant(eventType);
                 break;
             case WebConstants.EVENT_VIEW:
-                    loadFields(afilationRequest.getBusinessPersonId());
+                    loadFields(applicantParam);
                     blockFields();
                     loadCmbStatusApplicant(eventType);
                 break;

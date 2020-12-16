@@ -13,7 +13,14 @@ import com.alodiga.wallet.common.model.PhonePerson;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +68,6 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
         }
 
         initialize();
-//        initView(eventType, "crud.businessAffiliationRequets");
     }
 
     @Override
@@ -90,7 +96,6 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
             lblRequestNumber.setValue(businessAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(businessAffiliationRequest.getDateRequest()));
             lblStatusRequest.setValue(businessAffiliationRequest.getStatusRequestId().getDescription());
-            
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
@@ -113,7 +118,11 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
             }
             
             if(legalRepresentative.getDateBirth() != null){
-               lblBirthday.setValue(simpleDateFormat.format(legalRepresentative.getDateBirth())); 
+               lblBirthday.setValue(simpleDateFormat.format(legalRepresentative.getDateBirth()));
+                int year = Calendar.getInstance().get(Calendar.YEAR);          
+                DateFormat formatoFecha = new SimpleDateFormat("yyyy");
+                int yearBirth = Integer.valueOf(formatoFecha.format(legalRepresentative.getDateBirth()));
+                lblAge.setValue(String.valueOf(year - yearBirth));
             }
             
             if(legalRepresentative.getIdentificationNumberOld() != null){
@@ -124,15 +133,14 @@ public class AdminLegalRepresentativeController extends GenericAbstractAdminCont
             lblFullLastName.setValue(legalRepresentative.getLastNames());
             
             if(legalRepresentative.getPlaceBirth() != null){
-               lblBirthPlace.setValue(legalRepresentative.getPlaceBirth()); 
-            }
-            if(String.valueOf(legalRepresentative.getAge()) != null){
-               lblAge.setValue(String.valueOf(legalRepresentative.getAge())); 
+               lblBirthPlace.setValue(legalRepresentative.getPlaceBirth());    
             }
             
             lblGender.setValue(legalRepresentative.getGender());
             lblCivilState.setValue(legalRepresentative.getCivilStatusId().getDescription());            
-            lblEmail.setValue(person.getEmail());
+            if(legalRepresentative.getPersonId().getEmail() != null){
+               lblEmail.setValue(legalRepresentative.getPersonId().getEmail()); 
+            }
             
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
