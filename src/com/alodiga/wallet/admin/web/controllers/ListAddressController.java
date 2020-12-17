@@ -147,6 +147,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
 
     public void loadList(List<PersonHasAddress> list) {
         String indAddressDelivery = "";
+        String addressType = "";
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
@@ -156,12 +157,17 @@ public class ListAddressController extends GenericAbstractListController<PersonH
                     item.setValue(personHasAddress);
                     item.appendChild(new Listcell(personHasAddress.getAddressId().getCountryId().getName()));
                     item.appendChild(new Listcell(personHasAddress.getAddressId().getCityId().getName()));
-                    item.appendChild(new Listcell(personHasAddress.getAddressId().getAddressTypeId().getDescription()));
+//                    item.appendChild(new Listcell(personHasAddress.getAddressId().getAddressTypeId().getDescription()));
+                    if(personHasAddress.getAddressId().getAddressTypeId() == null){
+                        addressType = "No Especificada";
+                    } 
+                    
                     if (personHasAddress.getAddressId().getIndMainAddress() == true) {
                         indAddressDelivery = "Yes";
                     } else {
                         indAddressDelivery = "No";
                     }
+                    item.appendChild(new Listcell(addressType));
                     item.appendChild(new Listcell(indAddressDelivery));
                     item.appendChild(new Listcell(personHasAddress.getAddressId().getZipCode()));
                     item.appendChild(createButtonEditModal(personHasAddress));

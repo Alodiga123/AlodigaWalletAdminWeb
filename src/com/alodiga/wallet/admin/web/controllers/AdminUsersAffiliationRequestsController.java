@@ -78,7 +78,6 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             case WebConstants.EVENT_EDIT:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.edit"));
                 activateTabOfac();
-//                activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.view"));
@@ -122,7 +121,6 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             lblRequestNumber.setValue(userAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(userAffiliationRequest.getDateRequest()));
             lblStatusRequest.setValue(userAffiliationRequest.getStatusRequestId().getDescription());
-
             userAffiliationRequestParent = userAffiliationRequest;
             btnSave.setVisible(false);
         } catch (Exception ex) {
@@ -133,21 +131,60 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblCountryName.setValue(person.getCountryId().getName());
+            if(person.getCountryId().getName() != null){
+                lblCountryName.setValue(person.getCountryId().getName());
+            }
+            
             lblIdentificationType.setValue(person.getNaturalPerson().getDocumentsPersonTypeId().getDescription());
             lblIdentificationNumber.setValue(person.getNaturalPerson().getIdentificationNumber());
-            lblExpirationDater.setValue(simpleDateFormat.format(person.getNaturalPerson().getDueDateDocumentIdentification()));
-            lblIdentificationNumberOld.setValue(person.getNaturalPerson().getIdentificactionNumberOld());
-            lblFullName.setValue(person.getNaturalPerson().getFirstName());
-            lblFullLastName.setValue(person.getNaturalPerson().getLastName());
-            lblMarriedLastName.setValue(person.getNaturalPerson().getMarriedLastName());
-            lblBirthPlace.setValue(person.getNaturalPerson().getPlaceBirth());
-            lblBirthday.setValue(simpleDateFormat.format(person.getNaturalPerson().getDateBirth()));
-            lblGender.setValue(person.getNaturalPerson().getGender());
-            lblCivilState.setValue(person.getNaturalPerson().getCivilStatusId().getDescription());
-            lblProfession.setValue(person.getNaturalPerson().getProfessionId().getName());          
-            lblEmail.setValue(person.getEmail());
-            lblWebSite.setValue(person.getWebSite());
+            
+            if(person.getNaturalPerson().getDueDateDocumentIdentification() != null){
+               lblExpirationDater.setValue(simpleDateFormat.format(person.getNaturalPerson().getDueDateDocumentIdentification())); 
+            }
+            
+            if(person.getNaturalPerson().getIdentificactionNumberOld() != null){
+               lblIdentificationNumberOld.setValue(person.getNaturalPerson().getIdentificactionNumberOld());
+            }
+            
+            if(person.getNaturalPerson().getFirstName() != null){
+               lblFullName.setValue(person.getNaturalPerson().getFirstName()); 
+            }
+            
+            if(person.getNaturalPerson().getLastName() != null){
+               lblFullLastName.setValue(person.getNaturalPerson().getLastName()); 
+            }
+            
+            if(person.getNaturalPerson().getMarriedLastName() != null){
+               lblMarriedLastName.setValue(person.getNaturalPerson().getMarriedLastName());  
+            }
+            
+            if(person.getNaturalPerson().getPlaceBirth() != null){
+               lblBirthPlace.setValue(person.getNaturalPerson().getPlaceBirth()); 
+            }
+            
+            if(person.getNaturalPerson().getDateBirth() != null){
+               lblBirthday.setValue(simpleDateFormat.format(person.getNaturalPerson().getDateBirth())); 
+            }
+            
+            if(person.getNaturalPerson().getGender() != null){
+               lblGender.setValue(person.getNaturalPerson().getGender());  
+            }
+            
+            if(person.getNaturalPerson().getCivilStatusId() != null){
+                lblCivilState.setValue(person.getNaturalPerson().getCivilStatusId().getDescription());
+            }
+            
+            if(person.getNaturalPerson().getProfessionId() != null){
+               lblProfession.setValue(person.getNaturalPerson().getProfessionId().getName());  
+            }
+            
+            if(person.getEmail() != null){
+               lblEmail.setValue(person.getEmail()); 
+            }
+           
+            if(person.getWebSite() != null){
+              lblWebSite.setValue(person.getWebSite());  
+            }
             
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
