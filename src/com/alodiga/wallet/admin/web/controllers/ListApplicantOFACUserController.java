@@ -23,6 +23,7 @@ import com.alodiga.wallet.common.enumeraciones.StatusApplicantE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.AffiliationRequest;
@@ -48,6 +49,8 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Textbox;
@@ -100,6 +103,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
             loadList(personList);
             loadStatusApplicant();
         } catch (Exception ex) {
+
             showError(ex);
         }
     }
@@ -115,6 +119,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 
     public void loadList(List<Person> list) {
         NumberFormat formatoPorcentaje = NumberFormat.getPercentInstance();
+        String requestNumber = ""; 
         try {
             lbxRecords.getItems().clear();
             Listitem item = null;
@@ -124,7 +129,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                     item = new Listitem();
                     item.setValue(aplicant);
                     if (aplicant.getPersonTypeId().getIndNaturalPerson() == true) {
-                            item.appendChild(new Listcell(aplicant.getAffiliationRequest().getNumberRequest()));
+                            item.appendChild(new Listcell(aplicant.getAffiliationRequest().getNumberRequest()));                           
                             StringBuilder applicantNameNatural = new StringBuilder(aplicant.getNaturalPerson().getFirstName());
                             applicantNameNatural.append(" ");
                             applicantNameNatural.append(aplicant.getNaturalPerson().getLastName());
@@ -159,16 +164,30 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 
     public void getData() {
         personList = new ArrayList<Person>();
+        List<AffiliationRequest> affiliationRequest = new ArrayList<AffiliationRequest>();
         try {
             request.setFirst(0);
             request.setLimit(null);
             personList = personEJB.getPersonRegisterUnified(request);
+            for (Person p: personList) {
+               EJBRequest request = new EJBRequest();
+               Map<String, Object> params = new HashMap<String, Object>();
+               params.put(QueryConstants.PARAM_USER_REGISTER_ID , p.getId());
+               request.setParams(params);
+               affiliationRequest = utilsEJB.getAffiliationRequestByUser(request);
+                for(AffiliationRequest af : affiliationRequest){
+                    p.setAffiliationRequest(af);
+                    personEJB.savePerson(p);
+                }
+            }
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
             showEmptyList();
         } catch (GeneralException ex) {
             showError(ex);
+        } catch (RegisterNotFoundException ex) {
+            Logger.getLogger(ListApplicantOFACUserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
