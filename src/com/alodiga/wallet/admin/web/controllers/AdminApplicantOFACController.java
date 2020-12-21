@@ -22,7 +22,6 @@ import com.alodiga.wallet.common.model.ReviewOfac;
 import com.alodiga.wallet.common.model.StatusApplicant;
 import com.alodiga.wallet.common.model.StatusRequest;
 import com.alodiga.wallet.common.utils.Constants;
-import com.alodiga.ws.remittance.services.WSOFACMethod;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
