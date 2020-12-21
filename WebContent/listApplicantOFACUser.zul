@@ -56,7 +56,7 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="380px" mold="paging" pageSize="8">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="380px" mold="paging" pageSize="8" checkmark="true" multiple="true">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.collection.affiliation.request.number')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.businessAffiliationRequests.ofac.nameLastName')}" width="150px" sort="auto"/>

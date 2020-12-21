@@ -78,6 +78,7 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             case WebConstants.EVENT_EDIT:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.edit"));
                 activateTabOfac();
+                activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.view"));

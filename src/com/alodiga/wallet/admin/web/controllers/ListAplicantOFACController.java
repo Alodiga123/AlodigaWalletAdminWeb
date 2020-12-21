@@ -50,6 +50,10 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Textbox;
@@ -75,6 +79,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         initialize();
+        startListener();
     }
 
     @Override
@@ -88,7 +93,13 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
     }
 
     public void startListener() {
-
+        EventQueue que = EventQueues.lookup("updateApplicantOFAC", EventQueues.APPLICATION, true);
+        que.subscribe(new EventListener() {
+            public void onEvent(Event evt) {
+                getData();
+                loadList(personList);
+            }
+        });
     }
 
     @Override
@@ -254,7 +265,9 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             WsLoginResponse loginResponse = new WsLoginResponse();
             loginResponse = ofac.loginWS("alodiga", "d6f80e647631bb4522392aff53370502");
             WsExcludeListResponse ofacResponse = new WsExcludeListResponse();
-            for (Person applicant : personList) {
+            for (Object o: lbxRecords.getSelectedItems()) {
+                 Listitem item = (Listitem) o;
+                 Person applicant = (Person) item.getValue();
                 if (applicant.getPersonTypeId().getIndNaturalPerson() == false) {
                     if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
                         if (applicant.getLegalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
@@ -271,8 +284,10 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 firstName = legalPerson.getLegalRepresentativeId().getFirstNames();
                             }                        
                     } 
-                    ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), businessName, ofacPercentege);
-                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                    if (!naturalPerson.getStatusApplicantId().getId().equals(Constants.STATUS_APPLICANT_BLACK_LIST) || !naturalPerson.getStatusApplicantId().getId().equals(Constants.STATUS_APPLICANT_BLACK_LIST_OK)) {
+	                    ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), businessName, ofacPercentege);
+	                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                    }     
                 } else {
                     if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                         if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
