@@ -174,7 +174,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                Map<String, Object> params = new HashMap<String, Object>();
                params.put(QueryConstants.PARAM_USER_REGISTER_ID , p.getId());
                request.setParams(params);
-               affiliationRequest = utilsEJB.getAffiliationRequestByUser(request);
+               affiliationRequest = utilsEJB.getAffiliationRequestByPerson(request);
                 for(AffiliationRequest af : affiliationRequest){
                     p.setAffiliationRequest(af);
                     personEJB.savePerson(p);
