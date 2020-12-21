@@ -50,6 +50,10 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Textbox;
@@ -75,6 +79,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         initialize();
+        startListener();
     }
 
     @Override
@@ -88,7 +93,13 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
     }
 
     public void startListener() {
-
+        EventQueue que = EventQueues.lookup("updateApplicantOFAC", EventQueues.APPLICATION, true);
+        que.subscribe(new EventListener() {
+            public void onEvent(Event evt) {
+                getData();
+                loadList(personList);
+            }
+        });
     }
 
     @Override
