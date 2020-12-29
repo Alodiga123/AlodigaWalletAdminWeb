@@ -26,12 +26,17 @@ import com.ericsson.alodiga.ws.APIRegistroUnificadoProxy;
 import com.ericsson.alodiga.ws.RespuestaUsuario;
 import com.portal.business.commons.models.Business;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
@@ -79,6 +84,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     private Integer eventType;
     private Toolbarbutton tbbTitle;
     private User user = null;
+    List<CommissionItem> commissionItemList = new ArrayList<CommissionItem>();
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -149,6 +155,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblTelephone.setValue(businessSource.getPhoneNumber());
                 lblEmail.setValue(businessSource.getEmail());
+//                lblUserDocumentType.setValue();
+                lblUserDocumentNumber.setValue(businessSource.getIdentification());
             }            
             
             //Datos de la Solicitud
@@ -167,6 +175,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             if (manualWithdrawalApproval.getTransactionId().getAmount() != 0) {
                 dblAmount.setValue(manualWithdrawalApproval.getTransactionId().getAmount());
             }
+            
             if (manualWithdrawalApproval.getTransactionId().getConcept() != null) {
                 lblTransactionConcept.setValue(manualWithdrawalApproval.getTransactionId().getConcept());
             }
@@ -190,7 +199,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             //Datos de la operación bancaria
             lblBank.setValue(manualWithdrawalApproval.getBankOperationId().getBankId().getName());
             lblBankAccount.setValue(manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber());
-            if (manualWithdrawalApproval.getBankOperationId().getBankOperationNumber() != null) {
+            if (manualWithdrawalApproval.getBankOperationId() != null) {
                 txtBankNumber.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationNumber());
             }
             if (manualWithdrawalApproval.getBankOperationId().getResponsible() != null) {
@@ -198,7 +207,15 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             }
             if (manualWithdrawalApproval.getBankOperationId().getBankOperationDate() != null) {
                 dtbBankOperationDate.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationDate());
-            }  
+            }
+            
+            List<CommissionItem> commissionItems = utilsEJB.getCommissionItems(manualWithdrawalApproval.getTransactionId().getId());
+            if(commissionItems  != null){
+                for(CommissionItem comission : commissionItems){
+                    dblCommision.setValue(comission.getAmount());
+                }
+            }
+               
         } catch (Exception ex) {
             showError(ex);
         }
@@ -218,6 +235,12 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
     }
 
     public Boolean validateEmpty() {
+
+        Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String toDay = formatter.format(currentDate);
+        String dateBankOperation = formatter.format(dtbBankOperationDate.getValue());
+        
         if (dtbApprovedRequestDate.getText().isEmpty()) {
             dtbApprovedRequestDate.setFocus(true);
             this.showMessage("sp.error.date.approvedRequestDate", true, null);
@@ -235,6 +258,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         } else if (dtbApprovedRequestDate.getText().isEmpty()) {
             txtObservations.setFocus(true);
             this.showMessage("sp.error.date.bankRequestDate", true, null);
+        } else if(!toDay.equals(dateBankOperation)){
+            this.showMessage("sp.error.date.dateBankOperation", true, null);
         } else {
             return true;
         }
@@ -276,7 +301,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             bankOperation.setResponsible(txtResponsible.getText());
             bankOperation.setBankOperationDate(dtbBankOperationDate.getValue());
             bankOperation.setUpdateDate(new Timestamp(new Date().getTime()));
-            bankOperation = utilsEJB.saveBankOperation(bankOperation);
+//            bankOperation = utilsEJB.saveBankOperation(bankOperation);
             
             //Se actualiza el estatus de la solicitud de aprobación y el saldo del usuario en la billetera
             manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
@@ -286,7 +311,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApproval.setIndApproveRequest(indApproved);
             manualWithdrawalApproval.setObservations(txtObservations.getText());
             manualWithdrawalApproval.setUserApprovedRequestId(user);
-            manualWithdrawalApproval = productEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
+//            manualWithdrawalApproval = productEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
                
