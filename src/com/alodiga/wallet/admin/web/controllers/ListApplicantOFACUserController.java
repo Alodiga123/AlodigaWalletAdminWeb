@@ -233,7 +233,9 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
             WsLoginResponse loginResponse = new WsLoginResponse();
             loginResponse = ofac.loginWS("alodiga", "d6f80e647631bb4522392aff53370502");
             WsExcludeListResponse ofacResponse = new WsExcludeListResponse();
-            for (Person applicant : personList) {
+            for (Object o: lbxRecords.getSelectedItems()) {
+                Listitem item = (Listitem) o;
+                Person applicant = (Person) item.getValue();
                 if (applicant.getPersonTypeId().getIndNaturalPerson() == true) {
                     if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
                       affiliatinRequest = applicant.getAffiliationRequest();
@@ -242,35 +244,37 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                       firstName = applicant.getNaturalPerson().getFirstName();  
                     }
                 } 
-                if (lastName != null && firstName != null) {
-                    ofacResponse = ofac.queryOFACList(loginResponse.getToken(), lastName, firstName, null, null, null, null, ofacPercentege);
-
-                    //Se guarda el registro de la revision OFAC
-                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
-
-                    //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
-                    if (applicant.getPersonTypeId().getIndNaturalPerson() == true) {
-                        if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
-                            naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST));
-                            indBlackList = 1;
-                        } else {
-                            naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST_OK));
-                        }
-                        naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
-                    } 
-                }
-                //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
-                if (ofacResponse != null) {
-                    if (indBlackList == 1) {
-                        affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-                    } else {
-                        affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-                    }
-                    affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
-
-                    getData();
-                    loadList(personList);
-                    this.showMessage("sp.common.finishReviewOFAC", false, null);
+                if (!naturalPerson.getStatusApplicantId().getId().equals(Constants.STATUS_APPLICANT_BLACK_LIST) || !naturalPerson.getStatusApplicantId().getId().equals(Constants.STATUS_APPLICANT_BLACK_LIST_OK)) {               	
+	                if (lastName != null && firstName != null) {
+	                    ofacResponse = ofac.queryOFACList(loginResponse.getToken(), lastName, firstName, null, null, null, null, ofacPercentege);
+	
+	                    //Se guarda el registro de la revision OFAC
+	                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+	
+	                    //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
+	                    if (applicant.getPersonTypeId().getIndNaturalPerson() == true) {
+	                        if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
+	                            naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST));
+	                            indBlackList = 1;
+	                        } else {
+	                            naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST_OK));
+	                        }
+	                        naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
+	                    } 
+	                }
+	                //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
+	                if (ofacResponse != null) {
+	                    if (indBlackList == 1) {
+	                        affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
+	                    } else {
+	                        affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+	                    }
+	                    affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
+	
+	                    getData();
+	                    loadList(personList);
+	                    this.showMessage("sp.common.finishReviewOFAC", false, null);
+	                }
                 }
             }
         } catch (Exception ex) {

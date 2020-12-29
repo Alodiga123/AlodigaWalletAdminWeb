@@ -265,7 +265,9 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             WsLoginResponse loginResponse = new WsLoginResponse();
             loginResponse = ofac.loginWS("alodiga", "d6f80e647631bb4522392aff53370502");
             WsExcludeListResponse ofacResponse = new WsExcludeListResponse();
-            for (Person applicant : personList) {
+            for (Object o: lbxRecords.getSelectedItems()) {
+                 Listitem item = (Listitem) o;
+                 Person applicant = (Person) item.getValue();
                 if (applicant.getPersonTypeId().getIndNaturalPerson() == false) {
                     if(applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
                         if (applicant.getLegalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
@@ -282,8 +284,10 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 firstName = legalPerson.getLegalRepresentativeId().getFirstNames();
                             }                        
                     } 
-                    ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), businessName, ofacPercentege);
-                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                    if (!naturalPerson.getStatusApplicantId().getId().equals(Constants.STATUS_APPLICANT_BLACK_LIST) || !naturalPerson.getStatusApplicantId().getId().equals(Constants.STATUS_APPLICANT_BLACK_LIST_OK)) {
+	                    ofacResponse = ofac.queryOFACLegalPersonList(loginResponse.getToken(), businessName, ofacPercentege);
+	                    saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                    }     
                 } else {
                     if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                         if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
