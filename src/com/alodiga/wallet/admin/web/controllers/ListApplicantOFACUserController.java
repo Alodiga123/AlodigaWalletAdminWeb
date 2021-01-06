@@ -134,7 +134,6 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                             applicantNameNatural.append(" ");
                             applicantNameNatural.append(aplicant.getNaturalPerson().getLastName());
                             item.appendChild(new Listcell(applicantNameNatural.toString()));
-                            item.appendChild(new Listcell(aplicant.getNaturalPerson().getDocumentsPersonTypeId().getDescription()));
                             item.appendChild(new Listcell(aplicant.getNaturalPerson().getIdentificationNumber()));
                             item.appendChild(new Listcell(aplicant.getNaturalPerson().getStatusApplicantId().getDescription()));
                             if(aplicant.getNaturalPerson().getPersonId().getReviewOfac() != null){
