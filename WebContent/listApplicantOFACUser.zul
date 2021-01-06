@@ -58,9 +58,8 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" height="380px" mold="paging" pageSize="8" checkmark="true" multiple="true">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.crud.collection.affiliation.request.number')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.nameLastName')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.identificationsTypes')}" width="200px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.collection.affiliation.request.number')}" width="220px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.businessAffiliationRequests.ofac.nameLastName')}" width="180px" sort="auto"/>
                                                     <listheader label="${c:l('sp.businessAffiliationRequests.ofac.identificationNumber')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.businessAffiliationRequests.ofac.applicantType')}" width="130px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.applicantOfac.percentageMatch')}" width="120px" sort="auto"/>
