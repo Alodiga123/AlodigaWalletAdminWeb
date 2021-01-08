@@ -27,6 +27,7 @@ import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.Constants;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +42,7 @@ import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Tab;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 public class ListCommissionByProductController extends GenericAbstractListController<Commission> {
@@ -55,6 +57,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     private Product productParam;
     private Product products = null;
     private Tab tabCommissionByProduct;
+    private Textbox txtName;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -132,15 +135,22 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     }
 
     public List<Commission> getFilteredList(String filter) {
-        List<Commission> auxList = new ArrayList<Commission>();
-        for (Iterator<Commission> i = commissions.iterator(); i.hasNext();) {
-            Commission tmp = i.next();
-            String field = tmp.getProductId().getName().toLowerCase();
-            if (field.indexOf(filter.trim().toLowerCase()) >= 0) {
-                auxList.add(tmp);
+        List<Commission> comissionList = new ArrayList<Commission>();
+        try {
+            if (filter != null && !filter.equals("")) {
+                    EJBRequest _request = new EJBRequest();
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put(QueryConstants.PARAM_VALUE, filter);
+                    params.put(QueryConstants.PARAM_PRODUCT_ID, products.getId());
+                    _request.setParams(params);
+                   comissionList = utilsEJB.searchCommissionByTranssactionType(_request); 
+            } else {
+                return commissions;
             }
+        } catch (Exception ex) {
+            showError(ex);
         }
-        return auxList;
+        return comissionList;
     }
 
     public void onClick$btnAdd() throws InterruptedException {
@@ -311,10 +321,12 @@ public class ListCommissionByProductController extends GenericAbstractListContro
     }
 
     public void onClick$btnClear() throws InterruptedException {
+        txtName.setText("");
     }
 
     public void onClick$btnSearch() throws InterruptedException {
         try {
+            loadList(getFilteredList(txtName.getText()));
         } catch (Exception ex) {
             showError(ex);
         }
