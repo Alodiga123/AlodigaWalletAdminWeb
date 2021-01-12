@@ -54,7 +54,7 @@
                                                     <listheader label="${c:l('sp.crud.businessAffiliationRequests.date')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.businessAffiliationRequests.requestType')}" width="150px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.businessAffiliationRequests.applicant')}" width="250px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.businessAffiliationRequests.status')}" width="200px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.manual.recharge.status')}" width="200px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

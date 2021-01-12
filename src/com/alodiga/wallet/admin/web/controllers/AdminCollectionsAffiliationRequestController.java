@@ -73,10 +73,17 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     String format = "";
     private boolean uploaded = false;
     public Window winAdminCollectionsRequestController;
+    private AdminUsersAffiliationRequestsController adminUserRequest = null;
+    private AffiliationRequest affiliationRequest = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        adminUserRequest = new AdminUsersAffiliationRequestsController();
+        if(adminUserRequest.getUserAffiliationRequets() != null){
+            affiliationRequest = adminUserRequest.getUserAffiliationRequets();
+        }
+        
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
@@ -153,7 +160,12 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     }
 
     public Boolean validateEmpty() {
-        return true;
+        if(txtObservations.getText().isEmpty()){
+             this.showMessage("sp.error.renewal.observations",true, null);
+        } else {
+            return true;
+        }
+        return false;
     }
 
   
@@ -187,18 +199,22 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
             requestHasCollectionsRequest.setUpdateDate(new Timestamp(new Date().getTime()));
             requestHasCollectionsRequest.setImageFileUrl(UrlFile);
             requestHasCollectionsRequest = utilsEJB.saveRequestHasCollectionsRequest(requestHasCollectionsRequest);
+            
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
             params.put(EjbConstants.PARAM_AFFILIATION_REQUEST,requestHasCollectionsRequest.getAffiliationRequestId().getId());
             request.setParams(params);
             utilsEJB.updateBusinessAffiliationRequest(request);
+           
+            
+            
             this.showMessage("sp.common.save.success", false, null);
             EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true).publish(new Event(""));
         } catch (Exception ex) {
             showError(ex);
         }
     }
-
+  
     public void onClick$btnSave() {
         if (validateEmpty()) {
             switch (eventType) {
@@ -219,6 +235,8 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
                 loadFieldC(requestHasCollectionsRequestParam.getCollectionsRequestId());
                 loadCmbCountry(eventType);
                 loadCmbPersonType(eventType);
+                cmbPersonType.setDisabled(true);
+                cmbCountry.setDisabled(true);
                 break;
             case WebConstants.EVENT_VIEW:
                 loadFields(requestHasCollectionsRequestParam);
@@ -237,7 +255,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
         if (media != null) {
             divPreview.getChildren().clear();
             media = event.getMedia();
-            File file = new File("/opt/proyecto/cms/imagenes/" + media.getName());
+            File file = new File("/opt/alodiga/proyecto/maw/imagenes/" + media.getName());
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(media.getByteData());
             fos.flush();

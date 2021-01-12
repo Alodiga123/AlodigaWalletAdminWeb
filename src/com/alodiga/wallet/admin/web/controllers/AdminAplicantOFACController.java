@@ -7,6 +7,8 @@ import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusApplicantE;
+import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
@@ -18,6 +20,7 @@ import com.alodiga.wallet.common.model.NaturalPerson;
 import com.alodiga.wallet.common.model.Person;
 import com.alodiga.wallet.common.model.ReviewOfac;
 import com.alodiga.wallet.common.model.StatusApplicant;
+import com.alodiga.wallet.common.model.StatusRequest;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
@@ -28,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
@@ -56,6 +61,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private Toolbarbutton tbbTitle;
     private Person personParam;
     private Integer eventType;
+    
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -190,7 +196,8 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         NaturalPerson naturalPerson = null;
         LegalPerson legalPerson = null;
         LegalRepresentative legalRepresentative = null;
-
+        AffiliationRequest affiliationRequest = affiliationRequestParam;
+        Integer statusRequestId = StatusRequestE.APLINE.getId();
         try {
             if (_reviewOfac != null) {
                 reviewOfac = _reviewOfac;
@@ -229,8 +236,14 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                     legalRepresentative = personEJB.saveLegalRepresentative(legalRepresentative);
                 }
             }
+            
+            if(activateTabApplicationReview() == 0){
+               affiliationRequest.setStatusRequestId(getStatusRequest(affiliationRequest, statusRequestId));
+               affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+            }
 
             this.showMessage("sp.common.save.success", false, null);
+            EventQueues.lookup("updateApplicantOFAC", EventQueues.APPLICATION, true).publish(new Event(""));
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
@@ -241,7 +254,31 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             showError(ex);
         }
     }
-
+    
+    public int activateTabApplicationReview(){
+        String statusApplicantBlackList = StatusApplicantE.LISNEG.getStatusApplicantCode();
+        int indBlackList = 0;
+        
+        if(personParam.getNaturalPerson().getStatusApplicantId().getCode().equals(statusApplicantBlackList)){
+            indBlackList = 1;
+        }
+        
+        return indBlackList;
+    }
+    
+    public StatusRequest getStatusRequest(AffiliationRequest affiliationRequest, int statusRequestId){
+        StatusRequest statusRequest = affiliationRequest.getStatusRequestId();
+        try{
+            EJBRequest request = new EJBRequest();
+            request.setParam(statusRequestId);
+            statusRequest = utilsEJB.loadStatusRequest(request);
+        } catch (Exception ex) {
+            showError(ex);
+        }
+        
+        return statusRequest;
+    }
+    
     public void onClick$btnCancel() {
         clearFields();
     }

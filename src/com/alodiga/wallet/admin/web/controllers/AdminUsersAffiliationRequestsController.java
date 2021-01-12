@@ -5,6 +5,7 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Person;
@@ -53,6 +54,8 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
     public static AffiliationRequest userAffiliationRequestParent = null;
     private Integer eventType;
     private Tab tabUserAffiliationRequests;
+    private Tab tabOfac;
+    private Tab tabReview;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -74,9 +77,13 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.edit"));
+                activateTabOfac();
+                activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.view"));
+                activateTabOfac();
+                activateTabReview();
                 break;
             case WebConstants.EVENT_ADD:
                 tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.add"));
@@ -115,7 +122,6 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             lblRequestNumber.setValue(userAffiliationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(userAffiliationRequest.getDateRequest()));
             lblStatusRequest.setValue(userAffiliationRequest.getStatusRequestId().getDescription());
-
             userAffiliationRequestParent = userAffiliationRequest;
             btnSave.setVisible(false);
         } catch (Exception ex) {
@@ -126,21 +132,60 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            lblCountryName.setValue(person.getCountryId().getName());
+            if(person.getCountryId().getName() != null){
+                lblCountryName.setValue(person.getCountryId().getName());
+            }
+            
             lblIdentificationType.setValue(person.getNaturalPerson().getDocumentsPersonTypeId().getDescription());
             lblIdentificationNumber.setValue(person.getNaturalPerson().getIdentificationNumber());
-            lblExpirationDater.setValue(simpleDateFormat.format(person.getNaturalPerson().getDueDateDocumentIdentification()));
-            lblIdentificationNumberOld.setValue(person.getNaturalPerson().getIdentificactionNumberOld());
-            lblFullName.setValue(person.getNaturalPerson().getFirstName());
-            lblFullLastName.setValue(person.getNaturalPerson().getLastName());
-            lblMarriedLastName.setValue(person.getNaturalPerson().getMarriedLastName());
-            lblBirthPlace.setValue(person.getNaturalPerson().getPlaceBirth());
-            lblBirthday.setValue(simpleDateFormat.format(person.getNaturalPerson().getDateBirth()));
-            lblGender.setValue(person.getNaturalPerson().getGender());
-            lblCivilState.setValue(person.getNaturalPerson().getCivilStatusId().getDescription());
-            lblProfession.setValue(person.getNaturalPerson().getProfessionId().getName());          
-            lblEmail.setValue(person.getEmail());
-            lblWebSite.setValue(person.getWebSite());
+            
+            if(person.getNaturalPerson().getDueDateDocumentIdentification() != null){
+               lblExpirationDater.setValue(simpleDateFormat.format(person.getNaturalPerson().getDueDateDocumentIdentification())); 
+            }
+            
+            if(person.getNaturalPerson().getIdentificactionNumberOld() != null){
+               lblIdentificationNumberOld.setValue(person.getNaturalPerson().getIdentificactionNumberOld());
+            }
+            
+            if(person.getNaturalPerson().getFirstName() != null){
+               lblFullName.setValue(person.getNaturalPerson().getFirstName()); 
+            }
+            
+            if(person.getNaturalPerson().getLastName() != null){
+               lblFullLastName.setValue(person.getNaturalPerson().getLastName()); 
+            }
+            
+            if(person.getNaturalPerson().getMarriedLastName() != null){
+               lblMarriedLastName.setValue(person.getNaturalPerson().getMarriedLastName());  
+            }
+            
+            if(person.getNaturalPerson().getPlaceBirth() != null){
+               lblBirthPlace.setValue(person.getNaturalPerson().getPlaceBirth()); 
+            }
+            
+            if(person.getNaturalPerson().getDateBirth() != null){
+               lblBirthday.setValue(simpleDateFormat.format(person.getNaturalPerson().getDateBirth())); 
+            }
+            
+            if(person.getNaturalPerson().getGender() != null){
+               lblGender.setValue(person.getNaturalPerson().getGender());  
+            }
+            
+            if(person.getNaturalPerson().getCivilStatusId() != null){
+                lblCivilState.setValue(person.getNaturalPerson().getCivilStatusId().getDescription());
+            }
+            
+            if(person.getNaturalPerson().getProfessionId() != null){
+               lblProfession.setValue(person.getNaturalPerson().getProfessionId().getName());  
+            }
+            
+            if(person.getEmail() != null){
+               lblEmail.setValue(person.getEmail()); 
+            }
+           
+            if(person.getWebSite() != null){
+              lblWebSite.setValue(person.getWebSite());  
+            }
             
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
@@ -195,5 +240,24 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
             default:
                 break;
         }
+    }
+    
+    public void activateTabOfac(){
+         if((userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECCOM.getStatusRequestCode())) ||
+             (userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode()))){
+            tabOfac.setDisabled(false);
+         } else {
+            tabOfac.setDisabled(true);
+         }
+  
+    }
+    
+    public void activateTabReview(){
+         if(userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode())){
+            tabReview.setDisabled(false);
+         } else {
+            tabReview.setDisabled(true);
+         }
+  
     }
 }

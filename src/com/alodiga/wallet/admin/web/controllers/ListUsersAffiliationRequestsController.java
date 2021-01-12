@@ -28,6 +28,7 @@ import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
 import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
             params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
             request.setParams(params);
-            userAffiliationRequestList = utilsEJB.getTransactionApproveRequestByType(request);
+            userAffiliationRequestList = utilsEJB.getAffiliationRequestByRequestByType(request);
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
@@ -151,8 +152,14 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.businessAffiliationRequests.list"));
-            AccessControl.saveAction(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "Se descargo listado de Solicitud de Afiliacion en formato excel");
+            String pattern = "dd-MM-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(new Date());
+            StringBuilder file = new StringBuilder(Labels.getLabel("sp.userAffiliationRequests.list.download"));
+            file.append("_");
+            file.append(date);
+            Utils.exportExcel(lbxRecords, file.toString());
+            AccessControl.saveAction(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "Se descargo listado de países en stock formato excel");
         } catch (Exception ex) {
             showError(ex);
         }

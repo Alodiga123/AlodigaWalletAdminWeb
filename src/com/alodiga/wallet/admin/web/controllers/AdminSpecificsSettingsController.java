@@ -14,6 +14,8 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
@@ -25,6 +27,7 @@ import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.BusinessEJB;
 import com.alodiga.wallet.common.ejb.PreferencesEJB;
 import com.alodiga.wallet.common.ejb.ProductEJB;
+import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PreferenceManager;
 import com.alodiga.wallet.common.model.PreferenceClassification;
@@ -141,6 +144,8 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     private void loadPreferences(Long classificationId) {
         try {
             setData();
+            preferenceValues = new ArrayList<PreferenceValue>();
+            rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             for (PreferenceField field : fields) {
@@ -169,6 +174,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                              }
                         });
 	                	cmbbox.setParent(row);
+	                	 Datebox beginninDate = new Datebox();
+ 	                	beginninDate.setFormat("dd-MM-yyyy");
+ 	                	beginninDate.setValue(pValue.getBeginningDate());
+ 	                	beginninDate.setParent(row);
+ 	                	Hlayout hlayout = new Hlayout();
+ 	                	Checkbox endCheck = new Checkbox();
+ 	                	endCheck.addEventListener("onClick", new EventListener() {
+                             public void onEvent(Event event) throws Exception {
+                               changeEndinningDate(hlayout);
+                             }
+                         });
+ 	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+ 	                	endCheck.setParent(hlayout);
+ 	                	Datebox endinngDate = new Datebox();
+ 	                	endinngDate.setFormat("dd-MM-yyyy");
+ 	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+ 	                	if (endCheck.isChecked()) {
+ 	                		endinngDate.setVisible(true);
+ 	                	}else{
+ 	                		endinngDate.setVisible(false);
+ 	                	}	                	
+ 	                	endinngDate.setParent(hlayout);	  
+ 	                	hlayout.setParent(row);
+ 	                	Checkbox percentage = new Checkbox();
+ 	                	percentage.setChecked(pValue.getIsPercentage());
+ 	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
 	                	chb.addEventListener("onClick", new EventListener() {
@@ -196,6 +227,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                              }
                         });
 	                	chbValue.setParent(row);
+	                	 Datebox beginninDate = new Datebox();
+ 	                	beginninDate.setFormat("dd-MM-yyyy");
+ 	                	beginninDate.setValue(pValue.getBeginningDate());
+ 	                	beginninDate.setParent(row);
+ 	                	Hlayout hlayout = new Hlayout();
+ 	                	Checkbox endCheck = new Checkbox();
+ 	                	endCheck.addEventListener("onClick", new EventListener() {
+                             public void onEvent(Event event) throws Exception {
+                               changeEndinningDate(hlayout);
+                             }
+                         });
+ 	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+ 	                	endCheck.setParent(hlayout);
+ 	                	Datebox endinngDate = new Datebox();
+ 	                	endinngDate.setFormat("dd-MM-yyyy");
+ 	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+ 	                	if (endCheck.isChecked()) {
+ 	                		endinngDate.setVisible(true);
+ 	                	}else{
+ 	                		endinngDate.setVisible(false);
+ 	                	}	                	
+ 	                	endinngDate.setParent(hlayout);	  
+ 	                	hlayout.setParent(row);
+ 	                	Checkbox percentage = new Checkbox();
+ 	                	percentage.setChecked(pValue.getIsPercentage());
+ 	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
 	                	chb.addEventListener("onClick", new EventListener() {
@@ -222,6 +279,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                             }
                         });
 	                	txtValue.setParent(row);
+	                	 Datebox beginninDate = new Datebox();
+ 	                	beginninDate.setFormat("dd-MM-yyyy");
+ 	                	beginninDate.setValue(pValue.getBeginningDate());
+ 	                	beginninDate.setParent(row);
+ 	                	Hlayout hlayout = new Hlayout();
+ 	                	Checkbox endCheck = new Checkbox();
+ 	                	endCheck.addEventListener("onClick", new EventListener() {
+                             public void onEvent(Event event) throws Exception {
+                               changeEndinningDate(hlayout);
+                             }
+                         });
+ 	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+ 	                	endCheck.setParent(hlayout);
+ 	                	Datebox endinngDate = new Datebox();
+ 	                	endinngDate.setFormat("dd-MM-yyyy");
+ 	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+ 	                	if (endCheck.isChecked()) {
+ 	                		endinngDate.setVisible(true);
+ 	                	}else{
+ 	                		endinngDate.setVisible(false);
+ 	                	}	                	
+ 	                	endinngDate.setParent(hlayout);	  
+ 	                	hlayout.setParent(row);
+ 	                	Checkbox percentage = new Checkbox();
+ 	                	percentage.setChecked(pValue.getIsPercentage());
+ 	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
 	                	chb.addEventListener("onClick", new EventListener() {
@@ -251,7 +334,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     
     private void loadPreferencesByParam(PreferenceValue preferenceValue,Long classificationId, boolean readOnly) {
         try {
-            setData();                
+            setData();  
+            preferenceValues = new ArrayList<PreferenceValue>();
+            rowsGrid.getChildren().clear();
             List<PreferenceField> fields = preferencesEJB.getPreferenceFieldsByPreferenceId(Constants.PREFERENCE_TRANSACTION_ID);
             preferenceValues = new ArrayList<PreferenceValue>();
             PreferenceValue pValue = null;
@@ -287,6 +372,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                                 }
                             });
                             cmbbox.setParent(row);
+                            Datebox beginninDate = new Datebox();
+    	                	beginninDate.setFormat("dd-MM-yyyy");
+    	                	beginninDate.setValue(pValue.getBeginningDate());
+    	                	beginninDate.setParent(row);
+    	                	Hlayout hlayout = new Hlayout();
+    	                	Checkbox endCheck = new Checkbox();
+    	                	endCheck.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                  changeEndinningDate(hlayout);
+                                }
+                            });
+    	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+    	                	endCheck.setParent(hlayout);
+    	                	Datebox endinngDate = new Datebox();
+    	                	endinngDate.setFormat("dd-MM-yyyy");
+    	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+    	                	if (endCheck.isChecked()) {
+    	                		endinngDate.setVisible(true);
+    	                	}else{
+    	                		endinngDate.setVisible(false);
+    	                	}	                	
+    	                	endinngDate.setParent(hlayout);	  
+    	                	hlayout.setParent(row);
+    	                	Checkbox percentage = new Checkbox();
+    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
                             chb.addEventListener("onClick", new EventListener() {
@@ -318,6 +429,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                             	}
                             });
                             chbValue.setParent(row);
+                            Datebox beginninDate = new Datebox();
+    	                	beginninDate.setFormat("dd-MM-yyyy");
+    	                	beginninDate.setValue(pValue.getBeginningDate());
+    	                	beginninDate.setParent(row);
+    	                	Hlayout hlayout = new Hlayout();
+    	                	Checkbox endCheck = new Checkbox();
+    	                	endCheck.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                  changeEndinningDate(hlayout);
+                                }
+                            });
+    	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+    	                	endCheck.setParent(hlayout);
+    	                	Datebox endinngDate = new Datebox();
+    	                	endinngDate.setFormat("dd-MM-yyyy");
+    	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+    	                	if (endCheck.isChecked()) {
+    	                		endinngDate.setVisible(true);
+    	                	}else{
+    	                		endinngDate.setVisible(false);
+    	                	}	                	
+    	                	endinngDate.setParent(hlayout);	  
+    	                	hlayout.setParent(row);
+    	                	Checkbox percentage = new Checkbox();
+    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
                             chb.addEventListener("onClick", new EventListener() {
@@ -348,6 +485,32 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
                                     changeStatus(row);
                                 }
                             });
+                            Datebox beginninDate = new Datebox();
+    	                	beginninDate.setFormat("dd-MM-yyyy");
+    	                	beginninDate.setValue(pValue.getBeginningDate());
+    	                	beginninDate.setParent(row);
+    	                	Hlayout hlayout = new Hlayout();
+    	                	Checkbox endCheck = new Checkbox();
+    	                	endCheck.addEventListener("onClick", new EventListener() {
+                                public void onEvent(Event event) throws Exception {
+                                  changeEndinningDate(hlayout);
+                                }
+                            });
+    	                	endCheck.setChecked(pValue.getEndingDate()!=null?true:false);
+    	                	endCheck.setParent(hlayout);
+    	                	Datebox endinngDate = new Datebox();
+    	                	endinngDate.setFormat("dd-MM-yyyy");
+    	                	endinngDate.setValue(pValue.getEndingDate()!=null?pValue.getEndingDate():new Timestamp(new Date().getTime()));
+    	                	if (endCheck.isChecked()) {
+    	                		endinngDate.setVisible(true);
+    	                	}else{
+    	                		endinngDate.setVisible(false);
+    	                	}	                	
+    	                	endinngDate.setParent(hlayout);	  
+    	                	hlayout.setParent(row);
+    	                	Checkbox percentage = new Checkbox();
+    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
                             chb.addEventListener("onClick", new EventListener() {
@@ -377,6 +540,16 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 
     }
 
+    @SuppressWarnings("unchecked")
+    private void changeEndinningDate(Hlayout hlayout) {
+     	List<Component> children = hlayout.getChildren();
+     	if (((Checkbox)children.get(0)).isChecked()){
+	     	((Datebox)children.get(1)).setVisible(true);
+     	}else {
+     		((Datebox)children.get(1)).setVisible(false);
+     	}
+    }
+    
     public void setData() {
         DEFAULT_SMS_PROVIDER_ID = PreferenceFieldEnum.DEFAULT_SMS_PROVIDER_ID.getId();
     }
@@ -401,9 +574,14 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
             	else if (children.get(1) instanceof Checkbox)	
             		value = ((Checkbox)children.get(1)).isChecked()?"1":"0";
             	
-            	boolean check = ((Checkbox)children.get(2)).isChecked() ? true : false;
+            	boolean check = ((Checkbox)children.get(5)).isChecked() ? true : false;
+            	boolean percentage = ((Checkbox)children.get(4)).isChecked() ? true : false;
+            	List<Component> childrenHlayout = ((Hlayout)children.get(3)).getChildren();
             	
-            	if (!pvalue.getValue().equals(value) || eventType==WebConstants.EVENT_ADD || pvalue.isEnabled()!=check) {
+            	Date endingDate = null;
+            	if (((Checkbox)childrenHlayout.get(0)).isChecked())
+            		endingDate = ((Datebox)childrenHlayout.get(1)).getValue();
+            	if (!pvalue.getValue().equals(value) || eventType==WebConstants.EVENT_ADD || pvalue.isEnabled()!=check || pvalue.getIsPercentage()!=percentage || pvalue.getBeginningDate()!=((Datebox)children.get(2)).getValue() || pvalue.getEndingDate()!=endingDate) {
             		if ((children.get(1) instanceof Textbox) && Long.parseLong(((Textbox)children.get(1)).getText())>Long.parseLong(pvalue.getPreferenceValueParentId()!=null?pvalue.getPreferenceValueParentId().getValue():pvalue.getValue())) {
             			((Textbox)children.get(1)).setFocus(true);
             			save= false;
@@ -422,12 +600,14 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	            preferenceManager.refresh();
 	            this.showMessage("sp.common.save.success", false, null);
              } 
+        } catch (GeneralException ex) {
+            //showError(ex);
         } catch (Exception ex) {
             showError(ex);
         }
     }
 
-    private PreferenceValue updatePreferencenValue(PreferenceValue preferenceValue,Row r) {
+    private PreferenceValue updatePreferencenValue(PreferenceValue preferenceValue,Row r) throws GeneralException{
     	List<Component> children = r.getChildren();
     	String value = "";
     	if (children.get(1) instanceof Combobox) {
@@ -438,7 +618,21 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	else if (children.get(1) instanceof Checkbox)	
     		value = ((Checkbox)children.get(1)).isChecked()?"1":"0";
     	preferenceValue.setValue(value);
-    	preferenceValue.setEnabled(((Checkbox)children.get(2)).isChecked());
+    	preferenceValue.setBeginningDate(((Datebox)children.get(2)).getValue());
+    	if (children.get(3) instanceof Hlayout) {
+    		List<Component> childrenHlayout = ((Hlayout)children.get(3)).getChildren();
+    		if (((Checkbox)childrenHlayout.get(0)).isChecked()) {
+    			if (((Datebox)childrenHlayout.get(1)).getValue().getTime() >= ((Datebox)children.get(2)).getValue().getTime()) {
+    				preferenceValue.setEndingDate(((Datebox)childrenHlayout.get(1)).getValue()); 			
+    			} else {
+    				this.showMessage("sp.error.date.invalid", true, null);
+    				throw new GeneralException("Error Invalid Dates");
+    			}
+    		}else
+    			preferenceValue.setEndingDate(null);
+    	}
+    	preferenceValue.setIsPercentage(((Checkbox)children.get(4)).isChecked());
+    	preferenceValue.setEnabled(((Checkbox)children.get(6)).isChecked());
     	preferenceValue.setUpdateDate(new Timestamp(new Date().getTime()));
     	if(eventType==WebConstants.EVENT_ADD) {
     		preferenceValue.setPreferenceClassficationId(preferenceClassification);
@@ -481,9 +675,12 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 							preferenceClassification.getId(),
 							((Product) cmbProduct.getSelectedItem().getValue()).getId(),
 							((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
-							((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+							((Business) cmbBusiness.getSelectedItem().getValue()).getId())) {
 						savePreferenceValues();
-					else
+			      	cmbProduct.setDisabled(true);
+	            	cmbTransactionType.setDisabled(true);
+	            	cmbBusiness.setDisabled(true);
+					}else
 						this.showMessage("sp.error.field.exists", true, null);     
 				}  catch (Exception e) {
 					e.printStackTrace();
@@ -608,18 +805,81 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	}
     
     public void onChange$cmbProduct() {
+    	clearMessage();
+    	btnSave.setVisible(true);
     	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
-    		loadPreferences(preferenceClassification.getId());  
+    		try {
+				if (preferencesEJB.validatePreferencesValues(
+						preferenceClassification.getId(),
+						((Product) cmbProduct.getSelectedItem().getValue()).getId(),
+						((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
+						((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+		    		loadPreferences(preferenceClassification.getId());  
+				else {
+					PreferenceValue pValue = new PreferenceValue();
+					pValue.setPreferenceClassficationId(preferenceClassification);
+					pValue.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+					pValue.setTransactionTypeId((TransactionType) cmbTransactionType.getSelectedItem().getValue());
+					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
+	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
+	            	btnSave.setVisible(false);
+					this.showMessage("sp.error.field.exists", true, null);   
+				}  
+			}  catch (Exception e) {
+				e.printStackTrace();
+			}
     }
     
     public void onChange$cmbTransactionType() {
+    	clearMessage();
+    	btnSave.setVisible(true);
     	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
-    		loadPreferences(preferenceClassification.getId());  
+    		try {
+				if (preferencesEJB.validatePreferencesValues(
+						preferenceClassification.getId(),
+						((Product) cmbProduct.getSelectedItem().getValue()).getId(),
+						((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
+						((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+		    		loadPreferences(preferenceClassification.getId());  
+				else {
+					PreferenceValue pValue = new PreferenceValue();
+					pValue.setPreferenceClassficationId(preferenceClassification);
+					pValue.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+					pValue.setTransactionTypeId((TransactionType) cmbTransactionType.getSelectedItem().getValue());
+					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
+	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
+	            	btnSave.setVisible(false);
+					this.showMessage("sp.error.field.exists", true, null);   
+				}     
+			}  catch (Exception e) {
+				e.printStackTrace();
+			}  
     }
 
     public void onChange$cmbBusiness() {
+    	clearMessage();
+    	btnSave.setVisible(true);
     	if (cmbProduct.getSelectedItem() != null && cmbTransactionType.getSelectedItem() != null && cmbBusiness.getSelectedItem() != null && eventType==WebConstants.EVENT_ADD) 
-    		loadPreferences(preferenceClassification.getId());  
+    		try {
+				if (preferencesEJB.validatePreferencesValues(
+						preferenceClassification.getId(),
+						((Product) cmbProduct.getSelectedItem().getValue()).getId(),
+						((TransactionType) cmbTransactionType.getSelectedItem().getValue()).getId(),
+						((Business) cmbBusiness.getSelectedItem().getValue()).getId()))
+		    		loadPreferences(preferenceClassification.getId());  
+				else {
+					PreferenceValue pValue = new PreferenceValue();
+					pValue.setPreferenceClassficationId(preferenceClassification);
+					pValue.setProductId((Product) cmbProduct.getSelectedItem().getValue());
+					pValue.setTransactionTypeId((TransactionType) cmbTransactionType.getSelectedItem().getValue());
+					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
+	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
+	            	btnSave.setVisible(false);
+					this.showMessage("sp.error.field.exists", true, null);   
+				}
+			}  catch (Exception e) {
+				e.printStackTrace();
+			}
     }
     
     @SuppressWarnings("unchecked")
@@ -645,31 +905,31 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     @SuppressWarnings("unchecked")
     private void changeStatus(Row row) {
      	List<Component> children = row.getChildren();
-     	((Checkbox)children.get(2)).setChecked(true);
-     	((Checkbox)children.get(3)).setChecked(true);
+     	((Checkbox)children.get(5)).setChecked(true);
+     	((Checkbox)children.get(6)).setChecked(true);
     }
     
     @SuppressWarnings("unchecked")
     private void changeSpecific(Row row) {
      	List<Component> children = row.getChildren();
-     	if (((Checkbox)children.get(2)).isChecked()){
-	     	((Checkbox)children.get(2)).setChecked(true);
-	     	((Checkbox)children.get(3)).setChecked(true);
+     	if (((Checkbox)children.get(5)).isChecked()){
+	     	((Checkbox)children.get(5)).setChecked(true);
+	     	((Checkbox)children.get(6)).setChecked(true);
      	}else {
-     		((Checkbox)children.get(2)).setChecked(false);
-	     	((Checkbox)children.get(3)).setChecked(false);
+     		((Checkbox)children.get(5)).setChecked(false);
+	     	((Checkbox)children.get(6)).setChecked(false);
      	}
     }
     
     @SuppressWarnings("unchecked")
     private void changeEnabled(Row row) {
      	List<Component> children = row.getChildren();
-     	if (((Checkbox)children.get(3)).isChecked()){
-	     	((Checkbox)children.get(2)).setChecked(true);
-	     	((Checkbox)children.get(3)).setChecked(true);
+     	if (((Checkbox)children.get(6)).isChecked()){
+	     	((Checkbox)children.get(5)).setChecked(true);
+	     	((Checkbox)children.get(6)).setChecked(true);
      	}else {
-     		((Checkbox)children.get(2)).setChecked(false);
-	     	((Checkbox)children.get(3)).setChecked(false);
+     		((Checkbox)children.get(5)).setChecked(false);
+	     	((Checkbox)children.get(6)).setChecked(false);
      	}
     }
 }
