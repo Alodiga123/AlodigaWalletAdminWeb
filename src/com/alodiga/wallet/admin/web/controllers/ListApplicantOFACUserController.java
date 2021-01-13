@@ -252,7 +252,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 	
 	                    //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
 	                    if (applicant.getPersonTypeId().getIndNaturalPerson() == true) {
-	                        if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
+	                        if (Double.parseDouble(ofacResponse.getPercentMatch()) >= 0.75) {
 	                            naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST));
 	                            indBlackList = 1;
 	                        } else {
