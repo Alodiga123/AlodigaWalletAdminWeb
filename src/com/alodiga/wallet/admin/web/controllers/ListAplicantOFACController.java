@@ -142,12 +142,12 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                     item = new Listitem();
                     item.setValue(aplicant);   
                         if (aplicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())) {
-                                item.appendChild(new Listcell(aplicant.getAffiliationRequest().getNumberRequest()));
-                                applicantNameLegal = aplicant.getLegalPerson().getBusinessName();
+                                item.appendChild(new Listcell(aplicant.getAffiliationRequest()!=null?aplicant.getAffiliationRequest().getNumberRequest():""));
+                                applicantNameLegal = aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getBusinessName():"";
                                 item.appendChild(new Listcell(applicantNameLegal));
                                 item.appendChild(new Listcell(Labels.getLabel("sp.common.legalApplicant")));
-                                item.appendChild(new Listcell(aplicant.getLegalPerson().getStatusApplicantId().getDescription()));
-                                if(aplicant.getLegalPerson().getPersonId().getReviewOfac() != null){
+                                item.appendChild(new Listcell(aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getStatusApplicantId().getDescription():""));
+                                if(aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getLegalPerson().getPersonId().getReviewOfac().getResultReview())));
                                 } else {
                                     item.appendChild(new Listcell(""));
@@ -155,14 +155,14 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
                                 item.appendChild(permissionRead ? new ListcellViewButton(adminPage, aplicant, Permission.VIEW_APLICANT_OFAC) : new Listcell());  
                         } else if (aplicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
-                                item.appendChild(new Listcell(aplicant.getAffiliationRequest().getNumberRequest()));
-                                StringBuilder applicarBusinessNatural = new StringBuilder(aplicant.getNaturalPerson().getFirstName());
+                                item.appendChild(new Listcell(aplicant.getAffiliationRequest()!=null?aplicant.getAffiliationRequest().getNumberRequest():""));
+                                StringBuilder applicarBusinessNatural = new StringBuilder(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getFirstName():"");
                                 applicarBusinessNatural.append(" ");
-                                applicarBusinessNatural.append(aplicant.getNaturalPerson().getLastName());
+                                applicarBusinessNatural.append(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getLastName():"");
                                 item.appendChild(new Listcell(applicarBusinessNatural.toString()));
                                 item.appendChild(new Listcell(Labels.getLabel("sp.common.naturalApplicant")));
-                                item.appendChild(new Listcell(aplicant.getNaturalPerson().getStatusApplicantId().getDescription()));
-                                if(aplicant.getNaturalPerson().getPersonId().getReviewOfac() != null){
+                                item.appendChild(new Listcell(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getStatusApplicantId().getDescription():""));
+                                if(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getNaturalPerson().getPersonId().getReviewOfac().getResultReview())));
                                 } else {
                                     item.appendChild(new Listcell(""));
@@ -170,14 +170,14 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, aplicant, Permission.EDIT_APLICANT_OFAC) : new Listcell());
                                 item.appendChild(permissionRead ? new ListcellViewButton(adminPage, aplicant, Permission.VIEW_APLICANT_OFAC) : new Listcell());
                         } else if (aplicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
-                                item.appendChild(new Listcell(aplicant.getAffiliationRequest().getNumberRequest()));
-                                StringBuilder applicantRepresentative = new StringBuilder(aplicant.getLegalRepresentative().getFirstNames());
+                                item.appendChild(new Listcell(aplicant.getAffiliationRequest()!=null?aplicant.getAffiliationRequest().getNumberRequest():""));
+                                StringBuilder applicantRepresentative = new StringBuilder(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getFirstNames():"");
                                 applicantRepresentative.append(" ");
-                                applicantRepresentative.append(aplicant.getLegalRepresentative().getLastNames());
+                                applicantRepresentative.append(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getLastNames():"");
                                 item.appendChild(new Listcell(applicantRepresentative.toString()));
                                 item.appendChild(new Listcell(Labels.getLabel("sp.common.legalRepresentative")));
-                                item.appendChild(new Listcell(aplicant.getLegalRepresentative().getStatusApplicantId().getDescription()));
-                                if(aplicant.getLegalRepresentative().getPersonId().getReviewOfac() != null){
+                                item.appendChild(new Listcell(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getStatusApplicantId().getDescription():""));
+                                if(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getLegalRepresentative().getPersonId().getReviewOfac().getResultReview())));
                                 } else {
                                     item.appendChild(new Listcell(""));
@@ -291,7 +291,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             }   
                         }                                             
                     } 
-                    if (applicant.getNaturalPerson() != null && applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
+                    if ( applicant.getNaturalPerson()!=null && applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                         if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
                             affiliationRequest = applicant.getNaturalPerson().getPersonId().getAffiliationRequest();
                             lastName = applicant.getNaturalPerson().getLastName();
@@ -305,8 +305,8 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
                 if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
                     if (applicant.getLegalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
-                        if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
-                            applicant.getLegalPerson().setStatusApplicantId(getStatusApplicant(legalPerson.getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST));
+                        if (Double.parseDouble(ofacResponse.getPercentMatch()) >= 0.75) {
+                            applicant.getLegalPerson().setStatusApplicantId(getStatusApplicant(applicant.getLegalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST));
                             indBlackList = 1;
                         } else {
                             applicant.getLegalPerson().setStatusApplicantId(getStatusApplicant(legalPerson.getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST_OK));
@@ -316,7 +316,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 }                
                 if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                      if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
-                        if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
+                        if (Double.parseDouble(ofacResponse.getPercentMatch()) >= 0.75) {
                             applicant.getNaturalPerson().setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(),Constants.STATUS_APPLICANT_BLACK_LIST ));
                             indBlackList = 1;
                         } else {
@@ -327,7 +327,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 }
                 if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
                     if (applicant.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
-                        if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
+                        if (Double.parseDouble(ofacResponse.getPercentMatch()) >= 0.75) {
                             applicant.getLegalRepresentative().setStatusApplicantId(getStatusApplicant(applicant.getLegalRepresentative().getStatusApplicantId(),Constants.STATUS_APPLICANT_BLACK_LIST ));
                             indBlackList = 1;
                         } else {
@@ -340,36 +340,35 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                     if( businessName != null && !businessName.equals("")){
                            //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
                         if (ofacResponse != null) {
-                            if (indBlackList == 1) {
-                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-                            } else {
-                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-                            }
-                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
-
-                            getData();
-                            loadList(personList);
-                            this.showMessage("sp.common.finishReviewOFAC", false, null);
+                        	if (affiliationRequest!=null) {
+	                            if (indBlackList == 1) {
+	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
+	                            } else {
+	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+	                            }
+	                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+                        	}
                         }
                     }
                 } else {
                     if (!lastName.equals("") && !firstName.equals("") && lastName != null && firstName != null) {
                         //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
                         if (ofacResponse != null) {
-                            if (indBlackList == 1) {
-                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-                            } else {
-                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-                            }
-                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
-
-                            getData();
-                            loadList(personList);
-                            this.showMessage("sp.common.finishReviewOFAC", false, null);
+                        	if (affiliationRequest!=null) {
+	                            if (indBlackList == 1) {
+	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
+	                            } else {
+	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+	                            }
+	                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+                        	}
                         }
                     }
                 }    
             }
+            getData();
+            loadList(personList);
+            this.showMessage("sp.common.finishReviewOFAC", false, null);
         } catch (Exception ex) {
             showError(ex);
         }

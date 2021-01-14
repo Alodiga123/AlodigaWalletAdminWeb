@@ -120,7 +120,7 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
                     item.appendChild(new Listcell(documentsPersonType.getPersonTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(documentsPersonType.getPersonTypeId().getDescription()));
                     item.appendChild(new Listcell(documentsPersonType.getDescription()));
-                    item.appendChild(new Listcell(documentsPersonType.getCodeIdentification()));
+                    item.appendChild(new Listcell(documentsPersonType.getPersonTypeId().getOriginApplicationId().getName()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, documentsPersonType, Permission.EDIT_DOCUMENTS_PERSON_TYPE) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, documentsPersonType, Permission.VIEW_DOCUMENTS_PERSON_TYPE) : new Listcell());
                     item.setParent(lbxRecords);

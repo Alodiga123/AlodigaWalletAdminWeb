@@ -20,17 +20,24 @@
                                         <div>
                                             <!--Filters for Searching-->
                                             <vlayout>
+                                                <hlayout style="text-align:right">
+                                                    <label value="${c:l('sp.common.transaction.type')}" width="60px" sclass="lblbold"/>
+                                                    <textbox id="txtName" value="" width="160px" tooltiptext="${c:l('sp.common.searching.filter')}" style="margin-right:15px;"/>
+                                                </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
-                                                    <div align="left" width="485px">
+                                                    <div align="left" width="375px">
                                                         <button id="btnAdd" label="${c:l('sp.common.actions.add')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.add.tooltip')}" visible="true"/>
                                                     </div>
-                                                    <div align="right" width="460px">
-                                                        <button id="btnBack" width="80px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listProducts.zul&quot;)"/>
+                                                    
+                                                    <!--Filters button-->
+                                                    <div align="right" width="560px">
+                                                        <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
+                                                        <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
                                                     </div>
                                                 </hlayout>
                                                 <div align="right" width="70px">
-                                                        <label id="lblProduct" value=" " sclass="lblexample"/>
+                                                        <label id="lblProduct" value=" " sclass="lblexample" style="font-weight: bold;"/>
                                                 </div>
                                             </vlayout>
                                             <separator/>
