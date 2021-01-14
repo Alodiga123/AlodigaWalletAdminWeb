@@ -291,7 +291,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             }   
                         }                                             
                     } 
-                    if (applicant.getLegalRepresentative() != null && applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
+                    if (applicant.getNaturalPerson() != null && applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                         if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
                             affiliationRequest = applicant.getNaturalPerson().getPersonId().getAffiliationRequest();
                             lastName = applicant.getNaturalPerson().getLastName();
