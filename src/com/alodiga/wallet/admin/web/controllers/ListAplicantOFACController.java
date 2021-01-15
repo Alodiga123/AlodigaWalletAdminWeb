@@ -23,6 +23,7 @@ import com.alodiga.wallet.common.enumeraciones.StatusApplicantE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.AffiliationRequest;
@@ -50,6 +51,8 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
@@ -203,18 +206,40 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
 
     public void getData() {
         personList = new ArrayList<Person>();
+        List<LegalPerson> legalPerson = new ArrayList<LegalPerson>();
+        List<AffiliationRequest> affiliationRequest = new ArrayList<AffiliationRequest>();
+        Long legalPersonId = 0L;
         try {
             request.setFirst(0);
             request.setLimit(null);
             personList = personEJB.getPersonBusinessApplicant(request);
             for (Person p: personList) {
-               
+                if (p.getAffiliationRequest() == null) {
+                    EJBRequest request = new EJBRequest();
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID , p.getLegalRepresentative().getId());
+                    request.setParams(params);
+                    legalPerson = personEJB.getLegalPersonByLegalRepresentative(request);
+                    for (LegalPerson lg: legalPerson) {
+                        legalPersonId = lg.getPersonId().getId();
+                    }
+                    params = new HashMap<String, Object>();                    
+                    params.put(QueryConstants.PARAM_LEGAL_PERSON_ID, legalPersonId);
+                    request.setParams(params);
+                    affiliationRequest = utilsEJB.getAffiliationRequestByLegalPerson(request);
+                    for (AffiliationRequest ar: affiliationRequest) {
+                        p.setAffiliationRequest(ar);
+                        personEJB.savePerson(p);
+                    }
+                }
             }
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
             showEmptyList();
         } catch (GeneralException ex) {
+            showError(ex);
+        } catch (RegisterNotFoundException ex) {
             showError(ex);
         }
     }
