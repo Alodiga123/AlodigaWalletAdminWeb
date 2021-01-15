@@ -34,6 +34,8 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
+                                                    <label value="${c:l('sp.common.origin.aplication')}" sclass="lblbold"/>
+                                                    <combobox id="cmbOrigin" width="170px" mold="rounded" readonly="true"/>
                                                     <label value="${c:l('cms.common.countryName')}" width="80px" sclass="lblbold"/>
                                                     <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
@@ -57,6 +59,7 @@
                                                     <listheader label="${c:l('cms.common.countryName')}" width="265px" sort="auto"/>
                                                     <listheader label="${c:l('cms.requestCollection.collectionTypes')}" width="270px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.documentPersonType.personType')}" width="270px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.origin.aplication')}" width="270px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>
