@@ -55,7 +55,7 @@
                                             <listbox id="lbxRecords" fixedLayout="true" width="990px" mold="paging" pageSize="10" height="430px">
                                                 <listhead>
                                                     <listheader label="${c:l('sp.crud.requestCollection.country')}" width="225px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.crud.requestCollection.collectionTypes')}" width="225px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.requestCollection.collectionTypes')}" width="260px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.requestCollection.personType')}" width="225px" sort="auto"/>
                                                     <listheader label="${c:l('sp.crud.requestCollection.requestType')}" width="225px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
