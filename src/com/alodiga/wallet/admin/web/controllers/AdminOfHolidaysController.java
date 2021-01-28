@@ -62,13 +62,13 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.calendarDays.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.calendarDays.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.calendarDays.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.calendarDays.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.calendarDays.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.calendarDays.add"));
                 break;
             default:
                 break;
@@ -117,7 +117,7 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
         } catch (Exception ex) {
                 showError(ex);
         } if (calendarDaysList.size() > 0) {
-                    this.showMessage("sp.error.calendarDays.existInBD", true, null);
+                    this.showMessage("msj.error.calendarDays.existInBD", true, null);
                     dtbHolidayDate.setFocus(true);
                     return false;
                 }
@@ -129,13 +129,13 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
 
         if (cmbCountry.getSelectedItem() == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.calendarDays.notSelected", true, null);
+            this.showMessage("msj.error.calendarDays.notSelected", true, null);
         } else if (dtbHolidayDate.getText().isEmpty()) {
             dtbHolidayDate.setFocus(true);
-            this.showMessage("sp.error.calendarDays.value", true, null);
+            this.showMessage("msj.error.calendarDays.value", true, null);
         } else if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.error.calendarDays.description", true, null);
+            this.showMessage("msj.error.calendarDays.description", true, null);
         } else {
             return true;
         }
@@ -166,10 +166,10 @@ public class AdminOfHolidaysController extends GenericAbstractAdminController {
                 calendarDays = utilsEJB.saveCalendarDays(calendarDays);
                 calendarDaysParam = calendarDays;
                 eventType = WebConstants.EVENT_EDIT;
-                this.showMessage("sp.common.save.success", false, null);
+                this.showMessage("wallet.msj.save.success", false, null);
             } catch (Exception e) {
                 e.printStackTrace();
-                this.showMessage("sp.common.calendarDays.save.fail", true, null);
+                this.showMessage("msj.error.calendarDays.save.fail", true, null);
             }
 
             if (eventType == WebConstants.EVENT_ADD) {

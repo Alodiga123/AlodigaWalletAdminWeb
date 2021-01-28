@@ -143,7 +143,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.setParent(lbxRecords);
@@ -177,7 +177,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
     private void showEmptyList() {
     	lbxRecords.getItems().clear();
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -233,7 +233,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
         	EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbProduct);
             cmbProduct.setSelectedItem(item);
             for (int i = 0; i < products.size(); i++) {
@@ -255,7 +255,7 @@ public class ListSettingController extends GenericAbstractListController<Prefere
         	EJBRequest request = new EJBRequest();
             List<TransactionType> transactionTypes = utilsEJB.getTransactionType(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbTransactionType);
             cmbTransactionType.setSelectedItem(item);
             for (int i = 0; i < transactionTypes.size(); i++) {

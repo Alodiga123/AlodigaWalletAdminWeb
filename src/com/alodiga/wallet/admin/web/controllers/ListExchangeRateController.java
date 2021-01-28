@@ -132,7 +132,7 @@ public class ListExchangeRateController extends GenericAbstractListController<Ex
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -161,7 +161,7 @@ public class ListExchangeRateController extends GenericAbstractListController<Ex
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -170,7 +170,7 @@ public class ListExchangeRateController extends GenericAbstractListController<Ex
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.exchangeRate.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.exchangeRate.list"));
             AccessControl.saveAction(Permission.LIST_EXCHANGE_RATE, "Se descargo listado de tipo de cambio en formato excel");
         } catch (Exception ex) {
             showError(ex);

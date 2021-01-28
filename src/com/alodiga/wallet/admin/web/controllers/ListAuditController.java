@@ -112,7 +112,7 @@ public class ListAuditController extends GenericAbstractAdminController {
                 request.setParams(params);
                 audits = auditoryEJB.searchAudit(request);
             } else {
-                this.showMessage("sp.error.date.invalid", true, null);
+                this.showMessage("msj.error.date.invalid", true, null);
             }
         } catch (NullParameterException ex) {
             ex.printStackTrace();
@@ -135,7 +135,7 @@ public class ListAuditController extends GenericAbstractAdminController {
             }
         } else {
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());

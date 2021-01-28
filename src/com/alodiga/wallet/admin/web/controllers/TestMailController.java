@@ -40,13 +40,13 @@ public class TestMailController extends GenericAbstractController {
     public Boolean validateEmpty() {
         if (txtEmail.getText().isEmpty()) {
             txtEmail.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtSubject.getText().isEmpty()) {
             txtSubject.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtContent.getText().isEmpty()) {
             txtContent.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         }  else {
             return true;
         }
@@ -61,7 +61,7 @@ public class TestMailController extends GenericAbstractController {
 //                recipents.add(txtEmail.getText());
 //                Mail mail = ServiceMails.getTestMail(enterprise, recipents, txtSubject.getText(), txtContent.getText());
 //                utilsEJB.sendMail(mail);
-//                this.showMessage(Labels.getLabel("sp.common.sent"), false, null);
+//                this.showMessage(Labels.getLabel("wallet.common.sent"), false, null);
 //            } catch (Exception ex) {
 //                showError(ex);
 //            }

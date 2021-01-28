@@ -138,7 +138,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -158,7 +158,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
                     item.appendChild(new Listcell(personHasAddress.getAddressId().getCityId().getName()));
 
                     if(personHasAddress.getAddressId().getAddressTypeId() == null){
-                        item.appendChild(new Listcell(Labels.getLabel("sp.common.not.specified")));
+                        item.appendChild(new Listcell(Labels.getLabel("wallet.common.notSpecified")));
                     } else {
                         item.appendChild(new Listcell(personHasAddress.getAddressId().getAddressTypeId().getDescription()));
                     }
@@ -178,7 +178,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -194,7 +194,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
         try {
             Button button = new Button();
             button.setImage("/images/icon-edit.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -220,7 +220,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
         try {
             Button button = new Button();
             button.setImage("/images/icon-invoice.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -243,7 +243,7 @@ public class ListAddressController extends GenericAbstractListController<PersonH
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.address.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.address.list"));
             AccessControl.saveAction(Permission.LIST_ADDRESS, "Se descargo la lista de direcciones en formato excel");
         } catch (Exception ex) {
             showError(ex);

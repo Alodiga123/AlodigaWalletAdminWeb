@@ -94,13 +94,13 @@
 //    public Boolean validateEmpty() {
 //    	if (txtFirstName.getText().isEmpty()) {
 //            txtFirstName.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
+//            this.showMessage("msj.error.field.cannotNull", true, null);
 //        }  else if (txtEmail.getText().isEmpty()) {
 //            txtEmail.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
+//            this.showMessage("msj.error.field.cannotNull", true, null);
 //        } else if (txtDNI.getText().isEmpty()) {
 //        	txtDNI.setFocus(true);
-//            this.showMessage("sp.error.field.cannotNull", true, null);
+//            this.showMessage("msj.error.field.cannotNull", true, null);
 //        }  else {
 //            return true;
 //        }
@@ -126,7 +126,7 @@
 //            customer.setPhoneNumber(txtPhoneNumber.getText());
 //            request.setParam(customer);
 //            customerParam = customerEJB.saveCustomer(request);
-//            this.showMessage("sp.common.save.success", false, null);
+//            this.showMessage("wallet.msj.save.success", false, null);
 //            AccessControl.saveAction(Permission.EDIT_CUSTOMER, "Ingreso el cliente= " + customer.getFirstName() + " "+customer.getLastName());
 //        } catch (Exception ex) {
 //            showError(ex);

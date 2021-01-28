@@ -119,16 +119,16 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
     public boolean validateEmpty() {
         if (cmbCountry.getSelectedItem()  == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);     
+            this.showMessage("msj.error.countryNotSelected", true, null);     
         } else if (txtAreaCode.getText().isEmpty()) {
             txtAreaCode.setFocus(true);
-            this.showMessage("sp.error.employee.areaCode", true, null);
+            this.showMessage("msj.error.employee.areaCode", true, null);
         } else if (txtPhone.getText().isEmpty()) {
             txtPhone.setFocus(true);
-            this.showMessage("sp.error.field.phoneNumber", true, null);
+            this.showMessage("msj.error.field.phoneNumber", true, null);
         } else if (cmbPhoneType.getSelectedItem() == null) {
             cmbPhoneType.setFocus(true);
-            this.showMessage("sp.error.phoneType.notSelected", true, null);
+            this.showMessage("msj.error.phoneType.notSelected", true, null);
         }  else {
             return true;
         }
@@ -151,7 +151,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             request.setParams(params);
             phonePersonList = personEJB.getValidateMainPhone(request);
             if ((phonePersonList != null) && (rIsPrincipalNumberYes.isChecked())){
-                this.showMessage("sp.error.employee.PhoneMainYes", true, null);
+                this.showMessage("msj.error.employee.PhoneMainYes", true, null);
                 txtPhone.setFocus(true);
                 return false;
             }
@@ -200,7 +200,7 @@ public class AdminEmployeePhoneController extends GenericAbstractAdminController
             }
  
             phonePerson = personEJB.savePhonePerson(phonePerson);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             EventQueues.lookup("updatePhonePerson", EventQueues.APPLICATION, true).publish(new Event(""));
             btnSave.setVisible(false);
             

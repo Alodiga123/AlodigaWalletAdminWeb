@@ -93,7 +93,7 @@ public class ListUsersController extends GenericAbstractListController<User> {
         Listcell cell = new Listcell();
         cell.setValue("");
         final ChangeStatusButton button = new ChangeStatusButton(enabled);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.changeStatus"));
         button.setClass("open orange");
         button.addEventListener("onClick", new EventListener() {
 
@@ -173,7 +173,7 @@ public class ListUsersController extends GenericAbstractListController<User> {
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -207,7 +207,7 @@ public class ListUsersController extends GenericAbstractListController<User> {
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.user.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.user.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

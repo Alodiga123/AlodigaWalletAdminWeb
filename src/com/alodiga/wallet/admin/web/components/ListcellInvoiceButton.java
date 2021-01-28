@@ -10,7 +10,7 @@ public class ListcellInvoiceButton extends Listcell {
 
     public ListcellInvoiceButton(String destinationView, Object obj, Long permissionId) {
         InvoiceButton button = new InvoiceButton(destinationView, obj,permissionId);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.invoice"));
+        button.setTooltiptext(Labels.getLabel("wallet.common.invoices"));
         button.setClass("open orange");
         button.setParent(this);
     }

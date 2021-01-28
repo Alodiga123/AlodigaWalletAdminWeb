@@ -58,13 +58,13 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("cms.common.collectionsType.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.collectionsType.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("cms.common.collectionsType.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.collectionsType.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("cms.common.collectionsType.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.collectionsType.add"));
                 break;
             default:
                 break;
@@ -108,7 +108,7 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
         
         if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
             return false;
         } 
         
@@ -144,7 +144,7 @@ public class AdminCollectionTypeControllers extends GenericAbstractAdminControll
             collectionType.setPersonTypeId((PersonType) cmbPersonType.getSelectedItem().getValue());
             collectionType = utilsEJB.saveCollectionType(collectionType);
             collectionTypeParam = collectionType;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);

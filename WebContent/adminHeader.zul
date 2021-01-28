@@ -5,7 +5,7 @@
             <hlayout style="background: transparent url(./images/topbarbg.jpg);background-repeat: repeat-x;">
                 <div ></div>
                 <div width="980px" height="18px" align="center">
-                    <label value="${c:l('sp.common.page.title')}" style="color:rgb(207, 207, 207); font-size:16px;"/>
+                    <label value="${c:l('wallet.page.title')}" style="color:rgb(207, 207, 207); font-size:16px;"/>
                 </div>
                 <div></div>
             </hlayout>

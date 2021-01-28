@@ -82,13 +82,13 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.ofac.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.ofac.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.ofac.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.ofac.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.ofac.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.ofac.add"));
                 break;
             default:
                 break;
@@ -242,7 +242,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
             }
 
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             EventQueues.lookup("updateApplicantOFAC", EventQueues.APPLICATION, true).publish(new Event(""));
 
             if (eventType == WebConstants.EVENT_ADD) {
@@ -286,7 +286,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     public Boolean validateEmpty() {
         if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.observations", true, null);
+            this.showMessage("msj.error.observations", true, null);
         } else {
             return true;
         }

@@ -100,7 +100,7 @@ public class ListBusinnesCategoryController extends GenericAbstractListControlle
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -128,7 +128,7 @@ public class ListBusinnesCategoryController extends GenericAbstractListControlle
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -146,7 +146,7 @@ public class ListBusinnesCategoryController extends GenericAbstractListControlle
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.businnesCategory.list.excel"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.businnesCategory.list.excel"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

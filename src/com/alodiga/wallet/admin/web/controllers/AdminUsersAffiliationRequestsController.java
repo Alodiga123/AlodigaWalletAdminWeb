@@ -76,17 +76,17 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.userAffiliationRequests.edit"));
                 activateTabOfac();
                 activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.userAffiliationRequests.view"));
                 activateTabOfac();
                 activateTabReview();
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.userAffiliationRequests.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.userAffiliationRequests.add"));
                 break;
             default:
                 break;

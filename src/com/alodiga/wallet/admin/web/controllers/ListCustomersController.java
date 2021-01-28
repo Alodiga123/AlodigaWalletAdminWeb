@@ -90,7 +90,7 @@
 //        Listcell cell = new Listcell();
 //        cell.setValue("");
 //        final ChangeStatusButton button = new ChangeStatusButton(enabled);
-//        button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
+//        button.setTooltiptext(Labels.getLabel("wallet.actions.changeStatus"));
 //        button.setClass("open orange");
 //        button.addEventListener("onClick", new EventListener() {
 //
@@ -165,7 +165,7 @@
 //            } else {
 //                btnDownload.setVisible(false);
 //                item = new Listitem();
-//                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+//                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
 //                item.appendChild(new Listcell());
 //                item.appendChild(new Listcell());
 //                item.appendChild(new Listcell());

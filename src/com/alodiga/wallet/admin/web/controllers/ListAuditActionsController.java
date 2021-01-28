@@ -107,7 +107,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -152,7 +152,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                 }
           txtName.setValue(userNames.getFirstName() + " " + userNames.getLastName());  
         } else {
-          txtName.setValue(Labels.getLabel("sp.error.field.userNoExistBD"));
+          txtName.setValue(Labels.getLabel("msj.error.field.userNoExistBD"));
         }
         
     }
@@ -162,7 +162,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.auditActions.list.excel"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.auditActions.list.excel"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -213,11 +213,11 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
                 _request.setParams(params);
                 loadList(auditoryEJB.searchAuditActions(_request));
             } else  {
-                this.showMessage("sp.error.date.invalid", true, null);
+                this.showMessage("msj.error.date.invalid", true, null);
             }             
         }catch (EmptyListException ex) {
         	lblInfo.setVisible(true);
-        	lblInfo.setValue(Labels.getLabel("sp.error.empty.list"));
+        	lblInfo.setValue(Labels.getLabel("msj.error.empty.list"));
                 onClick$btnClear();
         } catch (Exception ex) {
             showError(ex);
@@ -230,7 +230,7 @@ public class ListAuditActionsController extends GenericAbstractListController<Au
             cmbPermissions.getItems().clear();
             permissions = accessControlEJB.getPermissionOrderByAsc(new EJBRequest());
             Comboitem cmbItem = new Comboitem();
-            cmbItem.setLabel(Labels.getLabel("sp.common.combobox.all"));
+            cmbItem.setLabel(Labels.getLabel("wallet.common.all"));
             cmbItem.setValue(null);
             cmbItem.setParent(cmbPermissions);
             for (Permission p : permissions) {

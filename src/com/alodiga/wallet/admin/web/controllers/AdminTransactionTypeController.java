@@ -65,13 +65,13 @@ public class AdminTransactionTypeController extends GenericAbstractAdminControll
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.transactionType.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.transactionType.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.transactionType.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.transactionType.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.transactionType.add"));
+                tbbTitle.setLabel(Labels.getLabel("walet.crud.transactionType.add"));
                 break;
             default:
                 break;
@@ -110,13 +110,13 @@ public class AdminTransactionTypeController extends GenericAbstractAdminControll
     public boolean validateEmpty() {
         if (txtCode.getText().isEmpty()) {
             txtCode.setFocus(true);
-            this.showMessage("sp.error.transactionType.code", true, null);
+            this.showMessage("msj.error.transactionType.code", true, null);
         } else if (txtValue.getText().isEmpty()) {
             txtValue.setFocus(true);
-            this.showMessage("sp.error.transactionType.value", true, null);
+            this.showMessage("msj.error.transactionType.value", true, null);
         } else if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.transactionType.description", true, null);
+            this.showMessage("msj.error.transactionType.description", true, null);
         } else {
             return true;
         }
@@ -135,7 +135,7 @@ public class AdminTransactionTypeController extends GenericAbstractAdminControll
         } catch (Exception ex) {
             showError(ex);
         } if(transactionTypeList.size() > 0){
-            this.showMessage("sp.error.preferences.code", true, null);
+            this.showMessage("msj.error.preferences.code", true, null);
                 txtCode.setFocus(true);
                 return false;
         }
@@ -159,7 +159,7 @@ public class AdminTransactionTypeController extends GenericAbstractAdminControll
             transactions.setCode(txtCode.getText());
             request.setParam(transactions);
             transactions = preferencesEJB.saveTransactionType(request);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

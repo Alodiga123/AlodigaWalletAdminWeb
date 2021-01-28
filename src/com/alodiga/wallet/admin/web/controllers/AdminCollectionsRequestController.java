@@ -66,13 +66,13 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.collectionsRequest.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.collectionsRequest.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.collectionsRequest.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.collectionsRequest.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.collectionsRequest.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.collectionsRequest.add"));
                 break;
             default:
                 break;
@@ -156,14 +156,14 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
                 if (validate(collectionsRequest)) {
                     collectionsRequest = utilsEJB.saveCollectionsRequest(collectionsRequest);
                     collectionsRequestParam = collectionsRequest;
-                    this.showMessage("sp.common.save.success", false, null);
+                    this.showMessage("wallet.msj.save.success", false, null);
                 } else {
-                    this.showMessage("sp.crud.product.exist", true, null);
+                    this.showMessage("msj.error.collection.exist.error", true, null);
                 }
             } else {
                 collectionsRequest = utilsEJB.saveCollectionsRequest(collectionsRequest);
                 collectionsRequestParam = collectionsRequest;
-                this.showMessage("sp.common.save.success", false, null);
+                this.showMessage("wallet.msj.save.success", false, null);
             }
 
             if (eventType == WebConstants.EVENT_ADD) {
@@ -204,16 +204,16 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
     public Boolean validateEmpty() {
         if (cmbCountry.getSelectedItem() == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);
+            this.showMessage("msj.error.countryNotSelected", true, null);
         } else if (cmbCollectionType.getSelectedItem() == null) {
             cmbCollectionType.setFocus(true);
-            this.showMessage("sp.error.collectionsType.notSelected", true, null);
+            this.showMessage("msj.error.collectionsType.notSelected", true, null);
         } else if (cmbPersonType.getSelectedItem() == null) {
             cmbPersonType.setFocus(true);
-            this.showMessage("sp.error.personType.notSelected", true, null);
+            this.showMessage("msj.error.personType.notSelected", true, null);
         } else if (cmbRequestType.getSelectedItem() == null) {
             cmbRequestType.setFocus(true);
-            this.showMessage("sp.error.requestType.notSelected", true, null);
+            this.showMessage("msj.error.requestType.notSelected", true, null);
         } else {
             return true;
         }
@@ -306,7 +306,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
             showError(ex);
             ex.printStackTrace();
         } catch (NullParameterException ex) {
-            this.showMessage("sp.msj.error.origin.aplication", true, null);
+            this.showMessage("msj.error.countryNotSelected", true, null);
             ex.printStackTrace();
         }
     }
@@ -324,7 +324,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
             loadGenericCombobox(personTypes, cmbPersonType, "description", evenInteger, Long.valueOf(collectionsRequestParam != null ? collectionsRequestParam.getPersonTypeId().getId() : 0));
         } catch (EmptyListException ex) {
             showError(ex);
-            //this.showMessage("sp.msj.PersonTypeNull", true, null);
+            //this.showMessage("msj.error.PersonTypeNull", true, null);
             ex.printStackTrace();
         } catch (GeneralException ex) {
             showError(ex);
@@ -334,7 +334,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
             ex.printStackTrace();
         } finally {
             if (personTypes == null) {
-                this.showMessage("sp.msj.PersonTypeNull", true, null);
+                this.showMessage("msj.error.PersonTypeNull", true, null);
             } 
         }
     }
@@ -380,7 +380,7 @@ public class AdminCollectionsRequestController extends GenericAbstractAdminContr
             ex.printStackTrace();
         } finally {
             if (collectionTypes == null) {
-                this.showMessage("sp.msj.PersonTypeNull", true, null);
+                this.showMessage("msj.error.PersonTypeNull", true, null);
             }
         }
     }
