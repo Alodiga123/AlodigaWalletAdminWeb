@@ -44,13 +44,13 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.status.card.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.status.card.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.status.card.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.status.card.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.status.card.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.status.card.add"));
                 tabStatusCardFinal.setDisabled(true);
                 break;
             default:
@@ -92,10 +92,10 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (txtCode.getText().isEmpty()) {
             txtCode.setFocus(true);
-            this.showMessage("sp.error.country.code", true, null);
+            this.showMessage("msj.error.country.code", true, null);
         } else if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.businessCategory.description", true, null);
+            this.showMessage("msj.error.businessCategory.description", true, null);
         } else {
             return true;
         }
@@ -118,7 +118,7 @@ public class AdminStatusCardController extends GenericAbstractAdminController {
             statusCardParam = statusCard;
             statusCardParent = statusCard;
             tabStatusCardFinal.setDisabled(false);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

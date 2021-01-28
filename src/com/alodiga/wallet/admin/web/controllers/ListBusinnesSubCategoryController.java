@@ -115,7 +115,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
             final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
             window.doModal();
         } catch (Exception ex) {
-            this.showMessage("sp.error.general", true, ex);
+            this.showMessage("msj.error.general", true, ex);
         }
     }
 
@@ -143,7 +143,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -169,7 +169,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -186,7 +186,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
         try {
             Button button = new Button();
             button.setImage("/images/icon-edit.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -212,7 +212,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
         try {
             Button button = new Button();
             button.setImage("/images/icon-invoice.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -238,7 +238,7 @@ public class ListBusinnesSubCategoryController extends GenericAbstractListContro
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.businnesSubCategory.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.businnesSubCategory.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

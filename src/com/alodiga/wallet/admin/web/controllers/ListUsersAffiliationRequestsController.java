@@ -101,7 +101,7 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -139,7 +139,7 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -155,7 +155,7 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.userAffiliationRequests.list.download"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.userAffiliationRequests.list.download"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

@@ -49,13 +49,13 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferenceType.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferenceType.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferenceType.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferenceType.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferenceType.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferenceType.add"));
                 break;
             default:
                 break;
@@ -97,7 +97,7 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
         } catch (Exception ex) {
             showError(ex);
         } if (preferenceTypeList.size() > 0) {
-                this.showMessage("sp.error.preferenceType.typeInBd", true, null);
+                this.showMessage("msj.error.preferenceType.typeInBd", true, null);
                 txtPreferenceType.setFocus(true);
                 return false;
         }
@@ -107,7 +107,7 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
     public Boolean validateEmpty() {
         if (txtPreferenceType.getText().isEmpty()) {
             txtPreferenceType.setFocus(true);
-            this.showMessage("sp.error.preferenceType.type", true, null);
+            this.showMessage("msj.error.preferenceType.type", true, null);
         }  else {
             return true;
         }
@@ -127,7 +127,7 @@ public class AdminPreferenceTypeController extends GenericAbstractAdminControlle
             preferenceType.setType(txtPreferenceType.getText());
             preferenceType = preferencesEJB.savePreferencesType(preferenceType);
             preferenceTypeParam = preferenceType;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

@@ -15,14 +15,14 @@ public class ListcellEditButton extends Listcell {
     public ListcellEditButton(String destinationView, Object obj) {
         EditButton button = new EditButton(destinationView, obj);
         Sessions.getCurrent().setAttribute(WebConstants.EVENTYPE, WebConstants.EVENT_EDIT);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
         button.setClass("open orange");
         button.setParent(this);
     }
 
     public ListcellEditButton(String destinationView, Object obj, Long permissionId) {
         EditButton button = new EditButton(destinationView, obj,permissionId);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
         button.setClass("open orange");
         button.setParent(this);
     }

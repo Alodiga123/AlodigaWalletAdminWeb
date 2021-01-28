@@ -120,7 +120,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
             status = adminStatusCard.getStatusCardParent();
         }
             String statuscards =  status.getDescription();
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.status.cardLabel"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.status.cardLabel"));
             file.append(" ");
             file.append(statuscards);
             lblCard.setValue(file.toString());
@@ -165,7 +165,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 	            } else {
 	                btnDownload.setVisible(false);
 	                item = new Listitem();
-	                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+	                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
 	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
@@ -182,7 +182,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
         try {
             Button button = new Button();
             button.setImage("/images/icon-edit.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -208,7 +208,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
         try {
             Button button = new Button();
             button.setImage("/images/icon-invoice.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -255,7 +255,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -269,7 +269,7 @@ public class ListStatusCardFinalController extends GenericAbstractListController
             String statuscards =  status.getDescription();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.status.cardFinal.download"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.status.cardFinal.download"));
             file.append("_");
             file.append(statuscards);
             file.append("_");

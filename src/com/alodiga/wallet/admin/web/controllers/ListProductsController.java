@@ -91,7 +91,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
         Listcell cell = new Listcell();
         cell.setValue("");
         final ChangeStatusButton button = new ChangeStatusButton(enabled);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.changeStatus"));
         button.setClass("open orange");
         button.addEventListener("onClick", new EventListener() {
 
@@ -152,7 +152,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
                             item.appendChild(new Listcell(product.getReferenceCode()));
                             item.appendChild(new Listcell(product.getSymbol()));
                             item.appendChild(new Listcell(product.getCategoryId().getName()));
-                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("sp.crud.product.yes"):Labels.getLabel("sp.crud.product.no"))));
+                            item.appendChild(new Listcell((product.getEnabled()==true? Labels.getLabel("wallet.common.yes"):Labels.getLabel("wallet.common.no"))));
 	                    item.appendChild(new ListcellEditButton(adminPage, product));
 	                    item.appendChild(new ListcellViewButton(adminPage, product));
 	                    item.setParent(lbxRecords);
@@ -160,7 +160,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
 	            } else {
 	                btnDownload.setVisible(false);
 	                item = new Listitem();
-	                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+	                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
 	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
@@ -188,7 +188,7 @@ public class ListProductsController extends GenericAbstractListController<Produc
     
      private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -202,7 +202,7 @@ public void onClick$btnDownload() throws InterruptedException {
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.product.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -217,10 +217,10 @@ public void onClick$btnExportPdf() throws InterruptedException {
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.product.list"));
             file.append("_");
             file.append(date);
-            StringBuilder productTitle = new StringBuilder(Labels.getLabel("sp.crud.product.product"));
+            StringBuilder productTitle = new StringBuilder(Labels.getLabel("wallet.common.product"));
             PDFUtil.exportPdf(file.toString(), productTitle.toString(), lbxRecords, 2);            
         } catch (Exception ex) {
             showError(ex);

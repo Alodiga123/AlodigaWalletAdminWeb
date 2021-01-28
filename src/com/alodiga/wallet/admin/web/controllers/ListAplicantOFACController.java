@@ -145,7 +145,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 item.appendChild(new Listcell(aplicant.getAffiliationRequest()!=null?aplicant.getAffiliationRequest().getNumberRequest():""));
                                 applicantNameLegal = aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getBusinessName():"";
                                 item.appendChild(new Listcell(applicantNameLegal));
-                                item.appendChild(new Listcell(Labels.getLabel("sp.common.legalApplicant")));
+                                item.appendChild(new Listcell(Labels.getLabel("wallet.common.legalApplicant")));
                                 item.appendChild(new Listcell(aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getStatusApplicantId().getDescription():""));
                                 if(aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getLegalPerson().getPersonId().getReviewOfac().getResultReview())));
@@ -160,7 +160,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 applicarBusinessNatural.append(" ");
                                 applicarBusinessNatural.append(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getLastName():"");
                                 item.appendChild(new Listcell(applicarBusinessNatural.toString()));
-                                item.appendChild(new Listcell(Labels.getLabel("sp.common.naturalApplicant")));
+                                item.appendChild(new Listcell(Labels.getLabel("wallet.common.naturalApplicant")));
                                 item.appendChild(new Listcell(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getStatusApplicantId().getDescription():""));
                                 if(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getNaturalPerson().getPersonId().getReviewOfac().getResultReview())));
@@ -175,7 +175,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 applicantRepresentative.append(" ");
                                 applicantRepresentative.append(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getLastNames():"");
                                 item.appendChild(new Listcell(applicantRepresentative.toString()));
-                                item.appendChild(new Listcell(Labels.getLabel("sp.common.legalRepresentative")));
+                                item.appendChild(new Listcell(Labels.getLabel("wallet.common.legalRepresentative")));
                                 item.appendChild(new Listcell(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getStatusApplicantId().getDescription():""));
                                 if(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getLegalRepresentative().getPersonId().getReviewOfac().getResultReview())));
@@ -190,7 +190,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -221,7 +221,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -230,7 +230,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.businessAffiliationRequests.ofac.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.businessAffiliationRequests.ofac.list"));
             AccessControl.saveAction(Permission.LIST_APLICANT_OFAC, "Se descargo listado OFAC en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -368,7 +368,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             }
             getData();
             loadList(personList);
-            this.showMessage("sp.common.finishReviewOFAC", false, null);
+            this.showMessage("wallet.msj.finishReviewOFAC", false, null);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -434,7 +434,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             EJBRequest request = new EJBRequest();
             List<StatusApplicant> status = personEJB.getStatusApplicant(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbStatus);
             cmbStatus.setSelectedItem(item);
             for (int i = 0; i < status.size(); i++) {

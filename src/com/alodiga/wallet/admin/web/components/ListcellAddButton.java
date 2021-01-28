@@ -12,7 +12,7 @@ public class ListcellAddButton extends Listcell {
 
     public ListcellAddButton(String destinationView, Object obj, Long permissionId) {
     	AddButton button = new AddButton	(destinationView, obj,permissionId);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.income"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.income"));
         button.setClass("open orange");
         button.setParent(this);
     }

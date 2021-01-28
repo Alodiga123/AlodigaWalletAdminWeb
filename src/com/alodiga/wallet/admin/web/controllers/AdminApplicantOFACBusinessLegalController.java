@@ -217,7 +217,7 @@ public class AdminApplicantOFACBusinessLegalController extends GenericAbstractAd
                     affiliation = utilsEJB.saveAffiliationRequest(affiliation);
                 }
             }
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
         } catch (Exception ex) {
             showError(ex);
         }    

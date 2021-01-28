@@ -85,7 +85,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
     public Boolean validateEmpty() {
         if (cmbBank.getSelectedItem() == null) {
             cmbBank.setFocus(true);
-            this.showMessage("sp.crud.product.bank.select", true, null);
+            this.showMessage("wallet.crud.product.bank.select", true, null);
         } else {
             return true;
         }
@@ -109,7 +109,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
                 bankHasProduct = productEJB.saveBankHasProduct(bankHasProduct);
                 bankHasProductParam = bankHasProduct;
                 eventType = WebConstants.EVENT_EDIT;
-                this.showMessage("sp.common.save.success", false, null);
+                this.showMessage("wallet.msj.save.success", false, null);
 
                 if (eventType == WebConstants.EVENT_ADD) {
                     btnSave.setVisible(false);
@@ -119,7 +119,7 @@ public class AdminAddProductHasBankController extends GenericAbstractAdminContro
                 
                 EventQueues.lookup("updateProductHasBank", EventQueues.APPLICATION, true).publish(new Event(""));
             } else {
-                this.showMessage("sp.crud.product.hasBank.exist", true, null);
+                this.showMessage("msj.error.product.hasBank.exist", true, null);
             }
         } catch (NullParameterException ex) {
             showError(ex);

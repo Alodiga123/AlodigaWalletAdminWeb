@@ -97,7 +97,7 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -128,7 +128,7 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -142,7 +142,7 @@ public class ListDocumentsPersonTypeController extends GenericAbstractListContro
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.documentPersonType.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.documentPersonType.list"));
             AccessControl.saveAction(Permission.LIST_DOCUMENTS_PERSON_TYPE, "Se descargo listado de Documentos por tipo de Persona en formato excel");
         } catch (Exception ex) {
             showError(ex);

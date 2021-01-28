@@ -138,7 +138,7 @@ package com.alodiga.wallet.admin.web.controllers;
 //        } catch (Exception ex) {
 //             showError(ex);
 //             ex.printStackTrace();
-//             this.showMessage("sp.error.paymentInfo", true, null);
+//             this.showMessage("msj.error.paymentInfo", true, null);
 //
 //
 //        }
@@ -190,12 +190,12 @@ package com.alodiga.wallet.admin.web.controllers;
 //        } catch (GeneralException ex) {
 //            ex.printStackTrace();
 //                showError(ex);
-//                this.showMessage("sp.error.field.error.save.GE", true, null);
+//                this.showMessage("msj.error.field.error.save.GE", true, null);
 //            Logger.getLogger(AdminForceBillingController.class.getName()).log(Level.SEVERE, null, ex);
 //        } catch (EmptyListException ex) {
 //            ex.printStackTrace();
 //                showError(ex);
-//                this.showMessage("sp.error.field.error.save.ELE", true, null);
+//                this.showMessage("msj.error.field.error.save.ELE", true, null);
 //            Logger.getLogger(AdminForceBillingController.class.getName()).log(Level.SEVERE, null, ex);
 //        }  
 //

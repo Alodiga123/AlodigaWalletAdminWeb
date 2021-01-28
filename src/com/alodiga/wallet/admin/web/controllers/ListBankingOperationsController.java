@@ -104,7 +104,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
         	EJBRequest request = new EJBRequest();
             List<BankOperationType> operationTypes = utilsEJB.getBankOperationTypes(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbOperationType);
             cmbOperationType.setSelectedItem(item);
             for (int i = 0; i < operationTypes.size(); i++) {
@@ -126,7 +126,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
         	EJBRequest request = new EJBRequest();
             List<BankOperationMode> operationModes = utilsEJB.getBankOperationModes(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbOperationMode);
             cmbOperationMode.setSelectedItem(item);
             for (int i = 0; i < operationModes.size(); i++) {
@@ -148,7 +148,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
         	EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbProduct);
             cmbProduct.setSelectedItem(item);
             for (int i = 0; i < products.size(); i++) {
@@ -170,7 +170,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
         	EJBRequest request = new EJBRequest();
             List<Bank> banks = utilsEJB.getBank(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbBank);
             cmbBank.setSelectedItem(item);
             for (int i = 0; i < banks.size(); i++) {
@@ -217,7 +217,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
                   _request.setParam(true);
                   loadList(utilsEJB.getBankOperationsByParams(_request));
               } else  {
-                  this.showMessage("sp.error.date.invalid", true, null);
+                  this.showMessage("msj.error.date.invalid", true, null);
               }         
         } catch (EmptyListException ex) {
             showEmptyList();
@@ -267,7 +267,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -311,7 +311,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
     private void showEmptyList() {
     	lbxRecords.getItems().clear();
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -324,7 +324,7 @@ public class ListBankingOperationsController extends GenericAbstractListControll
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.tab.list.bank.operation"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.bank.operation.list"));
             AccessControl.saveAction(Permission.LIST_OPERATION_BANK, "Se descargo listado de Operaciones Bankarias en formato excel");
         } catch (Exception ex) {
             showError(ex);

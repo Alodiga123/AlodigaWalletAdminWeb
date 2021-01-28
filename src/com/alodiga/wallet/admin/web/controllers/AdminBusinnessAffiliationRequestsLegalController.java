@@ -72,13 +72,13 @@ public class AdminBusinnessAffiliationRequestsLegalController extends GenericAbs
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.businessAffiliationRequests.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.businessAffiliationRequests.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businessAffiliationRequests.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.businessAffiliationRequests.add"));
                 break;
             default:
                 break;

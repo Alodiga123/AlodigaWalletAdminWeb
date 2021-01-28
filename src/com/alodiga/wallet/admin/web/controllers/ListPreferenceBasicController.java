@@ -96,7 +96,7 @@ public class ListPreferenceBasicController extends GenericAbstractListController
     
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -115,7 +115,7 @@ public class ListPreferenceBasicController extends GenericAbstractListController
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.preferenceBasic.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.preferenceBasic.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -164,7 +164,7 @@ public class ListPreferenceBasicController extends GenericAbstractListController
                     item.setValue(preference);
                     item.appendChild(new Listcell(preference.getName()));
                     item.appendChild(new Listcell(preference.getDescription()));
-                    item.appendChild(new Listcell((preference.getEnabled()==true? Labels.getLabel("sp.common.yes"):Labels.getLabel("sp.common.no"))));
+                    item.appendChild(new Listcell((preference.getEnabled()==true? Labels.getLabel("wallet.common.yes"):Labels.getLabel("wallet.common.no"))));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, preference, Permission.EDIT_BASIC_PREFERENCE) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, preference, Permission.VIEW_BASIC_PREFERENCE) : new Listcell());
                     item.setParent(lbxRecords);
@@ -172,7 +172,7 @@ public class ListPreferenceBasicController extends GenericAbstractListController
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());

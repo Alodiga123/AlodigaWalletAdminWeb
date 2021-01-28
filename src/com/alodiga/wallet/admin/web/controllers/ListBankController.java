@@ -85,7 +85,7 @@ public class ListBankController extends GenericAbstractListController<Bank> {
         Listcell cell = new Listcell();
         cell.setValue("");
         final ChangeStatusButton button = new ChangeStatusButton(enabled);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.changeStatus"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.changeStatus"));
         button.setClass("open orange");
         button.setParent(cell);
         return cell;
@@ -121,7 +121,7 @@ public class ListBankController extends GenericAbstractListController<Bank> {
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -150,7 +150,7 @@ public class ListBankController extends GenericAbstractListController<Bank> {
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -159,7 +159,7 @@ public class ListBankController extends GenericAbstractListController<Bank> {
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.bank.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.bank.list"));
             AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Bancos en formato excel");
         } catch (Exception ex) {
             showError(ex);

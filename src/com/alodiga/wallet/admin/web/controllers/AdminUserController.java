@@ -75,7 +75,7 @@ public class AdminUserController extends GenericAbstractAdminController {
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         userParam = (Sessions.getCurrent().getAttribute("object") != null) ? (User) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
-        initView(eventType, "sp.crud.user");
+        initView(eventType, "wallet.crud.user");
     }
 
     @Override
@@ -168,21 +168,21 @@ public class AdminUserController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (cmbEmployee.getSelectedItem() == null) {
             cmbEmployee.setFocus(true);
-            this.showMessage("sp.error.employee.noSelected", true, null);
+            this.showMessage("msj.error.employee.noSelected", true, null);
         } else if (cmbAuthorizeEmployee.getSelectedItem() == null) {
             cmbAuthorizeEmployee.setFocus(true);
-            this.showMessage("sp.error.authorizeEmployee.noSelected", true, null);
+            this.showMessage("msj.error.authorizeEmployee.noSelected", true, null);
         } else if (cmbProfiles.getSelectedItem() == null) {
             cmbProfiles.setFocus(true);
-            this.showMessage("sp.error.profile.notSelected", true, null);
+            this.showMessage("msj.error.profile.notSelected", true, null);
         } else if (txtLogin.getText().isEmpty()) {
             txtLogin.setFocus(true);
-            this.showMessage("sp.error.login.empty", true, null);
+            this.showMessage("msj.error.login.empty", true, null);
         } else if (txtPassword.getText().isEmpty()) {
             txtPassword.setFocus(true);
-            this.showMessage("sp.error.password.empty", true, null);
+            this.showMessage("msj.error.password.empty", true, null);
         } else if ((!rEnabledYes.isChecked()) && (!rEnabledNo.isChecked())) {
-            this.showMessage("sp.error.field.enabled", true, null);
+            this.showMessage("msj.error.field.enabled", true, null);
         } else {
             return true;
         }
@@ -203,7 +203,7 @@ public class AdminUserController extends GenericAbstractAdminController {
             showError(ex);
         } finally {
             if (userEmployeeList.size() > 0) {
-                this.showMessage("sp.error.field.employeeExistInBD", true, null);
+                this.showMessage("msj.error.field.employeeExistInBD", true, null);
                 cmbEmployee.setFocus(true);
                 return false;
             }
@@ -218,7 +218,7 @@ public class AdminUserController extends GenericAbstractAdminController {
                 showError(ex);
             } finally {
                 if (userLoginList.size() > 0) {
-                    this.showMessage("sp.error.field.loginExistInBD", true, null);
+                    this.showMessage("msj.error.field.loginExistInBD", true, null);
                     txtLogin.setFocus(true);
                     return false;
                 }
@@ -264,7 +264,7 @@ public class AdminUserController extends GenericAbstractAdminController {
     if (nameEmployeeAuthorize.equals(nameEmployee)) {
             cmbAuthorizeEmployee.setValue("");
             lblAuthorizeExtAlodiga.setValue("");
-            this.showMessage("sp.msj.error.EmployeeAuthorizeNotEqualToEmployeeUser", true, null);
+            this.showMessage("msj.error.EmployeeAuthorizeNotEqualToEmployeeUser", true, null);
             cmbAuthorizeEmployee.setFocus(true);           
         }  else {
             if (employeeAuthorize.getPersonId().getPhonePerson() != null) {
@@ -367,7 +367,7 @@ public class AdminUserController extends GenericAbstractAdminController {
             }
             request.setParam(user);
             userParam = userEJB.saveUser(request);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);

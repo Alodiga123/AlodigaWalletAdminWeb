@@ -105,13 +105,13 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.manualWithdrawalApproval.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.manualWithdrawalApproval.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.manualWithdrawalApproval.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.manualWithdrawalApproval.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.manualWithdrawalApproval.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.manualWithdrawalApproval.add"));
                 break;
             default:
                 break;
@@ -243,23 +243,23 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         
         if (dtbApprovedRequestDate.getText().isEmpty()) {
             dtbApprovedRequestDate.setFocus(true);
-            this.showMessage("sp.error.date.approvedRequestDate", true, null);
+            this.showMessage("msj.error.date.approvedRequestDate", true, null);
         } else if ((!rApprovedYes.isChecked()) && (!rApprovedNo.isChecked())) {
-            this.showMessage("sp.error.indApproveRequest", true, null);
+            this.showMessage("msj.error.indApproveRequest", true, null);
         } else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.observations", true, null);
+            this.showMessage("msj.error.observations", true, null);
         } else if (txtBankNumber.getText().isEmpty()) {
             txtBankNumber.setFocus(true);
-            this.showMessage("sp.error.date.bankNumberOperation", true, null);
+            this.showMessage("msj.error.date.bankNumberOperation", true, null);
         } else if (txtResponsible.getText().isEmpty()) {
             txtResponsible.setFocus(true);
-            this.showMessage("sp.error.date.responsibleBankOperation", true, null);
+            this.showMessage("msj.error.date.responsibleBankOperation", true, null);
         } else if (dtbApprovedRequestDate.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.date.bankRequestDate", true, null);
+            this.showMessage("msj.error.date.bankRequestDate", true, null);
         } else if(!toDay.equals(dateBankOperation)){
-            this.showMessage("sp.error.date.dateBankOperation", true, null);
+            this.showMessage("msj.error.date.dateBankOperation", true, null);
         } else {
             return true;
         }
@@ -316,9 +316,9 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
                
             if(indApproved == true){
-                 this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveApproved", false, null);  
+                 this.showMessage("msj.manualWithdrawalApprova.recharge.saveApproved", false, null);  
             } else {
-                 this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveRejected", false, null);  
+                 this.showMessage("msj.error.manualWithdrawalApprova.recharge.saveRejected", false, null);  
             }
 
             if (eventType == WebConstants.EVENT_ADD) {
@@ -327,7 +327,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 btnSave.setVisible(true);
             }
         } catch (Exception ex) {
-            this.showMessage("sp.msj.errorSave", true, null);
+            this.showMessage("msj.error.errorSave", true, null);
         }
     }
 

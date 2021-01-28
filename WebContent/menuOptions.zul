@@ -2,13 +2,13 @@
     <hlayout>
         <hlayout>
             <button class="main-menu-button2" image="/images/icon-home.png" width="60px" height="27px" onClick="Executions.sendRedirect(&quot;loggedAccountView.zul&quot;)"/>
-            <button class="main-menu-button2" label="${c:l('sp.common.page.about')}" height="27px" width="145px" onClick="Executions.sendRedirect(&quot;http://www.alodiga.us/index.php/es/alodiga/telefonia-equipos-voip.html&quot;)"/>
-            <button id="btnAccessNumbers" class="main-menu-button2" label="${c:l('sp.common.accessNumbers')}" height="27px" width="145px"/>
-            <button id="btnTerms" class="main-menu-button2" label="${c:l('sp.common.page.terms')}" height="27px" width="150px" />
-            <button id="btnRates" class="main-menu-button2" label="${c:l('sp.common.rates')}" height="27px" width="145px" />
-            <button id="btnSpanish" class="main-menu-button2" label="${c:l('sp.common.language.spanish')}" height="27px" width="145px" />
-            <button id="btnEnglish" class="main-menu-button2" label="${c:l('sp.common.language.english')}" height="27px" width="145px" />
-            <button id="btnLogout" class="logout-menu-button" label="${c:l('sp.common.logout')}" height="27px" width="145px" />
+            <button class="main-menu-button2" label="${c:l('wallet.page.about')}" height="27px" width="145px" onClick="Executions.sendRedirect(&quot;http://www.alodiga.us/index.php/es/alodiga/telefonia-equipos-voip.html&quot;)"/>
+            <button id="btnAccessNumbers" class="main-menu-button2" label="${c:l('wallet.common.accessNumbers')}" height="27px" width="145px"/>
+            <button id="btnTerms" class="main-menu-button2" label="${c:l('wallet.page.terms')}" height="27px" width="150px" />
+            <button id="btnRates" class="main-menu-button2" label="${c:l('wallet.common.rates')}" height="27px" width="145px" />
+            <button id="btnSpanish" class="main-menu-button2" label="${c:l('wallet.common.language.spanish')}" height="27px" width="145px" />
+            <button id="btnEnglish" class="main-menu-button2" label="${c:l('wallet.common.language.english')}" height="27px" width="145px" />
+            <button id="btnLogout" class="logout-menu-button" label="${c:l('wallet.common.logout')}" height="27px" width="145px" />
         </hlayout>
     </hlayout>
     </div>

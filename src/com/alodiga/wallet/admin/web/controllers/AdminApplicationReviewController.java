@@ -164,10 +164,10 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
 
     public Boolean validateEmpty() {
         if ((!rApprovedYes.isChecked()) && (!rApprovedNo.isChecked())) {
-            this.showMessage("sp.error.indApprove", true, null);
+            this.showMessage("msj.error.indApprove", true, null);
         }else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.observations", true, null);
+            this.showMessage("msj.error.observations", true, null);
         } else {
             return true;
         }
@@ -259,7 +259,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 }
             }
             loadField(affiliationRequestParam);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);

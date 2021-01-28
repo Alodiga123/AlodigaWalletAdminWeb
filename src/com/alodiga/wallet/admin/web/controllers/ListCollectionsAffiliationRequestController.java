@@ -110,7 +110,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
     
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -129,7 +129,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.menu.collectionsRequest.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.collectionsRequest.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -178,12 +178,12 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
                     if(collectionsRequest.getIndApproved() != null){
                        if (collectionsRequest.getIndApproved() == 1) {
-                            indAprroved = Labels.getLabel("sp.common.approveds");
+                            indAprroved = Labels.getLabel("wallet.common.approveds");
                         } else {
-                            indAprroved = Labels.getLabel("sp.common.rejecteds");
+                            indAprroved = Labels.getLabel("wallet.common.rejecteds");
                         } 
                     } else {
-                            indAprroved = Labels.getLabel("sp.common.pending");
+                            indAprroved = Labels.getLabel("wallet.common.pending");
                     }
                     item.appendChild(new Listcell(indAprroved));
                     if (collectionsRequest.getUpdateDate() != null){
@@ -199,7 +199,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -238,7 +238,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
         try {
             Button button = new Button();
             button.setImage("/images/icon-edit.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -264,7 +264,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
         try {
             Button button = new Button();
             button.setImage("/images/icon-invoice.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override

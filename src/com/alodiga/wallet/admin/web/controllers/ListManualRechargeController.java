@@ -107,7 +107,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
             EJBRequest request = new EJBRequest();
             List<StatusTransactionApproveRequest> transactionApproveRequests = productEJB.getStatusTransactionApproveRequests(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbStatus);
             cmbStatus.setSelectedItem(item);
             for (int i = 0; i < transactionApproveRequests.size(); i++) {
@@ -127,7 +127,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
             EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbProduct);
             cmbProduct.setSelectedItem(item);
             for (int i = 0; i < products.size(); i++) {
@@ -190,7 +190,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
                   _request.setParams(params);
                   loadList(productEJB.getTransactionApproveRequestByParams(_request));
               } else  {
-                  this.showMessage("sp.error.date.invalid", true, null);
+                  this.showMessage("msj.error.date.invalid", true, null);
               }         
         } catch (EmptyListException ex) {
             showEmptyList();
@@ -240,7 +240,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -257,7 +257,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
     private void showEmptyList() {
     	lbxRecords.getItems().clear();
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -273,7 +273,7 @@ public class ListManualRechargeController extends GenericAbstractListController<
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.manual.recharge.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.manual.recharge.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

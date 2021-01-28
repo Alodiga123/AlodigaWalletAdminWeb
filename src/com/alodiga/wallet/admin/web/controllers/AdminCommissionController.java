@@ -74,13 +74,13 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.commission.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.commission.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.commission.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.commission.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.commission.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.commission.add"));
                 break;
             default:
                 break;
@@ -102,13 +102,13 @@ public class AdminCommissionController extends GenericAbstractAdminController {
     
     public void onClick$rPercentCommisionYes(){
          if (rPercentCommisionYes.isChecked()) {
-            testPorcent.setValue(Labels.getLabel("sp.tab.comission.porcentcomission"));  
+            testPorcent.setValue(Labels.getLabel("wallet.crud.comission.porcentcomission"));  
         } 
     }
     
     public void onClick$rPercentCommisionNo(){
         if(rPercentCommisionNo.isChecked()) {
-            testPorcent.setValue(Labels.getLabel("sp.crud.commission.value")); 
+            testPorcent.setValue(Labels.getLabel("wallet.crud.commission.value")); 
          }
     }
 
@@ -153,18 +153,18 @@ public class AdminCommissionController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (cmbProduct.getSelectedItem() == null) {
             cmbProduct.setFocus(true);
-            this.showMessage("sp.error.products.notSelected", true, null);
+            this.showMessage("msj.error.products.notSelected", true, null);
         } else if (cmbTrasactionType.getSelectedItem() == null) {
             cmbTrasactionType.setFocus(true);
-            this.showMessage("sp.error.trasacctionType.notSelected", true, null);
+            this.showMessage("msj.error.trasacctionType.notSelected", true, null);
         } else if ((!rPercentCommisionYes.isChecked()) && (!rPercentCommisionNo.isChecked())) {
-            this.showMessage("sp.error.percentCommision", true, null);
+            this.showMessage("msj.error.percentCommision", true, null);
         } else if (dblValue.getText().isEmpty()) {
             dblValue.setFocus(true);
-            this.showMessage("sp.error.value", true, null);
+            this.showMessage("msj.error.value", true, null);
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
-            this.showMessage("sp.error.date.beginningDate", true, null);
+            this.showMessage("msj.error.date.beginningDate", true, null);
         } else {
             return true;
         }
@@ -195,11 +195,11 @@ public class AdminCommissionController extends GenericAbstractAdminController {
         } catch (Exception ex) {
             showError(ex);
         } if (comissionList.size() > 0) {
-                this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
+                this.showMessage("msj.error.commission.commissionByProductAndType", true, null);
                 dblValue.setFocus(true);
                 return false;
         } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
-            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
+            this.showMessage("msj.error.commission.todayComprareToBeginningDate", true, null);
             return false;
         }
         return true;
@@ -237,7 +237,7 @@ public class AdminCommissionController extends GenericAbstractAdminController {
             commission = utilsEJB.saveCommission(commission);
             commissionParam = commission;
             eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

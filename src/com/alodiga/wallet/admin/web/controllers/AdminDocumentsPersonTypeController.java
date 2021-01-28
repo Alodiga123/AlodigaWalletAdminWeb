@@ -60,13 +60,13 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.documentPersonType.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.documentPersonType.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.documentPersonType.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.documentPersonType.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.documentPersonType.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.documentPersonType.add"));
                 break;
             default:
                 break;
@@ -122,16 +122,16 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
     public Boolean validateEmpty() {
         if (cmbCountry.getSelectedItem() == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);
+            this.showMessage("msj.error.countryNotSelected", true, null);
         }else if (cmbPersonType.getSelectedItem() == null) {
             cmbPersonType.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);
+            this.showMessage("msj.error.countryNotSelected", true, null);
         } else if (txtDocumentPerson.getText().isEmpty()) {
             txtDocumentPerson.setFocus(true);
-            this.showMessage("sp.error.personType.notSelected", true, null);
+            this.showMessage("msj.error.personType.notSelected", true, null);
         } else if (txtIdentityCode.getText().isEmpty()) {
             txtIdentityCode.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else {
             return true;
         }
@@ -151,7 +151,7 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
             documentsPersonType.setPersonTypeId((PersonType) cmbPersonType.getSelectedItem().getValue());
             documentsPersonType = personEJB.saveDocumentsPersonType(documentsPersonType);
             documentsPersonTypeParam = documentsPersonType;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
@@ -160,7 +160,7 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
             }
         } catch (Exception ex) {
             showError(ex);
-            this.showMessage("sp.msj.errorSave", true, null);
+            this.showMessage("msj.error.errorSave", true, null);
         }
     }
     
@@ -260,7 +260,7 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
             loadGenericCombobox(personTypes, cmbPersonType, "description", evenInteger, Long.valueOf(documentsPersonTypeParam != null ? documentsPersonTypeParam.getPersonTypeId().getId() : 0));
         } catch (EmptyListException ex) {
 //            showError(ex);
-            this.showMessage("sp.msj.PersonTypeNull", true, null);
+            this.showMessage("msj.error.PersonTypeNull", true, null);
 //            ex.printStackTrace();
         } catch (GeneralException ex) {
             showError(ex);
@@ -270,7 +270,7 @@ public class AdminDocumentsPersonTypeController extends GenericAbstractAdminCont
             ex.printStackTrace();
         } finally {
             if (personTypes == null) {
-                this.showMessage("sp.msj.PersonTypeNull", true, null);
+                this.showMessage("msj.error.PersonTypeNull", true, null);
             }
         }
     }

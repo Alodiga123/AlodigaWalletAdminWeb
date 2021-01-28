@@ -6,9 +6,9 @@
             <div></div>
             <div align="center" width="980px" style="padding-top: 5px;">
                 <hlayout>
-                <label value="${c:l('sp.common.page.copyright')}" style="color:rgb(196, 196, 196);"/>
+                <label value="${c:l('wallet.page.copyright')}" style="color:rgb(196, 196, 196);"/>
                 <separator orient="vertical" bar="true"/>
-                <label value="${c:l('sp.common.page.powerby')}" style="color:#837E76;"/>
+                <label value="${c:l('wallet.page.powerby')}" style="color:#837E76;"/>
                 <label value="Alodiga" style="color:#CDA869; cursor:pointer;" onClick="Executions.sendRedirect(&quot;http://www.alodiga.us&quot;)"/>
                 <separator/>
                 <separator/>

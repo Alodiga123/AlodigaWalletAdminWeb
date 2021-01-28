@@ -71,13 +71,13 @@ public class AdminPersonTypeController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.personType.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.personType.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.personType.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.personType.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.personType.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.personType.add"));
                 break;
             default:
                 break;
@@ -118,15 +118,15 @@ public class AdminPersonTypeController extends GenericAbstractAdminController {
     public Boolean validateEmpty() {
         if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.error.person.type.empty", true, null);
+            this.showMessage("msj.error.person.type.empty", true, null);
         } else if (cmbCountry.getSelectedItem() == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.country.notSelected", true, null);
+            this.showMessage("msj.error.country.notSelected", true, null);
         } else if (cmbOriginApplication.getSelectedItem() == null) {
             cmbOriginApplication.setFocus(true);
-            this.showMessage("sp.error.OriginApplication.noSelected", true, null);
+            this.showMessage("msj.error.OriginApplication.noSelected", true, null);
         } else if ((!rIsNaturalPersonYes.isChecked()) && (!rIsNaturalPersonNo.isChecked())) {
-            this.showMessage("sp.error.isNaturalPerson.noSelected", true, null);
+            this.showMessage("msj.error.isNaturalPerson.noSelected", true, null);
         } else {
             return true;
         }
@@ -154,7 +154,7 @@ public class AdminPersonTypeController extends GenericAbstractAdminController {
             personType.setIndNaturalPerson(indIsNaturalPerson);
             personType = utilsEJB.savePersonType(personType);
             personTypeParam = personType;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
