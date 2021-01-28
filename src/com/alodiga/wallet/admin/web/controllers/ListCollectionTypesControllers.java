@@ -13,20 +13,27 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.CollectionType;
+import com.alodiga.wallet.common.model.OriginApplication;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
+import com.alodiga.wallet.common.model.StatusApplicant;
 import com.alodiga.wallet.common.model.User;
 import com.alodiga.wallet.common.utils.EJBServiceLocator;
 import com.alodiga.wallet.common.utils.EjbConstants;
+import com.alodiga.wallet.common.utils.QueryConstants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -41,6 +48,7 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
     private List<CollectionType> collectionType = null;
     private User currentUser;
     private Profile currentProfile;
+    private Combobox cmbOrigin;
 
     
     @Override
@@ -61,6 +69,7 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
             checkPermissions();
             getData();
             loadList(collectionType);
+            loadOriginAplication();
         } catch (Exception ex) {
             showError(ex);
         }
@@ -134,7 +143,16 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
         List<CollectionType> collectionTypeList = new ArrayList<CollectionType>();
         try {
             if (filter != null && !filter.equals("")) {
-                collectionTypeList = utilsEJB.getSearchCollectionType(filter);
+                EJBRequest request = new EJBRequest();
+               Map<String, Object> params = new HashMap<String, Object>();
+               if (cmbOrigin.getSelectedItem() != null && cmbOrigin.getSelectedIndex() != 0) {
+                   params.put(QueryConstants.PARAM_ORIGIN_APPLICATION_ID, ((OriginApplication) cmbOrigin.getSelectedItem().getValue()).getId());
+               }
+               if(!txtName.getText().equals("")){
+                 params.put(QueryConstants.PARAM_COUNTRY_NAME, txtName.getText());  
+               }
+               request.setParams(params);
+               collectionTypeList = utilsEJB.getSearchCollectionTypeByOriginAplication(request);
             } else {
                 return collectionType;
             }
@@ -162,7 +180,7 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
                     } else {
                         item.appendChild(new Listcell(""));
                     }
-                    
+                    item.appendChild(new Listcell(collectionType.getPersonTypeId().getOriginApplicationId().getName()));
                     item.appendChild(permissionEdit ? new ListcellEditButton(adminPage, collectionType, Permission.EDIT_TYPE_OF_COLLECTIONS) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellViewButton(adminPage, collectionType, Permission.VIEW_TYPE_OF_COLLECTIONS) : new Listcell());
                     item.setParent(lbxRecords);
@@ -182,4 +200,26 @@ public class ListCollectionTypesControllers extends GenericAbstractListControlle
         }    
     }
 
+    private void loadOriginAplication() {
+        try {
+           cmbOrigin.getItems().clear();
+            EJBRequest request = new EJBRequest();
+            List<OriginApplication> origin = utilsEJB.getOriginApplications(request);
+            Comboitem item = new Comboitem();
+            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setParent(cmbOrigin);
+            cmbOrigin.setSelectedItem(item);
+            for (int i = 0; i < origin.size(); i++) {
+                item = new Comboitem();
+                item.setValue(origin.get(i));
+                item.setLabel(origin.get(i).getName());
+                item.setParent(cmbOrigin);
+            }
+        } catch (Exception ex) {
+            this.showError(ex);
+        }
+    }
+    
+ 
+    
 }

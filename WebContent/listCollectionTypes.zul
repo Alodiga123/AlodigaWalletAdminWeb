@@ -34,8 +34,10 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="text-align:right">
-                                                    <label value="${c:l('wallet.common.country')}" width="80px" sclass="lblbold"/>
-                                                    <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('wallet.common.searchingFilter')}"/>
+                                                    <label value="${c:l('sp.common.origin.aplication')}" sclass="lblbold"/>
+                                                    <combobox id="cmbOrigin" width="170px" mold="rounded" readonly="true"/>
+                                                    <label value="${c:l('cms.common.countryName')}" width="80px" sclass="lblbold"/>
+                                                    <textbox id="txtName" value="" width="150px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
                                                 </hlayout>
                                                 <hlayout>
                                                     <!--Add button-->
@@ -54,9 +56,10 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="895px" mold="paging" pageSize="10" height="450px">
                                                 <listhead>
-                                                    <listheader label="${c:l('wallet.common.country')}" width="265px" sort="auto"/>
-                                                    <listheader label="${c:l('wallet.common.collectionsTypes')}" width="270px" sort="auto"/>
-                                                    <listheader label="${c:l('wallet.common.personType')}" width="270px" sort="auto"/>
+                                                    <listheader label="${c:l('cms.common.countryName')}" width="265px" sort="auto"/>
+                                                    <listheader label="${c:l('cms.requestCollection.collectionTypes')}" width="270px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.crud.documentPersonType.personType')}" width="270px" sort="auto"/>
+                                                    <listheader label="${c:l('sp.common.origin.aplication')}" width="270px" sort="auto"/>
                                                     <listheader label="-" width="45px"/>
                                                     <listheader label="-" width="45px"/>
                                                 </listhead>

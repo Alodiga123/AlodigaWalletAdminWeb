@@ -57,7 +57,7 @@
                                             </vlayout>
                                             <separator/>
                                             <!--Record Listbox-->
-                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="380px" mold="paging" pageSize="10" checkmark="true" multiple="true">
+                                            <listbox id="lbxRecords" fixedLayout="true" width="990px" height="420px" mold="paging" pageSize="10" checkmark="true" multiple="true">
                                                 <listhead>
                                                     <listheader label="${c:l('wallet.common.requestNumber')}" width="200px" sort="auto"/>
                                                     <listheader label="${c:l('wallet.crud.ofac.nameLastName')}" width="200px" sort="auto"/>
