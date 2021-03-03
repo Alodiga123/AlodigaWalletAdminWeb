@@ -198,7 +198,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
  	                	endinngDate.setParent(hlayout);	  
  	                	hlayout.setParent(row);
  	                	Checkbox percentage = new Checkbox();
- 	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
  	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
@@ -251,7 +253,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
  	                	endinngDate.setParent(hlayout);	  
  	                	hlayout.setParent(row);
  	                	Checkbox percentage = new Checkbox();
- 	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                } 	                	
  	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
@@ -303,7 +307,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
  	                	endinngDate.setParent(hlayout);	  
  	                	hlayout.setParent(row);
  	                	Checkbox percentage = new Checkbox();
- 	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
  	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
@@ -396,7 +402,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	                	endinngDate.setParent(hlayout);	  
     	                	hlayout.setParent(row);
     	                	Checkbox percentage = new Checkbox();
-    	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
     	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
@@ -453,7 +461,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	                	endinngDate.setParent(hlayout);	  
     	                	hlayout.setParent(row);
     	                	Checkbox percentage = new Checkbox();
-    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
     	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
@@ -509,7 +519,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	                	endinngDate.setParent(hlayout);	  
     	                	hlayout.setParent(row);
     	                	Checkbox percentage = new Checkbox();
-    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
     	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
