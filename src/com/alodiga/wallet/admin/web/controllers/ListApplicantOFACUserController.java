@@ -166,6 +166,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
     public void getData() {
         personList = new ArrayList<Person>();
         List<AffiliationRequest> affiliationRequest = new ArrayList<AffiliationRequest>();
+        Long affiliationRequestId = 0L;
         try {
             request.setFirst(0);
             request.setLimit(null);
@@ -176,10 +177,23 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                params.put(QueryConstants.PARAM_USER_REGISTER_ID , p.getId());
                request.setParams(params);
                affiliationRequest = utilsEJB.getAffiliationRequestByPerson(request);
-                for(AffiliationRequest af : affiliationRequest){
+               for(AffiliationRequest af : affiliationRequest){
                     p.setAffiliationRequest(af);
                     personEJB.savePerson(p);
-                }
+                    affiliationRequestId = af.getId();
+               }
+               Long haveReviewOFAC = utilsEJB.haveReviewOFACByPerson(p.getId());
+               if (haveReviewOFAC > 0) {
+                   request = new EJBRequest();
+                   params = new HashMap();
+                   params.put(Constants.PERSON_KEY, p.getId());
+                   params.put(Constants.AFFILIATION_REQUEST_KEY, affiliationRequestId);
+                   request.setParams(params);
+                   List<ReviewOfac> reviewOFAC = utilsEJB.getReviewOfacByRequest(request);
+                   for (ReviewOfac r: reviewOFAC) {
+                        p.setReviewOfac(r);
+                    }
+               }
             }
         } catch (NullParameterException ex) {
             showError(ex);
