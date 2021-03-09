@@ -53,7 +53,6 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
     @Override
     public void checkPermissions() {
         try {
-//            btnAdd.setVisible(PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.ADD_BUSINESS_AFFILIATION_REQUESTS));
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_BUSINESS_AFFILIATION_REQUESTS);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_BUSINESS_AFFILIATION_REQUESTS);
         } catch (Exception ex) {
