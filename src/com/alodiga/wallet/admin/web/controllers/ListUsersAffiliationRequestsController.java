@@ -12,6 +12,7 @@ import com.alodiga.wallet.admin.web.components.ListcellViewButton;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractListController;
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.Utils;
+import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 import com.alodiga.wallet.common.exception.EmptyListException;
@@ -20,6 +21,7 @@ import com.alodiga.wallet.common.exception.NullParameterException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.AffiliationRequest;
+import com.alodiga.wallet.common.model.NaturalPerson;
 import com.alodiga.wallet.common.model.Permission;
 import com.alodiga.wallet.common.model.Profile;
 import com.alodiga.wallet.common.model.User;
@@ -40,7 +42,9 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
     private Listbox lbxRecords;
     private Textbox txtNumber;
     private UtilsEJB utilsEJB = null;
+    private PersonEJB personEJB = null;
     private List<AffiliationRequest> userAffiliationRequestList = null;
+    private List<NaturalPerson> naturalPersonList = null;
     private User currentUser;
     private Profile currentProfile;
 
@@ -68,6 +72,7 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
             currentUser = AccessControl.loadCurrentUser();
             currentProfile = currentUser.getCurrentProfile();
             utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
+            personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
             checkPermissions();
             adminPage = "TabUserAffiliationRequests.zul";
             getData();
@@ -82,13 +87,25 @@ public class ListUsersAffiliationRequestsController extends GenericAbstractListC
 
     public void getData() {
         userAffiliationRequestList = new ArrayList<AffiliationRequest>();
+        naturalPersonList = new ArrayList<NaturalPerson>();
         try {
             EJBRequest request = new EJBRequest();
             Map params = new HashMap();
-            params = new HashMap();
             params.put(QueryConstants.PARAM_REQUEST_TYPE, RequestTypeE.SORUBI.getId());
             request.setParams(params);
             userAffiliationRequestList = utilsEJB.getAffiliationRequestByRequestByType(request);
+            for (AffiliationRequest u: userAffiliationRequestList) {
+                if (u.getUserRegisterUnifiedId().getNaturalPerson() == null) {
+                    request = new EJBRequest();
+                    params = new HashMap();
+                    params.put(QueryConstants.PARAM_PERSON_ID, u.getUserRegisterUnifiedId().getId());
+                    request.setParams(params);
+                    naturalPersonList = personEJB.getNaturalPersonByPerson(request);
+                    for (NaturalPerson np: naturalPersonList) {
+                        u.getUserRegisterUnifiedId().setNaturalPerson(np);
+                    }
+                }                
+            }
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (EmptyListException ex) {
