@@ -209,14 +209,16 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         List<LegalPerson> legalPerson = new ArrayList<LegalPerson>();
         List<AffiliationRequest> affiliationRequest = new ArrayList<AffiliationRequest>();
         Long legalPersonId = 0L;
+        EJBRequest request = new EJBRequest();
+        Map<String, Object> params = new HashMap<String, Object>();
+        Long affiliationRequestId = 0L;
         try {
             request.setFirst(0);
             request.setLimit(null);
             personList = personEJB.getPersonBusinessApplicant(request);
             for (Person p: personList) {
                 if (p.getAffiliationRequest() == null) {
-                    EJBRequest request = new EJBRequest();
-                    Map<String, Object> params = new HashMap<String, Object>();
+                    params = new HashMap<String, Object>();
                     params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID , p.getLegalRepresentative().getId());
                     request.setParams(params);
                     legalPerson = personEJB.getLegalPersonByLegalRepresentative(request);
@@ -230,8 +232,23 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                     for (AffiliationRequest ar: affiliationRequest) {
                         p.setAffiliationRequest(ar);
                         personEJB.savePerson(p);
+                        affiliationRequestId = ar.getId();
                     }
+                } else {                   
+                    affiliationRequestId = p.getAffiliationRequest().getId(); 
                 }
+                Long haveReviewOFAC = utilsEJB.haveReviewOFACByPerson(p.getId());
+                   if (haveReviewOFAC > 0) {
+                       request = new EJBRequest();
+                       params = new HashMap();
+                       params.put(Constants.PERSON_KEY, p.getId());
+                       params.put(Constants.AFFILIATION_REQUEST_KEY, affiliationRequestId);
+                       request.setParams(params);
+                       List<ReviewOfac> reviewOFAC = utilsEJB.getReviewOfacByRequest(request);
+                       for (ReviewOfac r: reviewOFAC) {
+                            p.setReviewOfac(r);
+                        }
+                   }
             }
         } catch (NullParameterException ex) {
             showError(ex);
