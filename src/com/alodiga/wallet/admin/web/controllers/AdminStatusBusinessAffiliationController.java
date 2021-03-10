@@ -36,7 +36,7 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
         super.doAfterCompose(comp);
         statusParam = (Sessions.getCurrent().getAttribute("object") != null) ? (StatusBusinessAffiliationHasFinalState) Sessions.getCurrent().getAttribute("object") : null;
         initialize();
-        initView(eventType, "sp.crud.status.business.affiliation");
+        initView(eventType, "wallet.crud.status.business.affiliation");
     }
 
     @Override
@@ -77,12 +77,12 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
             if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusBusinessAffiliationHasFinalState(status.getStatusBusinessAffiliationRequetsId().getId(),status.getFinalStateId().getId()))
 		|| eventType.equals(WebConstants.EVENT_EDIT)) {
                     status = utilsEJB.saveStatusBusinessAffiliationHasFinalState(status);
-            	    this.showMessage("sp.common.save.success", false, null);
+            	    this.showMessage("wallet.msj.save.success", false, null);
             if (eventType == WebConstants.EVENT_ADD) {
 		btnSave.setVisible(false);
             } 				
             }else
-                this.showMessage("sp.error.status.business.affiliation.exist", true, null);     
+                this.showMessage("msj.error.status.business.affiliation.exist", true, null);     
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {
@@ -95,10 +95,10 @@ public class AdminStatusBusinessAffiliationController extends GenericAbstractAdm
     public Boolean validateEmpty() {
         if (cmbStatus.getSelectedItem() == null) {
         	cmbStatus.setFocus(true);
-            this.showMessage("sp.error.status.business.affiliation.init", true, null);
+            this.showMessage("msj.error.status.business.affiliation.init", true, null);
         } else if (cmbFinal.getText().isEmpty()) {
             cmbFinal.setFocus(true);
-            this.showMessage("sp.error.status.business.affiliation.final", true, null);
+            this.showMessage("msj.error.status.business.affiliation.final", true, null);
         } else {
             return true;
         }

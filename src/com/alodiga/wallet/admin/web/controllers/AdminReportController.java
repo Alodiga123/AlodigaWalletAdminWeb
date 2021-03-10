@@ -81,13 +81,13 @@ public class AdminReportController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.report.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.report.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.report.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.report.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.report.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.report.add"));
                 break;
             default:
                 break;
@@ -137,13 +137,13 @@ public class AdminReportController extends GenericAbstractAdminController {
         boolean valid = false;
         if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (cmbReportType.getSelectedItem() == null) {
             cmbReportType.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else {
             valid = true;
         }
@@ -157,13 +157,13 @@ public class AdminReportController extends GenericAbstractAdminController {
                 request.setLimit(null);
                 parameterTypes = reportEJB.getParameterType(request);
             } catch (EmptyListException e) {
-                lblInfo.setValue(Labels.getLabel("sp.error.general"));
+                lblInfo.setValue(Labels.getLabel("msj.error.general"));
                 e.printStackTrace();
             } catch (GeneralException e) {
-                lblInfo.setValue(Labels.getLabel("sp.error.general"));
+                lblInfo.setValue(Labels.getLabel("msj.error.general"));
                 e.printStackTrace();
             } catch (NullParameterException e) {
-                lblInfo.setValue(Labels.getLabel("sp.error.general"));
+                lblInfo.setValue(Labels.getLabel("msj.error.general"));
                 e.printStackTrace();
             }
             loadcmbReportType();
@@ -183,7 +183,7 @@ public class AdminReportController extends GenericAbstractAdminController {
             loadProfiles(profiles);
         } catch (Exception e) {
             e.printStackTrace();
-            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+            lblInfo.setValue(Labels.getLabel("msj.error.general"));
         }
          if (eventType == WebConstants.EVENT_VIEW) {
                 blockFields();
@@ -210,18 +210,18 @@ public class AdminReportController extends GenericAbstractAdminController {
                 }
             }
             if (eventType.equals(WebConstants.EVENT_ADD)) {
-                cmbReportType.setText(Labels.getLabel("sp.common.select"));
+                cmbReportType.setText(Labels.getLabel("wallet.common.selectOption"));
             }
 
         } catch (EmptyListException e) {
             e.printStackTrace();
-            this.showMessage("sp.error.general", true, null);
+            this.showMessage("msj.error.general", true, null);
         } catch (GeneralException e) {
             e.printStackTrace();
-            this.showMessage("sp.error.general", true, null);
+            this.showMessage("msj.error.general", true, null);
         } catch (NullParameterException e) {
             e.printStackTrace();
-            this.showMessage("sp.error.general", true, null);
+            this.showMessage("msj.error.general", true, null);
         }
     }
 
@@ -242,7 +242,7 @@ public class AdminReportController extends GenericAbstractAdminController {
 
             // parameters type
             Combobox cmbParameterType = new Combobox();
-            cmbParameterType.setText(Labels.getLabel("sp.common.select"));
+            cmbParameterType.setText(Labels.getLabel("wallet.common.selectOption"));
             cmbParameterType.setWidth("100px");
             cmbParameterType.setReadonly(true);
             cmbParameterType.setMold("rounded");
@@ -320,7 +320,7 @@ public class AdminReportController extends GenericAbstractAdminController {
 
         // parameters type
         Combobox cmbParameterType = new Combobox();
-        cmbParameterType.setText(Labels.getLabel("sp.common.select"));
+        cmbParameterType.setText(Labels.getLabel("wallet.common.selectOption"));
         cmbParameterType.setWidth("100px");
         cmbParameterType.setReadonly(true);
         cmbParameterType.setMold("rounded");
@@ -412,7 +412,7 @@ public class AdminReportController extends GenericAbstractAdminController {
             request.setParam(newReport);
             reportParam = reportEJB.saveReport(request);
             eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
         } catch (NullParameterException e) {
             e.printStackTrace();
         } catch (GeneralException e) {

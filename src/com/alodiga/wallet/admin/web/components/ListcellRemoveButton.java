@@ -12,7 +12,7 @@ public class ListcellRemoveButton extends Listcell {
 
     public ListcellRemoveButton(String destinationView, Object obj, Long permissionId) {
     	RemoveButton button = new RemoveButton(destinationView, obj,permissionId);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.remove"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.remove"));
         button.setClass("open orange");
         button.setParent(this);
     }

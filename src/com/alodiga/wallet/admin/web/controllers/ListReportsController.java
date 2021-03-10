@@ -108,7 +108,7 @@ public class ListReportsController extends GenericAbstractListController<Report>
                     item.setValue(report);
                     item.appendChild(new Listcell(report.getName()));
                     item.appendChild(new Listcell(report.getReportTypeId().getName()));
-                    item.appendChild(new Listcell((report.getEnabled()==true? Labels.getLabel("sp.crud.report.yes"):Labels.getLabel("sp.crud.report.no"))));
+                    item.appendChild(new Listcell((report.getEnabled()==true? Labels.getLabel("wallet.common.yes"):Labels.getLabel("wallet.common.no"))));
                     item.appendChild(permissionChangeStatus ? initEnabledButton(report.getEnabled(), item) : new Listcell());
                     item.appendChild(permissionEdit ? new ListcellViewButton(adminPage, report,Permission.EDIT_REPORTS) : new Listcell());
                     item.appendChild(permissionRead ? new ListcellEditButton(adminPage, report,Permission.VIEW_REPORTS) : new Listcell());
@@ -117,7 +117,7 @@ public class ListReportsController extends GenericAbstractListController<Report>
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -145,7 +145,7 @@ public class ListReportsController extends GenericAbstractListController<Report>
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -157,7 +157,7 @@ public class ListReportsController extends GenericAbstractListController<Report>
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.counties.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.country.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

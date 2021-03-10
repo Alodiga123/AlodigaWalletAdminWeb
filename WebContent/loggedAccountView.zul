@@ -52,14 +52,14 @@
                                         <separator/>
                                         <hlayout>
                                             <separator/>
-                                            <label  id="lblHome" value="${c:l('sp.common.myAccount')}" style="color:grey; font-size:14px; cursor:pointer; font-weight: bold;" onClick="Executions.sendRedirect(&quot;loggedAccountView.zul&quot;)"/>
+                                            <label  id="lblHome" value="${c:l('wallet.common.myAccount')}" style="color:grey; font-size:14px; cursor:pointer; font-weight: bold;" onClick="Executions.sendRedirect(&quot;loggedAccountView.zul&quot;)"/>
                                         </hlayout>
                                     </div>
                                         <div height="5px" width="100%" style="background:#333;"></div>
                                     <vlayout>
                                         <separator/>
                                         <separator/>
-                                        <label value="${c:l('sp.common.myStatistics')}" style="color:grey; font-size:14px; cursor:pointer; font-weight: bold;" onClick="Executions.sendRedirect(&quot;loggedAccountView.zul&quot;)"/>
+                                        <label value="${c:l('wallet.common.myStatistics')}" style="color:grey; font-size:14px; cursor:pointer; font-weight: bold;" onClick="Executions.sendRedirect(&quot;loggedAccountView.zul&quot;)"/>
                                         <groupbox mold="3d" width="620px">
                                             <hlayout>
                                                 <chart id="chtSales" width="300" height="120" fgAlpha="192" orient="horizontal" paneColor="#ffffff" bgColor="#ffffff" type="bar" threeD="true"/>
@@ -76,13 +76,13 @@
                                                 <vlayout>
                                                     <div id="divMasterStore" align="center">
                                                         <hlayout>
-                                                            <button id="buttonPurchase" onClick="Executions.sendRedirect(&quot;purchaseBalanceAccountView.zul&quot;)" label="${c:l('sp.menu.central.buyBalance')}" image="/images/icon-shuffle.png" class="big green"/>
-                                                            <button id="buttonPayment" onClick="Executions.sendRedirect(&quot;payment.zul&quot;)" label="${c:l('sp.menu.admin.payment')}" image="/images/icon-bank.png" class="big blue"/>
+                                                            <button id="buttonPurchase" onClick="Executions.sendRedirect(&quot;purchaseBalanceAccountView.zul&quot;)" label="${c:l('wallet.common.buyBalance')}" image="/images/icon-shuffle.png" class="big green"/>
+                                                            <button id="buttonPayment" onClick="Executions.sendRedirect(&quot;payment.zul&quot;)" label="${c:l('wallet.common.adminPayment')}" image="/images/icon-bank.png" class="big blue"/>
                                                         </hlayout>
                                                         <separator/>
                                                         <separator/>
                                                         <hlayout>
-                                                            <button id="buttonHistory" onClick="Executions.sendRedirect(&quot;transactionHistoryByAccountView.zul&quot;)" label="${c:l('sp.menu.central.transactionHistory')}" image="/images/icon-credit-card.png" class="big red" />
+                                                            <button id="buttonHistory" onClick="Executions.sendRedirect(&quot;transactionHistoryByAccountView.zul&quot;)" label="${c:l('wallet.common.transactionHistory')}" image="/images/icon-credit-card.png" class="big red" />
                                                             <button id="buttonEditAccount" onClick="Executions.sendRedirect(&quot;editAccountView.zul&quot;)" label="${c:l('sp.crud.account.edit')}" image="/images/icon-edit.png" class="big green-button"/>
                                                         </hlayout>
                                                         <separator/>

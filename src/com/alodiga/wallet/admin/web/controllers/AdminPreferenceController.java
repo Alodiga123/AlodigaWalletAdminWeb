@@ -100,13 +100,13 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferences.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferences.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferences.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferences.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferences.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferences.add"));
                 break;
             default:
                 break;
@@ -229,16 +229,16 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (txtPreference.getText().isEmpty()) {
             txtPreference.setFocus(true);
-            this.showMessage("sp.error.preferences.description", true, null);
+            this.showMessage("msj.error.preferences.description", true, null);
         } else if (cmbTypePreference.getSelectedItem() == null) {
             cmbTypePreference.setFocus(true);
-            this.showMessage("sp.error.preferences.preferenceType", true, null);
+            this.showMessage("msj.error.preferences.preferenceType", true, null);
         }  else if (cmbTypeData.getSelectedItem() == null) {
             cmbTypeData.setFocus(true);
-            this.showMessage("sp.error.preferences.typeData", true, null);
+            this.showMessage("msj.error.preferences.typeData", true, null);
         } else if (!chkCustomer.isChecked() && !chkBusiness.isChecked()) {
         	chkCustomer.setFocus(true);
-        	this.showMessage("sp.error.preferences.checked", true, null);
+        	this.showMessage("msj.error.preferences.checked", true, null);
         }else {
             return true;
         }
@@ -258,7 +258,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         } catch (Exception ex) {
             showError(ex);
         } if(preferenceFieldList.size() > 0){
-            this.showMessage("sp.error.preferences.code", true, null);
+            this.showMessage("msj.error.preferences.code", true, null);
                 txtCode.setFocus(true);
                 return false;
         }
@@ -280,11 +280,11 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
         
         try {            
     		if (chkBusinessEnding.isChecked() && dtxBusinessBeginning.getValue().getTime() >= dtxBusinessEnding.getValue().getTime()) {
-				this.showMessage("sp.error.date.invalid", true, null);
+				this.showMessage("msj.error.date.invalid", true, null);
 				throw new GeneralException("Error Invalid Dates");
 			}
     		if (chkCustomerEnding.isChecked() && dtxCustomerBeginning.getValue().getTime() >= dtxCustomerEnding.getValue().getTime()) {
-				this.showMessage("sp.error.date.invalid", true, null);
+				this.showMessage("msj.error.date.invalid", true, null);
 				throw new GeneralException("Error Invalid Dates");
 			}
             //Se obtienen los lenguajes Español e Ingles
@@ -452,7 +452,7 @@ public class AdminPreferenceController extends GenericAbstractAdminController {
                 }
             }
             
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
             } else {

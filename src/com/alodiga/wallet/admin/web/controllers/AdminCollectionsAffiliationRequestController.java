@@ -161,7 +161,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
 
     public Boolean validateEmpty() {
         if(txtObservations.getText().isEmpty()){
-             this.showMessage("sp.error.renewal.observations",true, null);
+             this.showMessage("msj.error.renewal.observations",true, null);
         } else {
             return true;
         }
@@ -208,7 +208,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
            
             
             
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true).publish(new Event(""));
         } catch (Exception ex) {
             showError(ex);

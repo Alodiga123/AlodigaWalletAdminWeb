@@ -123,7 +123,7 @@ public class ListPreferenceController extends GenericAbstractListController<Pref
 	                    item.appendChild(new Listcell(preference.getName()));
                             item.appendChild(new Listcell(preference.getPreferenceId().getName()));
                             item.appendChild(new Listcell(preference.getPreferenceTypeId().getType()));
-                            item.appendChild(new Listcell((preference.getEnabled()==1? Labels.getLabel("sp.crud.preferences.yes"):Labels.getLabel("sp.crud.preferences.no"))));
+                            item.appendChild(new Listcell((preference.getEnabled()==1? Labels.getLabel("wallet.common.yes"):Labels.getLabel("wallet.common.no"))));
 	                    item.appendChild(new ListcellEditButton(adminPage, preference));
 	                    item.appendChild(new ListcellViewButton(adminPage, preference));
 	                    item.setParent(lbxRecords);
@@ -131,7 +131,7 @@ public class ListPreferenceController extends GenericAbstractListController<Pref
 	            } else {
 	                btnDownload.setVisible(false);
 	                item = new Listitem();
-	                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+	                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
 	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
 	                item.appendChild(new Listcell());
@@ -160,7 +160,7 @@ public class ListPreferenceController extends GenericAbstractListController<Pref
     
      private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -174,7 +174,7 @@ public void onClick$btnDownload() throws InterruptedException {
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.preferences.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.preferences.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -189,10 +189,10 @@ public void onClick$btnExportPdf() throws InterruptedException {
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.product.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.product.list"));
             file.append("_");
             file.append(date);
-            StringBuilder productTitle = new StringBuilder(Labels.getLabel("sp.crud.product.product"));
+            StringBuilder productTitle = new StringBuilder(Labels.getLabel("wallet.common.product"));
             PDFUtil.exportPdf(file.toString(), productTitle.toString(), lbxRecords, 2);            
         } catch (Exception ex) {
             showError(ex);

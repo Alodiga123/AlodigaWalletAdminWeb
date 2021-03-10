@@ -97,7 +97,7 @@ public class ListPasswordChangeRequestController extends GenericAbstractListCont
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.passwordChange.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.passwordChange.list"));
             AccessControl.saveAction(Permission.LIST_PASSWORD_CHANGE_REQUEST, "Se descargo listado de Cambio de Contraseña en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -122,9 +122,9 @@ public class ListPasswordChangeRequestController extends GenericAbstractListCont
                     item.appendChild(new Listcell(passwordChangeRequest.getUserId().getFirstName() + " " + passwordChangeRequest.getUserId().getLastName()));
                     if (passwordChangeRequest.getIndApproved() != null) {
                         if (passwordChangeRequest.getIndApproved() == true) {
-                            indApproved = Labels.getLabel("sp.common.yes");
+                            indApproved = Labels.getLabel("wallet.common.yes");
                         } else {
-                            indApproved = Labels.getLabel("sp.common.no");
+                            indApproved = Labels.getLabel("wallet.common.no");
                         }
                     }
                     item.appendChild(new Listcell(indApproved));
@@ -134,7 +134,7 @@ public class ListPasswordChangeRequestController extends GenericAbstractListCont
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());

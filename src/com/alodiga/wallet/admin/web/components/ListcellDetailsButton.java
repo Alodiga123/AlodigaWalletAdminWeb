@@ -10,7 +10,7 @@ public class ListcellDetailsButton extends Listcell {
 
     public ListcellDetailsButton(String destinationView, Object obj,Long permissionId) {
         DetailsButton button = new DetailsButton(destinationView, obj,permissionId);
-        button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+        button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
         button.setClass("open orange");
         button.setParent(this);
     }

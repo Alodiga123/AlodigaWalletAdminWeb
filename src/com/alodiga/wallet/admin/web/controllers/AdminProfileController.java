@@ -56,12 +56,12 @@ public class AdminProfileController extends GenericAbstractAdminController {
         profileParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Profile) Sessions.getCurrent().getAttribute("object") : null;
         user = AccessControl.loadCurrentUser();
         initialize();
-        initView(eventType, "sp.crud.profile");
+        initView(eventType, "wallet.common.profile");
     }
 
     @Override
     public void initView(int eventType, String adminView) {
-        super.initView(eventType, "sp.crud.profile");
+        super.initView(eventType, "wallet.common.profile");
     }
 
     @Override
@@ -108,15 +108,15 @@ public class AdminProfileController extends GenericAbstractAdminController {
     public Boolean validateEmpty() {
         if (txtAlias.getText().isEmpty()) {
             txtAlias.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtAliasEnglish.getText().isEmpty()) {
             txtAliasEnglish.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtAliasSpanish.getText().isEmpty()) {
             txtAliasSpanish.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (lbxPermissions.getSelectedCount() == 0) {
-            this.showMessage("sp.error.permission.notSelected", true, null);
+            this.showMessage("msj.error.permission.notSelected", true, null);
         } else {
             return true;
         }
@@ -212,7 +212,7 @@ public class AdminProfileController extends GenericAbstractAdminController {
             profile = accessEjb.saveProfile(request);
             profileParam = profile;
             eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             try {
                 PermissionManager.refresh();
             } catch (Exception ex) {

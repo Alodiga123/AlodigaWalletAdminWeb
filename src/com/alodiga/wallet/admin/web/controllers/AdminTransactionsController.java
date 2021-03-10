@@ -86,13 +86,13 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.transaction.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.transaction.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.transaction.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.transaction.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.exchangeRate.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.exchangeRate.add"));
                 break;
             default:
                 break;
@@ -179,17 +179,17 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             if (transaction.getProductId().getName() != null) {
                 lblProduct.setValue(transaction.getProductId().getName());
             } else {
-                lblProduct.setValue(Labels.getLabel("sp.crud.transaction.empty"));
+                lblProduct.setValue(Labels.getLabel("wallet.common.emptySymbol"));
             }
             if (transaction.getTransactionTypeId() != null) {
                 lblTransactionType.setValue(transaction.getTransactionTypeId().getCode());
             } else {
-                lblTransactionType.setValue(Labels.getLabel("sp.crud.transaction.empty"));
+                lblTransactionType.setValue(Labels.getLabel("wallet.common.emptySymbol"));
             }
             if (transaction.getTransactionSourceId() != null) {
                 lblTransactionSource.setValue(transaction.getTransactionSourceId().getName());
             } else {
-                lblTransactionSource.setValue(Labels.getLabel("sp.crud.transaction.empty"));
+                lblTransactionSource.setValue(Labels.getLabel("wallet.common.emptySymbol"));
             }
             lblTransactionDate.setValue(simpleDateFormat.format(transaction.getCreationDate()));
             lblAmount.setValue(String.valueOf(transaction.getAmount()));
@@ -197,12 +197,12 @@ public class AdminTransactionsController extends GenericAbstractAdminController 
             if (transaction.getConcept() != null) {
                 lblConcept.setValue(transaction.getConcept());
             } else {
-                lblConcept.setValue(Labels.getLabel("sp.crud.transaction.empty"));
+                lblConcept.setValue(Labels.getLabel("wallet.common.emptySymbol"));
             }
             if (transaction.getDailyClosingId() != null){
                 lblEndDate.setValue(transaction.getDailyClosingId().getClosingDate().toString());
             } else {
-                lblEndDate.setValue(Labels.getLabel("sp.crud.transaction.empty"));
+                lblEndDate.setValue(Labels.getLabel("wallet.common.emptySymbol"));
             }
             if (transaction.getIndClosed() == true) {
                 rIsCloseYes.setChecked(true);

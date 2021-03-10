@@ -148,7 +148,7 @@ public class ListStatusBusinessAffiliationController extends GenericAbstractList
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -177,7 +177,7 @@ public class ListStatusBusinessAffiliationController extends GenericAbstractList
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.status.business.affiliation.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.status.business.affiliation.list"));
             AccessControl.saveAction(Permission.LIST_AFFILIATIONSTATUSPRERELATIONSHIPS, "Se descargo listado de Prerelaciones Estatus Afiliacion formato excel");
         } catch (Exception ex) {
             showError(ex);

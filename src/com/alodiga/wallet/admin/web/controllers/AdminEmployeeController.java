@@ -77,13 +77,13 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.employee.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.employee.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.employee.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.employee.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.employee.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.employee.add"));
                 tabEmployeePhone.setDisabled(true);
                 break;
             default:
@@ -130,28 +130,28 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (cmbCountry.getSelectedItem()  == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.country.notSelected", true, null);     
+            this.showMessage("msj.error.country.notSelected", true, null);     
         } else if (cmbDocumentPersonType.getSelectedItem() == null) {
             cmbDocumentPersonType.setFocus(true);
-            this.showMessage("sp.error.documentType.notSelected", true, null);
+            this.showMessage("msj.error.documentType.notSelected", true, null);
         } else if(indIdentification.getText().isEmpty()){
              indIdentification.setFocus(true);
-             this.showMessage("sp.error.employee.identification",true, null);
+             this.showMessage("msj.error.employee.identification",true, null);
         } else if(txtName.getText().isEmpty()){
             txtName.setFocus(true);
-            this.showMessage("sp.error.field.fullName",true, null);
+            this.showMessage("msj.error.field.fullName",true, null);
         } else if(txtLastName.getText().isEmpty()){
             txtLastName.setFocus(true);
-            this.showMessage("sp.error.field.lastName",true, null);
+            this.showMessage("msj.error.field.lastName",true, null);
         } else if(txtEmail.getText().isEmpty()){
             txtEmail.setFocus(true);
-            this.showMessage("sp.error.field.email",true, null);
+            this.showMessage("msj.error.field.email",true, null);
         } else if (cmbPositionEnterprise.getSelectedItem() == null) {
             cmbPositionEnterprise.setFocus(true);
-            this.showMessage("sp.error.employee.positionEnterprise", true, null);
+            this.showMessage("msj.error.employee.positionEnterprise", true, null);
         } else if (cmbComercialAgency.getSelectedItem() == null) {
             cmbComercialAgency.setFocus(true);
-            this.showMessage("sp.error.comercialAgency.noSelected", true, null);
+            this.showMessage("msj.error.comercialAgency.noSelected", true, null);
         } else {
             return true;
         }
@@ -197,7 +197,7 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
             employeeParent = employee;
             employeeParam = employee;
             tabEmployeePhone.setDisabled(false);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             
         } catch (WrongValueException ex) {
             showError(ex);
@@ -301,7 +301,7 @@ public class AdminEmployeeController extends GenericAbstractAdminController {
             showError(ex);
         } finally {
             if (documentsPersonType == null) {
-                this.showMessage("sp.msj.DocumentsPersonTypeNull", false, null);
+                this.showMessage("msj.DocumentsPersonTypeNull", false, null);
             }
         }
     }

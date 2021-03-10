@@ -86,15 +86,15 @@ public class AdminProductController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.product.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.product.view"));
                 break;
             case WebConstants.EVENT_ADD:
                 tabCommissionByProduct.setDisabled(true);
                 tabProductHasBank.setDisabled(true);
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.product.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.product.add="));
                 break;
             default:
                 break;
@@ -251,91 +251,91 @@ public class AdminProductController extends GenericAbstractAdminController {
         this.showMessage("", false, null);
         
         if (cmbCountry.getSelectedItem()  == null) {
-            this.showMessage("sp.error.countryNotSelected", true, null); 
+            this.showMessage("msj.error.countryNotSelected", true, null); 
             cmbCountry.setFocus(true);
             return false;
         }
 
         if (cmbCategory.getSelectedItem() == null) {
-            this.showMessage("sp.common.category.error", true, null);
+            this.showMessage("msj.error.category.error", true, null);
             cmbCategory.setFocus(true);
             return false;
         }
 
         if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.crud.product.name.error", true, null);
+            this.showMessage("msj.error.product.name.error", true, null);
             return false;
         }
 
         if (txtSymbol.getText().isEmpty()) {
             txtSymbol.setFocus(true);
-            this.showMessage("sp.crud.product.symbol.error", true, null);
+            this.showMessage("msj.error.product.symbol.error", true, null);
             return false;
         }
 
         if (txtReferenceCode.getText().isEmpty()) {
             txtReferenceCode.setFocus(true);
-            this.showMessage("sp.crud.product.referenceCode.error", true, null);
+            this.showMessage("msj.error.product.referenceCode.error", true, null);
             return false;
         }
 
         if (!(rEnabledYes.isChecked() || rEnabledNo.isChecked())) {
-            this.showMessage("sp.common.enabled.error", true, null);
+            this.showMessage("msj.error.product.enabled.error", true, null);
             rEnabledYes.setFocus(true);
             return false;
         }
         
         if (!(isDefaultYes.isChecked() || isDefaultNo.isChecked())) {
-            this.showMessage("sp.crud.product.isDefaultProduc.error", true, null);
+            this.showMessage("msj.error.product.isDefaultProduc.error", true, null);
             rEnabledYes.setFocus(true);
             return false;
         }
         
         if (!(isUsePrepaidCardYes.isChecked() || isUsePrepaidCardNo.isChecked())) {
-            this.showMessage("sp.crud.product.isUsePrepaidCard.error", true, null);
+            this.showMessage("msj.error.product.isUsePrepaidCard.error", true, null);
             rEnabledYes.setFocus(true);
             return false;
         }
 
         if (!(rIsFreeYes.isChecked() || rIsFreeNo.isChecked())) {
-            this.showMessage("sp.crud.product.isFree.error", true, null);
+            this.showMessage("msj.error.product.isFree.error", true, null);
             rIsFreeYes.setFocus(true);
             return false;
         }
 
         if (!(rIsAlocashProductYes.isChecked() || rIsAlocashProductNo.isChecked())) {
-            this.showMessage("sp.crud.product.isAlocashProduct.error", true, null);
+            this.showMessage("msj.error.product.isAlocashProduct.error", true, null);
             rIsAlocashProductYes.setFocus(true);
             return false;
         }
 
         if (!(rIsPayTopUpYes.isChecked() || rIsPayTopUpNo.isChecked())) {
-            this.showMessage("sp.crud.product.isPayTopUp.error", true, null);
+            this.showMessage("msj.error.product.isPayTopUp.error", true, null);
             rIsPayTopUpYes.setFocus(true);
             return false;
         }
 
         if (!(rIsExchangeProductYes.isChecked() || rIsExchangeProductNo.isChecked())) {
-            this.showMessage("sp.crud.product.isExchangeProduct.error", true, null);
+            this.showMessage("msj.error.product.isExchangeProduct.error", true, null);
             rIsExchangeProductYes.setFocus(true);
             return false;
         }
 
         if (!(rIsRemettenceYes.isChecked() || rIsRemettenceNo.isChecked())) {
-            this.showMessage("sp.crud.product.isRemettence.error", true, null);
+            this.showMessage("msj.error.product.isRemettence.error", true, null);
             rIsRemettenceYes.setFocus(true);
             return false;
         }
 
         if (!(rTaxIncludeYes.isChecked() || rTaxIncludeNo.isChecked())) {
-            this.showMessage("sp.crud.product.taxInclude.error", true, null);
+            this.showMessage("msj.error.product.taxInclude.error", true, null);
             rTaxIncludeYes.setFocus(true);
             return false;
         }
 
         if (!(rIsPaymentInfoYes.isChecked() || rIsPaymentInfoNo.isChecked())) {
-            this.showMessage("sp.crud.product.isPaymentInfo.error", true, null);
+            this.showMessage("msj.error.product.isPaymentInfo.error", true, null);
             rIsPaymentInfoYes.setFocus(true);
             return false;
         }
@@ -372,7 +372,7 @@ public class AdminProductController extends GenericAbstractAdminController {
             request1.setParam(product);
             product = productEJB.saveProduct(request1);
             productParent = product;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
                 tabCommissionByProduct.setDisabled(false);

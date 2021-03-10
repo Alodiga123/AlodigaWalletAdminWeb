@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
-<?page title="${c:l('sp.crud.profile.admin')}"?>
+<?page title="${c:l('wallet.common.profileAdmin')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminApplicantOFACBusinessLegal" title="${c:l('sp.crud.employeePhone.employee')}" width="950px" height="400px" apply="com.alodiga.wallet.admin.web.controllers.AdminApplicantOFACBusinessLegalController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winAdminApplicantOFACBusinessLegal" title="${c:l('wallet.common.employeePhone')}" width="950px" height="400px" apply="com.alodiga.wallet.admin.web.controllers.AdminApplicantOFACBusinessLegalController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
@@ -25,11 +25,11 @@
                                                         <column label="" width="290px"/>
                                                     </columns>
                                                     <rows>
-                                                        <group label="${c:l('sp.tab.businessAffiliationRequests')}"/> 
+                                                        <group label="${c:l('wallet.common.request')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.common.status')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.status')}" sclass="lblbold"/>
                                                         </row> 
                                                         
                                                         <row>
@@ -38,11 +38,11 @@
                                                             <label id="lblStatusRequest" value="" width="290px" style="color:#837E76;"/>
                                                         </row>
                                                         
-                                                        <group label="${c:l('sp.tab.affiliationRequestsGroup.ofac')}"/> 
+                                                        <group label="${c:l('wallet.affiliationRequestsGroup.ofac')}"/> 
                                                         <row>
-                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.name')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.documentType')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.identification.employee')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.crud.ofac.name')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.documentType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.identificationNumber')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblName" value="" width="250px" maxlength="60"/>
@@ -50,8 +50,8 @@
                                                             <label id="lblIdentificationNumber" value="" width="250px" maxlength="40"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.percentageMatch')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.businessAffiliationRequests.ofac.statusApplicant')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.crud.ofac.percentageMatch')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.status')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblPercentageMatch" value="" width="250px" maxlength="30"/>
@@ -67,8 +67,8 @@
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                         <!--Buttons-->
                                         <div align="right">
-                                            <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray"/>
+                                            <button  id="btnSave" width="150px" label="${c:l('wallet.actions.save')}" class="open orange"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('wallet.actions.back')}" class="open gray"/>
                                         </div>
                                     </vlayout>
                                 </div>

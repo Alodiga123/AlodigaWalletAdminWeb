@@ -24,9 +24,9 @@
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
                                             <hlayout>
-                                               <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
+                                               <toolbarbutton label="${c:l('wallet.page.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                |
-                                               <toolbarbutton label="${c:l('sp.specific.preference.list')}" onClick='Executions.sendRedirect(&quot;listSpecificsSetting.zul&quot;)'/>
+                                               <toolbarbutton label="${c:l('wallet.crud.specific.preference.list')}" onClick='Executions.sendRedirect(&quot;listSpecificsSetting.zul&quot;)'/>
                                                |
                                                <toolbarbutton id="tbbCurrentAction" label="${c:l('sp.crud.settings.admin')}"/>
                                             </hlayout>
@@ -36,11 +36,11 @@
                                             <vlayout>
                                           		  <hlayout>
                                                     <div align="left" width="400px">
-                                                        <label value="${c:l('sp.specific.preference.setting')}" sclass="lblbold"/>
+                                                        <label value="${c:l('wallet.crud.specific.preference.setting')}" sclass="lblbold"/>
                                                     </div> 
 	                                                <div align="right" width="485px">
 	                                                    <hlayout>
-	                                                        <label value="${c:l('sp.common.field.required.full')}" sclass="lblexample" />
+	                                                        <label value="${c:l('wallet.common.field.required.full')}" sclass="lblexample" />
 	                                                    </hlayout>
 	                                                </div>
 											 </hlayout>
@@ -51,19 +51,19 @@
                                                     </columns>
                                                     <rows>
                                                         <row>
-                                                        <label value="${c:l('sp.specific.preference.product')}" sclass="lblbold"/>  
+                                                        <label value="${c:l('wallet.common.product')}" sclass="lblbold"/>  
                                                             <hlayout>
                                                                 <combobox id="cmbProduct" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                          </row>
                                                          <row>
-                                                         <label value="${c:l('sp.specific.preference.transaction.type')}" sclass="lblbold"/>
+                                                         <label value="${c:l('wallet.common.transactionType')}" sclass="lblbold"/>
                                                              <hlayout>
                                                                 <combobox id="cmbTransactionType" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
                                                          </row>
                                                           <row>
-                                                          <label value="${c:l('sp.specific.preference.bussiness')}" sclass="lblbold"/>
+                                                          <label value="${c:l('wallet.common.bussiness')}" sclass="lblbold"/>
                                                              <hlayout>
                                                                <combobox id="cmbBusiness" width="250px" mold="rounded" readonly="true" />
                                                             </hlayout>
@@ -74,13 +74,13 @@
 
                                                <grid id="gridData" fixedLayout="true" mold="paging" pageSize="10">
                                                     <columns>
-                                                        <column label ="${c:l('sp.specific.preference.field')}" width="300px"/>
+                                                        <column label ="${c:l('wallet.common.preference')}" width="300px"/>
                                                         <column label ="${c:l('sp.crud.settings.main.value')}" width="180px"/>
-                                                        <column label="${c:l('sp.specific.preference.beginningDate')}" width="130px"/>
-                                                        <column label="${c:l('sp.specific.preference.endingDate')}" width="130px"/>
-                                                        <column label="${c:l('sp.specific.preference.percentage')}" width="85px"/>
-                                                        <column label ="${c:l('sp.specific.preference.spacific')}" width="85px"/>
-                                                        <column label ="${c:l('sp.specific.preference.enabled')}" width="85px"/>
+                                                        <column label="${c:l('wallet.crud.specific.preference.beginningDate')}" width="130px"/>
+                                                        <column label="${c:l('wallet.crud.specific.preference.endingDate')}" width="130px"/>
+                                                        <column label="${c:l('wallet.common.percentage')}" width="85px"/>
+                                                        <column label ="${c:l('wallet.common.specific')}" width="85px"/>
+                                                        <column label ="${c:l('wallet.common.active')}" width="85px"/>
                                                     </columns>
                                                      <rows id = "rowsGrid">                                                                      
                                                     
@@ -91,8 +91,8 @@
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                         <!--Buttons-->
                                         <div align="right">
-                                            <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listSpecificsSetting.zul&quot;)"/>
+                                            <button  id="btnSave" width="150px" label="${c:l('wallet.actions.save')}" class="open orange"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('wallet.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listSpecificsSetting.zul&quot;)"/>
                                         </div>
                                     </vlayout>
                                 </div>

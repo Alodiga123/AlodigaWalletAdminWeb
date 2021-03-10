@@ -8,7 +8,7 @@
                     <hlayout>
                         <div width="500px" align="left">
                             <hlayout>
-                                <label value="${c:l('sp.common.atc')}"/>
+                                <label value="${c:l('wallet.common.customerService')}"/>
                                 <separator/>
                                 <label id="lblAtcNumber"/>
                             </hlayout>

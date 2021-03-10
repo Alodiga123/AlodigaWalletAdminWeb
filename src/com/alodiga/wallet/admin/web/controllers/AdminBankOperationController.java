@@ -76,7 +76,7 @@ public class AdminBankOperationController extends GenericAbstractAdminController
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.bank.operaton.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.bank.operaton.view"));
                 break;           
             default:
                 break;

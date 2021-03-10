@@ -106,7 +106,7 @@ public class ManagementAdminReportController extends GenericAbstractController {
             userEjb = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
             currentUser = AccessControl.loadCurrentUser();
         } catch (Exception ex) {
-            this.showMessage("sp.error.general", true, ex);
+            this.showMessage("msj.error.general", true, ex);
         }
     }
 
@@ -137,9 +137,9 @@ public class ManagementAdminReportController extends GenericAbstractController {
         Comboitem item = new Comboitem();
         item.setValue(object);
         if (object.equals(trueVal)) {
-            item.setLabel(Labels.getLabel("sp.common.enabled"));
+            item.setLabel(Labels.getLabel("wallet.common.enabled"));
         } else {
-            item.setLabel(Labels.getLabel("sp.common.disabled"));
+            item.setLabel(Labels.getLabel("wallet.common.disabled"));
         }
         item.setParent(combo);
         item.setId(selectedId.toString());
@@ -208,8 +208,8 @@ public class ManagementAdminReportController extends GenericAbstractController {
                     List<String> tStatus = new ArrayList<String>();
                     //tStatus.add(TransactionStatus.APPROVED.toString());
                      Comboitem item1 = new Comboitem();
-                    item1.setValue(Labels.getLabel("sp.common.solicitud.all"));
-                    item1.setLabel(Labels.getLabel("sp.common.solicitud.all"));
+                    item1.setValue(Labels.getLabel("wallet.common.all"));
+                    item1.setLabel(Labels.getLabel("wallet.common.all"));
                     item1.setId(WebConstants.PREFIX_ALL_STORE);
                     item1.setParent(cmbTStatus);
                     cmbTStatus.setParent(rowParent);
@@ -237,7 +237,7 @@ public class ManagementAdminReportController extends GenericAbstractController {
             sql = auxReport.getQuery();
             pivotListbox();
         } catch (Exception ex) {
-            showMessage("sp.error.general", true, ex);
+            showMessage("msj.error.general", true, ex);
         }
     }
 
@@ -253,7 +253,7 @@ public class ManagementAdminReportController extends GenericAbstractController {
             auxReport = (Report) Sessions.getCurrent().getAttribute(WebConstants.SESSION_REPORT);
             exportExcel(lbxReport, file.toString() + ".xls");
         } catch (Exception ex) {
-            showMessage("sp.error.general", true, ex);
+            showMessage("msj.error.general", true, ex);
         }
     }
 
@@ -308,10 +308,10 @@ public class ManagementAdminReportController extends GenericAbstractController {
                     item.setParent(lbxReport);
                 }
                 if (rows.isEmpty()) {
-                    Messagebox.show(Labels.getLabel("sp.error.empty.list"), "Information", Messagebox.OK, Messagebox.INFORMATION);
+                    Messagebox.show(Labels.getLabel("msj.error.empty.list"), "Information", Messagebox.OK, Messagebox.INFORMATION);
                 }
             } catch (Exception ex) {
-                showMessage("sp.error.general", true, ex);
+                showMessage("msj.error.general", true, ex);
             } finally {
                 try {
                     if (conn != null) {
@@ -341,12 +341,12 @@ public class ManagementAdminReportController extends GenericAbstractController {
             listhead.setParent(lbxReport);
             try {
             }catch (Exception ex) {
-                showMessage("sp.error.general", true, ex);
+                showMessage("msj.error.general", true, ex);
             }
             java.util.Map<String, String> topUpWalletResponse = null;
             try {
             } catch (Exception ex) {
-                showMessage("sp.error.general", true, ex);
+                showMessage("msj.error.general", true, ex);
             }
     
             isWallet = false;
@@ -367,7 +367,7 @@ public class ManagementAdminReportController extends GenericAbstractController {
                 }
             } else if (currentRow.getLastChild() instanceof Combobox) {
                 Combobox cbx = (Combobox) currentRow.getLastChild();
-                if (cbx.getText() != null && !cbx.getText().equals(Labels.getLabel("sp.common.select"))) {
+                if (cbx.getText() != null && !cbx.getText().equals(Labels.getLabel("wallet.common.selectOption"))) {
                     if (cbx.getSelectedItem().getValue().equals(trueVal)) {
                         if (cbx.getSelectedItem().getValue().equals(trueVal)) {
                             paramRows.add("1");
@@ -375,7 +375,7 @@ public class ManagementAdminReportController extends GenericAbstractController {
                             paramRows.add("0");
                         }
                     } else {
-                        if (cbx.getSelectedItem().getValue().equals(Labels.getLabel("sp.common.solicitud.all"))) {
+                        if (cbx.getSelectedItem().getValue().equals(Labels.getLabel("wallet.common.all"))) {
                             isStoreAll = true;
                         }
                         String comboId;
@@ -489,7 +489,7 @@ public class ManagementAdminReportController extends GenericAbstractController {
 
         HSSFRow row2 = sheet.createRow(2);
         HSSFCell cell0 = row2.createCell(0);
-        cell0.setCellValue(Labels.getLabel("sp.file.commission.topUp.letterHead1"));
+        cell0.setCellValue(Labels.getLabel("wallet.page.title"));
 
         HSSFRow rowTitle = sheet.createRow(0);
         HSSFCell cellTitle = rowTitle.createCell(4);

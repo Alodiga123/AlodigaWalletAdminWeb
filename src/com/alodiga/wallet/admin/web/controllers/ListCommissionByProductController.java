@@ -127,7 +127,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             products = adminProduct.getProductParent();
         }
             String product =  products.getName();
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.product.title"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.common.product"));
             file.append(":");
             file.append(" ");
             file.append(product);
@@ -161,7 +161,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             final Window window = (Window) Executions.createComponents(adminPage, null, paramsPass);
             window.doModal();
         } catch (Exception ex) {
-            this.showMessage("sp.error.general", true, ex);
+            this.showMessage("msj.error.general", true, ex);
         }
     }
 
@@ -185,15 +185,15 @@ public class ListCommissionByProductController extends GenericAbstractListContro
                     value = numberFormat.format(commission.getValue());
                     item.appendChild(new Listcell(commission.getTransactionTypeId().getValue()));
                    if (commission.getIndApplicationCommission() == 1){
-                        apply = Labels.getLabel("sp.crud.commission.discount.amount");
+                        apply = Labels.getLabel("wallet.crud.commission.discount.amount");
                     } else {
-                        apply = Labels.getLabel("sp.crud.commission.additional.charge");
+                        apply = Labels.getLabel("wallet.crud.commission.additional.charge");
                     }
                     
                     if (commission.getIsPercentCommision() == 1) {
-                        comission = Labels.getLabel("sp.common.yes");
+                        comission = Labels.getLabel("wallet.common.yes");
                     } else {
-                        comission = Labels.getLabel("sp.common.no");
+                        comission = Labels.getLabel("wallet.common.no");
                     }
                     item.appendChild(new Listcell(apply));
                     item.appendChild(new Listcell(comission));
@@ -205,7 +205,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -222,7 +222,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         try {
             Button button = new Button();
             button.setImage("/images/icon-edit.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -248,7 +248,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
         try {
             Button button = new Button();
             button.setImage("/images/icon-invoice.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -298,7 +298,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -310,7 +310,7 @@ public class ListCommissionByProductController extends GenericAbstractListContro
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.commissions.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.commissions.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

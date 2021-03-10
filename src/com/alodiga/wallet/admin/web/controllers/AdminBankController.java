@@ -92,16 +92,16 @@ public class AdminBankController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (cmbCountry.getSelectedItem()  == null) {
             cmbCountry.setFocus(true);
-            this.showMessage("sp.error.countryNotSelected", true, null);     
+            this.showMessage("msj.error.countryNotSelected", true, null);     
         } else if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.crud.empty.bank", true, null);
+            this.showMessage("msj.error.empty.bank", true, null);
         } else if (txtCodeSwift.getText().isEmpty()) {
             txtCodeSwift.setFocus(true);
-            this.showMessage("sp.crud.empty.codeSwift", true, null);
+            this.showMessage("msj.error.empty.codeSwift", true, null);
         } else if (txtAba.getText().isEmpty()) {
             txtAba.setFocus(true);
-            this.showMessage("sp.crud.empty.codeAba", true, null);
+            this.showMessage("msj.error.empty.codeAba", true, null);
         } else {
             return true;
         }
@@ -128,7 +128,7 @@ public class AdminBankController extends GenericAbstractAdminController {
             bank = utilsEJB.saveBank(bank);
             bankParam = bank;
             eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

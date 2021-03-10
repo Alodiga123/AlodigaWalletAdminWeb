@@ -118,9 +118,9 @@ public class ListCommissionController extends GenericAbstractListController<Comm
                     item.appendChild(new Listcell(commission.getProductId().getName()));
                     item.appendChild(new Listcell(commission.getTransactionTypeId().getValue()));
                     if (commission.getIsPercentCommision() == 1) {
-                        comission = Labels.getLabel("sp.common.yes");
+                        comission = Labels.getLabel("wallet.common.yes");
                     }else{
-                        comission = Labels.getLabel("sp.common.no");
+                        comission = Labels.getLabel("wallet.common.no");
                     }
                     item.appendChild(new Listcell(comission));
                     item.appendChild(new Listcell(value));
@@ -131,7 +131,7 @@ public class ListCommissionController extends GenericAbstractListController<Comm
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -160,7 +160,7 @@ public class ListCommissionController extends GenericAbstractListController<Comm
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -169,7 +169,7 @@ public class ListCommissionController extends GenericAbstractListController<Comm
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.commissions.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.commissions.list"));
             AccessControl.saveAction(Permission.LIST_COMMISSION, "Se descargo listado de comisiones en formato excel");
         } catch (Exception ex) {
             showError(ex);

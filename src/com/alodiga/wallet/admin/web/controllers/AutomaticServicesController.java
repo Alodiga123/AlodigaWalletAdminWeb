@@ -37,13 +37,13 @@ public class AutomaticServicesController extends GenericAbstractController {
             showPPNExecutionDates();
         } catch (Exception ex) {
             ex.printStackTrace();
-            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+            lblInfo.setValue(Labels.getLabel("msj.error.general"));
         }
     }
 
     private void showPPNExecutionDates() {
         Date date1 = transactionTimerEJB.getNextExecutionDate();
-        lblDailyClosingDate.setValue(date1 != null ? date1.toString() : Labels.getLabel("sp.automatic.commission.noDate"));
+        lblDailyClosingDate.setValue(date1 != null ? date1.toString() : Labels.getLabel("wallet.crud.automatic.commission.noDate"));
         Long dailyInterval = transactionTimerEJB.getTimeoutInterval() / 86400000;// 86400000 Milisegundos en un dia
         lblDailyClosingInterval.setValue(dailyInterval.toString());
 
@@ -53,34 +53,34 @@ public class AutomaticServicesController extends GenericAbstractController {
     public void onClick$btnPPNRestart() {
         try {
         	transactionTimerEJB.restart();
-            lblInfo.setValue(Labels.getLabel("sp.automatic.commission.success"));
+            lblInfo.setValue(Labels.getLabel("wallet.crud.automatic.commission.success"));
             showPPNExecutionDates();
         } catch (Exception ex) {
             ex.printStackTrace();
-            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+            lblInfo.setValue(Labels.getLabel("msj.error.general"));
         }
     }
 
     public void onClick$btnPPNStop() {
         try {
         	transactionTimerEJB.stop();
-            lblInfo.setValue(Labels.getLabel("sp.automatic.commission.success"));
+            lblInfo.setValue(Labels.getLabel("wallet.crud.automatic.commission.success"));
             showPPNExecutionDates();
         } catch (Exception ex) {
             ex.printStackTrace();
-            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+            lblInfo.setValue(Labels.getLabel("msj.error.general"));
         }
     }
 
     public void onClick$btnPPNTimeout() {
         try {
         	transactionTimerEJB.forceTimeout();
-            String response = Labels.getLabel("sp.automatic.commission.timeoutMessage");
+            String response = Labels.getLabel("wallet.crud.automatic.commission.timeoutMessage");
             lblInfo.setValue(response);
             showPPNExecutionDates();
         } catch (Exception ex) {
             ex.printStackTrace();
-            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+            lblInfo.setValue(Labels.getLabel("msj.error.general"));
         }
     }
 
@@ -89,7 +89,7 @@ public class AutomaticServicesController extends GenericAbstractController {
             showPPNExecutionDates();
         } catch (Exception ex) {
             ex.printStackTrace();
-            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+            lblInfo.setValue(Labels.getLabel("msj.error.general"));
         }
     }
  

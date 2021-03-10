@@ -80,16 +80,16 @@ public class MyAccountController extends GenericAbstractAdminController {
 
         if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtLastName.getText().isEmpty()) {
             txtLastName.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtEmail.getText().isEmpty()) {
             txtEmail.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtPhoneNumber.getText().isEmpty()) {
             txtPhoneNumber.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else {
             return true;
         }
@@ -112,7 +112,7 @@ public class MyAccountController extends GenericAbstractAdminController {
                     user = userEJB.saveUser(request);
                     userParam = user;
                     Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
-                    this.showMessage("sp.common.save.update", false, null);
+                    this.showMessage("wallet.common.save.update", false, null);
                 } else if (user.getPassword().equals(Encoder.MD5(txtOldPassword.getText()))) {
                     if (txtNewPassword1.getText().equals(txtNewPassword2.getText())) {
                         user.setPassword(Encoder.MD5(txtNewPassword1.getText()));
@@ -126,20 +126,20 @@ public class MyAccountController extends GenericAbstractAdminController {
                         user = userEJB.saveUser(request);
                         userParam = user;
                         Sessions.getCurrent().setAttribute(WebConstants.SESSION_USER, user);
-                        this.showMessage("sp.common.save.update", false, null);
+                        this.showMessage("wallet.common.save.update", false, null);
                     } else {
 
-                        this.showMessage("sp.error.confirmationPasswordNotEqual", true, null);
+                        this.showMessage("msj.error.confirmationPasswordNotEqual", true, null);
                     }
                 } else {
-                    this.showMessage("sp.error.wrongPassword", true, null);
+                    this.showMessage("msj.error.wrongPassword", true, null);
                 }
             } else {
-                this.showMessage("sp.error.general", true, null);
+                this.showMessage("msj.error.general", true, null);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            this.showMessage("sp.error.general", true, null);
+            this.showMessage("msj.error.general", true, null);
         }
     }
 

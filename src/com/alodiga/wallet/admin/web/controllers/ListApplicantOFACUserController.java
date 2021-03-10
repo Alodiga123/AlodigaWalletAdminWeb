@@ -152,7 +152,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -208,7 +208,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -217,7 +217,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.businessAffiliationRequests.ofac.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.businessAffiliationRequests.ofac.list"));
             AccessControl.saveAction(Permission.LIST_APLICANT_OFAC, "Se descargo listado OFAC en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -288,8 +288,8 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 
                         getData();
                         loadList(personList);
-                        this.showMessage("sp.common.finishReviewOFAC", false, null);
-                    }
+	                    this.showMessage("wallet.msj.finishReviewOFAC", false, null);
+	                }
                 }
             }
         } catch (Exception ex) {
@@ -343,7 +343,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
             EJBRequest request = new EJBRequest();
             List<StatusApplicant> status = personEJB.getStatusApplicant(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbStatus);
             cmbStatus.setSelectedItem(item);
             for (int i = 0; i < status.size(); i++) {

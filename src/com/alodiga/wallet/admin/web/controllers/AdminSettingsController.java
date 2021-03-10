@@ -126,7 +126,7 @@ public class AdminSettingsController extends GenericAbstractController {
             if (children.get(1) instanceof Combobox) {   		
                 if (((Combobox) children.get(1)).getSelectedIndex() == -1 ) {
                         ((Combobox) children.get(1)).setFocus(true);
-                        this.showMessage("sp.error.smsprovider.notSelected", true, null);
+                        this.showMessage("msj.error.smsprovider.notSelected", true, null);
                         valid = false;
                         break;
                 }		
@@ -328,7 +328,7 @@ public class AdminSettingsController extends GenericAbstractController {
             preferencesEJB.savePreferenceValues(preferenceValueSave,preferenceControls);
             PreferenceManager preferenceManager = PreferenceManager.getInstance();
             preferenceManager.refresh();
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
         } catch (GeneralException ex) {
             //showError(ex);
         } catch (Exception ex) {
@@ -363,7 +363,7 @@ public class AdminSettingsController extends GenericAbstractController {
     			if (((Datebox)childrenHlayout.get(1)).getValue().getTime() >= ((Datebox)children.get(2)).getValue().getTime()) {
     				preferenceValue.setEndingDate(((Datebox)childrenHlayout.get(1)).getValue()); 			
     			} else {
-    				this.showMessage("sp.error.date.invalid", true, null);
+    				this.showMessage("msj.error.date.invalid", true, null);
     				throw new GeneralException("Error Invalid Dates");
     			}
     		}else

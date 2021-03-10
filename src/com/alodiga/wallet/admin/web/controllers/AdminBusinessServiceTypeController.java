@@ -50,13 +50,13 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.business.service.type.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.business.service.type.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.business.service.type.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.business.service.type.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.business.service.type.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.business.service.type.add"));
                 break;
             default:
                 break;
@@ -94,10 +94,10 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
     public boolean validateEmpty() {
         if (txtCode.getText().isEmpty()) {
             txtCode.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else {
             return true;
         }
@@ -115,7 +115,7 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
         } catch (Exception ex) {
             showError(ex);
         } if(businessServiceTypeList.size() > 0){
-                this.showMessage("sp.crud.businnesCategory.code.existBD", true, null);
+                this.showMessage("msj.error.businnesCategory.code.existBD", true, null);
                 txtCode.setFocus(true);
                 return false;
             }
@@ -136,7 +136,7 @@ public class AdminBusinessServiceTypeController extends GenericAbstractAdminCont
             businessServiceType.setDescription(txtDescription.getText());
             businessServiceType = utilsEJB.saveBusinessServiceType(businessServiceType);
             businessServiceParam = businessServiceType;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

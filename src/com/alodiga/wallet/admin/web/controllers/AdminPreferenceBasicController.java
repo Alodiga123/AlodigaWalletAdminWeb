@@ -46,13 +46,13 @@ public class AdminPreferenceBasicController extends GenericAbstractAdminControll
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferenceBasic.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferenceBasic.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferenceBasic.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferenceBasic.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.preferenceBasic.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.preferenceBasic.add"));
                 break;
             default:
                 break;
@@ -97,10 +97,10 @@ public class AdminPreferenceBasicController extends GenericAbstractAdminControll
     public Boolean validateEmpty() {
         if (txtPreferenceName.getText().isEmpty()) {
             txtPreferenceName.setFocus(true);
-            this.showMessage("sp.error.preferenceBasic.name", true, null);
+            this.showMessage("msj.error.preferenceBasic.name", true, null);
         }  else if (txtPreferenceDescription.getText().isEmpty()){
             txtPreferenceDescription.setFocus(true);
-            this.showMessage("sp.error.preferenceBasic.description", true, null);
+            this.showMessage("msj.error.preferenceBasic.description", true, null);
         } else {
             return true;
         }
@@ -129,7 +129,7 @@ public class AdminPreferenceBasicController extends GenericAbstractAdminControll
             preference.setEnabled(indEnable);
             preference = preferencesEJB.savePreference(preference);
             preferenceParam = preference;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

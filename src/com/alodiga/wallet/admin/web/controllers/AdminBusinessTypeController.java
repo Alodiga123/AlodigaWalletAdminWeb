@@ -102,10 +102,10 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
     public Boolean validateEmpty() {
         if (txtCode.getText().isEmpty()) {
             txtCode.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else {
             return true;
         }
@@ -187,7 +187,7 @@ public class AdminBusinessTypeController extends GenericAbstractAdminController 
                     }
                 }
             }
-            this.showMessage("sp.common.save.success", false, null);        
+            this.showMessage("wallet.msj.save.success", false, null);        
         } catch (Exception ex) {
             showError(ex);
         }

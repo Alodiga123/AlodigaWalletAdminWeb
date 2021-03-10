@@ -98,7 +98,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -147,7 +147,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -160,7 +160,7 @@ public class ListBusinessAffiliationRequestsController extends GenericAbstractLi
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.businessAffiliationRequests.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.businessAffiliationRequests.list"));
             AccessControl.saveAction(Permission.LIST_BUSINESS_AFFILIATION_REQUESTS, "Se descargo listado de Solicitud de Afiliacion en formato excel");
         } catch (Exception ex) {
             showError(ex);

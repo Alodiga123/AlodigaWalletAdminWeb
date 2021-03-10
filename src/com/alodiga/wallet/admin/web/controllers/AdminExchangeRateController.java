@@ -62,13 +62,13 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.exchangeRate.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.exchangeRate.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.exchangeRate.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.exchangeRate.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.exchangeRate.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.exchangeRate.add"));
                 break;
             default:
                 break;
@@ -114,13 +114,13 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         exchangeList.clear();
         if (cmbProduct.getSelectedItem() == null) {
             cmbProduct.setFocus(true);
-            this.showMessage("sp.error.products.notSelected", true, null);
+            this.showMessage("msj.error.products.notSelected", true, null);
         } else if (dblValue.getText().isEmpty()) {
             dblValue.setFocus(true);
-            this.showMessage("sp.error.value", true, null);
+            this.showMessage("msj.error.value", true, null);
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
-            this.showMessage("sp.error.date.beginningDate", true, null);
+            this.showMessage("msj.error.date.beginningDate", true, null);
         } else {
             return true;
         }
@@ -139,11 +139,11 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
         } catch (Exception ex) {
             showError(ex);
         }   if (exchangeList.size() > 0) {
-                this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
+                this.showMessage("msj.error.commission.commissionByProductAndType", true, null);
                 cmbProduct.setFocus(true);
                 return false;
             } else if ((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
-                this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
+                this.showMessage("msj.error.commission.todayComprareToBeginningDate", true, null);
                 return false;
             }
         return true;
@@ -168,7 +168,7 @@ public class AdminExchangeRateController extends GenericAbstractAdminController 
             exchangeRate = utilsEJB.saveExchangeRate(exchangeRate);
             exchangeRateParam = exchangeRate;
             eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

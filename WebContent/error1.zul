@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
-<?page title="${c:l('sp.common.page.title')}"?>
+<?page title="${c:l('wallet.page.title')}"?>
 <window width="560px" height="410px" id ="winError"
     apply="com.alodiga.wallet.admin.web.controllers.ErrorController"
     position="center,center" closable="true"
     action="show: slideDown;hide: slideUp">
     <vlayout>
-        <label value="${c:l('sp.error.title')}" sclass="lblbig"/>
+        <label value="${c:l('msj.error.title')}" sclass="lblbig"/>
 
         <separator/>
-        <label value="${c:l('sp.error.message')}" sclass="lblbold"/>
+        <label value="${c:l('msj.error.message')}" sclass="lblbold"/>
         <div height="300px" style="overflow:auto">
             <label id="lblError" sclass="lblreqlitle"/>
         </div>
-        <label value="${c:l('sp.error.note')}" sclass="lblbold"/>
-        <button id="btnClose" hflex="1" label="${c:l('sp.common.actions.close')}" class="open gray"/>
+        <label value="${c:l('msj.error.note')}" sclass="lblbold"/>
+        <button id="btnClose" hflex="1" label="${c:l('wallet.actions.close')}" class="open gray"/>
         <separator/>
     </vlayout>
 </window>

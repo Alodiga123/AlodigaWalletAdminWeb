@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
-<?page title="${c:l('sp.common.page.title')}"?>
+<?page title="${c:l('wallet.page.title')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 <?init class="com.alodiga.wallet.admin.web.security.InitiatorLoggedUser" ?>
 <zk xmlns:n="native">
@@ -23,9 +23,9 @@
                                         <div height="20px" width="100%" align="left">
                                             <!--Bread crumb-->
                                             <hlayout>
-                                                <toolbarbutton label="${c:l('sp.bread.crumb.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
+                                                <toolbarbutton label="${c:l('wallet.page.home')}" onClick='Executions.sendRedirect(&quot;home-admin.zul&quot;)'/>
                                                  |
-                                                <toolbarbutton label="${c:l('sp.auditActions.list')}" />
+                                                <toolbarbutton label="${c:l('wallet.crud.auditActions.list')}" />
                                             </hlayout>
                                         </div>
                                         <div height="5px" width="100%" style="background:#333;" align="left"></div>
@@ -33,26 +33,26 @@
                                             <!--Filters for Searching-->
                                             <vlayout>
                                                 <hlayout style="align:center" >
-                                                    <label value="${c:l('sp.auditActions.userLogin')}" sclass="lblbold"/>
-                                                    <textbox id="txtLogin" value="" width="100px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <label value="${c:l('wallet.common.login')}" sclass="lblbold"/>
+                                                    <textbox id="txtLogin" value="" width="100px" tooltiptext="${c:l('wallet.common.searchingFilter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.common.user')}" sclass="lblbold"/>
-                                                    <textbox id="txtName" value="" width="130px" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <label value="${c:l('wallet.common.user')}" sclass="lblbold"/>
+                                                    <textbox id="txtName" value="" width="130px" tooltiptext="${c:l('wallet.common.searchingFilter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.auditActions.functionality')}" sclass="lblbold"/>
+                                                    <label value="${c:l('wallet.common.functionality')}" sclass="lblbold"/>
                                                     <combobox id="cmbPermissions" width="100px" mold="rounded" readonly="true"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.common.beginningDateFrom')}"  sclass="lblbold"/>
-                                                    <datebox id="dtbBeginningDate"  format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <label value="${c:l('wallet.common.beginningDateFrom')}"  sclass="lblbold"/>
+                                                    <datebox id="dtbBeginningDate"  format="dd-MM-yyyy" tooltiptext="${c:l('wallet.common.searchingFilter')}"/>
                                                     <separator/>
-                                                    <label value="${c:l('sp.common.endingDateFrom')}" sclass="lblbold"/>
-                                                    <datebox id="dtbEndingDate" format="dd-MM-yyyy" tooltiptext="${c:l('sp.common.searching.filter')}"/>
+                                                    <label value="${c:l('wallet.common.endingDateFrom')}" sclass="lblbold"/>
+                                                    <datebox id="dtbEndingDate" format="dd-MM-yyyy" tooltiptext="${c:l('wallet.common.searchingFilter')}"/>
                                                 </hlayout>
                                                 <hlayout>
                                                     <!--Filters button-->
                                                     <div align="right" width="900px">
-                                                        <button id="btnSearch" label="${c:l('sp.common.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('sp.common.actions.search.filter.tooltip')}"/>
-                                                        <button id="btnClear" label="${c:l('sp.common.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('sp.common.actions.cancel.filter.tooltip')}"/>
+                                                        <button id="btnSearch" label="${c:l('wallet.actions.search')}" width="80px" class="open orange" tooltiptext="${c:l('wallet.actions.search.filter.tooltip')}"/>
+                                                        <button id="btnClear" label="${c:l('wallet.actions.cancel')}"  width="80px" class="open gray" tooltiptext="${c:l('wallet.actions.cancel.filter.tooltip')}"/>
                                                     </div>
                                                 </hlayout>
                                             </vlayout>
@@ -60,18 +60,18 @@
                                             <!--Record Listbox-->
                                             <listbox id="lbxRecords" fixedLayout="true" width="1080px" height="530px" mold="paging" pageSize="18">
                                                 <listhead>
-                                                    <listheader label="${c:l('sp.auditActions.userLogin')}" width="120px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.userName')}" width="140px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.functionality')}" width="260px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.date')}" width="150px" sort="auto"/>
-                                                    <listheader label="${c:l('sp.auditActions.info')}" width="300px" sort="auto"/>
+                                                    <listheader label="${c:l('wallet.common.login')}" width="120px" sort="auto"/>
+                                                    <listheader label="${c:l('wallet.common.name')}" width="140px" sort="auto"/>
+                                                    <listheader label="${c:l('wallet.common.functionality')}" width="260px" sort="auto"/>
+                                                    <listheader label="${c:l('wallet.common.date')}" width="150px" sort="auto"/>
+                                                    <listheader label="${c:l('wallet.crud.auditActions.info')}" width="300px" sort="auto"/>
                                                 </listhead>
                                             </listbox>
                                         </div>
                                         <!--Download button-->
                                           <label id="lblInfo" value="" sclass="lblbold" visible="false"/>
                                         <div align="left">
-                                            <button id="btnDownload" label="${c:l('sp.common.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('sp.common.actions.download.tooltip')}"/>
+                                            <button id="btnDownload" label="${c:l('wallet.actions.download')}"  width="90px" class="open gray" tooltiptext="${c:l('wallet.actions.download.tooltip')}"/>
                                         </div>
                                     </vlayout>
                                 </div>

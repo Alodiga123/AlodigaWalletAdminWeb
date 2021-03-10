@@ -114,13 +114,13 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
    
     public void onClick$rPercentCommisionYes(){
          if (rPercentCommisionYes.isChecked()) {
-            testPorcent.setValue(Labels.getLabel("sp.tab.comission.porcentcomission"));  
+            testPorcent.setValue(Labels.getLabel("wallet.crud.comission.porcentcomission"));  
         } 
     }
     
     public void onClick$rPercentCommisionNo(){
         if(rPercentCommisionNo.isChecked()) {
-            testPorcent.setValue(Labels.getLabel("sp.crud.commission.value")); 
+            testPorcent.setValue(Labels.getLabel("wallet.crud.commission.value")); 
          }
     }
 
@@ -163,15 +163,15 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
     public boolean validateEmpty() {
          if (cmbTrasactionType.getSelectedItem() == null) {
             cmbTrasactionType.setFocus(true);
-            this.showMessage("sp.error.trasacctionType.notSelected", true, null);
+            this.showMessage("msj.error.trasacctionType.notSelected", true, null);
         } else if ((!rPercentCommisionYes.isChecked()) && (!rPercentCommisionNo.isChecked())) {
-            this.showMessage("sp.error.percentCommision", true, null);
+            this.showMessage("msj.error.percentCommision", true, null);
         } else if (dblValue.getText().isEmpty()) {
             dblValue.setFocus(true);
-            this.showMessage("sp.error.value", true, null);
+            this.showMessage("msj.error.value", true, null);
         } else if (dtbBeginningDate.getText().isEmpty()) {
             dtbBeginningDate.setFocus(true);
-            this.showMessage("sp.error.date.beginningDate", true, null);
+            this.showMessage("msj.error.date.beginningDate", true, null);
         } else {
             return true;
         }
@@ -201,11 +201,11 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
         } catch (Exception ex) {
             showError(ex);
         } if (comissionList.size() > 0) {
-                this.showMessage("sp.tab.commission.error.commissionByProductAndType", true, null);
+                this.showMessage("msj.error.commission.commissionByProductAndType", true, null);
                 dblValue.setFocus(true);
                 return false;
         } else if((new Timestamp(new Date().getTime())).compareTo((dtbBeginningDate.getValue())) > 0){
-            this.showMessage("sp.tab.commission.error.todayComprareToBeginningDate", true, null);
+            this.showMessage("msj.error.commission.todayComprareToBeginningDate", true, null);
             return false;
         }
         return true;
@@ -247,7 +247,7 @@ public class AdminCommissionsByProductController extends GenericAbstractAdminCon
             commission = utilsEJB.saveCommission(commission);
             commissionParam = commission;
             eventType = WebConstants.EVENT_EDIT;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);
