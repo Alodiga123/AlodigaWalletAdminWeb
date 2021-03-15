@@ -65,6 +65,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
     private PersonEJB personEJB = null;
     private UtilsEJB utilsEJB = null;
     private List<Person> personList = null;
+    private List<NaturalPerson> naturalPersonList = null;
     private User currentUser;
     private Profile currentProfile;
     private AdminUsersAffiliationRequestsController naturalRequest;
@@ -165,6 +166,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
 
     public void getData() {
         personList = new ArrayList<Person>();
+        naturalPersonList = new ArrayList<NaturalPerson>();
         List<AffiliationRequest> affiliationRequest = new ArrayList<AffiliationRequest>();
         Long affiliationRequestId = 0L;
         try {
@@ -181,6 +183,16 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                     p.setAffiliationRequest(af);
                     personEJB.savePerson(p);
                     affiliationRequestId = af.getId();
+               }
+               if (p.getNaturalPerson() == null) {
+                   request = new EJBRequest();
+                   params = new HashMap<String, Object>();
+                   params.put(QueryConstants.PARAM_PERSON_ID, p.getId());
+                   request.setParams(params);
+                   naturalPersonList = personEJB.getNaturalPersonByPerson(request);
+                   for (NaturalPerson np: naturalPersonList) {
+                       p.setNaturalPerson(np);
+                   }
                }
                Long haveReviewOFAC = utilsEJB.haveReviewOFACByPerson(p.getId());
                if (haveReviewOFAC > 0) {
