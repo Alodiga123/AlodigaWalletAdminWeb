@@ -9,6 +9,7 @@ import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.enumeraciones.StatusApplicantE;
 import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
+import com.alodiga.wallet.common.enumeraciones.PersonClassificationE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
@@ -145,16 +146,16 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private void loadFieldP(Person person) {
         Float percentageMatchApplicant = 0.00F;
         try {
-            if (person.getPersonTypeId().getIndNaturalPerson() == true) {
+            if (person.getPersonClassificationId().getId() == PersonClassificationE.NABUAP.getId()) {
                 lblName.setValue(person.getNaturalPerson().getFirstName() + " " + person.getNaturalPerson().getLastName());
                 lblDocumentType.setValue(person.getNaturalPerson().getDocumentsPersonTypeId().getDescription());
                 lblIdentificationNumber.setValue(person.getNaturalPerson().getIdentificationNumber());
             } else {
-                if (person.getPersonClassificationId().getId() == 2) {
+                if (person.getPersonClassificationId().getId() == PersonClassificationE.LEBUAP.getId()) {
                     lblName.setValue(person.getLegalPerson().getBusinessName());
                     lblDocumentType.setValue(person.getLegalPerson().getDocumentsPersonTypeId().getDescription());
                     lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
-                } else if (person.getPersonClassificationId().getId() == 3) {
+                } else if(person.getPersonClassificationId().getId() == PersonClassificationE.LEGREP.getId()) {
                     if (getLegalPersonParam() != null) {
                         affiliationRequestParam = legalPersonParam.getPersonId().getAffiliationRequest();
                     }
@@ -339,11 +340,11 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         List<StatusApplicant> statusApplicants;
         try {
             statusApplicants = personEJB.getStatusApplicant(request1);
-            if (personParam.getPersonTypeId().getIndNaturalPerson() == true) {
+            if (personParam.getPersonTypeId().getId() == PersonClassificationE.NABUAP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getNaturalPerson().getStatusApplicantId().getId() : 0));
-            } else if (personParam.getPersonClassificationId().getId() == 2) {
+            } else if (personParam.getPersonClassificationId().getId() == PersonClassificationE.LEBUAP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalPerson().getStatusApplicantId().getId() : 0));
-            } else if (personParam.getPersonClassificationId().getId() == 3) {
+            } else if (personParam.getPersonClassificationId().getId() == PersonClassificationE.LEGREP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalRepresentative().getStatusApplicantId().getId() : 0));
             }
 
