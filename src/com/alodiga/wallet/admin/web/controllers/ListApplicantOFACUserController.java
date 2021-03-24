@@ -254,7 +254,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
         String firstName = "";
         float ofacPercentege = 0.1F;
         NaturalPerson naturalPerson = new NaturalPerson();
-        AffiliationRequest affiliatinRequest = new AffiliationRequest();
+        AffiliationRequest affiliationRequest = new AffiliationRequest();
         WSOFACMethodProxy ofac = new WSOFACMethodProxy();
         try {
             WsLoginResponse loginResponse = new WsLoginResponse();
@@ -265,7 +265,7 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                 Person applicant = (Person) item.getValue();
                 if (applicant.getPersonTypeId().getIndNaturalPerson() == true) {
                     if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
-                      affiliatinRequest = applicant.getAffiliationRequest();
+                      affiliationRequest = applicant.getAffiliationRequest();
                       naturalPerson = applicant.getNaturalPerson();
                       lastName = applicant.getNaturalPerson().getLastName();
                       firstName = applicant.getNaturalPerson().getFirstName();  
@@ -276,15 +276,15 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                         ofacResponse = ofac.queryOFACList(loginResponse.getToken(), lastName, firstName, null, null, null, null, ofacPercentege);
 
                         //Se guarda el registro de la revision OFAC
-                        saveReviewOfac(applicant, ofacResponse, affiliatinRequest);
+                        saveReviewOfac(applicant, ofacResponse, affiliationRequest);
 
                         //Actualizar el estatus del solicitante si tiene coincidencia con lista OFAC
                         if (applicant.getPersonTypeId().getIndNaturalPerson() == true) {
                             if (Double.parseDouble(ofacResponse.getPercentMatch()) <= 0.75) {
                                 naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST_OK));
-                                indBlackList = 1;
                             } else {
                                 naturalPerson.setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST));
+                                indBlackList = 1;
                             }
                             naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
                         } 
@@ -292,11 +292,11 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                     //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
                     if (ofacResponse != null) {
                         if (indBlackList == 1) {
-                            affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
+                            affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));
                         } else {
-                            affiliatinRequest.setStatusRequestId(getStatusAffiliationRequest(affiliatinRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                            affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
                         }
-                        affiliatinRequest = utilsEJB.saveAffiliationRequest(affiliatinRequest);
+                        affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
 
                         getData();
                         loadList(personList);
