@@ -163,9 +163,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                     lblIdentificationNumber.setValue(person.getLegalRepresentative().getIdentificationNumber());
                 } 
             }
-
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
-
             btnSave.setVisible(true);
         } catch (Exception ex) {
             showError(ex);
@@ -178,7 +176,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
 
     private void loadFieldR(ReviewOfac reviewOfac) {
         if (reviewOfac != null) {
-            lblPercentageMatch.setValue(String.valueOf(reviewOfac.getResultReview()));
+            lblPercentageMatch.setValue(String.valueOf(reviewOfac.getResultReview()*100));
             lblUser.setValue(reviewOfac.getUserReviewId().getFirstName() + " " + reviewOfac.getUserReviewId().getLastName());
             txtObservations.setValue(reviewOfac.getObservations());
         }

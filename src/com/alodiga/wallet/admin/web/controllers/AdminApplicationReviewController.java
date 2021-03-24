@@ -222,7 +222,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 if (collectionsByRequestList.size() > requestHasCollectionsRequestList.size()) {
                     indReviewCollectionIncomplete = 1;
                 }
-                short rejected = 0; 
+                boolean rejected = false; 
                 for (RequestHasCollectionRequest r : requestHasCollectionsRequestList) {
                     if (r.getIndApproved() == rejected) {
                         indReviewCollectionApproved = 1;

@@ -63,15 +63,9 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
         AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
-        
-//        if (adminRequestN.getBusinessAffiliationRequets().getBusinessPersonId().getNaturalPerson() != null) {
-//            afilationRequest = adminRequestN.getBusinessAffiliationRequets();
-//        }
-        
         if (adminRequestUser.getUserAffiliationRequets() != null){
             afilationRequest = adminRequestUser.getUserAffiliationRequets();
-        }
-        
+        }        
         initialize();
     }
 
@@ -97,10 +91,6 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         try {
             AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
             AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
-        
-//            if (adminRequestN.getBusinessAffiliationRequets().getBusinessPersonId().getNaturalPerson() != null) {
-//                afilationRequest = adminRequestN.getBusinessAffiliationRequets();
-//            }
             
             if (adminRequestUser.getUserAffiliationRequets() != null){
                 afilationRequest = adminRequestUser.getUserAffiliationRequets();
@@ -187,39 +177,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
                     affiliation.setUpdateDate(new Timestamp(new Date().getTime()));
                     affiliation = utilsEJB.saveAffiliationRequest(affiliation);
                 }
-  
-            //Business Natural Person
             } 
-//            else if (afilationRequest.getBusinessPersonId().getNaturalPerson() != null) {
-//                //Modificar el Estatus del solicitante
-//                naturalPerson = afilationRequest.getBusinessPersonId().getNaturalPerson();
-//                naturalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
-//                naturalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
-//                naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
-//                
-//                if(status.getCode().equals(StatusApplicantE.LISNOK.getStatusApplicantCode())){
-//                    // Obtener el estatus de la solicitud 
-//                    EJBRequest request = new EJBRequest();
-//                    request.setParam(StatusRequestE.APLINE.getId());
-//                    statusRequest = utilsEJB.loadStatusRequest(request);
-//                    
-//                    // Modificar el Estatus de la solicitud 
-//                    affiliation.setStatusRequestId(statusRequest);
-//                    affiliation.setUpdateDate(new Timestamp(new Date().getTime()));
-//                    affiliation = utilsEJB.saveAffiliationRequest(affiliation);
-//                
-//                } else if(status.getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())){
-//                    // Obtener el estatus de la solicitud 
-//                    EJBRequest request = new EJBRequest();
-//                    request.setParam(StatusRequestE.RELINE.getId());
-//                    statusRequest = utilsEJB.loadStatusRequest(request);
-//                    
-//                    // Modificar el Estatus de la solicitud 
-//                    affiliation.setStatusRequestId(statusRequest);
-//                    affiliation.setUpdateDate(new Timestamp(new Date().getTime()));
-//                    affiliation = utilsEJB.saveAffiliationRequest(affiliation);
-//                }
-//            }
             this.showMessage("wallet.msj.save.success", false, null);
         } catch (Exception ex) {
             showError(ex);
@@ -227,6 +185,8 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     }    
     
     public void blockFields() {
+        cmbStatusApplicant.setDisabled(true);
+        btnSave.setVisible(false);
     }
     
     public Boolean validateEmpty(){
@@ -258,9 +218,11 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
                 if(afilationRequest.getBusinessPersonId() != null){
                     loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
                     loadCmbStatusApplicant(eventType);
+                    blockFields();
                 } else if(afilationRequest.getUserRegisterUnifiedId() != null){
                     loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
                     loadCmbStatusApplicant(eventType);
+                    blockFields();
                 }
                 break;
             case WebConstants.EVENT_VIEW:

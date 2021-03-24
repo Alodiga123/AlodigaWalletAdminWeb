@@ -39,8 +39,8 @@
                                                     <tabs>
                                                         <tab id="tabUserAffiliationRequests" label="${c:l('wallet.common.request')}" />
                                                         <tab id="tabAddress" label="${c:l('wallet.common.address')}" />
-                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('wallet.common.reviewCollections')}" />
                                                         <tab id="tabOfac" label="${c:l('wallet.common.ofac')}" />
+                                                        <tab id="tabCollectionAffiliationRequests" label="${c:l('wallet.common.reviewCollections')}" />                                                        
                                                         <tab id="tabReview" label="${c:l('wallet.common.requestToApprove')}"/>
                                                     </tabs>
                                                     <tabpanels>
@@ -51,11 +51,11 @@
                                                             <include src="listAddress.zul"/>
                                                         </tabpanel>
                                                         <tabpanel>
-                                                            <include src="listCollectionsAffiliationRequest.zul"/>
-                                                        </tabpanel>
-                                                        <tabpanel>
                                                             <include src="adminApplicantOFAC.zul"/>
                                                         </tabpanel>
+                                                        <tabpanel>
+                                                            <include src="listCollectionsAffiliationRequest.zul"/>
+                                                        </tabpanel>                                                        
                                                         <tabpanel>
                                                             <include src="adminApplicationReview.zul"/>
                                                         </tabpanel>
