@@ -56,6 +56,7 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
     private Tab tabUserAffiliationRequests;
     private Tab tabOfac;
     private Tab tabReview;
+    private Tab tabCollectionAffiliationRequests;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -77,11 +78,13 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 tbbTitle.setLabel(Labels.getLabel("wallet.crud.userAffiliationRequests.edit"));
+                activateTabCollectionAffiliationRequests();
                 activateTabOfac();
                 activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
                 tbbTitle.setLabel(Labels.getLabel("wallet.crud.userAffiliationRequests.view"));
+                activateTabCollectionAffiliationRequests();
                 activateTabOfac();
                 activateTabReview();
                 break;
@@ -243,8 +246,8 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
     }
     
     public void activateTabOfac(){
-         if((userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECCOM.getStatusRequestCode())) ||
-             (userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode()))){
+         if((userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode())) || 
+            (userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RELINE.getStatusRequestCode()))){
             tabOfac.setDisabled(false);
          } else {
             tabOfac.setDisabled(true);
@@ -252,8 +255,19 @@ public class AdminUsersAffiliationRequestsController extends GenericAbstractAdmi
   
     }
     
+    public void activateTabCollectionAffiliationRequests(){
+         if((userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode()))) {
+            tabCollectionAffiliationRequests.setDisabled(false);
+         } else {
+            tabCollectionAffiliationRequests.setDisabled(true); 
+         }
+  
+    }
+    
     public void activateTabReview(){
-         if(userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode())){
+         if((userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECCOM.getStatusRequestCode())) ||
+            (userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RELINE.getStatusRequestCode())) ||
+            (userAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECINC.getStatusRequestCode()))) {
             tabReview.setDisabled(false);
          } else {
             tabReview.setDisabled(true);

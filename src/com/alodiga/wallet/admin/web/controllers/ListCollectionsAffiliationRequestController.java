@@ -177,7 +177,7 @@ public class ListCollectionsAffiliationRequestController extends GenericAbstract
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getCountryId().getName()));
                     item.appendChild(new Listcell(collectionsRequest.getCollectionsRequestId().getCollectionTypeId().getDescription()));
                     if(collectionsRequest.getIndApproved() != null){
-                       if (collectionsRequest.getIndApproved() == 1) {
+                       if (collectionsRequest.getIndApproved() == true) {
                             indAprroved = Labels.getLabel("wallet.common.approveds");
                         } else {
                             indAprroved = Labels.getLabel("wallet.common.rejecteds");

@@ -154,8 +154,6 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblTelephone.setValue(businessSource.getPhoneNumber());
-                lblEmail.setValue(businessSource.getEmail());
-//                lblUserDocumentType.setValue();
                 lblUserDocumentNumber.setValue(businessSource.getIdentification());
             }            
             
@@ -198,7 +196,9 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             
             //Datos de la operación bancaria
             lblBank.setValue(manualWithdrawalApproval.getBankOperationId().getBankId().getName());
-            lblBankAccount.setValue(manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber());
+            if (manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber() != null) {
+                lblBankAccount.setValue(manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber());
+            }            
             if (manualWithdrawalApproval.getBankOperationId() != null) {
                 txtBankNumber.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationNumber());
             }
@@ -234,13 +234,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         btnSave.setVisible(false);
     }
 
-    public Boolean validateEmpty() {
-
-        Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String toDay = formatter.format(currentDate);
-        String dateBankOperation = formatter.format(dtbBankOperationDate.getValue());
-        
+    public Boolean validateEmpty() {        
         if (dtbApprovedRequestDate.getText().isEmpty()) {
             dtbApprovedRequestDate.setFocus(true);
             this.showMessage("msj.error.date.approvedRequestDate", true, null);
@@ -249,20 +243,32 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         } else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
             this.showMessage("msj.error.observations", true, null);
-        } else if (txtBankNumber.getText().isEmpty()) {
+        } else if (txtBankNumber.getText().isEmpty() || txtBankNumber.getText() == "") {
             txtBankNumber.setFocus(true);
             this.showMessage("msj.error.date.bankNumberOperation", true, null);
         } else if (txtResponsible.getText().isEmpty()) {
             txtResponsible.setFocus(true);
             this.showMessage("msj.error.date.responsibleBankOperation", true, null);
-        } else if (dtbApprovedRequestDate.getText().isEmpty()) {
-            txtObservations.setFocus(true);
-            this.showMessage("msj.error.date.bankRequestDate", true, null);
-        } else if(!toDay.equals(dateBankOperation)){
-            this.showMessage("msj.error.date.dateBankOperation", true, null);
+        } else if (dtbBankOperationDate.getText().isEmpty()) {
+            dtbBankOperationDate.setFocus(true);
+            this.showMessage("msj.error.error.date.bankOperationDate", true, null);
         } else {
             return true;
         }
+        return false;
+    }
+    
+    public boolean validateManualWithdrawal() {
+        Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String toDay = formatter.format(currentDate);
+        String dateBankOperation = formatter.format(dtbBankOperationDate.getValue());;
+        
+        if(!toDay.equals(dateBankOperation)){
+            this.showMessage("msj.error.date.dateBankOperation", true, null);            
+        } else {
+            return true;
+        }        
         return false;
     }
     
@@ -301,7 +307,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             bankOperation.setResponsible(txtResponsible.getText());
             bankOperation.setBankOperationDate(dtbBankOperationDate.getValue());
             bankOperation.setUpdateDate(new Timestamp(new Date().getTime()));
-//            bankOperation = utilsEJB.saveBankOperation(bankOperation);
+            bankOperation = utilsEJB.saveBankOperation(bankOperation);
             
             //Se actualiza el estatus de la solicitud de aprobación y el saldo del usuario en la billetera
             manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
@@ -311,7 +317,6 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApproval.setIndApproveRequest(indApproved);
             manualWithdrawalApproval.setObservations(txtObservations.getText());
             manualWithdrawalApproval.setUserApprovedRequestId(user);
-//            manualWithdrawalApproval = productEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval);
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
                
@@ -337,7 +342,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
 
     public void onClick$btnSave() {
         if (validateEmpty()) {
-            switch (eventType) {
+            if (validateManualWithdrawal()) {
+                switch (eventType) {
                 case WebConstants.EVENT_ADD:
                     saveManualWithdrawalApproval(null);
                     break;
@@ -346,7 +352,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                     break;
                 default:
                     break;
-            }
+                }
+            }            
         }
     }
 

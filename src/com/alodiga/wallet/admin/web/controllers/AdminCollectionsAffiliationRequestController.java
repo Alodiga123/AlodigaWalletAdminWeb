@@ -134,7 +134,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     private void loadFields(RequestHasCollectionRequest requestHasCollectionsRequest) {
         if (requestHasCollectionsRequest != null) {
             try {
-            	short approved=1; 
+            	boolean approved=true; 
             	if (requestHasCollectionsRequest.getIndApproved()!=null) {
 	                if (requestHasCollectionsRequest.getIndApproved()==approved) {
 	                    rApprovedYes.setChecked(true);
@@ -180,7 +180,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     }
 
     private void saveRequest(RequestHasCollectionRequest _requestHasCollectionsRequest) {
-    	short approved = 1;
+    	boolean approved = true;
         try {
         	RequestHasCollectionRequest requestHasCollectionsRequest = null;
 
@@ -188,9 +188,9 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
                 requestHasCollectionsRequest = _requestHasCollectionsRequest;
             } 
             if (rApprovedYes.isChecked()) {
-            	approved = 1;
+            	approved = true;
             } else {
-            	approved = 0;
+            	approved = false;
             }
 
             //Guarda la solicitud en requestHasCollectionsRequest
