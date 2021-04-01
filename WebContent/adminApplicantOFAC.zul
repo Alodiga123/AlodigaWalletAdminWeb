@@ -54,7 +54,7 @@
                                                         </row>
                                                         <row>
                                                             <label id="lblPercentageMatch" value="" width="250px" maxlength="30"/>
-                                                            <combobox id="cmbStatusApplicant" width="200px" mold="rounded" readonly="true"/>
+                                                            <label id="lblStatusApplicant" value="" width="250px" maxlength="30"/>
                                                         </row>                                                       
                                                     </rows>
                                                 </grid>

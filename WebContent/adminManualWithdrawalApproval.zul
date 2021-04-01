@@ -68,7 +68,7 @@
                                                         
                                                         <row>
                                                             <label value="${c:l('wallet.crud.manualWithdrawalApproval.amount')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.manualWithdrawalApproval.commision')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.crud.manualWithdrawalApproval.commision')}" sclass="lblbold"/>
                                                             <label value="${c:l('wallet.crud.manualWithdrawalApproval.transactionConcept')}" sclass="lblbold"/>
                                                         </row>
                                                         
