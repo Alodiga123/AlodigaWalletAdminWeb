@@ -194,18 +194,20 @@ public class ListApplicantOFACUserController extends GenericAbstractListControll
                        p.setNaturalPerson(np);
                    }
                }
-               Long haveReviewOFAC = utilsEJB.haveReviewOFACByPerson(p.getId());
-               if (haveReviewOFAC > 0) {
-                   request = new EJBRequest();
-                   params = new HashMap();
-                   params.put(Constants.PERSON_KEY, p.getId());
-                   params.put(Constants.AFFILIATION_REQUEST_KEY, affiliationRequestId);
-                   request.setParams(params);
-                   List<ReviewOfac> reviewOFAC = utilsEJB.getReviewOfacByRequest(request);
-                   for (ReviewOfac r: reviewOFAC) {
-                        p.setReviewOfac(r);
-                    }
-               }
+               if (p.getReviewOfac() == null) {
+                   Long haveReviewOFAC = utilsEJB.haveReviewOFACByPerson(p.getId());
+                   if (haveReviewOFAC > 0) {
+                       request = new EJBRequest();
+                       params = new HashMap();
+                       params.put(Constants.PERSON_KEY, p.getId());
+                       params.put(Constants.AFFILIATION_REQUEST_KEY, affiliationRequestId);
+                       request.setParams(params);
+                       List<ReviewOfac> reviewOFAC = utilsEJB.getReviewOfacByRequest(request);
+                       for (ReviewOfac r: reviewOFAC) {
+                            p.setReviewOfac(r);
+                        }
+                   }
+               }               
             }
         } catch (NullParameterException ex) {
             showError(ex);

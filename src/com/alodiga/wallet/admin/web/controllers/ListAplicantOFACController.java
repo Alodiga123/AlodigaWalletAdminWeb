@@ -357,15 +357,15 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                         int indBlackListLegalPerson= 0;
                         Person person = personEJB.searchPersonByLegalPersonId(applicant.getLegalPerson().getId());
     	                if (person!=null && !person.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())) {
-    	                	if (person.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())) {
-                                    indBlackListLegalPerson = 1;
-    	                	}		 
-                                if (indBlackList == 1 || indBlackListLegalPerson ==1) {
-                                    affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));
-                                } else {
-                                    affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-                                }
-                                affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+                            if (person.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())) {
+                                indBlackListLegalPerson = 1;
+                            }		 
+                            if (indBlackList == 0 && indBlackListLegalPerson ==0) {
+                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                            } else {
+                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));
+                            }
+                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
     	                } 
                     } 
                 } else if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
@@ -404,7 +404,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             if (legalPersons.get(0).getStatusApplicantId().getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())) {
                                 indBlackListLegalPerson = 1;
                             }		 
-                            if (indBlackList == 1 || indBlackListLegalPerson ==1) {
+                            if (indBlackList == 0 && indBlackListLegalPerson ==0) {
                                 affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
                             } else {
                                 affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));

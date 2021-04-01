@@ -5,6 +5,7 @@ import org.zkoss.zk.ui.Sessions;
 import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminController;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.PersonEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.model.AffiliationRequest;
 import com.alodiga.wallet.common.model.Person;
@@ -53,6 +54,9 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
     public static AffiliationRequest businessAffiliationRequestParent = null;
     private Integer eventType;
     private Tab tabBusinessAffiliationRequests;
+    private Tab tabCollectionAffiliationRequests;
+    private Tab tabOfac;
+    private Tab tabReview;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -74,9 +78,15 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
                 tbbTitle.setLabel(Labels.getLabel("wallet.crud.businessAffiliationRequests.edit"));
+                activateTabCollectionAffiliationRequests();
+                activateTabOfac();
+                activateTabReview();
                 break;
             case WebConstants.EVENT_VIEW:
                 tbbTitle.setLabel(Labels.getLabel("wallet.crud.businessAffiliationRequests.view"));
+                activateTabCollectionAffiliationRequests();
+                activateTabOfac();
+                activateTabReview();
                 break;
             case WebConstants.EVENT_ADD:
                 tbbTitle.setLabel(Labels.getLabel("wallet.crud.businessAffiliationRequests.add"));
@@ -197,5 +207,34 @@ public class AdminBusinnessAffiliationRequestsNaturalController extends GenericA
             default:
                 break;
         }
+    }
+    
+    public void activateTabOfac(){
+         if((businessAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode())) || 
+            (businessAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RELINE.getStatusRequestCode()))){
+            tabOfac.setDisabled(false);
+         } else {
+            tabOfac.setDisabled(true);
+         }
+  
+    }
+    
+    public void activateTabCollectionAffiliationRequests(){
+         if((businessAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.APLINE.getStatusRequestCode()))) {
+            tabCollectionAffiliationRequests.setDisabled(false);
+         } else {
+            tabCollectionAffiliationRequests.setDisabled(true); 
+         }
+  
+    }
+    
+    public void activateTabReview(){
+         if((businessAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECCOM.getStatusRequestCode())) ||
+            (businessAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RELINE.getStatusRequestCode())) ||
+            (businessAffiliationRequestParam.getStatusRequestId().getCode().equals(StatusRequestE.RECINC.getStatusRequestCode()))) {
+            tabReview.setDisabled(false);
+         } else {
+            tabReview.setDisabled(true);
+         }  
     }
 }

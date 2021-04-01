@@ -45,7 +45,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     private Label lblDocumentType;
     private Label lblIdentificationNumber;
     private Label lblPercentageMatch;
-    private Combobox cmbStatusApplicant;
+    private Label lblStatusApplicant;
     private PersonEJB personEJB = null;
     private UtilsEJB utilsEJB = null;
     private NaturalPerson naturalPersonParam;
@@ -109,6 +109,7 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
             lblIdentificationNumber.setValue(applicant.getIdentificationNumber());
             percentageMatchApplicant = getReviewOFAC(applicant).getResultReview()*100;
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
+            lblStatusApplicant.setValue(applicant.getStatusApplicantId().getDescription());
 
         } catch (Exception ex) {
             showError(ex);
@@ -145,14 +146,14 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
             } else {
                 affiliation  = new AffiliationRequest();
             }
-            StatusApplicant status = (StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue();
+            StatusApplicant status = afilationRequest.getBusinessPersonId().getNaturalPerson().getStatusApplicantId();
                 
             //Usuarios de la Billetera
             if(afilationRequest.getUserRegisterUnifiedId() != null){
                 //Modificar el Estatus del solicitante
                 naturalPerson = afilationRequest.getUserRegisterUnifiedId().getNaturalPerson();
                 naturalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
-                naturalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
+                naturalPerson.setStatusApplicantId(status);
                 naturalPerson = personEJB.saveNaturalPerson(naturalPerson); 
                 
                 if(status.getCode().equals(StatusApplicantE.LISNOK.getStatusApplicantCode())){
@@ -185,7 +186,6 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     }    
     
     public void blockFields() {
-        cmbStatusApplicant.setDisabled(true);
         btnSave.setVisible(false);
     }
     
@@ -217,11 +217,9 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
             case WebConstants.EVENT_EDIT:
                 if(afilationRequest.getBusinessPersonId() != null){
                     loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
-                    loadCmbStatusApplicant(eventType);
                     blockFields();
                 } else if(afilationRequest.getUserRegisterUnifiedId() != null){
                     loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
-                    loadCmbStatusApplicant(eventType);
                     blockFields();
                 }
                 break;
@@ -229,38 +227,11 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
                 if(afilationRequest.getBusinessPersonId() != null){
                     loadFields(afilationRequest.getBusinessPersonId().getNaturalPerson());
                     blockFields();
-                    loadCmbStatusApplicant(eventType);
                 } else if(afilationRequest.getUserRegisterUnifiedId() != null){
                     loadFields(afilationRequest.getUserRegisterUnifiedId().getNaturalPerson());
                     blockFields();
-                    loadCmbStatusApplicant(eventType);
                 }
-
                 break;
-        }
-    }
-    
-    private void loadCmbStatusApplicant(Integer evenInteger) {
-        EJBRequest request1 = new EJBRequest();
-        List<StatusApplicant> statusApplicants;
-        try {
-            statusApplicants = personEJB.getStatusApplicantOFAC(request1);
-            if (afilationRequest.getUserRegisterUnifiedId() != null) {
-                    loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(afilationRequest != null ? afilationRequest.getUserRegisterUnifiedId().getNaturalPerson().getStatusApplicantId().getId() : 0));
-            } else if(afilationRequest.getBusinessPersonId() != null){
-                if(afilationRequest.getBusinessPersonId().getPersonTypeId().getIndNaturalPerson() == true){
-                    loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(afilationRequest != null ? afilationRequest.getBusinessPersonId().getNaturalPerson().getStatusApplicantId().getId() : 0));
-                } 
-            } 
-        } catch (EmptyListException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (GeneralException ex) {
-            showError(ex);
-            ex.printStackTrace();
-        } catch (NullParameterException ex) {
-            showError(ex);
-            ex.printStackTrace();
         }
     }
  

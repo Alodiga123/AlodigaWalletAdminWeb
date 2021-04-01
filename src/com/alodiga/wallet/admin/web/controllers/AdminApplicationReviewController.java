@@ -36,6 +36,8 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Textbox;
+import com.alodiga.businessportal.ws.APIBusinessPortalWSProxy;
+import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 
 public class AdminApplicationReviewController extends GenericAbstractAdminController {
 
@@ -178,6 +180,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
     private void saveReviewCollectionsRequest(ReviewAffiliationRequest _reviewAffiliationRequest) {
         try {
             ReviewAffiliationRequest reviewAffiliationRequest = null;
+            APIBusinessPortalWSProxy apiBusinessPortalWSProxy = new APIBusinessPortalWSProxy();
             boolean indApproved;
             int indReviewCollectionApproved = 0;
             int indReviewCollectionIncomplete = 0;
@@ -242,6 +245,14 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             reviewAffiliationRequest.setReviewTypeId(reviewType);
             reviewAffiliationRequest.setCreateDate(new Timestamp(new Date().getTime()));
             reviewAffiliationRequest = utilsEJB.saveReviewAffiliationRequest(reviewAffiliationRequest);
+            
+            if (reviewAffiliationRequest.getAffiliationRequestId().getRequestTypeId().getCode().equals(RequestTypeE.SOAFNE.getRequestTypeCode())) {
+                if (rApprovedYes.isChecked()) {
+                    apiBusinessPortalWSProxy.acceptRegister(reviewAffiliationRequest.getAffiliationRequestId().getId());
+                } else {
+                    apiBusinessPortalWSProxy.rejectRegister(reviewAffiliationRequest.getAffiliationRequestId().getId());
+                }
+            }            
 
             //Si los recaudos están incompletos, se rechaza la solicitud
             if (indReviewCollectionIncomplete == 1) {
