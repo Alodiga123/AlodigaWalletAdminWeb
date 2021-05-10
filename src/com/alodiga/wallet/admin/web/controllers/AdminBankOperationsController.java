@@ -92,7 +92,7 @@ public class AdminBankOperationsController extends GenericAbstractAdminControlle
             if (bankOperation.getPaymentTypeId() != null){
                 lblPayType.setValue(bankOperation.getPaymentTypeId().getName()); 
             } else {
-                lblPayType.setValue(Labels.getLabel("sp.crud.transaction.empty"));
+                lblPayType.setValue(Labels.getLabel("wallet.common.emptySymbol"));
             }
             lblTransactionNumber.setValue(bankOperation.getTransactionId().getTransactionNumber());
             lblTransactionDate.setValue(bankOperation.getTransactionId().getCreationDate().toString());

@@ -37,7 +37,7 @@
 //        try {
 //            userEJB = (UserEJB) EJBServiceLocator.getInstance().get(EjbConstants.USER_EJB);
 //        } catch (Exception e) {
-//            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+//            lblInfo.setValue(Labels.getLabel("msj.error.general"));
 //        }
 //    }
 //
@@ -50,12 +50,12 @@
 //                request.setParams(params);
 //                user = userEJB.loadUserByLogin(request);
 //                AccessControl.generateNewPassword(user, false);
-//                lblInfo.setValue(Labels.getLabel("sp.common.recoveryPassword.success"));
+//                lblInfo.setValue(Labels.getLabel("wallet.msj.recoveryPassword.success"));
 //            } catch (RegisterNotFoundException e) {
-//                lblInfo.setValue(Labels.getLabel("sp.common.recoveryPassword.notFound"));
+//                lblInfo.setValue(Labels.getLabel("wallet.msj.recoveryPassword.notFound"));
 //            } catch (Exception e) {
 //                e.printStackTrace();
-//                lblInfo.setValue(Labels.getLabel("sp.error.general"));
+//                lblInfo.setValue(Labels.getLabel("msj.error.general"));
 //            }
 //        }
 //    }
@@ -64,7 +64,7 @@
 //        Boolean valid = true;
 //        if (txtLogin.getText().isEmpty()) {
 //            valid = false;
-//            lblInfo.setValue(Labels.getLabel("sp.error.field.cannotNull"));
+//            lblInfo.setValue(Labels.getLabel("msj.error.field.cannotNull"));
 //            txtLogin.setFocus(true);
 //        }
 //        return valid;

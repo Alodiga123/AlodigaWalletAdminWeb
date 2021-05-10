@@ -104,13 +104,13 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     public boolean validateEmpty() {
         if (cmbProduct.getSelectedIndex() == -1) {
         	cmbProduct.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (cmbTransactionType.getSelectedIndex() == -1) {
         	cmbTransactionType.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         }  else if (cmbBusiness.getSelectedIndex() == -1) {
         	cmbBusiness.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         }
         List<Component> childrens = rowsGrid.getChildren();
         int i=0;
@@ -121,14 +121,14 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
         	if (children.get(1) instanceof Combobox) {   		
         		if (((Combobox) children.get(1)).getSelectedIndex() == -1 ) {
         			((Combobox) children.get(1)).setFocus(true);
-        			this.showMessage("sp.error.smsprovider.notSelected", true, null);
+        			this.showMessage("msj.error.smsprovider.notSelected", true, null);
         			valid = false;
         			break;
         		}		
         	}else if (children.get(1) instanceof Textbox) {
         		if (((Textbox)children.get(1)).getText().isEmpty()) {
         			((Textbox)children.get(1)).setFocus(true);
-        			this.showMessage("sp.error.field.cannotNull", true, null); 
+        			this.showMessage("msj.error.field.cannotNull", true, null); 
         			valid = false;
         			break;
 
@@ -198,7 +198,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
  	                	endinngDate.setParent(hlayout);	  
  	                	hlayout.setParent(row);
  	                	Checkbox percentage = new Checkbox();
- 	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
  	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
@@ -251,7 +253,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
  	                	endinngDate.setParent(hlayout);	  
  	                	hlayout.setParent(row);
  	                	Checkbox percentage = new Checkbox();
- 	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                } 	                	
  	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
@@ -303,7 +307,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
  	                	endinngDate.setParent(hlayout);	  
  	                	hlayout.setParent(row);
  	                	Checkbox percentage = new Checkbox();
- 	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
  	                	percentage.setParent(row);
 	                	Checkbox chb = new Checkbox();
 	                	chb.setChecked(false);
@@ -396,7 +402,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	                	endinngDate.setParent(hlayout);	  
     	                	hlayout.setParent(row);
     	                	Checkbox percentage = new Checkbox();
-    	                	percentage.setChecked(pValue.getIsPercentage());
+                                if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
     	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
@@ -453,7 +461,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	                	endinngDate.setParent(hlayout);	  
     	                	hlayout.setParent(row);
     	                	Checkbox percentage = new Checkbox();
-    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
     	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
@@ -509,7 +519,9 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     	                	endinngDate.setParent(hlayout);	  
     	                	hlayout.setParent(row);
     	                	Checkbox percentage = new Checkbox();
-    	                	percentage.setChecked(pValue.getIsPercentage());
+    	                	if (pValue.getIsPercentage() != null) {
+                                    percentage.setChecked(pValue.getIsPercentage());
+                                }
     	                	percentage.setParent(row);
                             Checkbox chb = new Checkbox();
                             chb.setChecked(pValue.isEnabled());
@@ -585,7 +597,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
             		if ((children.get(1) instanceof Textbox) && Long.parseLong(((Textbox)children.get(1)).getText())>Long.parseLong(pvalue.getPreferenceValueParentId()!=null?pvalue.getPreferenceValueParentId().getValue():pvalue.getValue())) {
             			((Textbox)children.get(1)).setFocus(true);
             			save= false;
-            			this.showMessage("sp.error.field.wrongValue", true, null);        
+            			this.showMessage("msj.error.field.wrongValue", true, null);        
             			break;
             		}else {
                 		preferenceControls.add(createPreferencenControl(pvalue));
@@ -598,7 +610,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
             	preferencesEJB.savePreferenceValues(preferenceValueSave,preferenceControls);
 	            PreferenceManager preferenceManager = PreferenceManager.getInstance();
 	            preferenceManager.refresh();
-	            this.showMessage("sp.common.save.success", false, null);
+	            this.showMessage("wallet.msj.save.success", false, null);
              } 
         } catch (GeneralException ex) {
             //showError(ex);
@@ -625,7 +637,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
     			if (((Datebox)childrenHlayout.get(1)).getValue().getTime() >= ((Datebox)children.get(2)).getValue().getTime()) {
     				preferenceValue.setEndingDate(((Datebox)childrenHlayout.get(1)).getValue()); 			
     			} else {
-    				this.showMessage("sp.error.date.invalid", true, null);
+    				this.showMessage("msj.error.date.invalid", true, null);
     				throw new GeneralException("Error Invalid Dates");
     			}
     		}else
@@ -681,7 +693,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 	            	cmbTransactionType.setDisabled(true);
 	            	cmbBusiness.setDisabled(true);
 					}else
-						this.showMessage("sp.error.field.exists", true, null);     
+						this.showMessage("msj.error.field.exists", true, null);     
 				}  catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -823,7 +835,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
 	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
 	            	btnSave.setVisible(false);
-					this.showMessage("sp.error.field.exists", true, null);   
+					this.showMessage("msj.error.field.exists", true, null);   
 				}  
 			}  catch (Exception e) {
 				e.printStackTrace();
@@ -849,7 +861,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
 	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
 	            	btnSave.setVisible(false);
-					this.showMessage("sp.error.field.exists", true, null);   
+					this.showMessage("msj.error.field.exists", true, null);   
 				}     
 			}  catch (Exception e) {
 				e.printStackTrace();
@@ -875,7 +887,7 @@ public class AdminSpecificsSettingsController extends GenericAbstractController 
 					pValue.setBussinessId(((Business) cmbBusiness.getSelectedItem().getValue()).getId());
 	            	loadPreferencesByParam(pValue,preferenceClassification.getId(), true);
 	            	btnSave.setVisible(false);
-					this.showMessage("sp.error.field.exists", true, null);   
+					this.showMessage("msj.error.field.exists", true, null);   
 				}
 			}  catch (Exception e) {
 				e.printStackTrace();

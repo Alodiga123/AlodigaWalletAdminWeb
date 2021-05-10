@@ -124,7 +124,7 @@ public class ListCountriesController extends GenericAbstractListController<Count
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -152,7 +152,7 @@ public class ListCountriesController extends GenericAbstractListController<Count
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -164,7 +164,7 @@ public class ListCountriesController extends GenericAbstractListController<Count
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.country.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.country.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());

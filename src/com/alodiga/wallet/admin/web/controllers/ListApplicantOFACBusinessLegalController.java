@@ -140,7 +140,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
     
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -159,7 +159,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.menu.collectionsRequest.list"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.collectionsRequest.list"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -234,7 +234,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -274,7 +274,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
         try {
             Button button = new Button();
             button.setImage("/images/icon-edit.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.edit"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.edit"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override
@@ -300,7 +300,7 @@ public class ListApplicantOFACBusinessLegalController extends GenericAbstractLis
         try {
             Button button = new Button();
             button.setImage("/images/icon-invoice.png");
-            button.setTooltiptext(Labels.getLabel("sp.common.actions.view"));
+            button.setTooltiptext(Labels.getLabel("wallet.actions.view"));
             button.setClass("open orange");
             button.addEventListener("onClick", new EventListener() {
                 @Override

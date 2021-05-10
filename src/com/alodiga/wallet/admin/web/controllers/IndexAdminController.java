@@ -48,10 +48,10 @@ public class IndexAdminController extends GenericAbstractController {
     public Boolean validateEmpty() {
         if (txtLogin.getText().isEmpty()) {
             txtLogin.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else if (txtPassword.getText().isEmpty()) {
             txtPassword.setFocus(true);
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
         } else {
             return true;
         }
@@ -62,7 +62,7 @@ public class IndexAdminController extends GenericAbstractController {
     public boolean validateRecoverLogin() {
 
         if (txtRecoverLogin.getText().isEmpty()) {
-            this.showMessage("sp.error.field.cannotNull", true, null);
+            this.showMessage("msj.error.field.cannotNull", true, null);
             txtRecoverLogin.setFocus(true);
         } else {
             return true;
@@ -77,12 +77,12 @@ public class IndexAdminController extends GenericAbstractController {
                     return true;
                 }
             } catch (DisabledUserException ex) {
-                this.showMessage("sp.error.disableAccount", true, null);
+                this.showMessage("msj.error.disableAccount", true, null);
             } catch (RegisterNotFoundException ex) {
-                this.showMessage("sp.error.invalid.login", true, null);
+                this.showMessage("msj.error.invalid.login", true, null);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                this.showMessage("sp.error.general", true, null);
+                this.showMessage("msj.error.general", true, null);
             }
         }
         return false;
@@ -131,12 +131,12 @@ public class IndexAdminController extends GenericAbstractController {
                 request.setParams(params);
                 user = userEJB.loadUserByLogin(request);
                 AccessControl.generateNewPassword(user, false);
-                this.showMessage("sp.common.recoveryPassword.success", false, null);
+                this.showMessage("wallet.msj.recoveryPassword.success", false, null);
             } catch (RegisterNotFoundException e) {
-                this.showMessage("sp.common.recoveryPassword.notFound", true, null);
+                this.showMessage("wallet.msj.recoveryPassword.notFound", true, null);
             } catch (Exception e) {
                 e.printStackTrace();
-                this.showMessage("sp.error.general", true, null);
+                this.showMessage("msj.error.general", true, null);
             }
         }
     }

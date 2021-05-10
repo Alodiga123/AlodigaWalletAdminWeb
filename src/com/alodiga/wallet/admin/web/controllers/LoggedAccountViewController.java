@@ -78,7 +78,7 @@ package com.alodiga.wallet.admin.web.controllers;
 //            currentAccount = AccessControl.loadCurrentAccount();
 //            currencySymbol = currentAccount.getEnterprise().getCurrency().getSymbol();
 //        } catch (Exception ex) {
-//            lblInfo.setValue(Labels.getLabel("sp.error.general"));
+//            lblInfo.setValue(Labels.getLabel("msj.error.general"));
 //            ex.getStackTrace();
 //        }
 //    }
@@ -150,30 +150,30 @@ package com.alodiga.wallet.admin.web.controllers;
 //
 //            switch (i) {
 //                case 1:
-//                   msg1 = Labels.getLabel("sp.common.stadistics");
-//                    msgSales = Labels.getLabel("sp.common.sales");
+//                   msg1 = Labels.getLabel("wallet.common.stadistics");
+//                    msgSales = Labels.getLabel("wallet.common.sales");
 //                    break;
 //                case 2://TODAY
-//                    msg1 = Labels.getLabel("sp.common.today");
+//                    msg1 = Labels.getLabel("wallet.common.today");
 //                    todaySales = _sales.get(0);
 //                    salesCategoryModel.setValue(msg1, "", todaySales);
 //                    msgSales = new DecimalFormat("#.##").format(todaySales) + currencySymbol;
 //                    break;
 //                case 3://YESTERDAY
-//                    msg1 = Labels.getLabel("sp.common.yesterday");
+//                    msg1 = Labels.getLabel("wallet.common.yesterday");
 //                    sales = _sales.get(1);
 //                    sales = sales - todaySales;
 //                    salesCategoryModel.setValue(msg1, "", sales);
 //                    msgSales = new DecimalFormat("#.##").format(sales) + currencySymbol;
 //                    break;
 //                case 4://LAST 7 DAYS
-//                    msg1 = Labels.getLabel("sp.common.last7days");
+//                    msg1 = Labels.getLabel("wallet.common.last7days");
 //                    sales = _sales.get(2);
 //                    salesCategoryModel.setValue(msg1, "", sales);
 //                    msgSales = new DecimalFormat("#.##").format(sales) + currencySymbol;
 //                    break;
 //                case 5://LAST 15 DAYS
-//                    msg1 = Labels.getLabel("sp.common.last15days");
+//                    msg1 = Labels.getLabel("wallet.common.last15days");
 //                    sales = _sales.get(3);
 //                    salesCategoryModel.setValue(msg1, "", sales);
 //                    msgSales = new DecimalFormat("#.##").format(sales) + currencySymbol;
@@ -197,8 +197,8 @@ package com.alodiga.wallet.admin.web.controllers;
 //                row.appendChild(cell);
 //
 //                chtSales.setModel(salesCategoryModel);
-////                chtSales.setEngine(new BarChartEngine(Labels.getLabel("sp.chart.sales.title")));
-//                chtSales.setEngine((ChartEngine) new BarChartEngine(Labels.getLabel("sp.chart.sales.title")));    
+////                chtSales.setEngine(new BarChartEngine(Labels.getLabel("wallet.crud.chart.sales.title")));
+//                chtSales.setEngine((ChartEngine) new BarChartEngine(Labels.getLabel("wallet.crud.chart.sales.title")));    
 //            if (i == 1) {
 //                label.setStyle("font-weight: bold;color: #424242;");
 //            }

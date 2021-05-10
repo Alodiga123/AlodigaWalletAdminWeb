@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="/WEB-INF/tld/core.dsp.tld" prefix="c" ?>
-<?page title="${c:l('sp.crud.profile.admin')}"?>
+<?page title="${c:l('wallet.common.profileAdmin')}"?>
 <?link rel="icon" tye="image/x-icon" href="/images/favicon.ico"?>
 
 <zk xmlns:n="native">
-    <window id="winAdminPersonAddress" title="${c:l('sp.crud.address.main')}" width="950px" height="650px" apply="com.alodiga.wallet.admin.web.controllers.AdminAddressController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
+    <window id="winAdminPersonAddress" title="${c:l('wallet.crud.address.main')}" width="950px" height="650px" apply="com.alodiga.wallet.admin.web.controllers.AdminAddressController" closable ="true" border="normal" position="center,center" action="show: slideDown;hide: slideUp">
         <style src="/css/general.css"/>
         <borderlayout width="100%" height="100%" class="content-transparent">
             <center border="none" flex="true" class="content-transparent" autoscroll="true">
@@ -25,22 +25,22 @@
                                                         <column label="" width="290px"/>
                                                     </columns>
                                                     <rows>
-                                                        <group label="${c:l('sp.crud.businessAffiliationRequests')}"/>
+                                                        <group label="${c:l('wallet.common.applicationData')}"/>
                                                         <row>
-                                                            <label value="${c:l('sp.common.number')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.common.date')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.common.status')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.number')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.date')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.status')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblRequestNumber" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblRequestDate" value="" width="200px" style="color:#837E76;"/>
                                                             <label id="lblStatusRequest" value="" width="200px" style="color:#837E76;"/>
                                                         </row> 
-                                                        <group label="${c:l('sp.crud.passwordChange.request')}"/>
+                                                        <group label="${c:l('wallet.common.request')}"/>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.address.country')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.city')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.urbanitation')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.country')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.city')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.urbanitation')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblCountry" value="" width="200px" style="color:#837E76;"/>
@@ -48,9 +48,9 @@
                                                             <label id="lblUbanization" value="" width="200px" style="color:#837E76;"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.address.streetType')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.street')}" sclass="lblbold"/>  
-                                                            <label value="${c:l('sp.crud.address.edificationType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.streetType')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.street')}" sclass="lblbold"/>  
+                                                            <label value="${c:l('wallet.common.edificationType')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblStreetType" value="" width="200px" style="color:#837E76;"/>
@@ -58,9 +58,9 @@
                                                             <label id="lblEdificationType" value="" width="200px" style="color:#837E76;"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.address.nameEdification')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.tower')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.floor')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.nameEdification')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.tower')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.floor')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <label id="lblNameEdification" value="" width="200px" style="color:#837E76;"/>
@@ -68,9 +68,9 @@
                                                             <label id="lblFloor" value="" width="200px" style="color:#837E76;"/>
                                                         </row>
                                                         <row> 
-                                                            <label value="${c:l('sp.crud.address.zipZone')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.addressTypes')}" sclass="lblbold"/>
-                                                            <label value="${c:l('sp.crud.address.mainAddress')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.zipZone')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.addressTypes')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.mainAddress')}" sclass="lblbold"/>
                                                             
                                                         </row>
                                                         <row>
@@ -81,15 +81,15 @@
                                                                 <grid>
                                                                     <rows>
                                                                         <row>
-                                                                            <radio id="rMainAddressYes" label="${c:l('sp.common.yes')}" radiogroup="mainAddress" />
-                                                                            <radio id="rMainAddressNo" label="${c:l('sp.common.no')} " radiogroup="mainAddress" />
+                                                                            <radio id="rMainAddressYes" label="${c:l('wallet.common.yes')}" radiogroup="mainAddress" />
+                                                                            <radio id="rMainAddressNo" label="${c:l('wallet.common.no')} " radiogroup="mainAddress" />
                                                                         </row>
                                                                     </rows>
                                                                 </grid>
                                                             </hbox>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.address.line1')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.address.line1')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <cell colspan="3">
@@ -97,7 +97,7 @@
                                                             </cell>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('sp.crud.address.line2')}" sclass="lblbold"/>
+                                                            <label value="${c:l('wallet.common.address.line2')}" sclass="lblbold"/>
                                                         </row>
                                                         <row>
                                                             <cell colspan="3">
@@ -111,8 +111,8 @@
                                         <div id="divInfo" height="20px" width="100%" style="background:#B6E59E;" align="left" visible="false"/>
                                         <!--Buttons-->
                                         <div align="right">
-                                            <button  id="btnSave" width="150px" label="${c:l('sp.common.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('sp.common.actions.back')}" class="open gray"/>
+                                            <button  id="btnSave" width="150px" label="${c:l('wallet.actions.save')}" class="open orange"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('wallet.actions.back')}" class="open gray"/>
                                         </div>
                                     </vlayout>
                                 </div>

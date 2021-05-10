@@ -23,6 +23,7 @@ import com.alodiga.wallet.common.enumeraciones.StatusApplicantE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
+import com.alodiga.wallet.common.exception.RegisterNotFoundException;
 import com.alodiga.wallet.common.genericEJB.EJBRequest;
 import com.alodiga.wallet.common.manager.PermissionManager;
 import com.alodiga.wallet.common.model.AffiliationRequest;
@@ -50,6 +51,8 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
@@ -145,7 +148,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 item.appendChild(new Listcell(aplicant.getAffiliationRequest()!=null?aplicant.getAffiliationRequest().getNumberRequest():""));
                                 applicantNameLegal = aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getBusinessName():"";
                                 item.appendChild(new Listcell(applicantNameLegal));
-                                item.appendChild(new Listcell(Labels.getLabel("sp.common.legalApplicant")));
+                                item.appendChild(new Listcell(Labels.getLabel("wallet.common.legalApplicant")));
                                 item.appendChild(new Listcell(aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getStatusApplicantId().getDescription():""));
                                 if(aplicant.getLegalPerson()!=null?aplicant.getLegalPerson().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getLegalPerson().getPersonId().getReviewOfac().getResultReview())));
@@ -160,7 +163,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 applicarBusinessNatural.append(" ");
                                 applicarBusinessNatural.append(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getLastName():"");
                                 item.appendChild(new Listcell(applicarBusinessNatural.toString()));
-                                item.appendChild(new Listcell(Labels.getLabel("sp.common.naturalApplicant")));
+                                item.appendChild(new Listcell(Labels.getLabel("wallet.common.naturalApplicant")));
                                 item.appendChild(new Listcell(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getStatusApplicantId().getDescription():""));
                                 if(aplicant.getNaturalPerson()!=null?aplicant.getNaturalPerson().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getNaturalPerson().getPersonId().getReviewOfac().getResultReview())));
@@ -175,7 +178,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                                 applicantRepresentative.append(" ");
                                 applicantRepresentative.append(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getLastNames():"");
                                 item.appendChild(new Listcell(applicantRepresentative.toString()));
-                                item.appendChild(new Listcell(Labels.getLabel("sp.common.legalRepresentative")));
+                                item.appendChild(new Listcell(Labels.getLabel("wallet.common.legalRepresentative")));
                                 item.appendChild(new Listcell(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getStatusApplicantId().getDescription():""));
                                 if(aplicant.getLegalRepresentative()!=null?aplicant.getLegalRepresentative().getPersonId().getReviewOfac() != null:false){
                                     item.appendChild(new Listcell(formatoPorcentaje.format(aplicant.getLegalRepresentative().getPersonId().getReviewOfac().getResultReview())));
@@ -190,7 +193,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -203,12 +206,49 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
 
     public void getData() {
         personList = new ArrayList<Person>();
+        List<LegalPerson> legalPerson = new ArrayList<LegalPerson>();
+        List<AffiliationRequest> affiliationRequest = new ArrayList<AffiliationRequest>();
+        Long legalPersonId = 0L;
+        EJBRequest request = new EJBRequest();
+        Map<String, Object> params = new HashMap<String, Object>();
+        Long affiliationRequestId = 0L;
         try {
             request.setFirst(0);
             request.setLimit(null);
             personList = personEJB.getPersonBusinessApplicant(request);
             for (Person p: personList) {
-               
+                if (p.getAffiliationRequest() == null) {
+                    params = new HashMap<String, Object>();
+                    params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID , p.getLegalRepresentative().getId());
+                    request.setParams(params);
+                    legalPerson = personEJB.getLegalPersonByLegalRepresentative(request);
+                    for (LegalPerson lg: legalPerson) {
+                        legalPersonId = lg.getPersonId().getId();
+                    }
+                    params = new HashMap<String, Object>();                    
+                    params.put(QueryConstants.PARAM_LEGAL_PERSON_ID, legalPersonId);
+                    request.setParams(params);
+                    affiliationRequest = utilsEJB.getAffiliationRequestByLegalPerson(request);
+                    for (AffiliationRequest ar: affiliationRequest) {
+                        p.setAffiliationRequest(ar);
+                        personEJB.savePerson(p);
+                        affiliationRequestId = ar.getId();
+                    }
+                } else {                   
+                    affiliationRequestId = p.getAffiliationRequest().getId(); 
+                }
+                Long haveReviewOFAC = utilsEJB.haveReviewOFACByPerson(p.getId());
+                   if (haveReviewOFAC > 0) {
+                       request = new EJBRequest();
+                       params = new HashMap();
+                       params.put(Constants.PERSON_KEY, p.getId());
+                       params.put(Constants.AFFILIATION_REQUEST_KEY, affiliationRequestId);
+                       request.setParams(params);
+                       List<ReviewOfac> reviewOFAC = utilsEJB.getReviewOfacByRequest(request);
+                       for (ReviewOfac r: reviewOFAC) {
+                            p.setReviewOfac(r);
+                        }
+                   }
             }
         } catch (NullParameterException ex) {
             showError(ex);
@@ -216,12 +256,14 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             showEmptyList();
         } catch (GeneralException ex) {
             showError(ex);
+        } catch (RegisterNotFoundException ex) {
+            showError(ex);
         }
     }
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -230,7 +272,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.businessAffiliationRequests.ofac.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.businessAffiliationRequests.ofac.list"));
             AccessControl.saveAction(Permission.LIST_APLICANT_OFAC, "Se descargo listado OFAC en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -312,9 +354,21 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                             applicant.getLegalPerson().setStatusApplicantId(getStatusApplicant(legalPerson.getStatusApplicantId(), Constants.STATUS_APPLICANT_BLACK_LIST_OK));
                         }
                         legalPerson = personEJB.saveLegalPerson(applicant.getLegalPerson());
+                        int indBlackListLegalPerson= 0;
+                        Person person = personEJB.searchPersonByLegalPersonId(applicant.getLegalPerson().getId());
+    	                if (person!=null && !person.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())) {
+                            if (person.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())) {
+                                indBlackListLegalPerson = 1;
+                            }		 
+                            if (indBlackList == 0 && indBlackListLegalPerson ==0) {
+                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                            } else {
+                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));
+                            }
+                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+    	                } 
                     } 
-                }                
-                if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
+                } else if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())){
                      if (applicant.getNaturalPerson().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){    
                         if (Double.parseDouble(ofacResponse.getPercentMatch()) >= 0.75) {
                             applicant.getNaturalPerson().setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId(),Constants.STATUS_APPLICANT_BLACK_LIST ));
@@ -322,53 +376,46 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                         } else {
                             applicant.getNaturalPerson().setStatusApplicantId(getStatusApplicant(applicant.getNaturalPerson().getStatusApplicantId() ,Constants.STATUS_APPLICANT_BLACK_LIST_OK));
                         }
-                        naturalPerson = personEJB.saveNaturalPerson(applicant.getNaturalPerson());                        
+                        naturalPerson = personEJB.saveNaturalPerson(applicant.getNaturalPerson());       
+                        if (indBlackList == 1) {
+                            affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                        } else {
+                            affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));
+                        }
+                        affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
                      }
-                }
-                if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
+                }else if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEGREP.getPersonClassificationCode())){
                     if (applicant.getLegalRepresentative().getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())){
                         if (Double.parseDouble(ofacResponse.getPercentMatch()) >= 0.75) {
-                            applicant.getLegalRepresentative().setStatusApplicantId(getStatusApplicant(applicant.getLegalRepresentative().getStatusApplicantId(),Constants.STATUS_APPLICANT_BLACK_LIST ));
+                            applicant.getLegalRepresentative().setStatusApplicantId(getStatusApplicant(applicant.getLegalRepresentative().getStatusApplicantId(),Constants.STATUS_APPLICANT_BLACK_LIST));
                             indBlackList = 1;
                         } else {
                             applicant.getLegalRepresentative().setStatusApplicantId(getStatusApplicant(applicant.getLegalRepresentative().getStatusApplicantId() ,Constants.STATUS_APPLICANT_BLACK_LIST_OK));
                         }
                         legalRepresentative = personEJB.saveLegalRepresentative(applicant.getLegalRepresentative());                       
                     }
-                }                
-                if (applicant.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())){
-                    if( businessName != null && !businessName.equals("")){
-                           //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
-                        if (ofacResponse != null) {
-                        	if (affiliationRequest!=null) {
-	                            if (indBlackList == 1) {
-	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-	                            } else {
-	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-	                            }
-	                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
-                        	}
-                        }
-                    }
-                } else {
-                    if (!lastName.equals("") && !firstName.equals("") && lastName != null && firstName != null) {
-                        //Si algunos solicitante(s) coincide(n) con la Lista OFAC se actualiza estatus de la solicitud
-                        if (ofacResponse != null) {
-                        	if (affiliationRequest!=null) {
-	                            if (indBlackList == 1) {
-	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_PENDING));
-	                            } else {
-	                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
-	                            }
-	                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
-                        	}
-                        }
-                    }
-                }    
+                    EJBRequest request = new EJBRequest();
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID , applicant.getLegalRepresentative().getId());
+                    request.setParams(params);
+                    List<LegalPerson> legalPersons = personEJB.getLegalPersonByLegalRepresentative(request);
+                    int indBlackListLegalPerson= 0;
+	                if (legalPersons !=null && !legalPersons.get(0).getStatusApplicantId().getCode().equals(StatusApplicantE.ACTIVO.getStatusApplicantCode())) {
+                            if (legalPersons.get(0).getStatusApplicantId().getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())) {
+                                indBlackListLegalPerson = 1;
+                            }		 
+                            if (indBlackList == 0 && indBlackListLegalPerson ==0) {
+                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_BLACK_LIST_OK));
+                            } else {
+                                affiliationRequest.setStatusRequestId(getStatusAffiliationRequest(affiliationRequest.getStatusRequestId(), Constants.STATUS_REQUEST_REJECTED_BLACK_LIST));
+                            }
+                            affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+	                }
+	           }	
             }
             getData();
             loadList(personList);
-            this.showMessage("sp.common.finishReviewOFAC", false, null);
+            this.showMessage("wallet.msj.finishReviewOFAC", false, null);
         } catch (Exception ex) {
             showError(ex);
         }
@@ -434,7 +481,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             EJBRequest request = new EJBRequest();
             List<StatusApplicant> status = personEJB.getStatusApplicant(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbStatus);
             cmbStatus.setSelectedItem(item);
             for (int i = 0; i < status.size(); i++) {

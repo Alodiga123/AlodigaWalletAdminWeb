@@ -58,7 +58,7 @@ public class ManagementReportController extends GenericAbstractController {
 //            lblUser.setValue(currentUser.getFirstName() + " " + currentUser.getLastName());
             loadData();
         } catch (Exception ex) {
-            this.showMessage("sp.error.general", true, ex);
+            this.showMessage("msj.error.general", true, ex);
         }
     }
 
@@ -74,11 +74,11 @@ public class ManagementReportController extends GenericAbstractController {
         try {
             reportTypes = reportEJB.getReportTypes(request);
         } catch (EmptyListException e1) {
-            this.showMessage("sp.error.general", true, e1);
+            this.showMessage("msj.error.general", true, e1);
         } catch (GeneralException e1) {
-            this.showMessage("sp.error.general", true, e1);
+            this.showMessage("msj.error.general", true, e1);
         } catch (NullParameterException e1) {
-            this.showMessage("sp.error.general", true, e1);
+            this.showMessage("msj.error.general", true, e1);
         }
         int ok = 0;
         for (ReportType type : reportTypes) {
@@ -98,9 +98,9 @@ public class ManagementReportController extends GenericAbstractController {
                 }
 
             } catch (NullParameterException e) {
-                this.showMessage("sp.error.general", true, e);
+                this.showMessage("msj.error.general", true, e);
             } catch (GeneralException e) {
-                this.showMessage("sp.error.general", true, e);
+                this.showMessage("msj.error.general", true, e);
             } catch (EmptyListException e) {
                 continue;
             }

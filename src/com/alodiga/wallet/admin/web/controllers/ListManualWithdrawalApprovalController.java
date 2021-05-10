@@ -110,7 +110,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -144,7 +144,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -160,7 +160,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
             String pattern = "dd-MM-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
-            StringBuilder file = new StringBuilder(Labels.getLabel("sp.crud.manual.recharge.list.download"));
+            StringBuilder file = new StringBuilder(Labels.getLabel("wallet.crud.manual.recharge.list.download"));
             file.append("_");
             file.append(date);
             Utils.exportExcel(lbxRecords, file.toString());
@@ -202,7 +202,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
                   _request.setParam(true);
                   loadList(productEJB.searchTransactionApproveRequestByParamsMWAR(_request));
               } else  {
-                  this.showMessage("sp.error.date.invalid", true, null);
+                  this.showMessage("msj.error.date.invalid", true, null);
               }         
         } catch (EmptyListException ex) {
             showEmptyList();
@@ -228,7 +228,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
             EJBRequest request = new EJBRequest();
             List<StatusTransactionApproveRequest> transactionApproveRequests = productEJB.getStatusTransactionApproveRequests(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbStatus);
             cmbStatus.setSelectedItem(item);
             for (int i = 0; i < transactionApproveRequests.size(); i++) {
@@ -251,7 +251,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
         	EJBRequest request = new EJBRequest();
             List<Product> products = productEJB.getProducts(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbProduct);
             cmbProduct.setSelectedItem(item);
             for (int i = 0; i < products.size(); i++) {
@@ -287,7 +287,7 @@ public class ListManualWithdrawalApprovalController extends GenericAbstractListC
                   _request.setParam(true);
                   loadList(productEJB.searchTransactionApproveRequestByParamsMWAR(_request));
               } else  {
-                  this.showMessage("sp.error.date.invalid", true, null);
+                  this.showMessage("msj.error.date.invalid", true, null);
               }         
         } catch (EmptyListException ex) {
             showEmptyList();

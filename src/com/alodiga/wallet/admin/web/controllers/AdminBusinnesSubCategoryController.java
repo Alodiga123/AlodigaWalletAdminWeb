@@ -112,10 +112,10 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
     public boolean validateEmpty() {
         if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.businessCategory.description", true, null);
+            this.showMessage("msj.error.businessCategory.description", true, null);
         } else if (txtMccCode.getText().isEmpty()) {
             txtMccCode.setFocus(true);
-            this.showMessage("sp.error.businessCategory.mccCode", true, null);
+            this.showMessage("msj.error.businessCategory.mccCode", true, null);
         } else {
             return true;
         }
@@ -132,7 +132,7 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
         } catch (Exception ex) {
             showError(ex);
         }   if (businessSubCategoryList.size() > 0) {
-                this.showMessage("sp.crud.businnesCategory.code.existBD", true, null);
+                this.showMessage("msj.error.businnesCategory.code.existBD", true, null);
                 txtMccCode.setFocus(true);
                 return false;
             }
@@ -154,7 +154,7 @@ public class AdminBusinnesSubCategoryController extends GenericAbstractAdminCont
             businessSubCategory.setBusinessCategoryId(businessCategory);
             businessSubCategory = utilsEJB.saveBusinessSubCategory(businessSubCategory);
             businessSubCategoryParam = businessSubCategory;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

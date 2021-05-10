@@ -52,13 +52,13 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businnesCategory.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.businnesCategory.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businnesCategory.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.businnesCategory.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.businnesCategory.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.businnesCategory.add"));
                 break;
             default:
                 break;
@@ -110,10 +110,10 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
     public boolean validateEmpty() {
         if (txtDescription.getText().isEmpty()) {
             txtDescription.setFocus(true);
-            this.showMessage("sp.error.businessCategory.description", true, null);
+            this.showMessage("msj.error.businessCategory.description", true, null);
         } else if (txtMccCode.getText().isEmpty()) {
             txtMccCode.setFocus(true);
-            this.showMessage("sp.error.businessCategory.mccCode", true, null);
+            this.showMessage("msj.error.businessCategory.mccCode", true, null);
         } else {
             return true;
         }
@@ -130,7 +130,7 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
         } catch (Exception ex) {
             showError(ex);
         }   if (businessCategoryList.size() > 0) {
-                this.showMessage("sp.crud.businnesCategory.code.existBD", true, null);
+                this.showMessage("msj.error.businnesCategory.code.existBD", true, null);
                 txtMccCode.setFocus(true);
                 return false;
             }
@@ -153,7 +153,7 @@ public class AdminBusinnessCategoryController extends GenericAbstractAdminContro
             businessCategoryParam = businessCategory;
             businessCategoryParent = businessCategory;
 
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

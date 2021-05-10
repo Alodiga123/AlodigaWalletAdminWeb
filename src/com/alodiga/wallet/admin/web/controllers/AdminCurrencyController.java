@@ -43,13 +43,13 @@ public class AdminCurrencyController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.currency.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.currency.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.currency.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.currency.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.currency.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.currency.add"));
                 break;
             default:
                 break;
@@ -87,10 +87,10 @@ public class AdminCurrencyController extends GenericAbstractAdminController {
     public Boolean validateEmpty() {
         if (txtNameMoney.getText().isEmpty()) {
             txtNameMoney.setFocus(true);
-            this.showMessage("sp.error.currency", true, null);
+            this.showMessage("msj.error.currency", true, null);
         } else if (txtSymbolMoney.getText().isEmpty()) {
             txtSymbolMoney.setFocus(true);
-            this.showMessage("sp.error.symbolCurrency", true, null);
+            this.showMessage("msj.error.symbolCurrency", true, null);
         } else {
             return true;
         }
@@ -111,7 +111,7 @@ public class AdminCurrencyController extends GenericAbstractAdminController {
             currency.setSymbol(txtSymbolMoney.getText());
             currency = utilsEJB.saveCurrency(currency);
             currencyParam = currency;
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
 
             if (eventType == WebConstants.EVENT_ADD) {
                 btnSave.setVisible(false);

@@ -118,7 +118,7 @@ public class ListBusinessServiceTypeController extends GenericAbstractListContro
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -146,7 +146,7 @@ public class ListBusinessServiceTypeController extends GenericAbstractListContro
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -155,7 +155,7 @@ public class ListBusinessServiceTypeController extends GenericAbstractListContro
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.counties.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.country.list"));
             AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Paises en formato excel");
         } catch (Exception ex) {
             showError(ex);

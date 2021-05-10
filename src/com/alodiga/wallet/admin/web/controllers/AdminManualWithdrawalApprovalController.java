@@ -105,13 +105,13 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.manualWithdrawalApproval.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.manualWithdrawalApproval.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.manualWithdrawalApproval.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.manualWithdrawalApproval.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.manualWithdrawalApproval.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.manualWithdrawalApproval.add"));
                 break;
             default:
                 break;
@@ -145,7 +145,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(manualWithdrawalApproval.getUnifiedRegistryUserId()));
                 String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
                 lblUserSource.setValue(userNameSource);
-                lblTelephone.setValue(responseUser.getDatosRespuesta().getTelefonoResidencial());
+                lblTelephone.setValue(responseUser.getDatosRespuesta().getMovil());
                 lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
                 lblUserDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
                 lblUserDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
@@ -154,8 +154,6 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 Business businessSource = businessEJB.getBusinessById(manualWithdrawalApproval.getTransactionId().getBusinessId().longValue());
                 lblUserSource.setValue(businessSource.getDisplayName());
                 lblTelephone.setValue(businessSource.getPhoneNumber());
-                lblEmail.setValue(businessSource.getEmail());
-//                lblUserDocumentType.setValue();
                 lblUserDocumentNumber.setValue(businessSource.getIdentification());
             }            
             
@@ -198,7 +196,9 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             
             //Datos de la operación bancaria
             lblBank.setValue(manualWithdrawalApproval.getBankOperationId().getBankId().getName());
-            lblBankAccount.setValue(manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber());
+            if (manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber() != null) {
+                lblBankAccount.setValue(manualWithdrawalApproval.getBankOperationId().getAccountBankId().getAccountNumber());
+            }            
             if (manualWithdrawalApproval.getBankOperationId() != null) {
                 txtBankNumber.setValue(manualWithdrawalApproval.getBankOperationId().getBankOperationNumber());
             }
@@ -234,35 +234,41 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
         btnSave.setVisible(false);
     }
 
-    public Boolean validateEmpty() {
-
-        Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String toDay = formatter.format(currentDate);
-        String dateBankOperation = formatter.format(dtbBankOperationDate.getValue());
-        
+    public Boolean validateEmpty() {        
         if (dtbApprovedRequestDate.getText().isEmpty()) {
             dtbApprovedRequestDate.setFocus(true);
-            this.showMessage("sp.error.date.approvedRequestDate", true, null);
+            this.showMessage("msj.error.date.approvedRequestDate", true, null);
         } else if ((!rApprovedYes.isChecked()) && (!rApprovedNo.isChecked())) {
-            this.showMessage("sp.error.indApproveRequest", true, null);
+            this.showMessage("msj.error.indApproveRequest", true, null);
         } else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.observations", true, null);
-        } else if (txtBankNumber.getText().isEmpty()) {
+            this.showMessage("msj.error.observations", true, null);
+        } else if (txtBankNumber.getText().isEmpty() || txtBankNumber.getText() == "") {
             txtBankNumber.setFocus(true);
-            this.showMessage("sp.error.date.bankNumberOperation", true, null);
+            this.showMessage("msj.error.date.bankNumberOperation", true, null);
         } else if (txtResponsible.getText().isEmpty()) {
             txtResponsible.setFocus(true);
-            this.showMessage("sp.error.date.responsibleBankOperation", true, null);
-        } else if (dtbApprovedRequestDate.getText().isEmpty()) {
-            txtObservations.setFocus(true);
-            this.showMessage("sp.error.date.bankRequestDate", true, null);
-        } else if(!toDay.equals(dateBankOperation)){
-            this.showMessage("sp.error.date.dateBankOperation", true, null);
+            this.showMessage("msj.error.date.responsibleBankOperation", true, null);
+        } else if (dtbBankOperationDate.getText().isEmpty()) {
+            dtbBankOperationDate.setFocus(true);
+            this.showMessage("msj.error.error.date.bankOperationDate", true, null);
         } else {
             return true;
         }
+        return false;
+    }
+    
+    public boolean validateManualWithdrawal() {
+        Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String toDay = formatter.format(currentDate);
+        String dateBankOperation = formatter.format(dtbBankOperationDate.getValue());;
+        
+        if(!toDay.equals(dateBankOperation)){
+            this.showMessage("msj.error.date.dateBankOperation", true, null);            
+        } else {
+            return true;
+        }        
         return false;
     }
     
@@ -301,7 +307,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             bankOperation.setResponsible(txtResponsible.getText());
             bankOperation.setBankOperationDate(dtbBankOperationDate.getValue());
             bankOperation.setUpdateDate(new Timestamp(new Date().getTime()));
-//            bankOperation = utilsEJB.saveBankOperation(bankOperation);
+            bankOperation = utilsEJB.saveBankOperation(bankOperation);
             
             //Se actualiza el estatus de la solicitud de aprobación y el saldo del usuario en la billetera
             manualWithdrawalApproval.setUnifiedRegistryUserId(bankOperation.getUserSourceId());
@@ -311,14 +317,13 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApproval.setIndApproveRequest(indApproved);
             manualWithdrawalApproval.setObservations(txtObservations.getText());
             manualWithdrawalApproval.setUserApprovedRequestId(user);
-//            manualWithdrawalApproval = productEJB.saveTransactionApproveRequest(manualWithdrawalApproval);
-            manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval);
+            manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval,lblTelephone.getValue());
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
                
             if(indApproved == true){
-                 this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveApproved", false, null);  
+                 this.showMessage("msj.manualWithdrawalApprova.recharge.saveApproved", false, null);  
             } else {
-                 this.showMessage("sp.crud.manualWithdrawalApprova.recharge.saveRejected", false, null);  
+                 this.showMessage("msj.error.manualWithdrawalApprova.recharge.saveRejected", false, null);  
             }
 
             if (eventType == WebConstants.EVENT_ADD) {
@@ -327,7 +332,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 btnSave.setVisible(true);
             }
         } catch (Exception ex) {
-            this.showMessage("sp.msj.errorSave", true, null);
+            this.showMessage("msj.error.errorSave", true, null);
         }
     }
 
@@ -337,7 +342,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
 
     public void onClick$btnSave() {
         if (validateEmpty()) {
-            switch (eventType) {
+            if (validateManualWithdrawal()) {
+                switch (eventType) {
                 case WebConstants.EVENT_ADD:
                     saveManualWithdrawalApproval(null);
                     break;
@@ -346,7 +352,8 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                     break;
                 default:
                     break;
-            }
+                }
+            }            
         }
     }
 

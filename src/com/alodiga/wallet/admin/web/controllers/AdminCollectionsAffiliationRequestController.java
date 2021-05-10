@@ -134,7 +134,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     private void loadFields(RequestHasCollectionRequest requestHasCollectionsRequest) {
         if (requestHasCollectionsRequest != null) {
             try {
-            	short approved=1; 
+            	boolean approved=true; 
             	if (requestHasCollectionsRequest.getIndApproved()!=null) {
 	                if (requestHasCollectionsRequest.getIndApproved()==approved) {
 	                    rApprovedYes.setChecked(true);
@@ -161,7 +161,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
 
     public Boolean validateEmpty() {
         if(txtObservations.getText().isEmpty()){
-             this.showMessage("sp.error.renewal.observations",true, null);
+             this.showMessage("msj.error.renewal.observations",true, null);
         } else {
             return true;
         }
@@ -180,7 +180,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
     }
 
     private void saveRequest(RequestHasCollectionRequest _requestHasCollectionsRequest) {
-    	short approved = 1;
+    	boolean approved = true;
         try {
         	RequestHasCollectionRequest requestHasCollectionsRequest = null;
 
@@ -188,9 +188,9 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
                 requestHasCollectionsRequest = _requestHasCollectionsRequest;
             } 
             if (rApprovedYes.isChecked()) {
-            	approved = 1;
+            	approved = true;
             } else {
-            	approved = 0;
+            	approved = false;
             }
 
             //Guarda la solicitud en requestHasCollectionsRequest
@@ -208,7 +208,7 @@ public class AdminCollectionsAffiliationRequestController extends GenericAbstrac
            
             
             
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             EventQueues.lookup("updateCollectionsAffiliationRequest", EventQueues.APPLICATION, true).publish(new Event(""));
         } catch (Exception ex) {
             showError(ex);

@@ -202,7 +202,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             } else {
                 btnDownload.setVisible(false);
                 item = new Listitem();
-                item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+                item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
                 item.appendChild(new Listcell());
@@ -230,7 +230,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
 
     private void showEmptyList() {
         Listitem item = new Listitem();
-        item.appendChild(new Listcell(Labels.getLabel("sp.error.empty.list")));
+        item.appendChild(new Listcell(Labels.getLabel("msj.error.empty.list")));
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
         item.appendChild(new Listcell());
@@ -239,7 +239,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
 
     public void onClick$btnDownload() throws InterruptedException {
         try {
-            Utils.exportExcel(lbxRecords, Labels.getLabel("sp.crud.transaction.list"));
+            Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.crud.transaction.list"));
             AccessControl.saveAction(Permission.LIST_BANK, "Se descargo listado de Transacciones en formato excel");
         } catch (Exception ex) {
             showError(ex);
@@ -268,7 +268,7 @@ public class ListTransactionsController extends GenericAbstractListController<Tr
             EJBRequest request = new EJBRequest();
             List<TransactionSource> transactionSource = utilsEJB.getTransactionSource(request);
             Comboitem item = new Comboitem();
-            item.setLabel(Labels.getLabel("sp.common.all"));
+            item.setLabel(Labels.getLabel("wallet.common.all"));
             item.setParent(cmbTransactionSource);
             cmbTransactionSource.setSelectedItem(item);
             for (int i = 0; i < transactionSource.size(); i++) {

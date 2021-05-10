@@ -214,17 +214,17 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             manualRechargeApproval.setIndApproveRequest(indApproved);
             manualRechargeApproval.setObservations(txtObservation.getText());
             manualRechargeApproval = productEJB.saveTransactionApproveRequest(manualRechargeApproval);
-            manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+            manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval,lblTelephone.getValue());
             transactionApproveRequestParam = manualRechargeApproval;
 
             if(indApproved == true){
-              this.showMessage("sp.crud.manual.recharge.saveApproved", false, null);  
+              this.showMessage("msj.recharge.saveApproved", false, null);  
             } else {
-              this.showMessage("sp.crud.manual.recharge.saveRejected", false, null);  
+              this.showMessage("msj.manual.recharge.saveRejected", false, null);  
             }
             btnSave.setVisible(false);
         } catch (Exception ex) {
-            this.showMessage("sp.msj.errorSave", true, null);
+            this.showMessage("msj.error.errorSave", true, null);
         }
     }
  

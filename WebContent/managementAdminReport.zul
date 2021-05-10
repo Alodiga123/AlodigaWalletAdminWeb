@@ -41,7 +41,7 @@
                                                 </groupbox>
                                                 <separator/>
                                                 <groupbox closable="false" height="150px" width="900px" mold="3d">
-                                                    <caption label="${c:l('sp.common.parameters')}" />
+                                                    <caption label="${c:l('wallet.common.parameters')}" />
                                                     <hlayout sclass="z-valign-top">
                                                         <grid id="gridParams" fixedLayout="true" width="750px">
                                                             <columns>
@@ -51,8 +51,8 @@
                                                             <rows id="filasParams"></rows>
                                                         </grid>
                                                         <vlayout>
-                                                            <button id="btnRunReport" width="140px" class="open orange" label="${c:l('sp.common.actions.runReport')}"/> <!-- image="/images/icon-report.png"-->
-                                                            <button  id="btnBack" width="140px" class="open gray" label="${c:l('sp.common.actions.back')}"/> <!-- image="/images/icon-row2.png"-->
+                                                            <button id="btnRunReport" width="140px" class="open orange" label="${c:l('wallet.actions.showReport')}"/> <!-- image="/images/icon-report.png"-->
+                                                            <button  id="btnBack" width="140px" class="open gray" label="${c:l('wallet.actions.back')}"/> <!-- image="/images/icon-row2.png"-->
                                                         </vlayout>
                                                     </hlayout>
                                                 </groupbox>
@@ -63,7 +63,7 @@
                                                 </div>
                                                 <separator/>
                                                 <div align="right" width="900px">
-                                                    <button id="btnExport" width="150px" image="/images/icon-excel.gif" label="${c:l('sp.common.actions.exportExcel')}" class="open gray"/>
+                                                    <button id="btnExport" width="150px" image="/images/icon-excel.gif" label="${c:l('wallet.actions.exportExcel')}" class="open gray"/>
                                                 </div>
                                         </vlayout>
                                     </vlayout>

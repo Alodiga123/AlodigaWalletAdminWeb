@@ -6,6 +6,7 @@ import com.alodiga.wallet.admin.web.generic.controllers.GenericAbstractAdminCont
 import com.alodiga.wallet.admin.web.utils.AccessControl;
 import com.alodiga.wallet.admin.web.utils.WebConstants;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
+import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
@@ -35,6 +36,8 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Textbox;
+import com.alodiga.businessportal.ws.APIBusinessPortalWSProxy;
+import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 
 public class AdminApplicationReviewController extends GenericAbstractAdminController {
 
@@ -164,27 +167,28 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
 
     public Boolean validateEmpty() {
         if ((!rApprovedYes.isChecked()) && (!rApprovedNo.isChecked())) {
-            this.showMessage("sp.error.indApprove", true, null);
+            this.showMessage("msj.error.indApprove", true, null);
         }else if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.observations", true, null);
+            this.showMessage("msj.error.observations", true, null);
         } else {
             return true;
         }
         return false;
     }
 
-    private void saveReviewCollectionsRequest(ReviewAffiliationRequest _reviewCollectionsRequest) {
+    private void saveReviewCollectionsRequest(ReviewAffiliationRequest _reviewAffiliationRequest) {
         try {
-            ReviewAffiliationRequest reviewCollectionsRequest = null;
+            ReviewAffiliationRequest reviewAffiliationRequest = null;
+            APIBusinessPortalWSProxy apiBusinessPortalWSProxy = new APIBusinessPortalWSProxy();
             boolean indApproved;
             int indReviewCollectionApproved = 0;
             int indReviewCollectionIncomplete = 0;
 
-            if (_reviewCollectionsRequest != null) {
-                reviewCollectionsRequest = _reviewCollectionsRequest;
+            if (_reviewAffiliationRequest != null) {
+                reviewAffiliationRequest = _reviewAffiliationRequest;
             } else {
-                reviewCollectionsRequest = new ReviewAffiliationRequest();
+                reviewAffiliationRequest = new ReviewAffiliationRequest();
             }
 
             if (rApprovedYes.isChecked()) {
@@ -193,7 +197,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 indApproved = false;
             }
 
-            //Obtiene el tipo de revision Recaudos
+            //Obtiene el tipo de revision Solicitud de Afiliación de Usuarios
             EJBRequest request = new EJBRequest();
             request.setParam(Constants.REVIEW_REQUEST_TYPE);
             ReviewType reviewType = utilsEJB.loadReviewType(request);
@@ -221,9 +225,9 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 if (collectionsByRequestList.size() > requestHasCollectionsRequestList.size()) {
                     indReviewCollectionIncomplete = 1;
                 }
-                short approved=1; 
+                boolean rejected = false; 
                 for (RequestHasCollectionRequest r : requestHasCollectionsRequestList) {
-                    if (r.getIndApproved() == approved) {
+                    if (r.getIndApproved() == rejected) {
                         indReviewCollectionApproved = 1;
                     }
                     if (r.getImageFileUrl() == null) {
@@ -233,33 +237,41 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             }
 
             //Guarda la revision
-            reviewCollectionsRequest.setAffiliationRequestId(affiliationRequestParam);
-            reviewCollectionsRequest.setUserReviewId(user);
-            reviewCollectionsRequest.setReviewDate(dtbReviewDate.getValue());
-            reviewCollectionsRequest.setObservations(txtObservations.getText());
-            reviewCollectionsRequest.setIndApproved(indApproved);
-            reviewCollectionsRequest.setReviewTypeId(reviewType);
-            reviewCollectionsRequest.setCreateDate(new Timestamp(new Date().getTime()));
-            reviewCollectionsRequest = utilsEJB.saveReviewAffiliationRequest(reviewCollectionsRequest);
+            reviewAffiliationRequest.setAffiliationRequestId(affiliationRequestParam);
+            reviewAffiliationRequest.setUserReviewId(user);
+            reviewAffiliationRequest.setReviewDate(dtbReviewDate.getValue());
+            reviewAffiliationRequest.setObservations(txtObservations.getText());
+            reviewAffiliationRequest.setIndApproved(indApproved);
+            reviewAffiliationRequest.setReviewTypeId(reviewType);
+            reviewAffiliationRequest.setCreateDate(new Timestamp(new Date().getTime()));
+            reviewAffiliationRequest = utilsEJB.saveReviewAffiliationRequest(reviewAffiliationRequest);
+            
+            if (reviewAffiliationRequest.getAffiliationRequestId().getRequestTypeId().getCode().equals(RequestTypeE.SOAFNE.getRequestTypeCode())) {
+                if (rApprovedYes.isChecked()) {
+                    apiBusinessPortalWSProxy.acceptRegister(reviewAffiliationRequest.getAffiliationRequestId().getId());
+                } else {
+                    apiBusinessPortalWSProxy.rejectRegister(reviewAffiliationRequest.getAffiliationRequestId().getId());
+                }
+            }            
 
             //Si los recaudos están incompletos, se rechaza la solicitud
             if (indReviewCollectionIncomplete == 1) {
                 updateRequestByCollectionsIncomplete(affiliationRequestParam);
                 //Se coloca la solicitud en no aprobada
-                UpdateRequestWithoutApproving(reviewCollectionsRequest);
+                UpdateRequestWithoutApproving(reviewAffiliationRequest);
             } else {
                 //Verificar que todos los recaudos estén aprobados y que la solicitud este aprobada por el agente comercial
-                if (indReviewCollectionApproved == 0 && reviewCollectionsRequest.getIndApproved() == true) {
+                if (indReviewCollectionApproved == 0 && reviewAffiliationRequest.getIndApproved() == true) {
                     //Se aprueba la solicitud
-                    affiliationRequestParam.setStatusRequestId(getStatusAffiliationRequest(affiliationRequestParam, Constants.STATUS_REQUEST_APPROVED));
+                    affiliationRequestParam.setStatusRequestId(getStatusAffiliationRequest(affiliationRequestParam, StatusRequestE.APROBA.getId()));
                     affiliationRequestParam = utilsEJB.saveAffiliationRequest(affiliationRequestParam);
                 } else {
                     //Se coloca la solicitud en no aprobada
-                    UpdateRequestWithoutApproving(reviewCollectionsRequest);
+                    UpdateRequestWithoutApproving(reviewAffiliationRequest);
                 }
             }
             loadField(affiliationRequestParam);
-            this.showMessage("sp.common.save.success", false, null);
+            this.showMessage("wallet.msj.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
             showError(ex);
@@ -278,15 +290,15 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
         return statusRequest;
     }
 
-    public void UpdateRequestWithoutApproving(ReviewAffiliationRequest reviewCollectionsRequest) {
+    public void UpdateRequestWithoutApproving(ReviewAffiliationRequest reviewAffiliationRequest) {
         boolean indApproved;
         try {
             updateRequestByCollectionsWithoutApproval(affiliationRequestParam);
             rApprovedYes.setChecked(false);
             rApprovedNo.setChecked(true);
             indApproved = false;
-            reviewCollectionsRequest.setIndApproved(indApproved);
-            reviewCollectionsRequest = utilsEJB.saveReviewAffiliationRequest(reviewCollectionsRequest);
+            reviewAffiliationRequest.setIndApproved(indApproved);
+            reviewAffiliationRequest = utilsEJB.saveReviewAffiliationRequest(reviewAffiliationRequest);
         } catch (Exception ex) {
             showError(ex);
         }

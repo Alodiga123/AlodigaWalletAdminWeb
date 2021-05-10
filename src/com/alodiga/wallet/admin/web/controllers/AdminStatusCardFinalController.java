@@ -101,7 +101,7 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
     public boolean validateEmpty() {
         if (cmbFinal.getSelectedItem() == null) {
             cmbFinal.setFocus(true);
-            this.showMessage("sp.error.status.card.hasFinal.error", true, null);
+            this.showMessage("msj.error.status.card.hasFinal.error", true, null);
         } else {
             return true;
         }
@@ -124,13 +124,13 @@ public class AdminStatusCardFinalController extends GenericAbstractAdminControll
             if ((eventType.equals(WebConstants.EVENT_ADD) && utilsEJB.validateStatusCardHasFinalState(statusCardHasFinalState.getStatusCardId().getId(),statusCardHasFinalState.getStatusCardFinalStateId().getId()))
 		|| eventType.equals(WebConstants.EVENT_EDIT)){
                 statusCardHasFinalState =utilsEJB.saveStatusCardHasFinalState(statusCardHasFinalState);
-                this.showMessage("sp.common.save.success", false, null);
+                this.showMessage("wallet.msj.save.success", false, null);
                 EventQueues.lookup("updateStatusCardFinal", EventQueues.APPLICATION, true).publish(new Event(""));
 		if (eventType == WebConstants.EVENT_ADD) {
                     btnSave.setVisible(false);
                 } 
             }else
-                this.showMessage("sp.error.status.card.hasFinal.exist", true, null); 
+                this.showMessage("msj.error.status.card.hasFinal.exist", true, null); 
         } catch (NullParameterException ex) {
             showError(ex);
         } catch (GeneralException ex) {

@@ -81,10 +81,10 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.passwordChange.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.passwordChange.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.passwordChange.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.passwordChange.add"));
                 rApprovedYes.setVisible(false);
                 rApprovedNo.setVisible(false);
                 break;
@@ -194,12 +194,12 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
         if (!txtRepeatNewPassword.getValue().equals(txtNewPassword.getValue())) {
             txtRepeatNewPassword.setValue("");
             txtRepeatNewPassword.setFocus(true);
-            this.showMessage("maaw.msj.fieldsPasswordNotEquals", true, null);
+            this.showMessage("msj.fieldsPasswordNotEquals", true, null);
         } else if (txtNewPassword.getValue().equals(txtCurrentPassword.getValue())) {
             txtNewPassword.setValue("");
             txtRepeatNewPassword.setValue("");
             txtNewPassword.setFocus(true);
-            this.showMessage("maaw.msj.fieldsCurrentPasswordEqualsNewPassword", true, null);
+            this.showMessage("msj.fieldsCurrentPasswordEqualsNewPassword", true, null);
         } else {
             return true;
         }
@@ -209,13 +209,13 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
     public Boolean validateEmpty() {
         if (txtCurrentPassword.getText().isEmpty()) {
             txtCurrentPassword.setFocus(true);
-            this.showMessage("sp.error.currentPassword", true, null);
+            this.showMessage("msj.error.currentPassword", true, null);
         } else if (txtNewPassword.getText().isEmpty()) {
             txtNewPassword.setFocus(true);
-            this.showMessage("sp.error.newPassword", true, null);
+            this.showMessage("msj.error.newPassword", true, null);
         } else if (txtRepeatNewPassword.getText().isEmpty()) {
             txtRepeatNewPassword.setFocus(true);
-            this.showMessage("sp.error.repeatNewPassword", true, null);
+            this.showMessage("msj.error.repeatNewPassword", true, null);
         } else {
             return true;
         }
@@ -280,7 +280,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
                 rApprovedYes.setDisabled(true);
                 rApprovedNo.setDisabled(true);
 
-                this.showMessage("sp.crud.passwordChangedRequestApproved", false, null);
+                this.showMessage("msj.crud.passwordChangedRequestApproved", false, null);
                 btnSave.setVisible(false);
             }
         } catch (WrongValueException ex) {
@@ -291,7 +291,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
             if (userList == null) {
                 attempts++;
                 if (attempts != 3) {
-                    this.showMessage("sp.crud.errorCurrentPasswordNotMatchInBD", true, null);
+                    this.showMessage("msj.errorCurrentPasswordNotMatchInBD", true, null);
                     txtCurrentPassword.setText("");
                     txtNewPassword.setText("");
                     txtRepeatNewPassword.setText("");
@@ -323,7 +323,7 @@ public class AdminPasswordChangeRequestController extends GenericAbstractAdminCo
                 rApprovedYes.setDisabled(true);
                 rApprovedNo.setDisabled(true);
 
-                this.showMessage("sp.crud.passwordChangedRequestRejected", true, null);
+                this.showMessage("msj.passwordChangedRequestRejected", true, null);
                 btnSave.setVisible(false);
             }
             loadFields(passwordChangeRequestParam);

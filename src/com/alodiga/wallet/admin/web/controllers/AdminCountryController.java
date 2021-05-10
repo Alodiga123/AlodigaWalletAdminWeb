@@ -56,13 +56,13 @@ public class AdminCountryController extends GenericAbstractAdminController {
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.country.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.country.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.country.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.country.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.country.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.country.add"));
                 break;
             default:
                 break;
@@ -119,13 +119,13 @@ public class AdminCountryController extends GenericAbstractAdminController {
     public boolean validateEmpty() {
         if (txtName.getText().isEmpty()) {
             txtName.setFocus(true);
-            this.showMessage("sp.error.country.name", true, null);
+            this.showMessage("msj.error.country.name", true, null);
         } else if (txtShortName.getText().isEmpty()) {
             txtShortName.setFocus(true);
-            this.showMessage("sp.error.country.shortName", true, null);
+            this.showMessage("msj.error.country.shortName", true, null);
         } else if (txtCode.getText().isEmpty()) {
             txtCode.setFocus(true);
-            this.showMessage("sp.error.country.code", true, null);
+            this.showMessage("msj.error.country.code", true, null);
         } else {
             return true;
         }
@@ -144,7 +144,7 @@ public class AdminCountryController extends GenericAbstractAdminController {
             showError(ex);
         } finally {
             if(countryCodeList.size() > 0){
-            this.showMessage("sp.crud.country.error.code", true, null);
+            this.showMessage("msj.error.country.error.code", true, null);
             txtCode.setFocus(true);  
             return false;  
           }    
@@ -159,7 +159,7 @@ public class AdminCountryController extends GenericAbstractAdminController {
                 showError(ex);
             } finally {
                 if (countryNameList.size() > 0) {
-                    this.showMessage("sp.crud.country.error.name", true, null);
+                    this.showMessage("msj.error.country.error.name", true, null);
                     txtName.setFocus(true);
                     return false;
                 }
@@ -194,9 +194,9 @@ public class AdminCountryController extends GenericAbstractAdminController {
                 country = utilsEJB.saveNewCountry(country);
                 countryParam = country;
                 eventType = WebConstants.EVENT_EDIT;
-                this.showMessage("sp.common.save.success", false, null);
+                this.showMessage("wallet.msj.save.success", false, null);
             } catch (DuplicateEntryException e) {
-                this.showMessage("sp.common.save.fail", false, null);
+                this.showMessage("wallet.error.save.fail", false, null);
                 return;
             }
 

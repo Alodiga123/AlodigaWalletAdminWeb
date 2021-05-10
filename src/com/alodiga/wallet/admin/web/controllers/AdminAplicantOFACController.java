@@ -9,6 +9,7 @@ import com.alodiga.wallet.common.ejb.PersonEJB;
 import com.alodiga.wallet.common.ejb.UtilsEJB;
 import com.alodiga.wallet.common.enumeraciones.StatusApplicantE;
 import com.alodiga.wallet.common.enumeraciones.StatusRequestE;
+import com.alodiga.wallet.common.enumeraciones.PersonClassificationE;
 import com.alodiga.wallet.common.exception.EmptyListException;
 import com.alodiga.wallet.common.exception.GeneralException;
 import com.alodiga.wallet.common.exception.NullParameterException;
@@ -66,13 +67,13 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         if (eventType == WebConstants.EVENT_ADD) {
             personParam = null;
         } else {
             personParam = (Sessions.getCurrent().getAttribute("object") != null) ? (Person) Sessions.getCurrent().getAttribute("object") : null;
         }
-
         initialize();
         initView(eventType, "crud.aplicantOFAC");
     }
@@ -82,13 +83,13 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         super.initialize();
         switch (eventType) {
             case WebConstants.EVENT_EDIT:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.ofac.edit"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.ofac.edit"));
                 break;
             case WebConstants.EVENT_VIEW:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.ofac.view"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.ofac.view"));
                 break;
             case WebConstants.EVENT_ADD:
-                tbbTitle.setLabel(Labels.getLabel("sp.crud.ofac.add"));
+                tbbTitle.setLabel(Labels.getLabel("wallet.crud.ofac.add"));
                 break;
             default:
                 break;
@@ -96,7 +97,6 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         try {
             user = AccessControl.loadCurrentUser();
             personEJB = (PersonEJB) EJBServiceLocator.getInstance().get(EjbConstants.PERSON_EJB);
-            utilsEJB = (UtilsEJB) EJBServiceLocator.getInstance().get(EjbConstants.UTILS_EJB);
             loadData();
         } catch (Exception ex) {
             showError(ex);
@@ -121,8 +121,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
 
     public ReviewOfac getReviewOfacParam() {
         reviewOfacParam = null;
-        try {
-           
+        try {           
             affiliationRequestParam = personParam.getAffiliationRequest();
             EJBRequest request1 = new EJBRequest();
             Map params = new HashMap();
@@ -132,9 +131,9 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             reviewOfac = utilsEJB.getReviewOfacByRequest(request1);
             for (ReviewOfac r : reviewOfac) {
                 reviewOfacParam = r;
-            }
-            
+            }            
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return reviewOfacParam;
     }
@@ -145,16 +144,17 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     private void loadFieldP(Person person) {
         Float percentageMatchApplicant = 0.00F;
         try {
-            if (person.getPersonTypeId().getIndNaturalPerson() == true) {
+            if (person.getPersonClassificationId().getId() == PersonClassificationE.NABUAP.getId() ||
+                person.getPersonClassificationId().getId() == PersonClassificationE.REUNUS.getId()) {
                 lblName.setValue(person.getNaturalPerson().getFirstName() + " " + person.getNaturalPerson().getLastName());
                 lblDocumentType.setValue(person.getNaturalPerson().getDocumentsPersonTypeId().getDescription());
                 lblIdentificationNumber.setValue(person.getNaturalPerson().getIdentificationNumber());
             } else {
-                if (person.getPersonClassificationId().getId() == 2) {
+                if (person.getPersonClassificationId().getId() == PersonClassificationE.LEBUAP.getId()) {
                     lblName.setValue(person.getLegalPerson().getBusinessName());
                     lblDocumentType.setValue(person.getLegalPerson().getDocumentsPersonTypeId().getDescription());
                     lblIdentificationNumber.setValue(person.getLegalPerson().getIdentificationNumber());
-                } else if (person.getPersonClassificationId().getId() == 3) {
+                } else if(person.getPersonClassificationId().getId() == PersonClassificationE.LEGREP.getId()) {
                     if (getLegalPersonParam() != null) {
                         affiliationRequestParam = legalPersonParam.getPersonId().getAffiliationRequest();
                     }
@@ -163,9 +163,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                     lblIdentificationNumber.setValue(person.getLegalRepresentative().getIdentificationNumber());
                 } 
             }
-
             lblPercentageMatch.setValue(percentageMatchApplicant.toString());
-
             btnSave.setVisible(true);
         } catch (Exception ex) {
             showError(ex);
@@ -178,15 +176,13 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
 
     private void loadFieldR(ReviewOfac reviewOfac) {
         if (reviewOfac != null) {
-            lblPercentageMatch.setValue(String.valueOf(reviewOfac.getResultReview()));
-            lblUser.setValue(reviewOfac.getUserReviewId().getFirstName() + " " + reviewOfac.getUserReviewId().getLastName());
+            lblPercentageMatch.setValue(String.valueOf(reviewOfac.getResultReview()*100));
             txtObservations.setValue(reviewOfac.getObservations());
         }
     }
 
     public void blockFields() {
         cmbStatusApplicant.setDisabled(true);
-
         btnSave.setVisible(false);
     }
 
@@ -196,8 +192,10 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         NaturalPerson naturalPerson = null;
         LegalPerson legalPerson = null;
         LegalRepresentative legalRepresentative = null;
+        StatusApplicant statusApplicant = null;
         AffiliationRequest affiliationRequest = affiliationRequestParam;
-        Integer statusRequestId = StatusRequestE.APLINE.getId();
+        StatusRequest statusRequest = null;
+        
         try {
             if (_reviewOfac != null) {
                 reviewOfac = _reviewOfac;
@@ -218,31 +216,52 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             }
             reviewOfac = utilsEJB.saveReviewOfac(reviewOfac);
 
-            if (personParam.getPersonTypeId().getIndNaturalPerson() == true) {
+            if (personParam.getPersonClassificationId().getId() == PersonClassificationE.NABUAP.getId()) {
                 naturalPerson = personParam.getNaturalPerson();
                 naturalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
                 naturalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
                 naturalPerson = personEJB.saveNaturalPerson(naturalPerson);
+                statusApplicant = naturalPerson.getStatusApplicantId();
             } else {
-                if (personParam.getPersonClassificationId().getId() != 3) {
+                if (personParam.getPersonClassificationId().getId() == PersonClassificationE.LEBUAP.getId()) {
                     legalPerson = personParam.getLegalPerson();
                     legalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
                     legalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
                     legalPerson = personEJB.saveLegalPerson(legalPerson);
+                    statusApplicant = legalPerson.getStatusApplicantId();
                 } else {
                     legalRepresentative = personParam.getLegalRepresentative();
                     legalRepresentative.setUpdateDate(new Timestamp(new Date().getTime()));
                     legalRepresentative.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
                     legalRepresentative = personEJB.saveLegalRepresentative(legalRepresentative);
+                    statusApplicant = legalRepresentative.getStatusApplicantId();
                 }
             }
             
-            if(activateTabApplicationReview() == 0){
-               affiliationRequest.setStatusRequestId(getStatusRequest(affiliationRequest, statusRequestId));
-               affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
-            }
+            if(statusApplicant.getCode().equals(StatusApplicantE.LISNOK.getStatusApplicantCode())){
+                //Se obtiene el estatus de la solicitud 
+                EJBRequest request = new EJBRequest();
+                request.setParam(StatusRequestE.APLINE.getId());
+                statusRequest = utilsEJB.loadStatusRequest(request);
 
-            this.showMessage("sp.common.save.success", false, null);
+                //Se actualiza el Estatus de la solicitud a APROBADA LISTA NEGRA
+                affiliationRequest.setStatusRequestId(statusRequest);
+                affiliationRequest.setUpdateDate(new Timestamp(new Date().getTime()));
+                affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+                
+            } else if(statusApplicant.getCode().equals(StatusApplicantE.LISNEG.getStatusApplicantCode())){
+                //Se obtiene el estatus de la solicitud  
+                EJBRequest request = new EJBRequest();
+                request.setParam(StatusRequestE.RELINE.getId());
+                statusRequest = utilsEJB.loadStatusRequest(request);
+
+                ///Se actualiza el Estatus de la solicitud a RECHAZADA LISTA NEGRA
+                affiliationRequest.setStatusRequestId(statusRequest);
+                affiliationRequest.setUpdateDate(new Timestamp(new Date().getTime()));
+                affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
+                }
+
+            this.showMessage("wallet.msj.save.success", false, null);
             EventQueues.lookup("updateApplicantOFAC", EventQueues.APPLICATION, true).publish(new Event(""));
 
             if (eventType == WebConstants.EVENT_ADD) {
@@ -253,17 +272,6 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         } catch (Exception ex) {
             showError(ex);
         }
-    }
-    
-    public int activateTabApplicationReview(){
-        String statusApplicantBlackList = StatusApplicantE.LISNEG.getStatusApplicantCode();
-        int indBlackList = 0;
-        
-        if(personParam.getNaturalPerson().getStatusApplicantId().getCode().equals(statusApplicantBlackList)){
-            indBlackList = 1;
-        }
-        
-        return indBlackList;
     }
     
     public StatusRequest getStatusRequest(AffiliationRequest affiliationRequest, int statusRequestId){
@@ -286,7 +294,7 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
     public Boolean validateEmpty() {
         if (txtObservations.getText().isEmpty()) {
             txtObservations.setFocus(true);
-            this.showMessage("sp.error.observations", true, null);
+            this.showMessage("msj.error.observations", true, null);
         } else {
             return true;
         }
@@ -341,11 +349,11 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
         List<StatusApplicant> statusApplicants;
         try {
             statusApplicants = personEJB.getStatusApplicant(request1);
-            if (personParam.getPersonTypeId().getIndNaturalPerson() == true) {
+            if (personParam.getPersonClassificationId().getId() == PersonClassificationE.NABUAP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getNaturalPerson().getStatusApplicantId().getId() : 0));
-            } else if (personParam.getPersonClassificationId().getId() == 2) {
+            } else if (personParam.getPersonClassificationId().getId() == PersonClassificationE.LEBUAP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalPerson().getStatusApplicantId().getId() : 0));
-            } else if (personParam.getPersonClassificationId().getId() == 3) {
+            } else if (personParam.getPersonClassificationId().getId() == PersonClassificationE.LEGREP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalRepresentative().getStatusApplicantId().getId() : 0));
             }
 

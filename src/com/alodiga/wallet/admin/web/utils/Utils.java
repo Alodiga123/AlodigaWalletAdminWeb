@@ -58,7 +58,7 @@ public class Utils {
 //    public static String getPeriodName(Long periodId) {
 //        String value = "";
 //        if (periodId.equals(Period.DIARY)) {
-//            value = Labels.getLabel("sp.period.diary");
+//            value = Labels.getLabel("wallet.period.diary");
 //        } else if (periodId.equals(Period.WEEKLY)) {
 //            value = Labels.getLabel("sp.period.weekly");
 //        } else if (periodId.equals(Period.BIWEEKLY)) {
@@ -76,9 +76,9 @@ public class Utils {
         String value = "";
 
         if (languageId.equals(Language.ENGLISH)) {
-            value = Labels.getLabel("sp.common.english");
+            value = Labels.getLabel("wallet.common.english");
         } else {
-            value = Labels.getLabel("sp.common.spanish");
+            value = Labels.getLabel("wallet.common.language.spanish");
         }
         return value;
     }
@@ -124,18 +124,18 @@ public class Utils {
             HSSFRow row2 = sheet.createRow(3);
             HSSFCell cell0 = row2.createCell(0);
             cell0.setCellStyle(cellStyleBold);
-            cell0.setCellValue(Labels.getLabel("sp.file.commission.topUp.letterHead1"));
+            cell0.setCellValue(Labels.getLabel("wallet.page.title"));
 
             HSSFRow rowReportName = sheet.createRow(4);
             HSSFCell cellReportName = rowReportName.createCell(0);
             cellReportName.setCellStyle(cellStyleBold);
-            cellReportName.setCellValue(Labels.getLabel("sp.report.title") + ":");
+            cellReportName.setCellValue(Labels.getLabel("wallet.common.report.title") + ":");
             HSSFCell cellTitle = rowReportName.createCell(1);
             cellTitle.setCellValue(nameFile);
 
             HSSFRow rowReportDate = sheet.createRow(5);
             HSSFCell cellDate = rowReportDate.createCell(0);
-            cellDate.setCellValue(Labels.getLabel("sp.common.date") + ":");
+            cellDate.setCellValue(Labels.getLabel("wallet.common.date") + ":");
             cellDate.setCellStyle(cellStyleBold);
             HSSFCell cellReportNameValue = rowReportDate.createCell(1);
             cellReportNameValue.setCellValue(GeneralUtils.dateCalendar2String(Calendar.getInstance()));
@@ -213,15 +213,15 @@ public class Utils {
     public static String getTransactionStatusName(String transactionStatusId) {
         String value = "";
 //        if (transactionStatusId.equals(Transaction.STATUS_PROCESSED)) {
-//            value = Labels.getLabel("sp.transactionStatus.approved");
+//            value = Labels.getLabel("wallet.common.approved");
 //        } else if (transactionStatusId.equals(Transaction.STATUS_PROCESSED)) {
-//            value = Labels.getLabel("sp.transactionStatus.canceled");
+//            value = Labels.getLabel("wallet.common.canceled");
 //        } else if (transactionStatusId.equals(Transaction.STATUS_CANCELED)) {
-//            value = Labels.getLabel("sp.transactionStatus.canceled");
+//            value = Labels.getLabel("wallet.common.canceled");
 //        } else if (transactionStatusId.equals(Transaction.STATUS_FAILED)) {
-//            value = Labels.getLabel("sp.transactionStatus.failed");
+//            value = Labels.getLabel("wallet.common.failed");
 //        } else if (transactionStatusId.equals(Transaction.STATUS_REJECTED_BY_PAYMENT)) {
-//            value = Labels.getLabel("sp.transactionStatus.rejectedByPayment");
+//            value = Labels.getLabel("msj.error.rejectedByPayment");
 //        }
         return value;
     }
@@ -229,9 +229,9 @@ public class Utils {
     public static String getStatus(boolean status) {
         String value = "";
         if (status) {
-            value = Labels.getLabel("sp.common.enabled");
+            value = Labels.getLabel("wallet.common.enabled");
         } else {
-            value = Labels.getLabel("sp.common.disabled");
+            value = Labels.getLabel("wallet.common.disabled");
         }
         return value;
     }
