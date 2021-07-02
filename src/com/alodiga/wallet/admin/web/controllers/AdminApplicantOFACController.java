@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Window;
 
 public class AdminApplicantOFACController extends GenericAbstractAdminController {
@@ -56,19 +57,18 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
     private Long optionMenu;
     private AffiliationRequest afilationRequest;
     private Person personParam;
-
+    
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         eventType = (Integer) Sessions.getCurrent().getAttribute(WebConstants.EVENTYPE);
         AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
-        AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
-        if (adminRequestUser.getUserAffiliationRequets() != null){
-            afilationRequest = adminRequestUser.getUserAffiliationRequets();
-        }        
+        if(adminRequestN.getBusinessAffiliationRequets() != null){
+            afilationRequest = adminRequestN.getBusinessAffiliationRequets(); 
+        }      
         initialize();
     }
-
+    
     @Override
     public void initialize() {
         super.initialize();
@@ -89,12 +89,6 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            AdminBusinnessAffiliationRequestsNaturalController adminRequestN = new AdminBusinnessAffiliationRequestsNaturalController();
-            AdminUsersAffiliationRequestsController adminRequestUser = new AdminUsersAffiliationRequestsController();
-            
-            if (adminRequestUser.getUserAffiliationRequets() != null){
-                afilationRequest = adminRequestUser.getUserAffiliationRequets();
-            }
             
             lblRequestNumber.setValue(afilationRequest.getNumberRequest());
             lblRequestDate.setValue(simpleDateFormat.format(afilationRequest.getDateRequest()));
@@ -115,7 +109,6 @@ public class AdminApplicantOFACController extends GenericAbstractAdminController
             showError(ex);
         }
     }
-    
     
     public ReviewOfac getReviewOFAC(NaturalPerson applicant) {
         ReviewOfac reviewOFAC = null;
