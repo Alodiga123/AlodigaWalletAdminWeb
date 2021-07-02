@@ -55,10 +55,6 @@
                                                             <label id="lblIdentificationNumber" value="" width="250px" maxlength="40"/>
                                                         </row>
                                                         <row>
-                                                            <label value="${c:l('wallet.common.user')}" sclass="lblbold"/>
-                                                            <label id="lblUser" value="" width="250px" maxlength="40"/>
-                                                        </row>
-                                                        <row>
                                                             <label value="${c:l('wallet.common.observation')}" sclass="lblbold"/>
                                                             <hlayout>
                                                                 <textbox id="txtObservations" multiline="true" rows="2" width="590px" maxlength="990"/>
@@ -75,6 +71,10 @@
                                                                 <combobox id="cmbStatusApplicant" width="250px" mold="rounded" readonly="true"/>
                                                                 <label value="*" sclass="lblreq" />
                                                             </hlayout>
+                                                        </row>
+                                                        <row>
+                                                            <label value="${c:l('wallet.common.userCumplimientAgent')}" sclass="lblbold"/>
+                                                            <label id="lblUser" value="" width="250px" maxlength="40"/>
                                                         </row>
                                                     </rows>
                                                 </grid>

@@ -36,6 +36,8 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Textbox;
+import com.alodiga.businessportal.ws.APIBusinessPortalWSProxy;
+import com.alodiga.wallet.common.enumeraciones.RequestTypeE;
 
 public class AdminApplicationReviewController extends GenericAbstractAdminController {
 
@@ -78,7 +80,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             this.clearMessage();
             loadData();
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -115,7 +117,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 lblStatusRequest.setValue(affiliationRequest.getStatusRequestId().getDescription());
             }
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -150,7 +152,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 lblAssessorName = null;
             }
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         } finally {
             lblAssessorName.setValue(user.getFirstName() + " " + user.getLastName());
         }
@@ -178,6 +180,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
     private void saveReviewCollectionsRequest(ReviewAffiliationRequest _reviewAffiliationRequest) {
         try {
             ReviewAffiliationRequest reviewAffiliationRequest = null;
+            APIBusinessPortalWSProxy apiBusinessPortalWSProxy = new APIBusinessPortalWSProxy();
             boolean indApproved;
             int indReviewCollectionApproved = 0;
             int indReviewCollectionIncomplete = 0;
@@ -242,6 +245,14 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             reviewAffiliationRequest.setReviewTypeId(reviewType);
             reviewAffiliationRequest.setCreateDate(new Timestamp(new Date().getTime()));
             reviewAffiliationRequest = utilsEJB.saveReviewAffiliationRequest(reviewAffiliationRequest);
+            
+            if (reviewAffiliationRequest.getAffiliationRequestId().getRequestTypeId().getCode().equals(RequestTypeE.SOAFNE.getRequestTypeCode())) {
+                if (rApprovedYes.isChecked()) {
+                    apiBusinessPortalWSProxy.acceptRegister(reviewAffiliationRequest.getAffiliationRequestId().getId());
+                } else {
+                    apiBusinessPortalWSProxy.rejectRegister(reviewAffiliationRequest.getAffiliationRequestId().getId());
+                }
+            }            
 
             //Si los recaudos están incompletos, se rechaza la solicitud
             if (indReviewCollectionIncomplete == 1) {
@@ -263,7 +274,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             this.showMessage("wallet.msj.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -274,7 +285,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             request.setParam(statusRequestId);
             statusRequest = utilsEJB.loadStatusRequest(request);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
         return statusRequest;
     }
@@ -289,7 +300,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             reviewAffiliationRequest.setIndApproved(indApproved);
             reviewAffiliationRequest = utilsEJB.saveReviewAffiliationRequest(reviewAffiliationRequest);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
 
     }
@@ -303,7 +314,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             affiliationRequest.setStatusRequestId(statusRequestRejected);
             affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -316,7 +327,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             affiliationRequest.setStatusRequestId(statusRequestRejected);
             affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 

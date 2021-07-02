@@ -214,7 +214,7 @@ public class AdminManualRechargeController extends GenericAbstractAdminControlle
             manualRechargeApproval.setIndApproveRequest(indApproved);
             manualRechargeApproval.setObservations(txtObservation.getText());
             manualRechargeApproval = productEJB.saveTransactionApproveRequest(manualRechargeApproval);
-            manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval);
+            manualRechargeApproval = productEJB.updateTransactionApproveRequest(manualRechargeApproval,lblTelephone.getValue());
             transactionApproveRequestParam = manualRechargeApproval;
 
             if(indApproved == true){

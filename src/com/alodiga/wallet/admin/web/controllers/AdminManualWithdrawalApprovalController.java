@@ -145,7 +145,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
                 responseUser = apiRegistroUnificado.getUsuarioporId("usuarioWS","passwordWS",String.valueOf(manualWithdrawalApproval.getUnifiedRegistryUserId()));
                 String userNameSource = responseUser.getDatosRespuesta().getNombre() + " " + responseUser.getDatosRespuesta().getApellido();
                 lblUserSource.setValue(userNameSource);
-                lblTelephone.setValue(responseUser.getDatosRespuesta().getTelefonoResidencial());
+                lblTelephone.setValue(responseUser.getDatosRespuesta().getMovil());
                 lblEmail.setValue(responseUser.getDatosRespuesta().getEmail());
                 lblUserDocumentType.setValue(responseUser.getDatosRespuesta().getTipoDocumento().getNombre());
                 lblUserDocumentNumber.setValue(responseUser.getDatosRespuesta().getNumeroDocumento());
@@ -317,7 +317,7 @@ public class AdminManualWithdrawalApprovalController extends GenericAbstractAdmi
             manualWithdrawalApproval.setIndApproveRequest(indApproved);
             manualWithdrawalApproval.setObservations(txtObservations.getText());
             manualWithdrawalApproval.setUserApprovedRequestId(user);
-            manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval);
+            manualWithdrawalApproval = productEJB.updateTransactionApproveRequest(manualWithdrawalApproval,lblTelephone.getValue());
             manualWithdrawalApprovalParam = manualWithdrawalApproval;
                
             if(indApproved == true){
