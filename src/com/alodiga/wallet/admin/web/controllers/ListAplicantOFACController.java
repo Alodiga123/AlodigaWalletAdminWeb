@@ -91,7 +91,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             permissionEdit = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.EDIT_APLICANT_OFAC);
             permissionRead = PermissionManager.getInstance().hasPermisssion(currentProfile.getId(), Permission.VIEW_APLICANT_OFAC);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -119,7 +119,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             loadList(personList);
             loadStatusApplicant();
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -200,7 +200,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 item.setParent(lbxRecords);
             }
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -218,22 +218,39 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             personList = personEJB.getPersonBusinessApplicant(request);
             for (Person p: personList) {
                 if (p.getAffiliationRequest() == null) {
-                    params = new HashMap<String, Object>();
-                    params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID , p.getLegalRepresentative().getId());
-                    request.setParams(params);
-                    legalPerson = personEJB.getLegalPersonByLegalRepresentative(request);
-                    for (LegalPerson lg: legalPerson) {
-                        legalPersonId = lg.getPersonId().getId();
-                    }
-                    params = new HashMap<String, Object>();                    
-                    params.put(QueryConstants.PARAM_LEGAL_PERSON_ID, legalPersonId);
-                    request.setParams(params);
-                    affiliationRequest = utilsEJB.getAffiliationRequestByLegalPerson(request);
-                    for (AffiliationRequest ar: affiliationRequest) {
-                        p.setAffiliationRequest(ar);
-                        personEJB.savePerson(p);
-                        affiliationRequestId = ar.getId();
-                    }
+                    if (p.getPersonClassificationId().getDescription().equals(PersonClassificationE.LEGREP.getPersonClassificationDescription())) {
+                        params = new HashMap<String, Object>();
+                        params.put(QueryConstants.PARAM_LEGAL_REPRESENTATIVE_ID , p.getLegalRepresentative().getId());
+                        request.setParams(params);
+                        legalPerson = personEJB.getLegalPersonByLegalRepresentative(request);
+                        for (LegalPerson lg: legalPerson) {
+                            legalPersonId = lg.getPersonId().getId();
+                        }
+                        params = new HashMap<String, Object>();                    
+                        params.put(QueryConstants.PARAM_BUSINESS_PERSON_ID, legalPersonId);
+                        request.setParams(params);
+                        affiliationRequest = utilsEJB.getAffiliationRequestByPerson(request);
+                        for (AffiliationRequest ar: affiliationRequest) {
+                            p.setAffiliationRequest(ar);
+                            personEJB.savePerson(p);
+                            affiliationRequestId = ar.getId();
+                        }
+                    } else {
+                        params = new HashMap<String, Object>();
+                        if (p.getPersonClassificationId().getCode().equals(PersonClassificationE.NABUAP.getPersonClassificationCode())) {
+                            params.put(QueryConstants.PARAM_BUSINESS_PERSON_ID , p.getNaturalPerson().getPersonId().getId());
+                        }
+                        if (p.getPersonClassificationId().getCode().equals(PersonClassificationE.LEBUAP.getPersonClassificationCode())) {
+                            params.put(QueryConstants.PARAM_BUSINESS_PERSON_ID , p.getLegalPerson().getPersonId().getId());
+                        }
+                        request.setParams(params);
+                        affiliationRequest = utilsEJB.getAffiliationRequestByPerson(request);
+                        for (AffiliationRequest ar: affiliationRequest) {
+                            p.setAffiliationRequest(ar);
+                            personEJB.savePerson(p);
+                            affiliationRequestId = ar.getId();
+                        }
+                    }                   
                 } else {                   
                     affiliationRequestId = p.getAffiliationRequest().getId(); 
                 }
@@ -251,13 +268,13 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                    }
             }
         } catch (NullParameterException ex) {
-            showError(ex);
+            ex.printStackTrace();
         } catch (EmptyListException ex) {
             showEmptyList();
         } catch (GeneralException ex) {
-            showError(ex);
+            ex.printStackTrace();
         } catch (RegisterNotFoundException ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -275,7 +292,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             Utils.exportExcel(lbxRecords, Labels.getLabel("wallet.businessAffiliationRequests.ofac.list"));
             AccessControl.saveAction(Permission.LIST_APLICANT_OFAC, "Se descargo listado OFAC en formato excel");
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -287,7 +304,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
         try {
             loadList(getFilteredList(txtNumber.getText()));
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -417,7 +434,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             loadList(personList);
             this.showMessage("wallet.msj.finishReviewOFAC", false, null);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -449,7 +466,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
 
             reviewOFAC = utilsEJB.saveReviewOfac(reviewOFAC);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -459,7 +476,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             request.setParam(statusRequestId);
             statusAplicant = personEJB.loadStatusApplicant(request);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
         return statusAplicant;
     }
@@ -470,7 +487,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
             request.setParam(statusRequestId);
             statusRequest = utilsEJB.loadStatusRequest(request);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
         return statusRequest;
     }
@@ -491,7 +508,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 item.setParent(cmbStatus);
             }
         } catch (Exception ex) {
-            this.showError(ex);
+            ex.printStackTrace();
         }
     }
     
@@ -515,7 +532,7 @@ public class ListAplicantOFACController extends GenericAbstractListController<Pe
                 return personList;
             }
         } catch (Exception ex ){
-            showError(ex);
+            ex.printStackTrace();
         }
         return persons;
     }
