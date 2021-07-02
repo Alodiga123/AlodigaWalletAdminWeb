@@ -80,7 +80,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             this.clearMessage();
             loadData();
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -117,7 +117,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 lblStatusRequest.setValue(affiliationRequest.getStatusRequestId().getDescription());
             }
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -152,7 +152,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
                 lblAssessorName = null;
             }
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         } finally {
             lblAssessorName.setValue(user.getFirstName() + " " + user.getLastName());
         }
@@ -274,7 +274,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             this.showMessage("wallet.msj.save.success", false, null);
             btnSave.setVisible(false);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -285,7 +285,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             request.setParam(statusRequestId);
             statusRequest = utilsEJB.loadStatusRequest(request);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
         return statusRequest;
     }
@@ -300,7 +300,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             reviewAffiliationRequest.setIndApproved(indApproved);
             reviewAffiliationRequest = utilsEJB.saveReviewAffiliationRequest(reviewAffiliationRequest);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
 
     }
@@ -314,7 +314,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             affiliationRequest.setStatusRequestId(statusRequestRejected);
             affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -327,7 +327,7 @@ public class AdminApplicationReviewController extends GenericAbstractAdminContro
             affiliationRequest.setStatusRequestId(statusRequestRejected);
             affiliationRequest = utilsEJB.saveAffiliationRequest(affiliationRequest);
         } catch (Exception ex) {
-            showError(ex);
+            ex.printStackTrace();
         }
     }
 

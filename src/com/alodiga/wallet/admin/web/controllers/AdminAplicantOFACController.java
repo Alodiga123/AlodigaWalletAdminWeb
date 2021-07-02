@@ -216,7 +216,8 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
             }
             reviewOfac = utilsEJB.saveReviewOfac(reviewOfac);
 
-            if (personParam.getPersonClassificationId().getId() == PersonClassificationE.NABUAP.getId()) {
+            if (personParam.getPersonClassificationId().getId() == PersonClassificationE.NABUAP.getId() ||
+                personParam.getPersonClassificationId().getId() == PersonClassificationE.REUNUS.getId()) {
                 naturalPerson = personParam.getNaturalPerson();
                 naturalPerson.setUpdateDate(new Timestamp(new Date().getTime()));
                 naturalPerson.setStatusApplicantId((StatusApplicant) cmbStatusApplicant.getSelectedItem().getValue());
@@ -355,6 +356,8 @@ public class AdminAplicantOFACController extends GenericAbstractAdminController 
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalPerson().getStatusApplicantId().getId() : 0));
             } else if (personParam.getPersonClassificationId().getId() == PersonClassificationE.LEGREP.getId()) {
                 loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getLegalRepresentative().getStatusApplicantId().getId() : 0));
+            } else if (personParam.getPersonClassificationId().getId() == PersonClassificationE.REUNUS.getId()) {
+                loadGenericCombobox(statusApplicants, cmbStatusApplicant, "description", evenInteger, Long.valueOf(personParam != null ? personParam.getNaturalPerson().getStatusApplicantId().getId() : 0));    
             }
 
         } catch (EmptyListException ex) {
