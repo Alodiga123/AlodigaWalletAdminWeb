@@ -64,7 +64,7 @@
                                         <!--Buttons-->
                                         <div align="right" style="margin-right: 25px;">
                                             <button  id="btnSave" width="150px" label="${c:l('wallet.actions.save')}" class="open orange"/>
-                                            <button  id="btnBack" width="150px" label="${c:l('wallet.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listUsersAffiliationRequests.zul&quot;)"/>
+                                            <button  id="btnBack" width="150px" label="${c:l('wallet.actions.back')}" class="open gray" onClick="Executions.sendRedirect(&quot;listBusinessAffiliationRequests.zul&quot;)"/>
                                         </div>
                                     </vlayout>
                                 </div>
